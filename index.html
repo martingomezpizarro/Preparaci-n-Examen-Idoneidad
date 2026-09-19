@@ -420,6 +420,192 @@ footer a{color:var(--ink-3)}
 .glosletras button:hover{border-color:var(--line-strong); color:var(--ink)}
 .glosletras button[aria-pressed="true"]{background:var(--accent-soft); color:var(--accent); font-weight:600}
 
+
+/* ---------- filtro por ley del glosario ---------- */
+.glosleyes{display:flex; flex-wrap:wrap; gap:6px; margin-top:18px}
+.glosleyes button{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--f-mono); font-size:11px; cursor:pointer;
+  border:1px solid var(--line); background:var(--surface); color:var(--ink-2);
+  border-radius:6px; padding:4px 9px;
+}
+.glosleyes button:hover{border-color:var(--line-strong); color:var(--ink)}
+.glosleyes button[aria-pressed="true"]{border-color:var(--gc,var(--accent)); color:var(--ink); background:var(--surface-2); font-weight:600}
+.glosleyes .gdot{width:7px; height:7px; border-radius:50%; background:var(--gc,var(--accent)); flex:none}
+.glosleyes .gn{color:var(--ink-3)}
+
+/* ---------- armado del simulacro ---------- */
+.setup{
+  margin-top:16px; background:var(--surface); border:1px solid var(--line);
+  border-radius:11px; padding:20px 22px; box-shadow:var(--shadow);
+}
+.setup h3{
+  margin:0; font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:600;
+}
+.sfila{margin-top:16px}
+.sfila:first-of-type{margin-top:14px}
+.sfila>.slabel{
+  display:block; font-family:var(--f-mono); font-size:10.5px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ink-3); margin-bottom:7px;
+}
+.schips{display:flex; flex-wrap:wrap; gap:6px}
+.schip{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--f-mono); font-size:11.5px; cursor:pointer;
+  border:1px solid var(--line-strong); background:var(--surface); color:var(--ink-2);
+  border-radius:6px; padding:5px 10px;
+}
+.schip:hover:not(:disabled){border-color:var(--accent); color:var(--ink)}
+.schip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--surface); font-weight:600}
+.schip[aria-pressed="true"] .sn{color:var(--surface); opacity:.75}
+.schip:disabled{opacity:.4; cursor:not-allowed}
+.schip .sn{color:var(--ink-3)}
+.schip.preset{border-style:dashed}
+.snum{display:flex; flex-wrap:wrap; gap:14px}
+.snum label{
+  display:flex; flex-direction:column; gap:5px;
+  font-family:var(--f-mono); font-size:10.5px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.snum input{
+  font-family:var(--f-mono); font-size:15px; font-weight:600; color:var(--ink);
+  background:var(--surface-2); border:1px solid var(--line-strong); border-radius:7px;
+  padding:7px 10px; width:110px;
+}
+.snum input:focus{outline:2px solid var(--accent); outline-offset:1px}
+.sdisp{
+  margin-top:16px; padding-top:14px; border-top:1px solid var(--line);
+  display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+  font-family:var(--f-mono); font-size:11.5px; color:var(--ink-3);
+}
+.sdisp b{color:var(--ink); font-weight:600}
+.sdisp .qnext{margin-left:auto}
+.snota{margin:10px 0 0; font-size:12.5px; color:var(--ink-3); text-align:left}
+.sswitch{
+  display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+  font-family:var(--f-body); font-size:13px; color:var(--ink-2);
+}
+.sswitch input{accent-color:var(--accent); width:15px; height:15px}
+
+/* ---------- reloj del simulacro ---------- */
+.qreloj{
+  display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:16px;
+  font-family:var(--f-mono); font-size:12px; color:var(--ink-3);
+}
+.qreloj #qtimer{
+  font-size:20px; font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums;
+  padding:2px 10px; border:1px solid var(--line-strong); border-radius:7px; background:var(--surface);
+}
+.qreloj #qtimer.poco{color:#B3453C; border-color:#B3453C}
+:root:not([data-theme="light"]) .qreloj #qtimer.poco{color:#E8786E; border-color:#E8786E}
+.qreloj .qcortar{
+  margin-left:auto; font-family:var(--f-body); font-size:12.5px; cursor:pointer;
+  border:1px solid var(--line-strong); background:transparent; color:var(--ink-2);
+  border-radius:7px; padding:6px 12px;
+}
+.qreloj .qcortar:hover{border-color:#B3453C; color:#B3453C}
+
+/* ---------- historial ---------- */
+.htiles{
+  display:grid; gap:10px; margin-top:16px;
+  grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+}
+.htile{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:14px 16px; box-shadow:var(--shadow);
+}
+.htile .hk{
+  font-family:var(--f-mono); font-size:10px; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--ink-3); display:block;
+}
+.htile .hv{
+  font-family:var(--f-display); font-size:27px; font-weight:600; color:var(--ink);
+  line-height:1.1; margin-top:6px; display:block; font-variant-numeric:tabular-nums;
+}
+.htile .hs{font-family:var(--f-mono); font-size:11px; color:var(--ink-3); display:block; margin-top:3px}
+.hsec{
+  margin-top:14px; background:var(--surface); border:1px solid var(--line);
+  border-radius:11px; padding:18px 20px; box-shadow:var(--shadow);
+}
+.hsec>h3{
+  margin:0 0 4px; font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:600;
+}
+.hsec>p.hsub{margin:0; font-size:12.5px; color:var(--ink-3); text-align:left}
+.hbars{margin-top:14px; display:grid; gap:9px}
+.hbar{display:grid; grid-template-columns:minmax(110px,auto) 1fr 118px; gap:12px; align-items:center}
+.hbar .hname{font-size:12.5px; color:var(--ink-2); line-height:1.3}
+.hbar .hname b{color:var(--ink); font-family:var(--f-mono); font-size:11.5px; font-weight:600}
+.htrack{position:relative; height:16px; background:var(--surface-2); border-radius:4px; overflow:hidden}
+.htrack i{display:block; height:100%; background:var(--accent); border-radius:0 4px 4px 0; opacity:.85}
+.htrack u{
+  position:absolute; top:-2px; bottom:-2px; left:70%; width:2px; background:var(--ink-3);
+  opacity:.55; text-decoration:none;
+}
+.hbar .hval{
+  font-family:var(--f-mono); font-size:11.5px; color:var(--ink-2); text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+.hbar .hval b{color:var(--ink); font-weight:600}
+.hbar .hok{color:#2E7D52} .hbar .hno{color:#B3453C}
+:root:not([data-theme="light"]) .hbar .hok{color:#5EC48C}
+:root:not([data-theme="light"]) .hbar .hno{color:#E8786E}
+.hchart{margin-top:12px; width:100%; height:auto; display:block; overflow:visible}
+.hchart .hgrid{stroke:var(--line); stroke-width:1}
+.hchart .href{stroke:var(--ink-3); stroke-width:1.5; stroke-dasharray:5 4; opacity:.7}
+.hchart .hline{fill:none; stroke:var(--accent); stroke-width:2; stroke-linejoin:round; stroke-linecap:round}
+.hchart .hdot{fill:var(--accent); stroke:var(--surface); stroke-width:2}
+.hchart text{font-family:var(--f-mono); font-size:11px; fill:var(--ink-3)}
+.hchart text.hnow{fill:var(--ink); font-weight:600}
+.htabla{width:100%; border-collapse:collapse; margin-top:12px; font-size:12.5px}
+.htabla th{
+  font-family:var(--f-mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:600; text-align:left; padding:0 10px 7px 0; border-bottom:1px solid var(--line);
+}
+.htabla th.r, .htabla td.r{text-align:right; padding-right:0}
+.htabla td{padding:9px 10px 9px 0; border-bottom:1px solid var(--line); color:var(--ink-2); vertical-align:top}
+.htabla tr.hrow{cursor:pointer}
+.htabla tr.hrow:hover td{background:var(--surface-2)}
+.htabla td b{color:var(--ink); font-weight:600}
+.htabla .hpill{
+  font-family:var(--f-mono); font-size:10px; letter-spacing:.05em; text-transform:uppercase;
+  border-radius:4px; padding:2px 7px; white-space:nowrap;
+}
+.hpill.ok{background:rgba(46,125,82,.13); color:#2E7D52}
+.hpill.no{background:rgba(179,69,60,.12); color:#B3453C}
+:root:not([data-theme="light"]) .hpill.ok{background:rgba(94,196,140,.15); color:#5EC48C}
+:root:not([data-theme="light"]) .hpill.no{background:rgba(232,120,110,.14); color:#E8786E}
+.hdet{background:var(--surface-2)}
+.hdet td{padding:0 0 14px}
+.hdur{font-variant-numeric:tabular-nums}
+.hlista{display:grid; gap:8px; margin-top:10px}
+.hq{
+  display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:baseline;
+  padding:9px 0; border-bottom:1px solid var(--line); font-size:13px; color:var(--ink-2);
+}
+.hq:last-child{border-bottom:0}
+.hq .hqid{font-family:var(--f-mono); font-size:11px; color:var(--ink-3)}
+.hq .hqn{font-family:var(--f-mono); font-size:11px; color:#B3453C; white-space:nowrap}
+:root:not([data-theme="light"]) .hq .hqn{color:#E8786E}
+.hacc{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:14px}
+.hbtn{
+  font-family:var(--f-body); font-size:12.5px; cursor:pointer;
+  border:1px solid var(--line-strong); background:transparent; color:var(--ink-2);
+  border-radius:7px; padding:6px 13px;
+}
+.hbtn:hover{border-color:var(--accent); color:var(--accent)}
+.hbtn.peligro:hover{border-color:#B3453C; color:#B3453C}
+@media(max-width:520px){
+  .hbar{grid-template-columns:1fr; gap:4px}
+  .hbar .hval{text-align:left}
+  .htabla .hoculta{display:none}
+  .hq{grid-template-columns:1fr; gap:3px}
+  .hq .hqn{text-align:left}
+  .hsec{padding:16px 14px}
+  .htabla{font-size:12px}
+}
+
 :focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 @media(max-width:520px){
@@ -458,6 +644,7 @@ footer a{color:var(--ink-3)}
 
 <section id="glosario" hidden>
   <p class="glosintro">Todas las definiciones que las ocho leyes dan de sí mismas, con el texto tal cual lo escribe la ley. La mayoría sale del artículo 2 de la Ley 26.831, que es el diccionario del mercado de capitales; el resto está repartido en los artículos donde cada ley define un concepto. El chip de abajo de cada término te lleva al artículo exacto.</p>
+  <div class="glosleyes" id="glosleyes"></div>
   <div class="glosletras" id="glosletras"></div>
   <div class="glosgrid" id="glosgrid"></div>
   <div class="empty" id="gempty">Ningún término coincide con la búsqueda.</div>
@@ -469,6 +656,7 @@ footer a{color:var(--ink-3)}
     <button class="mbtn" id="mPractica" aria-selected="true">Práctica</button>
     <button class="mbtn" id="mSimulacro" aria-selected="false">Simulacro</button>
     <button class="mbtn" id="mRepaso" aria-selected="false">Repaso</button>
+    <button class="mbtn" id="mHistorial" aria-selected="false">Historial</button>
     <span class="qstat" id="qstat"></span>
   </div>
   <div class="qfiltro" id="qfiltro"></div>
@@ -490,7 +678,7 @@ footer a{color:var(--ink-3)}
 <footer>
   <p>Textos actualizados tomados de InfoLeg (Ministerio de Justicia), incluidas las reformas de la Ley 27.440; la Ley 22.169, que no tiene texto actualizado publicado, va en su versión original. Las definiciones del glosario son literales. Los resúmenes, en cambio, son una ayuda de estudio: ante cualquier duda de examen, manda el texto legal, no el resumen.</p>
   <p><b>Esta página no es material oficial de la Comisión Nacional de Valores, no cuenta con su aval ni con su autorización.</b> Es una ayuda de estudio de uso libre y sin fines de lucro.</p>
-  <p>Textos actualizados tomados de InfoLeg (Ministerio de Justicia). Parte del cuestionario proviene del banco público de <a href="https://github.com/octavioes/cnv-idoneo-v2" rel="noopener">idoneocnv.com</a> (licencia MIT, de @octavioesc), armado sobre la Guía de Estudio que publica la CNV. El resto sale de simulaciones que circulan entre quienes rindieron. Código y detalle de atribuciones en el <a href="https://github.com/TU-USUARIO/mapa-idoneo" id="repolink" rel="noopener">repositorio</a>.</p>
+  <p>Textos actualizados tomados de InfoLeg (Ministerio de Justicia). Parte del cuestionario proviene del banco público de <a href="https://github.com/octavioes/cnv-idoneo-v2" rel="noopener">idoneocnv.com</a> (licencia MIT, de @octavioesc), armado sobre la Guía de Estudio que publica la CNV. El resto sale de simulaciones que circulan entre quienes rindieron. Código y detalle de atribuciones en el <a href="https://github.com/martingomezpizarro/Preparaci-n-Examen-Idoneidad" id="repolink" rel="noopener">repositorio</a>.</p>
 </footer>
 </div>
 
@@ -1465,7 +1653,10 @@ function render(){
 
 function filter(){
   if(vista === "glosario"){ filterGlosario(); return; }
-  if(vista === "cuestionario"){ nuevaCola(); pintarCuestionario(); return; }
+  if(vista === "cuestionario"){
+    if(quiz.modo === "practica" || quiz.modo === "repaso") nuevaCola();
+    pintarCuestionario(); return;
+  }
   const q = qEl.value.trim().toLowerCase();
   const only = onlyEl.getAttribute("aria-pressed")==="true";
   let shown = 0, total = 0;
@@ -1498,12 +1689,13 @@ function filter(){
 /* ---------------- glosario ---------------- */
 const glosGrid = document.getElementById("glosgrid");
 const glosLetras = document.getElementById("glosletras");
+const glosLeyes = document.getElementById("glosleyes");
 const gEmpty = document.getElementById("gempty");
 const vLeyesBtn = document.getElementById("vLeyes");
 const vGlosBtn = document.getElementById("vGlosario");
 const leyesView = document.getElementById("leyesView");
 const glosView = document.getElementById("glosario");
-let vista = "leyes", letra = "";
+let vista = "leyes", letra = "", glosLey = "";
 
 function inicial(s){
   return s.normalize("NFD").replace(/[̀-ͯ]/g, "")[0].toUpperCase();
@@ -1511,6 +1703,16 @@ function inicial(s){
 
 function renderGlosario(){
   document.getElementById("gcount").textContent = GLOSARIO.length;
+  const conteo = {};
+  GLOSARIO.forEach(g=>{ conteo[g.l] = (conteo[g.l]||0) + 1; });
+  const ids = Object.keys(conteo).sort((a,b)=>conteo[b]-conteo[a]);
+  glosLeyes.innerHTML =
+    `<button data-ley="" aria-pressed="true" style="--gc:var(--accent)"><span class="gdot"></span>Todas<span class="gn">${GLOSARIO.length}</span></button>` +
+    ids.map(id=>{
+      const l = leyPorId(id);
+      return `<button data-ley="${id}" aria-pressed="false" style="--gc:${l?l.color:"#2E5EAA"}">`
+        + `<span class="gdot"></span>Ley ${esc(l?l.num:id)}<span class="gn">${conteo[id]}</span></button>`;
+    }).join("");
   const letras = [...new Set(GLOSARIO.map(g=>inicial(g.t)))].sort();
   glosLetras.innerHTML =
     `<button data-l="" aria-pressed="true">Todas</button>` +
@@ -1519,7 +1721,7 @@ function renderGlosario(){
     const l = leyPorId(g.l);
     const nota = g.src === "nota";
     const color = l ? l.color : "#2E5EAA";
-    return `<article class="gitem${nota?" nota":""}" data-l="${inicial(g.t)}" style="--gc:${color}">
+    return `<article class="gitem${nota?" nota":""}" data-l="${inicial(g.t)}" data-ley="${g.l}" style="--gc:${color}">
       <h4>${esc(g.t)}</h4>
       <p>${esc(g.d)}</p>
       <div class="gfoot">
@@ -1534,7 +1736,9 @@ function filterGlosario(){
   const q = qEl.value.trim().toLowerCase();
   let n = 0;
   glosGrid.querySelectorAll(".gitem").forEach(el=>{
-    const ok = (!q || el.textContent.toLowerCase().includes(q)) && (!letra || el.dataset.l === letra);
+    const ok = (!q || el.textContent.toLowerCase().includes(q))
+      && (!letra || el.dataset.l === letra)
+      && (!glosLey || el.dataset.ley === glosLey);
     el.classList.toggle("hidden", !ok);
     if(ok) n++;
   });
@@ -1571,6 +1775,13 @@ glosLetras.addEventListener("click", e=>{
   glosLetras.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x === b ? "true":"false"));
   filterGlosario();
 });
+glosLeyes.addEventListener("click", e=>{
+  const b = e.target.closest("button[data-ley]");
+  if(!b) return;
+  glosLey = b.dataset.ley;
+  glosLeyes.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x === b ? "true":"false"));
+  filterGlosario();
+});
 glosGrid.addEventListener("click", e=>{
   const b = e.target.closest(".gsrc[data-go]");
   if(!b) return;
@@ -1584,30 +1795,85 @@ const cuestView = document.getElementById("cuestionario");
 const qzona = document.getElementById("qzona");
 const qstat = document.getElementById("qstat");
 const qfiltroEl = document.getElementById("qfiltro");
-const LS = "mapa-idoneo-quiz-v1";
+const LS  = "mapa-idoneo-quiz-v1";
+const LSH = "mapa-idoneo-hist-v1";
+const LSC = "mapa-idoneo-cfg-v1";
 const LETRAS = "abcdefghij";
+const APROB = 70;                       // % que pide la CNV para aprobar
 const esIcnv = q => q.id.startsWith("ICNV-");
+const MODS = [...new Set(PREGUNTAS.map(q=>q.mod))].sort((a,b)=>a-b);
+const MODOS = ["practica","simulacro","repaso","historial"];
+const IDMODO = { practica:"mPractica", simulacro:"mSimulacro", repaso:"mRepaso", historial:"mHistorial" };
 
 let quiz = {
   modo: "practica",
   mod: 0,                // 0 = todos los módulos
   origen: "todas",       // todas | verif | icnv
   filtro: null,          // {ley, art} cuando venís desde un artículo
-  soloFallos: false,
+  soloFallos: false,     // la última vez la fallé
+  dificiles: false,      // la fallé dos veces o más
   cola: [], i: 0,
   marcadas: [], resuelta: false,
-  respuestas: {},        // id -> {bien:bool, elegidas:[i]}
-  simul: { activo:false, t0:0, hechas:{} }
+  respuestas: {},        // id -> {bien, elegidas, v (veces), ok (aciertos), t (fecha)}
+  hist: [],              // simulacros cerrados
+  abierto: null,         // fila del historial desplegada
+  cfg: { n:60, min:45, mods:[], ley:"", origen:"todas", repartir:true },
+  simul: { activo:false, fin:false, t0:0, limite:0, hechas:{}, cerrado:null }
 };
 
+/* ---- persistencia, toda por dispositivo (localStorage del navegador) ---- */
 function cargarProgreso(){
   try{
     const raw = localStorage.getItem(LS);
-    if(raw) quiz.respuestas = JSON.parse(raw) || {};
+    quiz.respuestas = raw ? (JSON.parse(raw) || {}) : {};
   }catch(e){ quiz.respuestas = {}; }
+  // las respuestas viejas no llevaban contador: se les asume una vuelta
+  Object.values(quiz.respuestas).forEach(r=>{
+    if(typeof r.v !== "number"){ r.v = 1; r.ok = r.bien ? 1 : 0; }
+  });
+  try{
+    const raw = localStorage.getItem(LSH);
+    quiz.hist = raw ? (JSON.parse(raw) || []) : [];
+  }catch(e){ quiz.hist = []; }
+  try{
+    const raw = localStorage.getItem(LSC);
+    if(raw) quiz.cfg = Object.assign(quiz.cfg, JSON.parse(raw) || {});
+  }catch(e){}
 }
 function guardarProgreso(){
   try{ localStorage.setItem(LS, JSON.stringify(quiz.respuestas)); }catch(e){}
+}
+function guardarHist(){
+  try{ localStorage.setItem(LSH, JSON.stringify(quiz.hist.slice(-60))); }catch(e){}
+}
+function guardarCfg(){
+  try{ localStorage.setItem(LSC, JSON.stringify(quiz.cfg)); }catch(e){}
+}
+
+/* ---- utilidades ---- */
+const veces = id => (quiz.respuestas[id] || {}).v || 0;
+const fallas = id => { const r = quiz.respuestas[id]; return r ? (r.v||0) - (r.ok||0) : 0; };
+const pregPorId = id => PREGUNTAS.find(q=>q.id === id);
+
+function acerto(q, elegidas){
+  return !!q.ok.length && q.ok.every(i=>elegidas.includes(i)) && elegidas.every(i=>q.ok.includes(i));
+}
+function reloj(ms){
+  const s = Math.max(0, Math.round(ms/1000));
+  const m = Math.floor(s/60), r = s%60;
+  return `${m}:${String(r).padStart(2,"0")}`;
+}
+function fecha(ts){
+  const d = new Date(ts);
+  return d.toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"2-digit"})
+    + " " + d.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"});
+}
+function marcarModo(m){
+  quiz.modo = m;
+  MODOS.forEach(x=>{
+    const el = document.getElementById(IDMODO[x]);
+    if(el) el.setAttribute("aria-selected", x === m ? "true" : "false");
+  });
 }
 
 function citaHTML(q){
@@ -1623,6 +1889,7 @@ function citaHTML(q){
   return q.cita ? `<span class="lk ext">${esc(q.cita)}</span>` : "";
 }
 
+/* ---- pool de práctica y repaso ---- */
 function pool(){
   let xs = PREGUNTAS.slice();
   if(quiz.mod) xs = xs.filter(q=>q.mod===quiz.mod);
@@ -1630,6 +1897,7 @@ function pool(){
   if(quiz.origen === "verif") xs = xs.filter(q=>!esIcnv(q));
   else if(quiz.origen === "icnv") xs = xs.filter(esIcnv);
   if(quiz.soloFallos) xs = xs.filter(q=>quiz.respuestas[q.id] && !quiz.respuestas[q.id].bien);
+  if(quiz.dificiles) xs = xs.filter(q=>fallas(q.id) >= 2);
   const q = qEl.value.trim().toLowerCase();
   if(q) xs = xs.filter(x=>(x.q + " " + x.op.join(" ") + " " + (x.porque||"")).toLowerCase().includes(q));
   return xs;
@@ -1642,9 +1910,10 @@ function mezclar(xs){
 }
 
 function nuevaCola(){
-  quiz.cola = quiz.modo === "simulacro" ? mezclar(pool()) : mezclar(pool());
+  const xs = pool();
+  // en repaso dirigido, primero las que más veces fallaste
+  quiz.cola = quiz.dificiles ? xs.slice().sort((a,b)=>fallas(b.id)-fallas(a.id)) : mezclar(xs);
   quiz.i = 0; quiz.marcadas = []; quiz.resuelta = false;
-  if(quiz.modo === "simulacro"){ quiz.simul = { activo:true, t0:Date.now(), hechas:{} }; }
 }
 
 function statHTML(){
@@ -1656,10 +1925,9 @@ function statHTML(){
 
 function filtrosHTML(){
   const partes = [];
-  const mods = [...new Set(PREGUNTAS.map(q=>q.mod))].sort();
   partes.push(`<span class="vlabel">Módulo</span>`);
   partes.push(`<button class="lk${quiz.mod?" ext":""}" data-mod="0" style="cursor:pointer">Todos</button>`);
-  mods.forEach(m=>{
+  MODS.forEach(m=>{
     const n = PREGUNTAS.filter(q=>q.mod===m).length;
     partes.push(`<button class="lk${quiz.mod===m?"":" ext"}" data-mod="${m}" style="cursor:pointer">M${m} (${n})</button>`);
   });
@@ -1675,8 +1943,10 @@ function filtrosHTML(){
       partes.push(`<button class="lk${quiz.origen===k?"":" ext"}" data-origen="${k}" style="cursor:pointer">${et} (${n})</button>`);
     });
   const fallos = PREGUNTAS.filter(q=>quiz.respuestas[q.id] && !quiz.respuestas[q.id].bien).length;
+  const duras = PREGUNTAS.filter(q=>fallas(q.id) >= 2).length;
+  partes.push(`<span class="vlabel">Repaso</span>`);
   partes.push(`<button class="lk${quiz.soloFallos?"":" ext"}" id="qfallos" style="cursor:pointer">${quiz.soloFallos?"✓ ":""}Solo las que fallé (${fallos})</button>`);
-  partes.push(`<button class="lk ext" id="qreset" style="cursor:pointer">Borrar mi progreso</button>`);
+  partes.push(`<button class="lk${quiz.dificiles?"":" ext"}" id="qduras" style="cursor:pointer">${quiz.dificiles?"✓ ":""}Las que más me cuestan (${duras})</button>`);
   return partes.join("");
 }
 
@@ -1694,17 +1964,19 @@ function tarjeta(q, estado){
 
   const multi = q.ok.length > 1;
   const r = quiz.respuestas[q.id];
+  const mal = fallas(q.id);
   const cabecera = `<div class="qhead">
       <span class="qn">${esc(q.id)}</span>
       <span>Módulo ${q.mod}</span>
       ${multi ? `<span>Elegí todas las que correspondan</span>` : ""}
       ${q.verif ? "" : `<span class="qsinverif">Respuesta a confirmar</span>`}
-      ${r ? `<span>${r.bien ? "Ya la acertaste" : "La fallaste antes"}</span>` : ""}
+      ${r ? `<span>${r.bien ? "Ya la acertaste" : "La fallaste antes"}${r.v>1?` · ${r.ok}/${r.v}`:""}</span>` : ""}
+      ${mal>=2 ? `<span>La fallaste ${mal} veces</span>` : ""}
     </div>`;
 
   let fb = "";
   if(estado.revelada){
-    const bien = q.ok.length && q.ok.every(i=>estado.elegidas.includes(i)) && estado.elegidas.every(i=>q.ok.includes(i));
+    const bien = acerto(q, estado.elegidas);
     fb = `<div class="qfb">
       ${estado.listado ? "" : `<div class="qveredicto ${bien?"ok":"no"}">${bien?"Correcto":"Incorrecto"}</div>`}
       <p class="qporque">${esc(q.porque)}</p>
@@ -1722,18 +1994,487 @@ function tarjeta(q, estado){
     <ul class="qops">${ops}</ul>${fb}</article>`;
 }
 
+/* ---------------- simulacro ---------------- */
+function poolSimul(cfg){
+  let xs = PREGUNTAS.filter(q=>q.ok.length);
+  if(cfg.mods.length) xs = xs.filter(q=>cfg.mods.includes(q.mod));
+  if(cfg.ley) xs = xs.filter(q=>q.ley === cfg.ley);
+  if(cfg.origen === "verif") xs = xs.filter(q=>!esIcnv(q));
+  else if(cfg.origen === "icnv") xs = xs.filter(esIcnv);
+  return xs;
+}
+
+function armarCola(cfg){
+  const xs = poolSimul(cfg);
+  const n = Math.min(cfg.n, xs.length);
+  if(!cfg.repartir) return mezclar(xs).slice(0, n);
+  // reparto parejo entre los módulos disponibles, como el examen real
+  const porMod = {};
+  xs.forEach(q=>{ (porMod[q.mod] = porMod[q.mod] || []).push(q); });
+  const ms = Object.keys(porMod).map(Number).sort((a,b)=>a-b);
+  ms.forEach(m=>{ porMod[m] = mezclar(porMod[m]); });
+  const out = [];
+  let sigue = true;
+  while(out.length < n && sigue){
+    sigue = false;
+    for(const m of ms){
+      if(out.length >= n) break;
+      if(porMod[m].length){ out.push(porMod[m].pop()); sigue = true; }
+    }
+  }
+  return mezclar(out);
+}
+
+function setupHTML(){
+  const cfg = quiz.cfg;
+  const disp = poolSimul(cfg);
+  const n = Math.min(cfg.n, disp.length);
+  const leyesConPreg = {};
+  PREGUNTAS.forEach(q=>{ if(q.ley) leyesConPreg[q.ley] = (leyesConPreg[q.ley]||0) + 1; });
+  const idsLey = LEYES.map(l=>l.id);
+
+  const presets = [
+    ["real","Examen real · 60 preguntas en 45 min",60,45],
+    ["parcial","Parcial · 30 preguntas en 23 min",30,23],
+    ["corto","Repaso rápido · 20 preguntas en 15 min",20,15]
+  ].map(([k,et,pn,pm])=>{
+    const on = cfg.n===pn && cfg.min===pm;
+    return `<button class="schip preset" data-preset="${pn}:${pm}" aria-pressed="${on}">${et}</button>`;
+  }).join("");
+
+  const mods = MODS.map(m=>{
+    const cuenta = PREGUNTAS.filter(q=>q.mod===m && q.ok.length &&
+      (!cfg.ley || q.ley===cfg.ley) &&
+      (cfg.origen==="todas" || (cfg.origen==="verif" ? !esIcnv(q) : esIcnv(q)))).length;
+    const on = cfg.mods.includes(m);
+    return `<button class="schip" data-smod="${m}" aria-pressed="${on}"${cuenta?"":" disabled"}>M${m}<span class="sn">${cuenta}</span></button>`;
+  }).join("");
+
+  const leyes = idsLey.map(id=>{
+    const l = leyPorId(id);
+    const cuenta = PREGUNTAS.filter(q=>q.ley===id && q.ok.length &&
+      (!cfg.mods.length || cfg.mods.includes(q.mod)) &&
+      (cfg.origen==="todas" || (cfg.origen==="verif" ? !esIcnv(q) : esIcnv(q)))).length;
+    const on = cfg.ley === id;
+    return `<button class="schip" data-sley="${id}" aria-pressed="${on}"${cuenta?"":" disabled"}>${esc(l.num)}<span class="sn">${cuenta}</span></button>`;
+  }).join("");
+
+  const nIcnv = PREGUNTAS.filter(q=>esIcnv(q) && q.ok.length).length;
+  const nVerif = PREGUNTAS.filter(q=>!esIcnv(q) && q.ok.length).length;
+  const origen = [["todas","Las dos",nVerif+nIcnv],["verif","Simulaciones corregidas",nVerif],["icnv","Guía CNV · idoneocnv",nIcnv]]
+    .map(([k,et,c])=>`<button class="schip" data-sorigen="${k}" aria-pressed="${cfg.origen===k}">${et}<span class="sn">${c}</span></button>`).join("");
+
+  const conLey = Object.values(leyesConPreg).reduce((a,b)=>a+b,0);
+
+  return `<div class="setup">
+    <h3>Armá el simulacro</h3>
+    <div class="sfila">
+      <span class="slabel">Preset</span>
+      <div class="schips">${presets}</div>
+      <p class="snota">El examen real de la CNV son 60 preguntas de opción múltiple en 45 minutos, diez por módulo, y se aprueba con el 70% (42 correctas). El parcial, 30 en 23 minutos.</p>
+    </div>
+    <div class="sfila">
+      <div class="snum">
+        <label>Cantidad<input id="sn" type="number" min="1" max="${Math.max(1,disp.length)}" step="1" value="${cfg.n}"></label>
+        <label>Minutos (0 = sin límite)<input id="sm" type="number" min="0" max="240" step="1" value="${cfg.min}"></label>
+      </div>
+    </div>
+    <div class="sfila">
+      <span class="slabel">Módulos — ninguno marcado = todos</span>
+      <div class="schips">${mods}
+        <button class="schip" data-smod="0" aria-pressed="${cfg.mods.length===0}">Todos</button></div>
+    </div>
+    <div class="sfila">
+      <span class="slabel">Ley</span>
+      <div class="schips">
+        <button class="schip" data-sley="" aria-pressed="${!cfg.ley}">Todas<span class="sn">${poolSimul({mods:cfg.mods,ley:"",origen:cfg.origen,n:0}).length}</span></button>
+        ${leyes}</div>
+      <p class="snota">Solo ${conLey} de las ${PREGUNTAS.length} preguntas tienen ley y artículo enganchados: son las de las simulaciones corregidas. Las ${nIcnv} de la Guía CNV todavía no están cruzadas contra el texto legal, así que el filtro por ley se vacía enseguida. Para segmentar de verdad, usá el módulo.</p>
+    </div>
+    <div class="sfila">
+      <span class="slabel">Origen</span>
+      <div class="schips">${origen}</div>
+    </div>
+    <div class="sfila">
+      <label class="sswitch"><input type="checkbox" id="srep" ${cfg.repartir?"checked":""}>Repartir parejo entre los módulos, como el examen real</label>
+    </div>
+    <div class="sdisp">
+      <span id="sdispTxt">Disponibles con estos filtros: <b>${disp.length}</b> · te va a tomar <b>${n}</b>${cfg.min?` en <b>${cfg.min} min</b>`:" sin límite de tiempo"}</span>
+      <button class="qnext" id="sempezar"${disp.length?"":" disabled"}>Empezar simulacro</button>
+    </div>
+  </div>`;
+}
+
+let tick = null;
+function pararReloj(){ if(tick){ clearInterval(tick); tick = null; } }
+function arrancarReloj(){
+  pararReloj();
+  if(!quiz.simul.limite) return;
+  tick = setInterval(()=>{
+    if(!quiz.simul.activo){ pararReloj(); return; }
+    const queda = quiz.simul.limite - (Date.now() - quiz.simul.t0);
+    if(queda <= 0){ pararReloj(); terminarSimulacro(true); return; }
+    const el = document.getElementById("qtimer");
+    if(el){
+      el.textContent = reloj(queda);
+      el.classList.toggle("poco", queda < 5*60000);
+    }
+  }, 1000);
+}
+
+function empezarSimulacro(){
+  const cola = armarCola(quiz.cfg);
+  if(!cola.length) return;
+  quiz.cola = cola; quiz.i = 0; quiz.marcadas = []; quiz.resuelta = false;
+  quiz.simul = {
+    activo:true, fin:false, t0:Date.now(),
+    limite: quiz.cfg.min ? quiz.cfg.min*60000 : 0,
+    hechas:{}, cerrado:null
+  };
+  guardarCfg();
+  arrancarReloj();
+  pintarCuestionario();
+}
+
+function terminarSimulacro(porTiempo){
+  pararReloj();
+  const total = quiz.cola.length;
+  const hechas = quiz.simul.hechas;
+  const dadas = quiz.cola.filter(q=>hechas[q.id]);
+  const bien = dadas.filter(q=>acerto(q, hechas[q.id]));
+  dadas.forEach(q=>responder(q, hechas[q.id]));   // cuentan para el dominio por módulo
+  const seg = Math.round((Date.now() - quiz.simul.t0)/1000);
+  const pct = total ? Math.round(bien.length/total*100) : 0;
+  const mods = {};
+  quiz.cola.forEach(q=>{
+    const m = mods[q.mod] = mods[q.mod] || {n:0, ok:0};
+    m.n++;
+    if(hechas[q.id] && acerto(q, hechas[q.id])) m.ok++;
+  });
+  const reg = {
+    ts: Date.now(), n: total, resp: dadas.length, ok: bien.length, pct, seg,
+    corte: !!porTiempo,
+    cfg: { mods: quiz.cfg.mods.slice(), ley: quiz.cfg.ley, origen: quiz.cfg.origen, min: quiz.cfg.min },
+    mods,
+    ids: quiz.cola.map(q=>q.id),
+    hechas: Object.assign({}, hechas)
+  };
+  quiz.hist.push(reg);
+  guardarHist();
+  quiz.simul.activo = false;
+  quiz.simul.fin = true;
+  quiz.simul.cerrado = reg;
+  pintarCuestionario();
+}
+
+function pintarResultado(){
+  const reg = quiz.simul.cerrado;
+  if(!reg){ qzona.innerHTML = setupHTML(); bindSetup(); return; }
+  const aprob = reg.pct >= APROB;
+  const qs = (reg.ids || []).map(pregPorId).filter(Boolean);
+  const fallos = qs.filter(q=>!reg.hechas[q.id] || !acerto(q, reg.hechas[q.id]));
+  const porMod = Object.keys(reg.mods).map(Number).sort((a,b)=>a-b).map(m=>{
+    const x = reg.mods[m];
+    const p = x.n ? Math.round(x.ok/x.n*100) : 0;
+    return `<div class="hbar"><span class="hname"><b>M${m}</b></span>
+      <span class="htrack"><i style="width:${p}%"></i><u></u></span>
+      <span class="hval"><b class="${p>=APROB?"hok":"hno"}">${p}%</b> ${x.ok}/${x.n}</span></div>`;
+  }).join("");
+  qzona.innerHTML = `<div class="qcard">
+    <div class="qhead"><span class="qn">Resultado</span><span class="hdur">${reloj(reg.seg*1000)}</span>
+      ${reg.corte ? `<span>Cortado por tiempo</span>` : ""}
+      <span class="hpill ${aprob?"ok":"no"}">${aprob?"Aprobado":"Desaprobado"}</span></div>
+    <p class="qtext">${reg.ok} de ${reg.n} correctas — ${reg.pct}%</p>
+    <p class="qporque">${aprob
+      ? `Por encima del 70% que pide la CNV. ${reg.resp < reg.n ? `Quedaron ${reg.n-reg.resp} sin contestar y cuentan como error.` : ""}`
+      : `Debajo del 70% que pide la CNV${reg.resp < reg.n ? `; ${reg.n-reg.resp} quedaron sin contestar y cuentan como error` : ""}. ${fallos.length ? "Abajo están las que fallaste, con el fundamento al lado." : ""}`}</p>
+    <div class="hbars">${porMod}</div>
+    <div class="qpie">
+      <button class="qnext sec" id="qotra">Armar otro simulacro</button>
+      <button class="qnext sec" id="qalhist">Ver el historial</button>
+      ${fallos.length ? `<button class="qnext" id="qrepasar">Repasar las que fallé</button>` : ""}
+    </div>
+  </div>` + (fallos.length ? `<div class="qlista">` + fallos.map(q=>
+      tarjeta(q, { revelada:true, elegidas: reg.hechas[q.id] || [], listado:true })).join("") + `</div>` : "");
+}
+
+/* ---------------- historial ---------------- */
+function statsPorModulo(){
+  const out = {};
+  MODS.forEach(m=>{ out[m] = {n:0, v:0, ok:0, total: PREGUNTAS.filter(q=>q.mod===m).length}; });
+  PREGUNTAS.forEach(q=>{
+    const r = quiz.respuestas[q.id];
+    if(!r) return;
+    const o = out[q.mod];
+    o.n++; o.v += (r.v||1); o.ok += (r.ok||0);
+  });
+  return out;
+}
+
+function curvaHTML(){
+  const hs = quiz.hist.slice().sort((a,b)=>a.ts-b.ts);
+  if(!hs.length) return `<p class="hsub">Todavía no cerraste ningún simulacro. Cuando hagas el primero, acá aparece la curva.</p>`;
+  const angosto = (window.innerWidth || 900) < 560;
+  const W = angosto ? 380 : 640, H = angosto ? 160 : 180;
+  const L = 32, R = angosto ? 34 : 40, T = 16, B = 28;
+  const pw = W - L - R, ph = H - T - B;
+  const x = i => hs.length === 1 ? L + pw/2 : L + i*(pw/(hs.length-1));
+  const y = p => T + (100 - p)/100*ph;
+  const pts = hs.map((h,i)=>[x(i), y(h.pct)]);
+  const linea = hs.length > 1
+    ? `<path class="hline" d="${pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")}"/>` : "";
+  const dots = pts.map((p,i)=>`<circle class="hdot" cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4.5"><title>${fecha(hs[i].ts)} — ${hs[i].pct}% (${hs[i].ok}/${hs[i].n})</title></circle>`).join("");
+  const ult = hs[hs.length-1];
+  const etiqueta = `<text class="hnow" x="${x(hs.length-1).toFixed(1)}" y="${(y(ult.pct)-11).toFixed(1)}" text-anchor="${hs.length>1?"end":"middle"}">${ult.pct}%</text>`;
+  const grid = [0,50,100].map(p=>
+    `<line class="hgrid" x1="${L}" x2="${W-R}" y1="${y(p).toFixed(1)}" y2="${y(p).toFixed(1)}"/>`
+    + `<text x="${L-8}" y="${(y(p)+4).toFixed(1)}" text-anchor="end">${p}</text>`).join("");
+  return `<svg class="hchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Porcentaje obtenido en cada simulacro, en orden cronológico">
+    ${grid}
+    <line class="href" x1="${L}" x2="${W-R}" y1="${y(APROB).toFixed(1)}" y2="${y(APROB).toFixed(1)}"/>
+    <text x="${W-R+5}" y="${(y(APROB)+4).toFixed(1)}">70%</text>
+    ${linea}${dots}${etiqueta}
+    <text x="${L}" y="${H-8}">${fecha(hs[0].ts).split(" ")[0]}</text>
+    ${hs.length>1?`<text x="${W-R}" y="${H-8}" text-anchor="end">${fecha(ult.ts).split(" ")[0]}</text>`:""}
+  </svg>`;
+}
+
+function pintarHistorial(){
+  const hs = quiz.hist.slice().sort((a,b)=>b.ts-a.ts);
+  const respondidas = Object.keys(quiz.respuestas).length;
+  const vueltas = Object.values(quiz.respuestas).reduce((a,r)=>a+(r.v||1),0);
+  const aciertos = Object.values(quiz.respuestas).reduce((a,r)=>a+(r.ok||0),0);
+  const pctGlobal = vueltas ? Math.round(aciertos/vueltas*100) : 0;
+  const mejor = hs.length ? Math.max(...hs.map(h=>h.pct)) : null;
+  const ultimos3 = hs.slice(0,3);
+  const prom3 = ultimos3.length ? Math.round(ultimos3.reduce((a,h)=>a+h.pct,0)/ultimos3.length) : null;
+
+  const tiles = `<div class="htiles">
+    <div class="htile"><span class="hk">Preguntas vistas</span><span class="hv">${respondidas}</span><span class="hs">de ${PREGUNTAS.length} · ${Math.round(respondidas/PREGUNTAS.length*100)}% del banco</span></div>
+    <div class="htile"><span class="hk">Acierto acumulado</span><span class="hv">${pctGlobal}%</span><span class="hs">${aciertos} de ${vueltas} respuestas</span></div>
+    <div class="htile"><span class="hk">Simulacros</span><span class="hv">${hs.length}</span><span class="hs">${mejor!==null?`mejor ${mejor}%`:"ninguno todavía"}</span></div>
+    <div class="htile"><span class="hk">Últimos tres</span><span class="hv">${prom3!==null?prom3+"%":"—"}</span><span class="hs">${prom3!==null?(prom3>=APROB?"arriba del 70%":"abajo del 70%"):"sin datos"}</span></div>
+  </div>`;
+
+  const st = statsPorModulo();
+  const barras = MODS.map(m=>{
+    const o = st[m];
+    const p = o.v ? Math.round(o.ok/o.v*100) : 0;
+    const nom = (MODNOM[m]||("Módulo "+m)).replace(/^Módulo \d+ · /,"");
+    return `<div class="hbar">
+      <span class="hname"><b>M${m}</b> ${esc(nom)}</span>
+      <span class="htrack"><i style="width:${o.v?p:0}%"></i><u></u></span>
+      <span class="hval">${o.v ? `<b class="${p>=APROB?"hok":"hno"}">${p}%</b> · ${o.n}/${o.total}` : "sin datos"}</span>
+    </div>`;
+  }).join("");
+
+  const filas = hs.length ? hs.map(h=>{
+    const abierta = quiz.abierto === h.ts;
+    const et = [];
+    if(h.cfg.mods && h.cfg.mods.length) et.push("M"+h.cfg.mods.join(", M"));
+    else et.push("todos los módulos");
+    if(h.cfg.ley){ const l = leyPorId(h.cfg.ley); et.push("Ley "+(l?l.num:h.cfg.ley)); }
+    if(h.cfg.origen === "verif") et.push("simulaciones corregidas");
+    else if(h.cfg.origen === "icnv") et.push("Guía CNV");
+    const fallos = h.ids ? h.ids.filter(id=>{
+      const q = pregPorId(id);
+      return q && (!h.hechas[id] || !acerto(q, h.hechas[id]));
+    }) : [];
+    const det = abierta ? `<tr class="hdet"><td colspan="5">
+      ${fallos.length ? `<div class="hlista">` + fallos.map(id=>{
+        const q = pregPorId(id);
+        if(!q) return "";
+        return `<div class="hq"><span class="hqid">${esc(q.id)}</span><span>${esc(q.q)}</span>
+          <span class="hqn">${h.hechas[id] ? "mal" : "en blanco"}</span></div>`;
+      }).join("") + `</div>` : `<p class="hsub" style="padding:10px 0">No fallaste ninguna en esa corrida.</p>`}
+      <div class="hacc"><button class="hbtn" data-borrar="${h.ts}">Borrar este simulacro</button></div>
+    </td></tr>` : "";
+    return `<tr class="hrow" data-ts="${h.ts}">
+      <td><b>${fecha(h.ts)}</b></td>
+      <td class="hoculta">${esc(et.join(" · "))}${h.corte?" · cortado por tiempo":""}</td>
+      <td class="r hdur">${reloj(h.seg*1000)}</td>
+      <td class="r"><b>${h.ok}</b>/${h.n}</td>
+      <td class="r"><span class="hpill ${h.pct>=APROB?"ok":"no"}">${h.pct}%</span></td>
+    </tr>${det}`;
+  }).join("") : "";
+
+  const durasTodas = PREGUNTAS.filter(q=>fallas(q.id) >= 2).sort((a,b)=>fallas(b.id)-fallas(a.id));
+  const duras = durasTodas.slice(0,12);
+
+  qzona.innerHTML = tiles
+  + `<section class="hsec">
+      <h3>Dominio por módulo</h3>
+      <p class="hsub">Sobre todas tus respuestas, en cualquier modo: el porcentaje de acierto y cuántas preguntas del módulo viste al menos una vez. La línea vertical marca el 70% que pide la CNV.</p>
+      <div class="hbars">${barras}</div>
+    </section>`
+  + `<section class="hsec">
+      <h3>Curva de simulacros</h3>
+      <p class="hsub">Un punto por simulacro cerrado, en orden. La línea punteada es el 70% con el que se aprueba.</p>
+      ${curvaHTML()}
+    </section>`
+  + `<section class="hsec">
+      <h3>Registro de simulacros</h3>
+      <p class="hsub">${hs.length ? "Tocá una fila para ver las que fallaste en esa corrida." : "Todavía no cerraste ninguno."}</p>
+      ${hs.length ? `<table class="htabla"><thead><tr>
+        <th>Cuándo</th><th class="hoculta">Filtros</th><th class="r">Tiempo</th><th class="r">Correctas</th><th class="r">Nota</th>
+      </tr></thead><tbody>${filas}</tbody></table>` : ""}
+    </section>`
+  + `<section class="hsec">
+      <h3>Las que más te cuestan</h3>
+      <p class="hsub">${duras.length ? "Preguntas que fallaste dos veces o más, ordenadas por cantidad de errores." : "Ninguna pregunta fallada dos veces o más — por ahora."}</p>
+      ${duras.length ? `<div class="hlista">` + duras.map(q=>{
+        const r = quiz.respuestas[q.id];
+        return `<div class="hq"><span class="hqid">${esc(q.id)} · M${q.mod}</span><span>${esc(q.q)}</span>
+          <span class="hqn">${fallas(q.id)} de ${r.v} mal</span></div>`;
+      }).join("") + `</div>
+      ${durasTodas.length > duras.length ? `<p class="hsub" style="margin-top:10px">Se listan las doce peores de ${durasTodas.length}.</p>` : ""}
+      <div class="hacc"><button class="hbtn" id="hrepasar">Repasar las ${durasTodas.length} en modo Práctica</button></div>` : ""}
+    </section>`
+  + `<section class="hsec">
+      <h3>Tus datos</h3>
+      <p class="hsub">Todo esto vive en este navegador y en este dispositivo: nada viaja a ningún servidor. Si limpiás los datos del sitio o cambiás de máquina, se pierde. Bajá el archivo para llevarlo a otro lado.</p>
+      <div class="hacc">
+        <button class="hbtn" id="hexport">Bajar mi historial (.json)</button>
+        <button class="hbtn" id="himport">Cargar un historial</button>
+        <input type="file" id="hfile" accept="application/json,.json" hidden>
+        <button class="hbtn peligro" id="hborrarhist">Borrar los simulacros</button>
+        <button class="hbtn peligro" id="qreset">Borrar todo el progreso</button>
+      </div>
+      <p class="hsub" id="hmsg" style="margin-top:10px"></p>
+    </section>`;
+}
+
+function exportar(){
+  const datos = { v:1, app:"mapa-idoneo", fecha:new Date().toISOString(), respuestas: quiz.respuestas, hist: quiz.hist };
+  const blob = new Blob([JSON.stringify(datos, null, 1)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "historial-idoneo-" + new Date().toISOString().slice(0,10) + ".json";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+}
+
+function importar(texto){
+  const msg = document.getElementById("hmsg");
+  let d;
+  try{ d = JSON.parse(texto); }catch(e){ if(msg) msg.textContent = "Ese archivo no es un historial válido."; return; }
+  if(!d || (!d.respuestas && !d.hist)){ if(msg) msg.textContent = "Ese archivo no tiene datos de este sitio."; return; }
+  let nr = 0, nh = 0;
+  Object.entries(d.respuestas || {}).forEach(([id, r])=>{
+    if(!pregPorId(id)) return;
+    const a = quiz.respuestas[id];
+    if(!a){ quiz.respuestas[id] = { bien:!!r.bien, elegidas:r.elegidas||[], v:r.v||1, ok:r.ok||(r.bien?1:0), t:r.t||0 }; nr++; return; }
+    const nuevo = (r.t||0) > (a.t||0);
+    quiz.respuestas[id] = {
+      bien: nuevo ? !!r.bien : a.bien,
+      elegidas: nuevo ? (r.elegidas||[]) : a.elegidas,
+      v: Math.max(a.v||1, r.v||1),
+      ok: Math.max(a.ok||0, r.ok||0),
+      t: Math.max(a.t||0, r.t||0)
+    };
+    nr++;
+  });
+  const vistos = new Set(quiz.hist.map(h=>h.ts));
+  (d.hist || []).forEach(h=>{
+    if(h && h.ts && !vistos.has(h.ts)){ quiz.hist.push(h); vistos.add(h.ts); nh++; }
+  });
+  quiz.hist.sort((a,b)=>a.ts-b.ts);
+  guardarProgreso(); guardarHist();
+  pintarCuestionario();
+  const m2 = document.getElementById("hmsg");
+  if(m2) m2.textContent = `Listo: ${nr} preguntas y ${nh} simulacros incorporados.`;
+}
+
+/* ---------------- render del cuestionario ---------------- */
+const INTRO = {
+  practica: "Una pregunta por vez, con corrección inmediata. Hay dos bancos: las simulaciones corregidas de la carpeta, verificadas contra el texto legal y con el artículo que las responde enganchado, y las de la Guía de Estudio de la CNV que publica idoneocnv.com, que traen la clave de su autor pero todavía no están cruzadas contra la ley — van marcadas «Respuesta a confirmar». Filtralas por origen acá abajo.",
+  simulacro: "Elegís cuántas preguntas, cuánto tiempo y de qué módulos o ley, y el simulacro corre sin corrección hasta el final. Al cerrarlo queda guardado en el historial.",
+  repaso: "Todas las preguntas con su respuesta y su fundamento a la vista, para leer de corrido.",
+  historial: "Todo lo que respondiste en este navegador: el registro de cada simulacro, tu dominio por módulo, la curva de progreso y las preguntas que se te siguen escapando. No se comparte con nadie ni sale de este dispositivo."
+};
+
+function bindSetup(){
+  const sn = document.getElementById("sn");
+  const sm = document.getElementById("sm");
+  const rep = document.getElementById("srep");
+  const refresco = ()=>{
+    const disp = poolSimul(quiz.cfg);
+    const n = Math.min(quiz.cfg.n, disp.length);
+    const t = document.getElementById("sdispTxt");
+    if(t) t.innerHTML = `Disponibles con estos filtros: <b>${disp.length}</b> · te va a tomar <b>${n}</b>${quiz.cfg.min?` en <b>${quiz.cfg.min} min</b>`:" sin límite de tiempo"}`;
+    document.querySelectorAll(".schip.preset").forEach(b=>{
+      const [pn,pm] = b.dataset.preset.split(":").map(Number);
+      b.setAttribute("aria-pressed", quiz.cfg.n===pn && quiz.cfg.min===pm ? "true":"false");
+    });
+  };
+  if(sn) sn.addEventListener("input", ()=>{
+    const v = parseInt(sn.value, 10);
+    quiz.cfg.n = isNaN(v) || v < 1 ? 1 : v; guardarCfg(); refresco();
+  });
+  if(sm) sm.addEventListener("input", ()=>{
+    const v = parseInt(sm.value, 10);
+    quiz.cfg.min = isNaN(v) || v < 0 ? 0 : v; guardarCfg(); refresco();
+  });
+  if(rep) rep.addEventListener("change", ()=>{ quiz.cfg.repartir = rep.checked; guardarCfg(); });
+}
+
 function pintarCuestionario(){
   qstat.innerHTML = statHTML();
+  const intro = document.getElementById("qintro");
+  if(intro) intro.textContent = INTRO[quiz.modo] || "";
+
+  if(quiz.modo === "historial"){
+    qfiltroEl.innerHTML = "";
+    countEl.textContent = `${quiz.hist.length} simulacro${quiz.hist.length===1?"":"s"} registrado${quiz.hist.length===1?"":"s"}`;
+    pararReloj();
+    pintarHistorial();
+    return;
+  }
+
+  if(quiz.modo === "simulacro"){
+    qfiltroEl.innerHTML = "";
+    if(!quiz.simul.activo){
+      countEl.textContent = `${poolSimul(quiz.cfg).length} preguntas disponibles`;
+      if(quiz.simul.fin){ pintarResultado(); }
+      else { qzona.innerHTML = setupHTML(); bindSetup(); }
+      return;
+    }
+    const q = quiz.cola[quiz.i];
+    if(!q){ terminarSimulacro(false); return; }
+    const queda = quiz.simul.limite ? quiz.simul.limite - (Date.now() - quiz.simul.t0) : 0;
+    const contestadas = Object.keys(quiz.simul.hechas).length;
+    const pct = Math.round(quiz.i / quiz.cola.length * 100);
+    countEl.textContent = `${contestadas} de ${quiz.cola.length} contestadas`;
+    qzona.innerHTML =
+      `<div class="qreloj">` +
+        (quiz.simul.limite
+          ? `<span id="qtimer"${queda < 5*60000 ? ` class="poco"`:""}>${reloj(queda)}</span><span>restantes</span>`
+          : `<span id="qtimer">${reloj(Date.now()-quiz.simul.t0)}</span><span>transcurridos</span>`) +
+        `<span>${contestadas} contestadas de ${quiz.cola.length}</span>` +
+        `<button class="qcortar" id="qcortar">Terminar ahora</button>` +
+      `</div>` +
+      `<div class="qprog"><i style="width:${pct}%"></i></div>` +
+      tarjeta(q, { revelada:false, elegidas: quiz.marcadas, listado:false }) +
+      `<div class="qpie"><span class="count">Pregunta ${quiz.i+1} de ${quiz.cola.length}</span>` +
+      (q.ok.length > 1 ? "" :
+        quiz.marcadas.length ? `<button class="qnext" id="qsig">Siguiente</button>`
+                             : `<button class="qnext sec" id="qsalteo">Saltear</button>`) +
+      `</div>`;
+    if(!quiz.simul.limite && !tick){
+      tick = setInterval(()=>{
+        const el = document.getElementById("qtimer");
+        if(el && quiz.simul.activo) el.textContent = reloj(Date.now()-quiz.simul.t0);
+      }, 1000);
+    }
+    return;
+  }
+
   qfiltroEl.innerHTML = filtrosHTML();
   const xs = pool();
   countEl.textContent = xs.length === PREGUNTAS.length
     ? `${PREGUNTAS.length} preguntas`
     : `${xs.length} de ${PREGUNTAS.length} preguntas`;
-  document.getElementById("qintro").textContent = quiz.modo === "practica"
-    ? "Una pregunta por vez, con corrección inmediata. Hay dos bancos: las simulaciones corregidas de la carpeta, verificadas contra el texto legal y con el artículo que las responde enganchado, y las de la Guía de Estudio de la CNV que publica idoneocnv.com, que traen la clave de su autor pero todavía no están cruzadas contra la ley — van marcadas «Respuesta a confirmar». Filtralas por origen acá abajo."
-    : quiz.modo === "simulacro"
-    ? "Todas las preguntas seguidas, sin corrección hasta el final, para medir dónde estás parado."
-    : "Todas las preguntas con su respuesta y su fundamento a la vista, para leer de corrido.";
 
   if(!xs.length){
     qzona.innerHTML = `<div class="empty">No hay preguntas con ese filtro.</div>`;
@@ -1746,46 +2487,29 @@ function pintarCuestionario(){
     return;
   }
 
-  if(!quiz.cola.length || quiz.i >= quiz.cola.length){
-    if(quiz.modo === "simulacro" && quiz.cola.length){ pintarResultado(); return; }
-    nuevaCola();
-  }
+  if(!quiz.cola.length || quiz.i >= quiz.cola.length) nuevaCola();
   const q = quiz.cola[quiz.i];
   const pct = Math.round(quiz.i / quiz.cola.length * 100);
   qzona.innerHTML =
     `<div class="qprog"><i style="width:${pct}%"></i></div>` +
     tarjeta(q, { revelada: quiz.resuelta, elegidas: quiz.marcadas, listado:false }) +
-    `<div class="qpie"><span class="count">Pregunta ${quiz.i+1} de ${quiz.cola.length}</span>` +
-    (quiz.modo === "simulacro" && !quiz.resuelta && quiz.marcadas.length
-      ? `<button class="qnext" id="qsig">Siguiente</button>` : "") +
-    `</div>`;
-}
-
-function pintarResultado(){
-  const total = quiz.cola.length;
-  const dadas = quiz.cola.filter(q=>quiz.simul.hechas[q.id]);
-  const bien = dadas.filter(q=>{
-    const e = quiz.simul.hechas[q.id];
-    return q.ok.length && q.ok.every(i=>e.includes(i)) && e.every(i=>q.ok.includes(i));
-  });
-  const mins = Math.round((Date.now() - quiz.simul.t0) / 60000);
-  const fallos = dadas.filter(q=>!bien.includes(q));
-  qzona.innerHTML = `<div class="qcard">
-    <div class="qhead"><span class="qn">Resultado</span><span>${mins} min</span></div>
-    <p class="qtext">${bien.length} de ${total} correctas — ${Math.round(bien.length/total*100)}%</p>
-    <p class="qporque">${fallos.length ? "Estas son las que fallaste. Pasá a Práctica con «Solo las que fallé» para repasarlas con el fundamento al lado." : "No fallaste ninguna."}</p>
-    <div class="qpie"><button class="qnext sec" id="qotra">Hacer otro simulacro</button></div>
-  </div>` + (fallos.length ? `<div class="qlista">` + fallos.map(q=>
-      tarjeta(q, { revelada:true, elegidas:quiz.simul.hechas[q.id], listado:true })).join("") + `</div>` : "");
-  quiz.simul.activo = false;
+    `<div class="qpie"><span class="count">Pregunta ${quiz.i+1} de ${quiz.cola.length}</span></div>`;
 }
 
 function responder(q, elegidas){
-  const bien = q.ok.length && q.ok.every(i=>elegidas.includes(i)) && elegidas.every(i=>q.ok.includes(i));
-  if(q.ok.length){ quiz.respuestas[q.id] = { bien, elegidas }; guardarProgreso(); }
+  if(!q.ok.length) return false;
+  const bien = acerto(q, elegidas);
+  const r = quiz.respuestas[q.id] || { v:0, ok:0 };
+  r.v = (r.v||0) + 1;
+  r.ok = (r.ok||0) + (bien ? 1 : 0);
+  r.bien = bien; r.elegidas = elegidas; r.t = Date.now();
+  quiz.respuestas[q.id] = r;
+  guardarProgreso();
+  return bien;
 }
 
 cuestView.addEventListener("click", e=>{
+  /* ---- opciones de una pregunta ---- */
   const op = e.target.closest(".qop[data-op]");
   if(op){
     const card = op.closest(".qcard");
@@ -1793,42 +2517,145 @@ cuestView.addEventListener("click", e=>{
     const i = +op.dataset.op;
     if(q.ok.length > 1){
       quiz.marcadas = quiz.marcadas.includes(i) ? quiz.marcadas.filter(x=>x!==i) : quiz.marcadas.concat(i);
+      if(quiz.modo === "simulacro") quiz.simul.hechas[q.id] = quiz.marcadas.slice();
     } else {
       quiz.marcadas = [i];
-      if(quiz.modo === "simulacro"){ quiz.simul.hechas[q.id] = quiz.marcadas.slice(); responder(q, quiz.marcadas); }
+      if(quiz.modo === "simulacro"){ quiz.simul.hechas[q.id] = quiz.marcadas.slice(); }
       else { quiz.resuelta = true; responder(q, quiz.marcadas); }
     }
     pintarCuestionario(); return;
   }
   if(e.target.closest("#qconfirmar")){
     const q = quiz.cola[quiz.i];
-    if(quiz.modo === "simulacro"){ quiz.simul.hechas[q.id] = quiz.marcadas.slice(); responder(q, quiz.marcadas); quiz.i++; quiz.marcadas=[]; }
-    else { quiz.resuelta = true; responder(q, quiz.marcadas); }
+    if(quiz.modo === "simulacro"){
+      quiz.simul.hechas[q.id] = quiz.marcadas.slice();
+      quiz.i++; quiz.marcadas = [];
+      if(quiz.i >= quiz.cola.length){ terminarSimulacro(false); return; }
+    } else { quiz.resuelta = true; responder(q, quiz.marcadas); }
     pintarCuestionario(); return;
   }
-  if(e.target.closest("#qsig")){
-    quiz.i++; quiz.marcadas = []; quiz.resuelta = false; pintarCuestionario(); return;
+  if(e.target.closest("#qsig") || e.target.closest("#qsalteo")){
+    if(quiz.modo === "simulacro"){
+      quiz.i++; quiz.marcadas = [];
+      if(quiz.i >= quiz.cola.length){ terminarSimulacro(false); return; }
+    } else { quiz.i++; quiz.marcadas = []; quiz.resuelta = false; }
+    pintarCuestionario(); return;
   }
-  if(e.target.closest("#qotra")){ nuevaCola(); pintarCuestionario(); return; }
+
+  /* ---- simulacro ---- */
+  if(e.target.closest("#sempezar")){ empezarSimulacro(); return; }
+  if(e.target.closest("#qcortar")){ terminarSimulacro(false); return; }
+  if(e.target.closest("#qotra")){
+    quiz.simul = { activo:false, fin:false, t0:0, limite:0, hechas:{}, cerrado:null };
+    pintarCuestionario(); return;
+  }
+  if(e.target.closest("#qalhist")){ marcarModo("historial"); pintarCuestionario(); return; }
+  if(e.target.closest("#qrepasar")){
+    quiz.simul = { activo:false, fin:false, t0:0, limite:0, hechas:{}, cerrado:null };
+    marcarModo("practica");
+    quiz.soloFallos = true; quiz.dificiles = false; quiz.filtro = null;
+    nuevaCola(); pintarCuestionario();
+    return;
+  }
+  const pre = e.target.closest(".schip[data-preset]");
+  if(pre){
+    const [n,m] = pre.dataset.preset.split(":").map(Number);
+    quiz.cfg.n = n; quiz.cfg.min = m; guardarCfg(); pintarCuestionario(); return;
+  }
+  const sm = e.target.closest(".schip[data-smod]");
+  if(sm){
+    const m = +sm.dataset.smod;
+    if(!m) quiz.cfg.mods = [];
+    else quiz.cfg.mods = quiz.cfg.mods.includes(m) ? quiz.cfg.mods.filter(x=>x!==m) : quiz.cfg.mods.concat(m).sort((a,b)=>a-b);
+    guardarCfg(); pintarCuestionario(); return;
+  }
+  const sl = e.target.closest(".schip[data-sley]");
+  if(sl){ quiz.cfg.ley = sl.dataset.sley; guardarCfg(); pintarCuestionario(); return; }
+  const so = e.target.closest(".schip[data-sorigen]");
+  if(so){ quiz.cfg.origen = so.dataset.sorigen; guardarCfg(); pintarCuestionario(); return; }
+
+  /* ---- historial ---- */
+  const fila = e.target.closest("tr.hrow[data-ts]");
+  if(fila){
+    const ts = +fila.dataset.ts;
+    quiz.abierto = quiz.abierto === ts ? null : ts;
+    pintarCuestionario(); return;
+  }
+  const bor = e.target.closest("[data-borrar]");
+  if(bor){
+    const ts = +bor.dataset.borrar;
+    quiz.hist = quiz.hist.filter(h=>h.ts !== ts);
+    quiz.abierto = null; guardarHist(); pintarCuestionario(); return;
+  }
+  if(e.target.closest("#hrepasar")){
+    marcarModo("practica");
+    quiz.dificiles = true; quiz.soloFallos = false; quiz.filtro = null; quiz.mod = 0;
+    qEl.value = ""; nuevaCola(); pintarCuestionario(); return;
+  }
+  if(e.target.closest("#hexport")){ exportar(); return; }
+  if(e.target.closest("#himport")){ document.getElementById("hfile").click(); return; }
+  if(e.target.closest("#hborrarhist")){
+    if(confirm("¿Borrar el registro de simulacros? Las respuestas por pregunta quedan.")){
+      quiz.hist = []; quiz.abierto = null; guardarHist(); pintarCuestionario();
+    }
+    return;
+  }
+  if(e.target.closest("#qreset")){
+    if(confirm("¿Borrar todo? Se pierden las respuestas y los simulacros guardados en este dispositivo.")){
+      quiz.respuestas = {}; quiz.hist = []; quiz.abierto = null;
+      guardarProgreso(); guardarHist(); nuevaCola(); pintarCuestionario();
+    }
+    return;
+  }
+
+  /* ---- filtros de práctica ---- */
   const og = e.target.closest("button.lk[data-origen]");
   if(og){ quiz.origen = og.dataset.origen; nuevaCola(); pintarCuestionario(); return; }
   const md = e.target.closest("button.lk[data-mod]");
   if(md){ quiz.mod = +md.dataset.mod; quiz.filtro = null; nuevaCola(); pintarCuestionario(); return; }
   if(e.target.closest("#qquitar")){ quiz.filtro = null; nuevaCola(); pintarCuestionario(); return; }
-  if(e.target.closest("#qfallos")){ quiz.soloFallos = !quiz.soloFallos; nuevaCola(); pintarCuestionario(); return; }
-  if(e.target.closest("#qreset")){ quiz.respuestas = {}; guardarProgreso(); nuevaCola(); pintarCuestionario(); return; }
+  if(e.target.closest("#qfallos")){ quiz.soloFallos = !quiz.soloFallos; if(quiz.soloFallos) quiz.dificiles = false; nuevaCola(); pintarCuestionario(); return; }
+  if(e.target.closest("#qduras")){ quiz.dificiles = !quiz.dificiles; if(quiz.dificiles) quiz.soloFallos = false; nuevaCola(); pintarCuestionario(); return; }
+
   const lk = e.target.closest("button.lk[data-go]");
   if(lk){ const [l,k] = lk.dataset.go.split(":"); goTo(l, k); }
 });
 
-["practica","simulacro","repaso"].forEach(m=>{
-  const id = "m" + m[0].toUpperCase() + m.slice(1);
-  document.getElementById(id).addEventListener("click", ()=>{
-    quiz.modo = m;
-    ["mPractica","mSimulacro","mRepaso"].forEach(x=>
-      document.getElementById(x).setAttribute("aria-selected", x === id ? "true":"false"));
-    nuevaCola(); pintarCuestionario();
+cuestView.addEventListener("change", e=>{
+  if(e.target.id === "hfile"){
+    const f = e.target.files && e.target.files[0];
+    if(!f) return;
+    const fr = new FileReader();
+    fr.onload = ()=>importar(String(fr.result));
+    fr.readAsText(f);
+    e.target.value = "";
+  }
+});
+
+MODOS.forEach(m=>{
+  const el = document.getElementById(IDMODO[m]);
+  if(!el) return;
+  el.addEventListener("click", ()=>{
+    if(quiz.simul.activo && m !== "simulacro"){
+      if(!confirm("Hay un simulacro en curso. ¿Lo cerrás y guardás el resultado?")) return;
+      terminarSimulacro(false);
+    }
+    if(m === "simulacro" && quiz.simul.fin && !quiz.simul.activo){
+      quiz.simul = { activo:false, fin:false, t0:0, limite:0, hechas:{}, cerrado:null };
+    }
+    marcarModo(m);
+    if(m === "practica" || m === "repaso") nuevaCola();
+    pintarCuestionario();
   });
+});
+
+let anchoPrevio = window.innerWidth < 560;
+window.addEventListener("resize", ()=>{
+  const ahora = window.innerWidth < 560;
+  if(ahora !== anchoPrevio){
+    anchoPrevio = ahora;
+    if(vista === "cuestionario" && quiz.modo === "historial") pintarHistorial();
+  }
 });
 
 document.documentElement.lang = "es";
