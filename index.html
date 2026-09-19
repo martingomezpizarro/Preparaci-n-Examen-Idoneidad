@@ -129,7 +129,11 @@ h1{
 .count{font-family:var(--f-mono); font-size:12px; color:var(--ink-3); white-space:nowrap}
 
 /* ---------- selector de leyes ---------- */
-nav.vistas{display:flex; gap:6px; margin-top:22px; border-bottom:1px solid var(--line); padding-bottom:14px}
+nav.vistas{display:flex; flex-wrap:wrap; gap:6px; margin-top:22px; border-bottom:1px solid var(--line); padding-bottom:14px}
+@media(max-width:560px){
+  .vbtn{font-size:12.5px; padding:6px 11px}
+  .vbtn .vc{margin-left:4px}
+}
 .vbtn{
   font-family:var(--f-body); font-size:13.5px; font-weight:600; cursor:pointer;
   border:1px solid var(--line-strong); background:var(--surface); color:var(--ink-2);
@@ -606,6 +610,338 @@ footer a{color:var(--ink-3)}
   .htabla{font-size:12px}
 }
 
+
+/* ---------- el mercado ---------- */
+#mercado[hidden]{display:none}
+.mintro{margin:22px auto 0; color:var(--ink-2); max-width:none}
+.msub{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:18px}
+.mtab{
+  font-family:var(--f-body); font-size:13px; font-weight:600; cursor:pointer;
+  border:1px solid var(--line-strong); background:var(--surface); color:var(--ink-2);
+  border-radius:7px; padding:6px 13px;
+}
+.mtab[aria-selected="true"]{background:var(--accent); border-color:var(--accent); color:var(--surface)}
+.mnota{margin:14px 0 0; font-size:12.5px; color:var(--ink-3); text-align:left; line-height:1.6}
+
+/* fuentes */
+.mf{
+  display:inline-block; font-family:var(--f-mono); font-size:10.5px; line-height:1.5;
+  border:1px solid var(--line-strong); border-radius:5px; padding:1px 7px;
+  background:transparent; color:var(--ink-2); cursor:pointer; text-decoration:none;
+}
+.mf:hover{border-color:var(--accent); color:var(--accent)}
+.mf.soft{border-style:dashed}
+.mf.norm{border-color:#C08A2E; color:#8A6420}
+.mf.norm:hover{background:rgba(192,138,46,.08)}
+:root:not([data-theme="light"]) .mf.norm{border-color:#C9A24E; color:#C9A24E}
+.mf.otra{border-style:dotted; cursor:default; color:var(--ink-3)}
+.mf.otra:hover{border-color:var(--line-strong); color:var(--ink-3)}
+
+/* esquema por capas */
+.mcapa{
+  margin-top:12px; background:var(--surface); border:1px solid var(--line);
+  border-radius:11px; padding:16px 18px; box-shadow:var(--shadow);
+  border-left:3px solid var(--accent);
+}
+.mcapa h3{
+  margin:0; font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:600;
+}
+.mcapa p.mcd{margin:5px 0 0; font-size:13px; color:var(--ink-2); text-align:left}
+.mcajas{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+.mcaja{
+  display:flex; flex-direction:column; gap:2px; align-items:flex-start; text-align:left;
+  min-width:150px; flex:1 1 180px; max-width:280px; cursor:pointer;
+  border:1px solid var(--line-strong); background:var(--surface-2); color:var(--ink);
+  border-radius:8px; padding:9px 12px;
+}
+.mcaja:hover{border-color:var(--accent); background:var(--accent-soft)}
+.mcaja b{font-family:var(--f-mono); font-size:12px; font-weight:600}
+.mcaja span{font-size:12px; color:var(--ink-2); line-height:1.35}
+
+/* recorrido de una orden */
+.mflujo{display:flex; flex-wrap:wrap; gap:0; margin-top:14px; align-items:stretch}
+.mpaso{
+  flex:1 1 150px; min-width:140px; position:relative;
+  border:1px solid var(--line); border-radius:9px; background:var(--surface-2);
+  padding:11px 13px; margin:4px;
+}
+.mpaso.opc{border-style:dashed}
+.mpaso:not(:last-child)::after{
+  content:"›"; position:absolute; right:-11px; top:50%; transform:translateY(-50%);
+  font-size:19px; line-height:1; color:var(--ink-3); opacity:.7; z-index:1;
+}
+@media(max-width:700px){ .mpaso:not(:last-child)::after{content:none} }
+.mpaso b{
+  display:block; font-family:var(--f-mono); font-size:11.5px; color:var(--ink); font-weight:600;
+  cursor:pointer;
+}
+.mpaso b:hover{color:var(--accent)}
+.mpaso span{display:block; margin-top:4px; font-size:12px; color:var(--ink-2); line-height:1.4}
+.mpaso .mnum{
+  position:absolute; top:-8px; left:11px; font-family:var(--f-mono); font-size:9.5px;
+  background:var(--accent); color:var(--surface); border-radius:4px; padding:1px 5px;
+}
+
+/* matriz */
+.mwrap{margin-top:14px; overflow-x:auto; border:1px solid var(--line); border-radius:11px; background:var(--surface)}
+.mtabla{border-collapse:collapse; width:100%; min-width:760px; font-size:12.5px}
+.mtabla th, .mtabla td{border-bottom:1px solid var(--line); padding:9px 8px; text-align:center}
+.mtabla thead th{
+  font-family:var(--f-mono); font-size:9.5px; letter-spacing:.05em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:600; vertical-align:bottom; line-height:1.35; padding:12px 6px 9px;
+}
+.mtabla th.ma, .mtabla td.ma{
+  text-align:left; position:sticky; left:0; background:var(--surface); z-index:2;
+  border-right:1px solid var(--line); min-width:168px;
+}
+.mtabla tbody tr:hover td{background:var(--surface-2)}
+.mtabla tbody tr:hover td.ma{background:var(--surface-2)}
+.mtabla td.ma b{display:block; font-family:var(--f-mono); font-size:11.5px; color:var(--ink); font-weight:600; cursor:pointer}
+.mtabla td.ma b:hover{color:var(--accent)}
+.mtabla td.ma span{display:block; font-size:11px; color:var(--ink-3); line-height:1.3; margin-top:2px}
+.mv{font-family:var(--f-mono); font-size:13px; font-weight:600}
+.mv.si{color:#2E7D52}
+.mv.no{color:#B3453C}
+.mv.conv, .mv.cond{color:#C08A2E; font-size:11px}
+:root:not([data-theme="light"]) .mv.si{color:#5EC48C}
+:root:not([data-theme="light"]) .mv.no{color:#E8786E}
+:root:not([data-theme="light"]) .mv.conv, :root:not([data-theme="light"]) .mv.cond{color:#D9B05E}
+.mref{display:flex; flex-wrap:wrap; gap:14px; margin-top:12px; font-family:var(--f-mono); font-size:11px; color:var(--ink-3)}
+.mref span{display:inline-flex; align-items:center; gap:5px}
+
+/* fichas e instrumentos */
+.mindice{display:flex; flex-wrap:wrap; gap:6px; margin-top:16px}
+.mindice button{
+  font-family:var(--f-mono); font-size:11px; cursor:pointer; border:1px solid var(--line);
+  background:var(--surface); color:var(--ink-2); border-radius:6px; padding:4px 9px;
+}
+.mindice button:hover{border-color:var(--accent); color:var(--accent)}
+.mficha{
+  margin-top:12px; background:var(--surface); border:1px solid var(--line);
+  border-radius:11px; padding:18px 20px; box-shadow:var(--shadow); scroll-margin-top:16px;
+}
+.mficha.hidden{display:none}
+.mficha > header{display:flex; flex-wrap:wrap; gap:8px; align-items:baseline}
+.mficha h3{
+  margin:0; font-family:var(--f-display); font-size:19px; font-weight:600;
+  line-height:1.25; letter-spacing:-.005em;
+}
+.mficha .msig{
+  font-family:var(--f-mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+  border:1px solid var(--line-strong); border-radius:4px; padding:1px 6px; color:var(--ink-3);
+}
+.mficha .mcapaet{font-family:var(--f-mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3)}
+.mficha p.mque{margin:9px 0 0; font-size:13.5px; color:var(--ink-2); text-align:justify; hyphens:auto}
+.mbloque{margin-top:14px}
+.mbloque > h4{
+  margin:0 0 7px; font-family:var(--f-mono); font-size:10px; letter-spacing:.07em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:600;
+}
+.mlista{list-style:none; margin:0; padding:0; display:grid; gap:7px}
+.mlista li{
+  display:grid; grid-template-columns:16px 1fr; gap:8px; align-items:baseline;
+  font-size:13px; color:var(--ink-2); line-height:1.5;
+}
+.mlista li .mi{font-family:var(--f-mono); font-size:12px; font-weight:600}
+.mlista.si li .mi{color:#2E7D52}
+.mlista.no li .mi{color:#B3453C}
+:root:not([data-theme="light"]) .mlista.si li .mi{color:#5EC48C}
+:root:not([data-theme="light"]) .mlista.no li .mi{color:#E8786E}
+.mlista li .mf{margin-left:7px; vertical-align:1px}
+.mtec{display:grid; gap:8px}
+.mtec > div{
+  display:grid; grid-template-columns:minmax(130px,190px) 1fr; gap:12px;
+  padding:8px 0; border-bottom:1px solid var(--line); font-size:13px; color:var(--ink-2); line-height:1.5;
+}
+.mtec > div:last-child{border-bottom:0}
+.mtec .mk{font-family:var(--f-mono); font-size:11px; color:var(--ink); font-weight:600}
+.mempty{padding:34px 18px; text-align:center; color:var(--ink-3); font-size:14px}
+@media(max-width:560px){
+  .mtec > div{grid-template-columns:1fr; gap:3px}
+  .mcaja{max-width:none}
+  .mficha{padding:15px 14px}
+  .mcapa{padding:14px 14px}
+}
+
+
+/* ---------- la red ---------- */
+.redwrap{margin-top:14px; border:1px solid var(--line); border-radius:11px; background:var(--surface); overflow:hidden}
+.redbar{
+  display:flex; flex-wrap:wrap; gap:7px; align-items:center;
+  padding:10px 12px; border-bottom:1px solid var(--line); background:var(--surface-2);
+}
+.rbtn{
+  font-family:var(--f-mono); font-size:11.5px; cursor:pointer;
+  border:1px solid var(--line-strong); background:var(--surface); color:var(--ink-2);
+  border-radius:6px; padding:5px 10px;
+}
+.rbtn:hover{border-color:var(--accent); color:var(--accent)}
+.rbtn[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--surface)}
+.rhint{margin-left:auto; font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3)}
+.redcv{display:block; width:100%; height:620px; touch-action:none; cursor:grab; background:var(--surface)}
+.redcv.arrastrando{cursor:grabbing}
+.redleg{
+  display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+  padding:10px 12px; border-top:1px solid var(--line); background:var(--surface-2);
+}
+.rlg{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--f-mono); font-size:10.5px; cursor:pointer;
+  border:1px solid var(--line); background:var(--surface); color:var(--ink-2);
+  border-radius:6px; padding:3px 9px;
+}
+.rlg:hover{border-color:var(--line-strong); color:var(--ink)}
+.rlg[aria-pressed="false"]{opacity:.42}
+.rlg i{width:9px; height:9px; border-radius:50%; background:var(--rc); flex:none}
+.rlg.cuad i{border-radius:2px}
+.rlg.rombo i{border-radius:2px; transform:rotate(45deg)}
+.rlg .rn{color:var(--ink-3)}
+.redformas{
+  display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-left:auto;
+  font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3);
+}
+.redformas span{display:inline-flex; align-items:center; gap:5px}
+.redformas i{width:9px; height:9px; background:var(--ink-3); flex:none}
+.redformas i.c{border-radius:50%}
+.redformas i.q{border-radius:2px}
+.redformas i.r{transform:rotate(45deg)}
+
+/* panel del nodo */
+.redpanel{
+  margin-top:12px; background:var(--surface); border:1px solid var(--line);
+  border-radius:11px; padding:18px 20px; box-shadow:var(--shadow);
+  border-left:3px solid var(--rc, var(--accent));
+}
+.redpanel[hidden]{display:none}
+.redpanel > header{display:flex; flex-wrap:wrap; gap:8px; align-items:baseline}
+.redpanel h3{margin:0; font-family:var(--f-display); font-size:19px; font-weight:600; line-height:1.25}
+.redpanel .rgrp{
+  font-family:var(--f-mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--rc, var(--accent));
+}
+.redpanel .rcerrar{
+  margin-left:auto; font-family:var(--f-mono); font-size:11px; cursor:pointer;
+  border:1px solid var(--line-strong); background:transparent; color:var(--ink-3);
+  border-radius:6px; padding:3px 9px;
+}
+.redpanel .rcerrar:hover{border-color:#B3453C; color:#B3453C}
+.redpanel p.rd{margin:9px 0 0; font-size:13.5px; color:var(--ink-2); text-align:justify; hyphens:auto}
+.redpanel .racc{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; align-items:center}
+.rrel{margin-top:14px}
+.rrel h4{
+  margin:0 0 7px; font-family:var(--f-mono); font-size:10px; letter-spacing:.07em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:600;
+}
+.rrel ul{list-style:none; margin:0; padding:0; display:grid; gap:6px}
+.rrel li{
+  display:flex; flex-wrap:wrap; gap:6px; align-items:baseline;
+  font-size:13px; color:var(--ink-2); line-height:1.5;
+  padding-bottom:6px; border-bottom:1px solid var(--line);
+}
+.rrel li:last-child{border-bottom:0}
+.rverbo{font-style:italic; color:var(--ink-3)}
+.rnodo{
+  font-family:var(--f-mono); font-size:11.5px; cursor:pointer; color:var(--ink); font-weight:600;
+  border:0; background:transparent; padding:0; border-bottom:1px dotted var(--line-strong);
+}
+.rnodo:hover{color:var(--accent); border-bottom-color:var(--accent)}
+@media(max-width:560px){
+  .redcv{height:420px}
+  .rhint{display:none}
+  .redformas{margin-left:0; flex-basis:100%; margin-top:4px}
+  .redpanel{padding:15px 14px}
+}
+
+
+/* ---------- la estructura ---------- */
+.estrwrap{margin-top:14px; border:1px solid var(--line); border-radius:11px; background:var(--surface); overflow:hidden}
+.estrviewport{
+  position:relative; height:660px; overflow:hidden; background:var(--surface);
+  cursor:grab; touch-action:none;
+}
+.estrviewport.arrastrando{cursor:grabbing}
+.estrlienzo{
+  position:absolute; top:0; left:0; transform-origin:0 0; padding:24px 28px;
+  display:grid; grid-template-columns:1fr 1fr; gap:30px 44px; width:1180px;
+  align-content:start;
+}
+.estrlienzo > .bflujo{grid-column:1 / -1}
+.estrcol{display:flex; flex-direction:column; gap:30px; align-content:start}
+.estrsvg{position:absolute; top:0; left:0; overflow:visible; pointer-events:none}
+
+.banda{
+  position:relative; z-index:1; width:100%; background:var(--surface);
+  border:1px solid var(--line); border-left:3px solid var(--bc); border-radius:11px;
+  box-shadow:var(--shadow);
+}
+.banda.apagada{opacity:.4}
+.bcab{
+  display:flex; flex-wrap:wrap; gap:9px; align-items:baseline;
+  padding:13px 16px; cursor:pointer; width:100%; text-align:left;
+  background:transparent; border:0; color:var(--ink); border-radius:9px;
+}
+.bcab:hover{background:var(--surface-2)}
+.bcab .bpunto{width:10px; height:10px; border-radius:50%; background:var(--bc); flex:none; align-self:center}
+.bcab.cuad .bpunto{border-radius:2px}
+.bcab.rombo .bpunto{border-radius:2px; transform:rotate(45deg)}
+.bcab b{font-family:var(--f-display); font-size:16.5px; font-weight:600; letter-spacing:-.005em}
+.bcab .bn{font-family:var(--f-mono); font-size:11px; color:var(--ink-3)}
+.bcab .bmas{
+  margin-left:auto; font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3);
+  border:1px solid var(--line-strong); border-radius:5px; padding:1px 8px; align-self:center;
+}
+.bcab:hover .bmas{border-color:var(--bc); color:var(--bc)}
+.bd{margin:0; padding:0 16px 13px; font-size:12.5px; color:var(--ink-2); line-height:1.5; text-align:left}
+.bnodos{display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 14px}
+.nchip{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--f-mono); font-size:11px; cursor:pointer;
+  border:1px solid var(--line-strong); background:var(--surface-2); color:var(--ink);
+  border-radius:6px; padding:4px 9px; max-width:100%;
+}
+.nchip:hover{border-color:var(--bc); background:var(--surface)}
+.nchip[aria-pressed="true"]{background:var(--bc); border-color:var(--bc); color:#fff}
+.nchip .ni{width:8px; height:8px; background:var(--bc); flex:none; border-radius:50%}
+.nchip.cuad .ni{border-radius:2px}
+.nchip.rombo .ni{border-radius:1px; transform:rotate(45deg)}
+.nchip[aria-pressed="true"] .ni{background:#fff}
+.nchip.apagado{opacity:.28}
+.nchip .ng{font-family:var(--f-mono); font-size:9.5px; color:var(--ink-3)}
+.nchip[aria-pressed="true"] .ng{color:#fff; opacity:.75}
+
+/* el recorrido, arriba de todo */
+.bflujo{width:100%; background:var(--surface-2); border:1px dashed var(--line-strong); border-radius:11px; padding:14px 16px}
+.bflujo h4{
+  margin:0 0 4px; font-family:var(--f-mono); font-size:10px; letter-spacing:.07em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:600;
+}
+.bflujo p{margin:0 0 11px; font-size:12.5px; color:var(--ink-2); text-align:left}
+
+.estrbar{
+  display:flex; flex-wrap:wrap; gap:7px; align-items:center;
+  padding:10px 12px; border-bottom:1px solid var(--line); background:var(--surface-2);
+}
+.estrpie{
+  display:flex; flex-wrap:wrap; gap:14px; align-items:center;
+  padding:10px 12px; border-top:1px solid var(--line); background:var(--surface-2);
+  font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3);
+}
+.estrpie span{display:inline-flex; align-items:center; gap:5px}
+.estrpie i{width:9px; height:9px; background:var(--ink-3); flex:none}
+.estrpie i.c{border-radius:50%}
+.estrpie i.q{border-radius:2px}
+.estrpie i.r{transform:rotate(45deg)}
+.estrpie u{display:inline-block; width:22px; height:2px; background:var(--ink-3); text-decoration:none}
+@media(max-width:560px){
+  .estrviewport{height:460px}
+  .estrlienzo{width:470px; padding:16px; gap:22px; grid-template-columns:1fr}
+  .estrcol{gap:22px}
+  .bcab b{font-size:15px}
+}
+.nchip.coincide{outline:2px solid var(--accent); outline-offset:1px}
+.banda.coincide{border-color:var(--accent)}
+
 :focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 @media(max-width:520px){
@@ -618,7 +954,7 @@ footer a{color:var(--ink-3)}
 <header class="top">
   <p class="eyebrow">Examen de idoneidad · Comisión Nacional de Valores</p>
   <h1>Mapa normativo del idóneo</h1>
-  <p class="lede">Las ocho leyes de la bibliografía, abiertas por dentro: cómo está construida cada una, qué regula cada bloque y el texto literal de cada artículo. Los artículos <strong>que la bibliografía de la CNV pide expresamente</strong> están marcados con el módulo que los toma; el resto está para ubicarse, no para memorizarlo. El glosario reúne las definiciones que las propias leyes dan, y el cuestionario engancha cada pregunta con el artículo que la responde.</p>
+  <p class="lede">Las ocho leyes de la bibliografía, abiertas por dentro: cómo está construida cada una, qué regula cada bloque y el texto literal de cada artículo. Los artículos <strong>que la bibliografía de la CNV pide expresamente</strong> están marcados con el módulo que los toma; el resto está para ubicarse, no para memorizarlo. El glosario reúne las definiciones que las propias leyes dan, el cuestionario engancha cada pregunta con el artículo que la responde y <strong>El mercado</strong> arma el mapa de quién es quién: qué puede hacer cada agente, qué tiene prohibido y quién administra, custodia, califica y controla cada instrumento.</p>
 </header>
 
 <div class="controls">
@@ -635,6 +971,7 @@ footer a{color:var(--ink-3)}
   <button class="vbtn" id="vLeyes" role="tab" aria-selected="true">Las leyes<span class="vc">8</span></button>
   <button class="vbtn" id="vGlosario" role="tab" aria-selected="false">Glosario<span class="vc" id="gcount"></span></button>
   <button class="vbtn" id="vCuest" role="tab" aria-selected="false">Cuestionario<span class="vc" id="qcount"></span></button>
+  <button class="vbtn" id="vMercado" role="tab" aria-selected="false">El mercado<span class="vc" id="mcount"></span></button>
 </nav>
 
 <div id="leyesView">
@@ -663,6 +1000,12 @@ footer a{color:var(--ink-3)}
   <div id="qzona"></div>
 </section>
 
+<section id="mercado" hidden>
+  <p class="mintro" id="mintro"></p>
+  <div class="msub" id="msub" role="tablist" aria-label="Vistas del mercado"></div>
+  <div id="mzona"></div>
+</section>
+
 <section class="leyenda">
   <h3>Cómo leer esta página</h3>
   <ul>
@@ -672,6 +1015,9 @@ footer a{color:var(--ink-3)}
     <li><span class="lk ext">Vínculos</span><span>Las otras leyes y artículos que el propio texto legal cita. Los que están en esta página se abren con un clic y te llevan al artículo exacto; los que tienen borde punteado te dejan en la ficha de esa ley, y los demás quedan como referencia.</span></li>
     <li><span class="qsinverif">Respuesta a confirmar</span><span>Pregunta del banco de la Guía de Estudio de la CNV (vía idoneocnv.com, licencia MIT). La clave es la de ese banco y no está verificada contra el texto legal ni enganchada a un artículo; sirve para practicar volumen, no para citar. Las otras salen de las simulaciones corregidas de la carpeta.</span></li>
     <li><span class="lk ext" style="font-style:italic">Reformas</span><span>De dónde viene la redacción actual del artículo, según las notas del texto actualizado de InfoLeg. Si dice «Reformado por Ley 27.440», la versión que estudiás es la de 2018 y no la original.</span></li>
+    <li><span class="tag" style="background:var(--accent);color:var(--surface);border-color:var(--accent)">Mer</span><span>La pestaña <b>El mercado</b> arma el mapa de quién es quién. <b>Estructura</b>: nueve capas plegadas que se despliegan una por una hasta el detalle de cada entidad y agente, con las líneas de relación entre ellas; tocá cualquier nombre y se apaga todo lo que no lo toca. <b>Quién puede qué</b>: la matriz de qué puede hacer cada agente y qué tiene prohibido. <b>Instrumentos</b>: cada valor negociable con quién lo emite, lo negocia, lo custodia, lo califica y lo controla. <b>Fichas</b>: el detalle de cada actor con sus números.</span></li>
+    <li><span class="mf">Ley 26.831 · art. 2</span><span>Chip de fuente del mapa: lleva al texto literal del artículo, que está cargado en esta misma página.</span></li>
+    <li><span class="mf norm">Normas CNV · Tít. VII Cap. I art. 4</span><span>Fuente distinta: las <b>Normas de la CNV (T.O. 2013)</b>, que abren el capítulo en InfoLeg. Ahí está el detalle operativo que las leyes no traen — la 26.831 define al agente de negociación en una línea, pero que no pueda liquidar lo dice la norma. Ojo: los montos de ese texto ordenado pueden estar desactualizados por resoluciones posteriores.</span></li>
   </ul>
 </section>
 
@@ -1436,6 +1782,903 @@ const LEYES = [
 }
 ];
 
+
+/* ---------------------------------------------------------------
+   El mercado: agentes, actividades e instrumentos.
+   Cada dato lleva su fuente codificada:
+     "L:<ley>:<art>"  → artículo de una de las ocho leyes, cargado en esta página
+     "N:<cap>:<art>"  → Normas CNV (T.O. 2013), Título VII, capítulo y artículo
+     "X:<texto>"      → referencia sin texto cargado acá
+   --------------------------------------------------------------- */
+const NORMBASE = "https://servicios.infoleg.gob.ar/infolegInternet/anexos/215000-219999/219405/TituloVII-Cap";
+const NORMCAP = {
+  "I":"Agentes de negociación", "II":"Agentes de liquidación y compensación",
+  "III":"Fondo de garantía para reclamos de clientes", "IV":"Agentes productores",
+  "V":"Agentes asesores de mercado de capitales", "VI":"Agentes de corretaje de valores negociables"
+};
+
+const MCAPAS = [
+  { k:"control", n:"Regulación y control", d:"Autorizan, registran, supervisan y sancionan. Nadie opera sin pasar por acá." },
+  { k:"infra",   n:"Infraestructura del mercado", d:"Donde la operación se concierta, se garantiza, se liquida y queda depositada." },
+  { k:"inter",   n:"Intermediación", d:"Los que te conectan con el mercado. Acá está la diferencia entre negociar y liquidar." },
+  { k:"canal",   n:"Canales y asesoramiento", d:"Llegan al inversor, pero no tocan ni el dinero ni los títulos." },
+  { k:"colect",  n:"Productos de inversión colectiva", d:"Administran y custodian patrimonios de terceros: fondos y fideicomisos." },
+  { k:"punta",   n:"Las dos puntas", d:"El que necesita financiarse y el que tiene el ahorro. Todo lo de arriba existe para unirlos." }
+];
+
+const MACT = [
+  { k:"neg",  n:"Negociar en el mercado",    d:"Ingresar ofertas o registrar operaciones en los sistemas autorizados del mercado." },
+  { k:"prim", n:"Colocar en primaria",        d:"Intervenir en la colocación primaria, cuando el valor se emite." },
+  { k:"liq",  n:"Liquidar y compensar",       d:"Cerrar la operación: que los títulos y el dinero cambien de manos." },
+  { k:"liq3", n:"Liquidar para otros agentes",d:"Prestarle el servicio de liquidación a otro agente, por convenio." },
+  { k:"fon",  n:"Recibir y custodiar fondos", d:"Tener el dinero del cliente en su poder." },
+  { k:"val",  n:"Custodiar valores",          d:"Tener los valores negociables del cliente en su poder." },
+  { k:"cap",  n:"Captar clientes",            d:"Salir a buscar clientes para darlos de alta en un agente." },
+  { k:"ase",  n:"Asesorar sobre inversiones", d:"Recomendar qué hacer con la cartera." },
+  { k:"car",  n:"Administrar carteras",       d:"Decidir por el cliente, con su consentimiento expreso." },
+  { k:"ord",  n:"Gestionar órdenes",          d:"Tomar la orden del cliente y cursarla." }
+];
+
+/* si = puede · no = no puede · conv = solo con convenio o a través de otro · cond = puede, con condiciones */
+const MAGENTES = [
+  {
+    id:"cnv", sig:"CNV", n:"Comisión Nacional de Valores", capa:"control",
+    que:"El regulador. Autoriza la oferta pública en todo el país, registra a cada agente en su categoría y tiene la competencia disciplinaria exclusiva sobre todos ellos. Sobre las sociedades que hacen oferta pública ejerce además el control societario, de manera exclusiva y excluyente: le saca esa función a la autoridad de contralor común.",
+    puede:[
+      {t:"Autorizar, denegar y revocar la oferta pública de valores negociables", f:"L:26831:80"},
+      {t:"Llevar el registro de agentes y fijar los requisitos de cada categoría", f:"L:26831:47"},
+      {t:"Ejercer la competencia disciplinaria exclusiva sobre los agentes registrados", f:"L:26831:56"},
+      {t:"Aprobar, antes de que entren en vigencia, todas las reglamentaciones de mercados y cámaras", f:"L:26831:44"},
+      {t:"Fiscalizar, supervisar y registrar a la sociedad gerente y a la depositaria de los FCI", f:"L:24083:32"},
+      {t:"Ejercer el control societario exclusivo y excluyente de las emisoras con oferta pública", f:"L:22169:1"}
+    ],
+    nopuede:[
+      {t:"Alcanzar la oferta pública de valores emitidos por la Nación, las provincias, la Ciudad, los municipios, los entes autárquicos y los organismos multilaterales de crédito: quedan fuera de la ley", f:"L:26831:83"},
+      {t:"Conformar la constitución de la sociedad emisora: eso le sigue quedando a la autoridad de contralor común", f:"L:22169:2"}
+    ],
+    tec:[
+      {k:"Escala de sanciones", v:"Apercibimiento · multa de $100.000 a $100.000.000, elevable hasta el quíntuplo del beneficio o del perjuicio · inhabilitación hasta 5 años · suspensión hasta 2 años para hacer oferta pública · prohibición de hacer oferta pública", f:"L:26831:132"},
+      {k:"Plazo para resolver la oferta pública", v:"30 días hábiles desde que la documentación está completa a su satisfacción", f:"L:26831:84"},
+      {k:"Plazo para resolver el registro de un agente", v:"20 días hábiles desde la presentación", f:"L:26831:49"}
+    ]
+  },
+  {
+    id:"mercados", sig:"Mercados", n:"Mercados", capa:"infra",
+    que:"Sociedades anónimas autorizadas por la CNV cuyo objeto principal es organizar las operaciones con valores negociables que tienen oferta pública. Sus propias acciones cotizan. El precio que sale de operar habitualmente en un mercado es el precio corriente del valor.",
+    def:"L:26831:2",
+    puede:[
+      {t:"Dictar las reglamentaciones que habilitan a los agentes a actuar en su ámbito, con acceso abierto", f:"L:26831:32"},
+      {t:"Constituir fondos de garantía para los compromisos incumplidos por sus agentes", f:"L:26831:45"},
+      {t:"Expedir, cuando no garantizan la operación, un certificado de deuda que es título ejecutivo contra el agente deudor", f:"L:26831:41"},
+      {t:"Actuar como contraparte central cuando garantizan el cumplimiento de las operaciones", f:"L:26831:40"}
+    ],
+    nopuede:[
+      {t:"Exigirle al agente ser accionista del mercado para poder actuar en su ámbito", f:"L:26831:32"},
+      {t:"Poner en vigencia una reglamentación sin la aprobación previa de la CNV", f:"L:26831:44"},
+      {t:"Impedir el ejercicio de las facultades concurrentes de la CNV", f:"L:26831:33"}
+    ],
+    tec:[
+      {k:"Forma jurídica", v:"Sociedad anónima en el régimen de oferta pública, con sus acciones listadas en un mercado autorizado; la CNV fija las tenencias máximas por accionista", f:"L:26831:31"},
+      {k:"Aranceles", v:"Libres, con los máximos que fije la CNV; pueden diferenciarse por instrumento, por PyME o por pequeño inversor", f:"L:26831:36"},
+      {k:"Tribunal arbitral", v:"Obligatorio y permanente en cada mercado; las emisoras quedan sometidas en sus relaciones con accionistas e inversores", f:"L:26831:46"}
+    ]
+  },
+  {
+    id:"camaras", sig:"Cámaras", n:"Cámaras compensadoras", capa:"infra",
+    que:"Sociedades anónimas autorizadas por la CNV cuyo objeto es liquidar y compensar las operaciones cumpliendo el rol de contraparte central: se meten en el medio de las dos puntas y le garantizan a cada una que la otra va a cumplir.",
+    def:"L:26831:2",
+    puede:[
+      {t:"Administrar los sistemas de compensación y liquidación de operaciones", f:"L:26831:35"},
+      {t:"Exigir a los agentes los márgenes iniciales, su reposición, los activos que sirven de garantía y la moneda", f:"L:26831:35"},
+      {t:"Actuar como contraparte central de las operaciones garantizadas", f:"L:26831:40"},
+      {t:"Constituir fondos de garantía bajo figura fiduciaria u otra que apruebe la CNV", f:"L:26831:45"}
+    ],
+    nopuede:[
+      {t:"Poner en vigencia una reglamentación sin la aprobación previa de la CNV", f:"L:26831:44"}
+    ],
+    tec:[
+      {k:"Forma jurídica", v:"Sociedad anónima autorizada por la CNV", f:"L:26831:2"},
+      {k:"Denuncia obligatoria", v:"Deben denunciar a la CNV toda falta de sus agentes que surja de sus auditorías y controles", f:"L:26831:56"}
+    ]
+  },
+  {
+    id:"adcvn", sig:"ADCVN", n:"Agente depositario central de valores negociables", capa:"infra",
+    que:"Recibe los depósitos colectivos y regulares de valores negociables y presta los servicios de custodia, liquidación y pago de las acreencias de lo depositado. En la práctica argentina es la Caja de Valores. Se rige por la Ley 20.643 —no incluida en esta página— y por la 26.831.",
+    def:"L:26831:2",
+    puede:[
+      {t:"Recibir depósitos colectivos y regulares de valores negociables", f:"L:26831:2"},
+      {t:"Prestar custodia, liquidación y pago de acreencias de los valores depositados", f:"L:26831:2"},
+      {t:"Llevar el registro de los valores escriturales, con los efectos del régimen de anotación en cuenta", f:"L:26831:129"}
+    ],
+    nopuede:[],
+    tec:[
+      {k:"Marco propio", v:"Ley 20.643 (régimen de depósito colectivo), sus modificaciones por el Título VII de la Ley 27.440, y la reglamentación de la CNV", f:"X:Ley 20.643 · texto no cargado en esta página"}
+    ]
+  },
+  {
+    id:"alyc_int", sig:"ALyC Integral", n:"Agente de liquidación y compensación y agente de negociación — Integral", capa:"inter",
+    matriz:true,
+    que:"Es el más completo de la cadena: negocia y además liquida y compensa, no solo lo propio y lo de sus clientes, sino también lo de otros agentes de negociación que le firmen convenio. Por eso responde por las obligaciones de esos agentes.",
+    def:"L:26831:2",
+    puede:[
+      {t:"Intervenir en la liquidación y compensación de sus operaciones y las de sus clientes", f:"N:II:2"},
+      {t:"Ofrecer el servicio de liquidación y compensación a otros agentes de negociación, por convenio", f:"N:II:2"},
+      {t:"Negociar, porque está registrado también como agente de negociación", f:"N:II:2"}
+    ],
+    nopuede:[
+      {t:"Disponer de los fondos de los clientes sin su autorización", f:"N:II:8"},
+      {t:"Financiar a sus clientes", f:"N:II:9"},
+      {t:"Hacer acciones promocionales sobre clientes de otros agentes", f:"N:II:6"},
+      {t:"Registrar operaciones de clientes de otros agentes", f:"N:II:10"}
+    ],
+    tec:[
+      {k:"Patrimonio neto mínimo", v:"$15.000.000, de forma permanente", f:"N:II:20"},
+      {k:"Contrapartida líquida", v:"Al menos el 50% del patrimonio neto mínimo", f:"N:II:22"},
+      {k:"Responsabilidad", v:"Por las obligaciones propias, las de sus clientes y las de los agentes con los que firme convenio de liquidación", f:"N:II:2"}
+    ],
+    matrizf:"N:II:2",
+    act:{ neg:"si", prim:"si", liq:"si", liq3:"si", fon:"si", val:"si", cap:"si", ase:"si", car:"cond", ord:"si" }
+  },
+  {
+    id:"alyc_prop", sig:"ALyC Propio", n:"Agente de liquidación y compensación y agente de negociación — Propio", capa:"inter",
+    matriz:true,
+    que:"Igual que el integral, pero cerrado sobre sí mismo: liquida y compensa lo suyo y lo de sus clientes, y nada más. No le presta el servicio a otros agentes, y por eso su responsabilidad y su patrimonio exigido son menores.",
+    def:"L:26831:2",
+    puede:[
+      {t:"Intervenir en la liquidación y compensación de sus operaciones y las de sus clientes", f:"N:II:2"},
+      {t:"Negociar, porque está registrado también como agente de negociación", f:"N:II:2"}
+    ],
+    nopuede:[
+      {t:"Ofrecer el servicio de liquidación y compensación a otros agentes: esa es la línea que lo separa del Integral", f:"N:II:2"},
+      {t:"Disponer de los fondos de los clientes sin su autorización", f:"N:II:8"},
+      {t:"Financiar a sus clientes", f:"N:II:9"}
+    ],
+    tec:[
+      {k:"Patrimonio neto mínimo", v:"$3.500.000, de forma permanente", f:"N:II:20"},
+      {k:"Contrapartida líquida", v:"Al menos el 50% del patrimonio neto mínimo", f:"N:II:22"},
+      {k:"Responsabilidad", v:"Limitada a las obligaciones propias y a las de sus clientes", f:"N:II:2"}
+    ],
+    matrizf:"N:II:2",
+    act:{ neg:"si", prim:"si", liq:"si", liq3:"no", fon:"si", val:"si", cap:"si", ase:"si", car:"cond", ord:"si" }
+  },
+  {
+    id:"an", sig:"AN", n:"Agente de negociación", capa:"inter",
+    matriz:true,
+    que:"Te conecta con el mercado y nada más: ingresa las ofertas y registra las operaciones, en primaria y en secundaria. No cobra, no custodia y no liquida. Para cerrar el círculo necesita convenio con un ALyC Integral, que es el que responde por la liquidación.",
+    def:"L:26831:2",
+    puede:[
+      {t:"Actuar en la colocación primaria y en la negociación secundaria, ingresando ofertas o registrando operaciones en los sistemas autorizados", f:"N:I:3"},
+      {t:"Cursar la liquidación a través del ALyC con el que tenga convenio", f:"N:I:5"}
+    ],
+    nopuede:[
+      {t:"Recibir cobros de clientes", f:"N:I:4"},
+      {t:"Custodiar valores negociables ni fondos de clientes", f:"N:I:4"},
+      {t:"Liquidar directamente sus operaciones: necesita convenio con un ALyC", f:"N:I:5"}
+    ],
+    tec:[
+      {k:"Patrimonio neto mínimo", v:"$1.000.000, de forma permanente, verificable en los estados contables trimestrales y anuales", f:"N:I:14"},
+      {k:"Convenio obligatorio", v:"Con un agente de liquidación y compensación, sin el cual no puede operar", f:"N:I:5"}
+    ],
+    matrizf:"N:I:3",
+    act:{ neg:"si", prim:"si", liq:"conv", liq3:"no", fon:"no", val:"no", cap:"si", ase:"si", car:"cond", ord:"si" }
+  },
+  {
+    id:"acvn", sig:"ACVN", n:"Agente de corretaje de valores negociables", capa:"inter",
+    matriz:true,
+    que:"No es tu intermediario: es el que pone en contacto a dos partes para que cierren el negocio, sin estar ligado a ninguna de las dos por relaciones de colaboración, subordinación ni representación. Difunde ofertas de precio y volumen en su sistema, registra lo que se concierta y le informa los volúmenes al mercado.",
+    def:"L:26831:2",
+    puede:[
+      {t:"Poner en relación a dos o más partes para la conclusión de negocios sobre valores negociables", f:"L:26831:2"},
+      {t:"Registrar las operaciones concertadas", f:"N:VI:18"},
+      {t:"Informar al mercado los volúmenes operados", f:"N:VI:18"},
+      {t:"Hacer actividades de promoción", f:"N:VI:37"}
+    ],
+    nopuede:[
+      {t:"Recibir ni custodiar fondos ni valores negociables de clientes", f:"N:VI:19"},
+      {t:"Efectuar operaciones para sí a través de su propio sistema", f:"N:VI:19"},
+      {t:"Estar ligado a ninguna de las partes por colaboración, subordinación o representación", f:"L:26831:2"}
+    ],
+    tec:[
+      {k:"Patrimonio neto mínimo", v:"$2.000.000, de forma permanente", f:"N:VI:9"},
+      {k:"Contrapartida líquida", v:"Al menos el 20% del patrimonio neto mínimo", f:"N:VI:11"},
+      {k:"Forma jurídica", v:"Persona jurídica", f:"L:26831:2"}
+    ],
+    matrizf:"N:VI:19",
+    act:{ neg:"cond", prim:"no", liq:"no", liq3:"no", fon:"no", val:"no", cap:"no", ase:"no", car:"no", ord:"no" }
+  },
+  {
+    id:"ap", sig:"AP", n:"Agente productor", capa:"canal",
+    matriz:true,
+    que:"La puerta de entrada: difunde y promociona bajo la responsabilidad de un agente registrado. Capta clientes para que el AN o el ALyC les dé el alta, los asesora, les gestiona las órdenes y hasta puede administrarles la cartera con consentimiento expreso. Lo único que nunca toca es el dinero y los títulos.",
+    def:"L:26831:2",
+    puede:[
+      {t:"Captar clientes para su posterior alta por parte del AN o del ALyC", f:"N:IV:7"},
+      {t:"Informar sobre los servicios de los agentes que lo contratan", f:"N:IV:7"},
+      {t:"Suministrar la documentación necesaria para el registro de clientes", f:"N:IV:7"},
+      {t:"Asesorar sobre inversiones", f:"N:IV:7"},
+      {t:"Gestionar órdenes de clientes autorizados", f:"N:IV:7"},
+      {t:"Administrar carteras, con consentimiento expreso del cliente", f:"N:IV:7"}
+    ],
+    nopuede:[
+      {t:"Recibir ni custodiar fondos ni valores de clientes", f:"N:IV:13"},
+      {t:"Compartir domicilio con los agentes que lo contratan", f:"N:IV:13"},
+      {t:"Delegar sus servicios en terceros", f:"N:IV:13"},
+      {t:"Usar contraseñas o firmas electrónicas ajenas", f:"N:IV:13"}
+    ],
+    tec:[
+      {k:"Patrimonio neto mínimo", v:"$250.000, de forma permanente", f:"N:IV:17"},
+      {k:"Actúa bajo responsabilidad ajena", v:"Difunde y promociona bajo la responsabilidad del agente registrado que lo contrata", f:"L:26831:2"}
+    ],
+    matrizf:"N:IV:7",
+    act:{ neg:"no", prim:"no", liq:"no", liq3:"no", fon:"no", val:"no", cap:"si", ase:"si", car:"cond", ord:"si" }
+  },
+  {
+    id:"aa", sig:"AAMC", n:"Agente asesor de mercado de capitales", capa:"canal",
+    matriz:true,
+    que:"Asesora y cobra honorarios convenidos con su cliente, y hasta ahí llega. Es el contracara del agente productor: los dos asesoran, pero el asesor no puede captar clientes para un intermediario, ni gestionar órdenes, ni administrar carteras. Esa comparación es pregunta de examen.",
+    puede:[
+      {t:"Prestar cualquier tipo de asesoramiento en el ámbito del mercado de capitales", f:"N:V:1"},
+      {t:"Percibir los honorarios que convenga con sus clientes", f:"N:V:5"}
+    ],
+    nopuede:[
+      {t:"Recibir ni custodiar fondos de clientes", f:"N:V:4"},
+      {t:"Recibir ni custodiar valores negociables", f:"N:V:4"},
+      {t:"Captar clientes para agentes de negociación o de liquidación y compensación", f:"N:V:4"},
+      {t:"Prestar información sobre los servicios de esos intermediarios ni proveer su documentación", f:"N:V:4"},
+      {t:"Gestionar órdenes de clientes", f:"N:V:4"},
+      {t:"Administrar carteras", f:"N:V:4"},
+      {t:"Delegar sus servicios en terceros", f:"N:V:4"},
+      {t:"Usar la denominación sin estar registrado previamente", f:"N:V:3"}
+    ],
+    tec:[
+      {k:"Patrimonio neto mínimo", v:"El capítulo no le exige uno", f:"N:V:1"},
+      {k:"Retribución", v:"Honorarios convenidos con el cliente", f:"N:V:5"}
+    ],
+    matrizf:"N:V:4",
+    act:{ neg:"no", prim:"no", liq:"no", liq3:"no", fon:"no", val:"no", cap:"no", ase:"si", car:"no", ord:"no" }
+  },
+  {
+    id:"acyd", sig:"ACyD", n:"Agentes de colocación y distribución", capa:"canal",
+    que:"Personas humanas o jurídicas registradas para desarrollar canales de colocación y distribución de valores negociables. La categoría existe en la ley; el detalle operativo lo fija la reglamentación de la CNV, que no está relevada en esta página.",
+    def:"L:26831:2",
+    puede:[
+      {t:"Desarrollar canales de colocación y distribución de valores negociables, según la reglamentación de la CNV", f:"L:26831:2"}
+    ],
+    nopuede:[],
+    tec:[
+      {k:"Detalle operativo", v:"En la reglamentación de la CNV; el Título VII relevado acá no le dedica capítulo propio", f:"L:26831:47"}
+    ]
+  },
+  {
+    id:"aapic", sig:"AAPIC", n:"Agente de administración de productos de inversión colectiva", capa:"colect",
+    que:"La categoría junta a la sociedad gerente de un fondo común de inversión, al fiduciario financiero de un fideicomiso y a las demás entidades que hagan lo mismo. Administra patrimonio ajeno: decide en qué se invierte, sin custodiarlo.",
+    def:"L:26831:2",
+    puede:[
+      {t:"Tener a su cargo la dirección y administración del fondo común de inversión", f:"L:24083:3"},
+      {t:"Emitir títulos de deuda y certificados de participación con garantía de letras hipotecarias", f:"L:24441:49"}
+    ],
+    nopuede:[
+      {t:"Invertir el haber del fondo en valores emitidos por la propia gerente o por la depositaria", f:"L:24083:7"},
+      {t:"Ser al mismo tiempo la depositaria de los fondos que administra, si es una entidad financiera", f:"L:24083:14"}
+    ],
+    tec:[
+      {k:"Responsabilidad", v:"La gerente y la depositaria responden de manera individual y separada; ninguna responde por el incumplimiento de la otra", f:"L:24083:4"},
+      {k:"Fiscalización", v:"La CNV tiene a su cargo la fiscalización, supervisión y registro de la gerente y la depositaria", f:"L:24083:32"},
+      {k:"Régimen societario", v:"La gerente que no sea entidad financiera queda comprendida en el art. 299 de la Ley 19.550", f:"L:24083:34"},
+      {k:"Reglamento de gestión", v:"Fija la política de inversión, los límites por tipo de activo y las demás condiciones del fondo", f:"L:24083:13"}
+    ]
+  },
+  {
+    id:"acpic", sig:"ACPIC", n:"Agente de custodia de productos de inversión colectiva", capa:"colect",
+    que:"La sociedad depositaria del fondo común de inversión. Guarda los activos, cobra las suscripciones y paga los rescates. No decide la inversión: esa es la gerente. Las dos existen porque el fondo no tiene personería jurídica y no puede actuar por sí mismo.",
+    def:"L:26831:2",
+    puede:[
+      {t:"Tener la custodia de los activos que integran el haber del fondo", f:"L:24083:3"},
+      {t:"Percibir el importe de las suscripciones y pagar los rescates", f:"L:24083:14"}
+    ],
+    nopuede:[
+      {t:"Ser a la vez la sociedad gerente de los fondos que custodia, si es una entidad financiera", f:"L:24083:14"}
+    ],
+    tec:[
+      {k:"Responsabilidad", v:"Individual y separada de la gerente", f:"L:24083:4"},
+      {k:"Fiscalización", v:"CNV, igual que la gerente", f:"L:24083:32"},
+      {k:"Intimación por incumplimiento", v:"Si un órgano del fondo deja de reunir los requisitos, la CNV intima a regularizar y, si no, abre sumario con suspensión de actividades", f:"L:24083:33"}
+    ]
+  },
+  {
+    id:"acr", sig:"ACR", n:"Agente de calificación de riesgo", capa:"control",
+    que:"Entidades registradas para calificar valores negociables y otros riesgos. Califican a pedido de la emisora o de otras entidades, y pueden calificar un valor esté o no bajo el régimen de oferta pública. La CNV puede registrar como calificadoras a universidades públicas.",
+    def:"L:26831:2",
+    puede:[
+      {t:"Calificar cualquier valor negociable, esté o no sujeto al régimen de oferta pública, a pedido de emisoras y otras entidades", f:"L:26831:58"},
+      {t:"Prestar servicios de calificación de otros tipos de riesgo y actividades afines y complementarias", f:"L:26831:2"}
+    ],
+    nopuede:[],
+    tec:[
+      {k:"Registro", v:"La CNV fija las formalidades y requisitos y determina qué clase de organizaciones pueden hacerlo; puede incluir universidades públicas", f:"L:26831:57"}
+    ]
+  },
+  {
+    id:"auditor", sig:"Auditor", n:"Auditor externo", capa:"control",
+    que:"No es un agente registrado: es el contador público matriculado e independiente que audita los estados contables de las emisoras con oferta pública. Lo designa la asamblea ordinaria de accionistas, y la misma asamblea puede revocarle el encargo.",
+    puede:[
+      {t:"Auditar los estados contables de sociedades que hacen oferta pública de sus valores negociables", f:"L:26831:104"}
+    ],
+    nopuede:[
+      {t:"Auditar sin haber presentado antes la declaración jurada sobre sanciones penales, administrativas o profesionales que haya recibido", f:"L:26831:104"}
+    ],
+    tec:[
+      {k:"Designación", v:"Por la asamblea ordinaria de accionistas, al aprobar los estados contables, para el ejercicio siguiente", f:"L:26831:105"},
+      {k:"Independencia", v:"Contadores públicos matriculados independientes, según los criterios que fije la CNV", f:"L:26831:105"}
+    ]
+  },
+  {
+    id:"comite", sig:"Comité", n:"Comité de auditoría", capa:"control",
+    que:"Órgano interno obligatorio en las sociedades que hacen oferta pública de sus acciones. Funciona en forma colegiada con tres o más directores y la mayoría tiene que ser independiente según los criterios de la CNV. Es control desde adentro de la emisora, no un agente del mercado.",
+    puede:[
+      {t:"Funcionar en forma colegiada dentro de la emisora, con tres o más miembros del directorio", f:"L:26831:109"}
+    ],
+    nopuede:[
+      {t:"Integrarse con mayoría de directores no independientes", f:"L:26831:109"}
+    ],
+    tec:[
+      {k:"Integración", v:"Tres o más miembros del directorio, con mayoría necesariamente independiente", f:"L:26831:109"},
+      {k:"Ámbito", v:"Obligatorio solo donde hay oferta pública de las acciones", f:"L:26831:109"}
+    ]
+  },
+  {
+    id:"sgr", sig:"SGR", n:"Sociedad de garantía recíproca", capa:"colect",
+    que:"No intermedia ni custodia: avala. Existe para que una PyME pueda acceder al crédito y al mercado con una garantía que el sistema acepta. Es la pieza que hace posible que un cheque de pago diferido o un pagaré de una PyME se negocie en el mercado.",
+    puede:[
+      {t:"Otorgar garantías a sus socios partícipes mediante contratos de garantía recíproca, y también a terceros", f:"L:24467:33"},
+      {t:"Brindar asesoramiento técnico, económico y financiero a sus socios, en forma directa o por terceros", f:"L:24467:33"}
+    ],
+    nopuede:[
+      {t:"Asignar a un mismo socio partícipe garantías por más del 5% del fondo de riesgo", f:"L:24467:34"}
+    ],
+    tec:[
+      {k:"Régimen legal", v:"Ley 24.467 Título II y, supletoriamente, las normas de la sociedad anónima de la Ley 19.550", f:"L:24467:32"},
+      {k:"Efecto de la garantía", v:"El BCRA les da el carácter de garantías preferidas autoliquidables ante el sistema financiero", f:"L:24467:80"}
+    ]
+  },
+  {
+    id:"emisora", sig:"Emisora", n:"Emisora", capa:"punta",
+    que:"La que necesita financiarse y para eso emite valores negociables. Si quiere ofrecerlos públicamente tiene que pedir autorización a la CNV, y desde ese momento queda atada al régimen informativo, al auditor externo, al comité de auditoría y al control societario exclusivo de la CNV.",
+    puede:[
+      {t:"Ofrecer públicamente valores negociables emitidos o agrupados en serie, una vez autorizada", f:"L:26831:82"},
+      {t:"Pedirle a un agente de calificación que califique sus valores", f:"L:26831:58"},
+      {t:"Convenir con una entidad o agente registrado la defensa colectiva de los derechos de los obligacionistas", f:"L:23576:13"}
+    ],
+    nopuede:[
+      {t:"Hacer oferta pública sin la autorización de la CNV", f:"L:26831:80"},
+      {t:"Quedar fuera del régimen informativo mientras dure la oferta pública", f:"L:26831:99"}
+    ],
+    tec:[
+      {k:"Trámite", v:"La CNV resuelve dentro de los 30 días hábiles contados desde que la documentación está completa", f:"L:26831:84"},
+      {k:"Control societario", v:"Exclusivo y excluyente de la CNV mientras haga oferta pública", f:"L:22169:1"},
+      {k:"Fiscalización estatal permanente", v:"Queda comprendida en el art. 299 de la Ley 19.550 por hacer oferta pública", f:"L:19550:299"}
+    ]
+  },
+  {
+    id:"inversor", sig:"Inversor", n:"Inversor", capa:"punta",
+    que:"El que pone el ahorro. No entra solo al mercado: entra a través de un agente. La ley le reconoce el secreto de sus operaciones y de su nombre, y le arma un tribunal arbitral obligatorio en cada mercado para sus conflictos con las emisoras.",
+    puede:[
+      {t:"Operar a través de un agente registrado, que es el único con acceso a los sistemas del mercado", f:"L:26831:2"},
+      {t:"Someter sus conflictos con las emisoras al tribunal arbitral permanente del mercado", f:"L:26831:46"}
+    ],
+    nopuede:[
+      {t:"Ingresar ofertas al mercado por sí mismo: la ley reserva la intermediación a los agentes registrados", f:"L:26831:47"}
+    ],
+    tec:[
+      {k:"Secreto", v:"El agente debe guardar secreto de las operaciones y de los nombres; solo cede por orden judicial o a requerimiento de la CNV, el BCRA, la UIF o la Superintendencia de Seguros", f:"L:26831:53"},
+      {k:"Fuerza probatoria", v:"La firma del agente registrado da autenticidad a los documentos en que interviene", f:"L:26831:54"}
+    ]
+  }
+];
+
+const MFLUJO = [
+  { n:"Inversor", id:"inversor", d:"Da la orden." },
+  { n:"Agente productor", id:"ap", d:"Opcional: lo captó y le gestiona la orden, sin tocar plata ni títulos.", opc:true },
+  { n:"AN o ALyC", id:"an", d:"Ingresa la oferta al sistema del mercado. Si es un AN, hasta acá llega." },
+  { n:"Mercado", id:"mercados", d:"Organiza la operación y la concierta. Lo que sale de ahí es el precio corriente." },
+  { n:"ALyC / Cámara", id:"camaras", d:"Liquida y compensa. Si la operación está garantizada, la cámara es contraparte central." },
+  { n:"ADCVN", id:"adcvn", d:"Los títulos quedan en depósito colectivo y ahí se pagan sus acreencias." }
+];
+
+const MINSTR = [
+  {
+    id:"acciones", n:"Acciones", fam:"Renta variable",
+    que:"Representan una parte del capital de una sociedad anónima. El que las tiene es dueño de una porción de la empresa: vota, cobra dividendos si los hay y tiene preferencia para suscribir nuevas emisiones.",
+    roles:[
+      {r:"Emite", q:"Sociedad anónima autorizada a hacer oferta pública", f:"L:26831:82"},
+      {r:"Autoriza", q:"CNV, autoridad de aplicación y autorización de la oferta pública", f:"L:26831:80"},
+      {r:"Negocia", q:"Agentes de negociación y ALyC, en los mercados", f:"L:26831:2"},
+      {r:"Liquida", q:"ALyC y cámaras compensadoras", f:"L:26831:35"},
+      {r:"Custodia", q:"Agente depositario central; si son escriturales, el registro hace las veces de título", f:"L:26831:129"},
+      {r:"Audita", q:"Auditor externo designado por la asamblea, más el comité de auditoría", f:"L:26831:105"},
+      {r:"Controla", q:"CNV, con control societario exclusivo y excluyente sobre la emisora", f:"L:22169:1"}
+    ]
+  },
+  {
+    id:"on", n:"Obligaciones negociables", fam:"Renta fija privada",
+    que:"Deuda emitida por una empresa. El inversor no es dueño: es acreedor, y cobra amortización y renta según el prospecto. Pueden ser convertibles en acciones y pueden tener garantía común, especial o flotante.",
+    roles:[
+      {r:"Emite", q:"Sociedades por acciones, SRL, cooperativas, asociaciones civiles y sucursales de sociedades extranjeras del art. 118 LGS", f:"L:23576:1"},
+      {r:"Autoriza", q:"CNV, si se van a ofrecer públicamente", f:"L:26831:80"},
+      {r:"Representa a los tenedores", q:"Entidad o agente registrado con el que la emisora convenga la defensa colectiva de los obligacionistas", f:"L:23576:13"},
+      {r:"Negocia", q:"Agentes de negociación y ALyC, en los mercados", f:"L:26831:2"},
+      {r:"Califica", q:"Agente de calificación de riesgo, a pedido de la emisora", f:"L:26831:58"},
+      {r:"Controla", q:"CNV", f:"L:26831:80"}
+    ]
+  },
+  {
+    id:"publicos", n:"Títulos públicos", fam:"Renta fija pública",
+    que:"Deuda del Estado nacional, provincial, municipal o de entes autárquicos. Son el grueso de la renta fija que se negocia en el país. Clave de examen: su oferta pública no está comprendida en la Ley 26.831.",
+    roles:[
+      {r:"Emite", q:"Nación, provincias, Ciudad Autónoma, municipios, entes autárquicos y organismos multilaterales de crédito de los que la Argentina sea miembro", f:"L:26831:83"},
+      {r:"Autoriza", q:"Nadie: esa oferta pública queda fuera de la Ley 26.831", f:"L:26831:83"},
+      {r:"Negocia", q:"Agentes de negociación y ALyC, en los mercados", f:"L:26831:2"},
+      {r:"Liquida", q:"ALyC y cámaras compensadoras", f:"L:26831:35"},
+      {r:"Custodia", q:"Agente depositario central de valores negociables", f:"L:26831:2"}
+    ]
+  },
+  {
+    id:"fci", n:"Cuotapartes de fondos comunes de inversión", fam:"Inversión colectiva",
+    que:"Un FCI es un patrimonio de copropiedad dividido en cuotapartes. No es una sociedad y no tiene personería jurídica, así que no puede actuar por sí mismo: por eso la ley le pone dos órganos, la gerente y la depositaria, que responden de manera individual y separada.",
+    roles:[
+      {r:"Administra", q:"Sociedad gerente, o entidad financiera autorizada como administradora de cartera", f:"L:24083:3"},
+      {r:"Custodia", q:"Sociedad depositaria, que además cobra las suscripciones y paga los rescates", f:"L:24083:14"},
+      {r:"Marca las reglas", q:"El reglamento de gestión: política de inversión y límites por tipo de activo", f:"L:24083:13"},
+      {r:"Fiscaliza", q:"CNV, sobre la gerente, la depositaria y todo el que se vincule con el fondo", f:"L:24083:32"},
+      {r:"Sanciona", q:"CNV, con las sanciones de la Ley 26.831", f:"L:24083:35"},
+      {r:"Incompatibilidad", q:"La entidad financiera que sea gerente no puede ser depositaria del mismo fondo", f:"L:24083:14"}
+    ]
+  },
+  {
+    id:"fideicomiso", n:"Valores fiduciarios de fideicomisos financieros", fam:"Inversión colectiva",
+    que:"Títulos de deuda y certificados de participación respaldados por un patrimonio separado que administra un fiduciario financiero. El fideicomiso pasó al Código Civil y Comercial: los arts. 1 a 34 de la Ley 24.441 están derogados y el fideicomiso financiero vive en los arts. 1690 a 1692 del CCyC.",
+    roles:[
+      {r:"Administra", q:"Fiduciario financiero, dentro de la categoría de agentes de administración de productos de inversión colectiva", f:"L:26831:2"},
+      {r:"Custodia", q:"Agente de custodia de productos de inversión colectiva", f:"L:26831:2"},
+      {r:"Marco legal", q:"Código Civil y Comercial, arts. 1690 a 1692; la Ley 24.441 quedó vigente solo desde su art. 35", f:"X:CCyC arts. 1690-1692 · texto no cargado en esta página"},
+      {r:"Emite con letras hipotecarias", q:"Los autorizados a hacer oferta pública como fiduciarios o a administrar FCI pueden emitir títulos garantizados con letras hipotecarias", f:"L:24441:49"},
+      {r:"Controla", q:"CNV", f:"L:26831:80"}
+    ]
+  },
+  {
+    id:"pyme", n:"Instrumentos PyME: cheque, pagaré y factura de crédito", fam:"Financiamiento PyME",
+    que:"La puerta del mercado para las empresas chicas. El pagaré bursátil viene de la reforma que la Ley 27.440 le hizo al decreto ley cambiario, y la Factura de Crédito Electrónica MiPyME nace en el Título I de esa misma ley: si la empresa grande no la cancela ni la acepta en quince días corridos, queda aceptada tácitamente y se vuelve título ejecutivo.",
+    roles:[
+      {r:"Emite", q:"La MiPyME que factura a una empresa grande, cuando está obligada a emitir comprobantes electrónicos", f:"L:27440:1"},
+      {r:"Avala", q:"Sociedad de garantía recíproca, que le da la garantía que el sistema acepta", f:"L:24467:33"},
+      {r:"Define quién es PyME", q:"La autoridad de aplicación, por personal ocupado, ventas y activos, con revisión anual", f:"L:24467:2"},
+      {r:"Negocia", q:"Agentes de negociación y ALyC, en los mercados", f:"L:26831:2"},
+      {r:"Controla", q:"CNV sobre la negociación; AFIP sobre el régimen de emisión de la factura", f:"L:27440:2"}
+    ]
+  },
+  {
+    id:"letras", n:"Letras hipotecarias", fam:"Renta fija con garantía real",
+    que:"Títulos valores con garantía hipotecaria. Es lo que quedó vivo de la Ley 24.441 después de que el Código Civil y Comercial se llevara el fideicomiso y el leasing.",
+    roles:[
+      {r:"Naturaleza", q:"Títulos valores con garantía hipotecaria", f:"L:24441:35"},
+      {r:"Empaqueta", q:"Los autorizados a hacer oferta pública como fiduciarios o a administrar FCI pueden emitir títulos respaldados en ellas o armar fondos comunes", f:"L:24441:49"},
+      {r:"Controla", q:"CNV, según las disposiciones reglamentarias que dicte", f:"L:24441:49"}
+    ]
+  },
+  {
+    id:"derivados", n:"Futuros, opciones y pases", fam:"Derivados",
+    que:"Contratos cuyo valor depende de otro activo. Lo que los distingue del resto no es cómo se negocian sino cómo se garantizan: la cámara compensadora se pone en el medio como contraparte central y exige márgenes iniciales y su reposición.",
+    roles:[
+      {r:"Negocia", q:"Agentes de negociación y ALyC, en los mercados autorizados", f:"L:26831:2"},
+      {r:"Garantiza", q:"Cámara compensadora como contraparte central, exigiendo márgenes y activos de garantía", f:"L:26831:35"},
+      {r:"Responde por el incumplimiento", q:"Los fondos de garantía que constituyen mercados y cámaras", f:"L:26831:45"},
+      {r:"Registra los OTC", q:"Entidades de registro de operaciones de derivados autorizadas por la CNV", f:"L:26831:2"},
+      {r:"Controla", q:"CNV", f:"L:26831:80"}
+    ]
+  }
+];
+
+/* ---------------------------------------------------------------
+   La red: todo lo que las ocho leyes definen, como nodos y aristas.
+   forma: 0 actor (círculo) · 1 valor negociable (cuadrado) · 2 concepto (rombo)
+   --------------------------------------------------------------- */
+const MGRUPOS = [
+  { k:"reg",  n:"Regulación",             c:"#2a78d6", cd:"#3987e5" },
+  { k:"inf",  n:"Infraestructura",        c:"#1baf7a", cd:"#199e70" },
+  { k:"int",  n:"Intermediación",         c:"#eb6834", cd:"#d95926" },
+  { k:"can",  n:"Canales",                c:"#e87ba4", cd:"#d55181" },
+  { k:"col",  n:"Inversión colectiva",    c:"#008300", cd:"#008300" },
+  { k:"ctl",  n:"Control y auditoría",    c:"#e34948", cd:"#e66767" },
+  { k:"pta",  n:"Puntas",                 c:"#4a3aa7", cd:"#9085e9" },
+  { k:"val",  n:"Valores negociables",    c:"#eda100", cd:"#c98500" },
+  { k:"con",  n:"Conceptos",              c:"#7A8593", cd:"#8792A1" }
+];
+
+const MNODOS = [
+/* ---------- regulación ---------- */
+{id:"cnv", n:"Comisión Nacional de Valores", sig:"CNV", g:"reg", forma:0, ficha:"cnv",
+ d:"Autoriza la oferta pública en todo el país, registra a cada agente y tiene la competencia disciplinaria exclusiva sobre todos ellos.", f:"L:26831:19"},
+{id:"bcra", n:"Banco Central de la República Argentina", sig:"BCRA", g:"reg", forma:0,
+ d:"Puede relevar al agente del secreto bursátil, y le da a las garantías de las SGR el carácter de preferidas autoliquidables ante el sistema financiero.", f:"L:26831:53"},
+{id:"uif", n:"Unidad de Información Financiera", sig:"UIF", g:"reg", forma:0,
+ d:"Uno de los cuatro organismos ante los que cede el secreto bursátil del art. 53. La prevención de lavado es el Módulo 2 del programa.", f:"L:26831:53"},
+{id:"ssn", n:"Superintendencia de Seguros de la Nación", sig:"SSN", g:"reg", forma:0,
+ d:"Cierra la lista de organismos ante los que el agente queda relevado del secreto, junto con la CNV, el BCRA y la UIF.", f:"L:26831:53"},
+{id:"afip", n:"AFIP", sig:"AFIP", g:"reg", forma:0,
+ d:"Define el régimen de emisión de comprobantes electrónicos del que depende la Factura de Crédito Electrónica MiPyME.", f:"L:27440:1"},
+{id:"contralor", n:"Autoridad de contralor común", sig:"IGJ", g:"reg", forma:0,
+ d:"Conserva la conformidad de la constitución de la sociedad; todo lo demás pasa a la CNV cuando la sociedad hace oferta pública.", f:"L:22169:2"},
+
+/* ---------- infraestructura ---------- */
+{id:"mercados", n:"Mercados", sig:"Mercados", g:"inf", forma:0, ficha:"mercados",
+ d:"Sociedades anónimas autorizadas por la CNV que organizan las operaciones con valores negociables. Sus propias acciones cotizan.", f:"L:26831:2"},
+{id:"camaras", n:"Cámaras compensadoras", sig:"Cámaras", g:"inf", forma:0, ficha:"camaras",
+ d:"Liquidan y compensan cumpliendo el rol de contraparte central: se ponen en el medio y le garantizan a cada punta que la otra cumple.", f:"L:26831:2"},
+{id:"adcvn", n:"Agente depositario central de valores negociables", sig:"ADCVN", g:"inf", forma:0, ficha:"adcvn",
+ d:"Recibe los depósitos colectivos, custodia, liquida y paga las acreencias de lo depositado. En la práctica, la Caja de Valores.", f:"L:26831:2"},
+{id:"ered", n:"Entidades de registro de operaciones de derivados", sig:"ERD", g:"inf", forma:0,
+ d:"Sociedades anónimas autorizadas por la CNV para llevar el registro de los derivados pactados bilateralmente fuera de mercado. Si no las hay, lo llevan los mercados o las cámaras.", f:"L:26831:2"},
+{id:"tribunal", n:"Tribunal arbitral permanente", sig:"Arbitral", g:"inf", forma:0,
+ d:"Obligatorio en cada mercado. Las emisoras quedan sometidas a él en sus relaciones con accionistas e inversores, incluidas las acciones de la Ley 19.550.", f:"L:26831:46"},
+{id:"fgarantia", n:"Fondos de garantía", sig:"F. garantía", g:"inf", forma:0,
+ d:"Los constituyen mercados y cámaras bajo figura fiduciaria para cubrir los compromisos incumplidos por sus agentes en operaciones garantizadas.", f:"L:26831:45"},
+
+/* ---------- intermediación ---------- */
+{id:"alyc_int", n:"ALyC y AN — Integral", sig:"ALyC Integral", g:"int", forma:0, ficha:"alyc_int",
+ d:"Negocia, liquida y compensa lo propio, lo de sus clientes y lo de otros agentes por convenio. Patrimonio neto mínimo $15.000.000.", f:"N:II:2"},
+{id:"alyc_prop", n:"ALyC y AN — Propio", sig:"ALyC Propio", g:"int", forma:0, ficha:"alyc_prop",
+ d:"Igual que el integral pero cerrado sobre sí mismo: no le presta el servicio de liquidación a otros agentes. Patrimonio neto mínimo $3.500.000.", f:"N:II:2"},
+{id:"an", n:"Agente de negociación", sig:"AN", g:"int", forma:0, ficha:"an",
+ d:"Te conecta con el mercado y nada más. No cobra, no custodia y no liquida: necesita convenio con un ALyC. Patrimonio neto mínimo $1.000.000.", f:"N:I:3"},
+{id:"acvn", n:"Agente de corretaje de valores negociables", sig:"ACVN", g:"int", forma:0, ficha:"acvn",
+ d:"Pone en relación a dos partes sin estar ligado a ninguna. No custodia fondos ni valores y no puede operar para sí en su propio sistema.", f:"L:26831:2"},
+{id:"acyd", n:"Agentes de colocación y distribución", sig:"ACyD", g:"int", forma:0, ficha:"acyd",
+ d:"Desarrollan canales de colocación y distribución de valores negociables, con arreglo a la reglamentación de la CNV.", f:"L:26831:2"},
+
+/* ---------- canales ---------- */
+{id:"ap", n:"Agente productor", sig:"AP", g:"can", forma:0, ficha:"ap",
+ d:"Difunde y promociona bajo la responsabilidad de un agente registrado. Capta, asesora, gestiona órdenes y administra carteras, pero nunca toca fondos ni títulos.", f:"L:26831:2"},
+{id:"aa", n:"Agente asesor de mercado de capitales", sig:"AAMC", g:"can", forma:0, ficha:"aa",
+ d:"Solo asesora y cobra honorarios. Tiene prohibido captar clientes, gestionar órdenes y administrar carteras: ahí está la diferencia con el productor.", f:"N:V:4"},
+
+/* ---------- inversión colectiva ---------- */
+{id:"aapic", n:"Agente de administración de productos de inversión colectiva", sig:"AAPIC", g:"col", forma:0, ficha:"aapic",
+ d:"La categoría que junta a la sociedad gerente y al fiduciario financiero: administra patrimonio ajeno sin custodiarlo.", f:"L:26831:2"},
+{id:"acpic", n:"Agente de custodia de productos de inversión colectiva", sig:"ACPIC", g:"col", forma:0, ficha:"acpic",
+ d:"Las sociedades depositarias de la Ley 24.083, registradas ante la CNV.", f:"L:26831:2"},
+{id:"gerente", n:"Sociedad gerente", sig:"Gerente", g:"col", forma:0,
+ d:"Sociedad anónima —o entidad financiera autorizada— que dirige y administra el fondo común de inversión. Si no es entidad financiera, queda en el art. 299 de la Ley 19.550.", f:"L:24083:3"},
+{id:"depositaria", n:"Sociedad depositaria", sig:"Depositaria", g:"col", forma:0,
+ d:"Custodia los activos del fondo, percibe las suscripciones y paga los rescates. Responde de manera individual y separada de la gerente.", f:"L:24083:14"},
+{id:"fiduciario", n:"Fiduciario financiero", sig:"Fiduciario", g:"col", forma:0,
+ d:"Administra el patrimonio separado del fideicomiso financiero. La CNV tiene competencia solo sobre los que hacen oferta pública de sus valores.", f:"L:26831:2"},
+{id:"sgr", n:"Sociedad de garantía recíproca", sig:"SGR", g:"col", forma:0, ficha:"sgr",
+ d:"Avala a las PyMEs para que accedan al crédito y al mercado. No puede asignarle a un socio partícipe más del 5% del fondo de riesgo.", f:"L:24467:33"},
+
+/* ---------- control y auditoría ---------- */
+{id:"acr", n:"Agente de calificación de riesgo", sig:"ACR", g:"ctl", forma:0, ficha:"acr",
+ d:"Califica valores negociables y otros riesgos, a pedido de la emisora, esté o no el valor bajo el régimen de oferta pública.", f:"L:26831:58"},
+{id:"auditor", n:"Auditor externo", sig:"Auditor", g:"ctl", forma:0, ficha:"auditor",
+ d:"Contador público matriculado e independiente. Lo designa la asamblea ordinaria al aprobar los estados contables, para el ejercicio siguiente.", f:"L:26831:105"},
+{id:"comite", n:"Comité de auditoría", sig:"Comité", g:"ctl", forma:0, ficha:"comite",
+ d:"Órgano interno obligatorio donde hay oferta pública de acciones: tres o más directores, con mayoría necesariamente independiente.", f:"L:26831:109"},
+{id:"sindicatura", n:"Comisión fiscalizadora / sindicatura", sig:"Síndicos", g:"ctl", forma:0,
+ d:"La fiscalización privada de la sociedad anónima. En las sociedades del art. 299 —entre ellas las que hacen oferta pública— la sindicatura es obligatoria y colegiada.", f:"L:19550:299"},
+{id:"consejo", n:"Consejo de vigilancia", sig:"Consejo", g:"ctl", forma:0,
+ d:"Órgano opcional de tres a quince accionistas que el estatuto puede organizar para vigilar al directorio.", f:"L:19550:280"},
+
+/* ---------- puntas ---------- */
+{id:"emisora", n:"Emisora", sig:"Emisora", g:"pta", forma:0, ficha:"emisora",
+ d:"La que necesita financiarse. Al pedir oferta pública queda atada al régimen informativo, al auditor externo y al control societario exclusivo de la CNV.", f:"L:26831:82"},
+{id:"inversor", n:"Inversor", sig:"Inversor", g:"pta", forma:0, ficha:"inversor",
+ d:"El que pone el ahorro. No entra solo al mercado: entra a través de un agente registrado, y tiene el secreto del art. 53 de su lado.", f:"L:26831:53"},
+{id:"controlante", n:"Controlante o grupo de control", sig:"Controlante", g:"pta", forma:0,
+ d:"El que tiene los votos para formar la voluntad social en asamblea ordinaria o para elegir la mayoría del directorio, de derecho o de hecho.", f:"L:26831:2"},
+{id:"cuotapartista", n:"Cuotapartista", sig:"Cuotapartista", g:"pta", forma:0,
+ d:"Copropietario del haber del fondo. Su derecho está representado en cuotapartes, cartulares o escriturales.", f:"L:24083:1"},
+{id:"obligacionista", n:"Obligacionistas", sig:"Obligacionistas", g:"pta", forma:0,
+ d:"Los tenedores de las obligaciones negociables. Se reúnen en asamblea y pueden tener un representante que defienda sus derechos colectivos.", f:"L:23576:14"},
+{id:"socios", n:"Socios partícipes y socios protectores", sig:"Socios SGR", g:"pta", forma:0,
+ d:"Los partícipes son las PyMEs que reciben la garantía; los protectores son los que aportan al capital social y al fondo de riesgo.", f:"L:24467:33"}
+];
+
+MNODOS.push(
+/* ---------- valores negociables (cuadrados) ---------- */
+{id:"valores_neg", n:"Valores negociables", sig:"Valores negociables", g:"val", forma:1,
+ d:"El concepto paraguas: títulos valores cartulares o anotados en cuenta, emitidos o agrupados en serie, susceptibles de tráfico generalizado e impersonal en los mercados. La definición del art. 2 los enumera uno por uno.", f:"L:26831:2"},
+{id:"acciones", n:"Acciones", sig:"Acciones", g:"val", forma:1, instr:"acciones",
+ d:"Parte del capital de una sociedad anónima. Dan voto, dividendo, preferencia para suscribir y cuota de liquidación.", f:"L:26831:2"},
+{id:"on", n:"Obligaciones negociables", sig:"ON", g:"val", forma:1, instr:"on",
+ d:"Deuda de una empresa. Las emiten sociedades por acciones, SRL, cooperativas, asociaciones civiles y sucursales de sociedades extranjeras.", f:"L:23576:1"},
+{id:"on_conv", n:"Obligaciones convertibles", sig:"ON convertible", g:"val", forma:1,
+ d:"Las que dan opción de convertirse en acciones de la emisora. Solo pueden emitirlas las sociedades por acciones.", f:"L:23576:5"},
+{id:"publicos", n:"Títulos públicos", sig:"Títulos públicos", g:"val", forma:1, instr:"publicos",
+ d:"Deuda de la Nación, las provincias, la Ciudad, los municipios, los entes autárquicos y los organismos multilaterales. Su oferta pública no está comprendida en la Ley 26.831.", f:"L:26831:83"},
+{id:"cuotapartes", n:"Cuotapartes de fondos comunes de inversión", sig:"Cuotapartes", g:"val", forma:1, instr:"fci",
+ d:"Representan el derecho de copropiedad sobre el haber del fondo. Cartulares o escriturales.", f:"L:24083:18"},
+{id:"vdf", n:"Títulos de deuda y certificados de participación", sig:"Valores fiduciarios", g:"val", forma:1, instr:"fideicomiso",
+ d:"Los valores que emite un fideicomiso financiero contra el patrimonio separado que administra el fiduciario.", f:"L:26831:2"},
+{id:"futuros", n:"Contratos de futuros", sig:"Futuros", g:"val", forma:1, instr:"derivados",
+ d:"Entran en el concepto de valor negociable cuando se registran conforme la reglamentación de la CNV.", f:"L:26831:2"},
+{id:"opciones", n:"Contratos de opciones", sig:"Opciones", g:"val", forma:1, instr:"derivados",
+ d:"Igual que los futuros: son valores negociables en la medida en que se registren según la reglamentación de la CNV.", f:"L:26831:2"},
+{id:"derivados_otc", n:"Derivados bilaterales fuera de mercado", sig:"Derivados OTC", g:"val", forma:1,
+ d:"Los pactados de forma bilateral fuera de los mercados autorizados. Van al registro de operaciones de derivados.", f:"L:26831:2"},
+{id:"cheque", n:"Cheques de pago diferido", sig:"Cheque", g:"val", forma:1, instr:"pyme",
+ d:"Nombrados expresamente en la definición de valor negociable del art. 2. Es la vía clásica de financiamiento PyME en el mercado.", f:"L:26831:2"},
+{id:"pagare", n:"Pagarés", sig:"Pagaré", g:"val", forma:1, instr:"pyme",
+ d:"También enumerados en el art. 2. La Ley 27.440 reformó sus requisitos al sustituir los artículos de la Ley 27.264 sobre el decreto ley cambiario.", f:"L:27440:196"},
+{id:"fce", n:"Factura de Crédito Electrónica MiPyME", sig:"FCE MiPyME", g:"val", forma:1, instr:"pyme",
+ d:"La emite la MiPyME que le factura a una empresa grande. Si en quince días corridos no la cancelan ni la aceptan, queda aceptada tácitamente y es título ejecutivo.", f:"L:27440:1"},
+{id:"letra_cambio", n:"Letras de cambio", sig:"Letra de cambio", g:"val", forma:1,
+ d:"Enumerada en la definición de valor negociable del art. 2.", f:"L:26831:2"},
+{id:"letra_hip", n:"Letras hipotecarias", sig:"Letra hipotecaria", g:"val", forma:1, instr:"letras",
+ d:"Títulos valores con garantía hipotecaria. Es lo que quedó vivo de la Ley 24.441 tras el Código Civil y Comercial.", f:"L:24441:35"},
+{id:"warrants", n:"Certificados de depósito y warrants", sig:"Warrants", g:"val", forma:1,
+ d:"Enumerados en el art. 2 entre los títulos susceptibles de negociación secundaria en mercados.", f:"L:26831:2"},
+{id:"pfijo", n:"Certificados de depósito a plazo fijo admisibles", sig:"Plazo fijo", g:"val", forma:1,
+ d:"También nombrados en el art. 2 como valores negociables.", f:"L:26831:2"},
+{id:"escriturales", n:"Valores escriturales", sig:"Escriturales", g:"val", forma:1,
+ d:"Anotados en cuenta, sin lámina. La inscripción en el registro produce los efectos de la tradición del título.", f:"L:26831:129"},
+{id:"debentures", n:"Debentures", sig:"Debentures", g:"val", forma:1,
+ d:"Deuda de la sociedad anónima regulada por la Ley 19.550. Hacer oferta pública de ellos mete a la sociedad en el art. 299.", f:"L:19550:299"},
+
+/* ---------- conceptos (rombos) ---------- */
+{id:"mdo_capitales", n:"Mercado de capitales", sig:"Mercado de capitales", g:"con", forma:2,
+ d:"El ámbito donde se ofrecen públicamente valores negociables para que, a través de agentes habilitados, el público realice actos jurídicos, bajo supervisión de la CNV.", f:"L:26831:2"},
+{id:"of_publica", n:"Oferta pública", sig:"Oferta pública", g:"con", forma:2,
+ d:"Invitación al público en general, o a grupos determinados, para realizar cualquier acto jurídico con valores negociables, por cualquier medio de difusión.", f:"L:26831:2"},
+{id:"pic", n:"Productos de inversión colectiva", sig:"PIC", g:"con", forma:2,
+ d:"Los fondos comunes de inversión, los fideicomisos financieros del CCyC y los demás vehículos que pidan autorización de oferta pública a la CNV.", f:"L:26831:2"},
+{id:"reg_derivados", n:"Registro de operaciones de derivados", sig:"Registro derivados", g:"con", forma:2,
+ d:"El registro de los derivados pactados bilateralmente fuera de mercado. Lo llevan las entidades de registro y, si no las hay, los mercados o las cámaras.", f:"L:26831:2"},
+{id:"info_priv", n:"Información reservada o privilegiada", sig:"Info privilegiada", g:"con", forma:2,
+ d:"Información concreta no pública que, de publicarse, podría influir de manera sustancial sobre el precio o el curso de negociación.", f:"L:26831:2"},
+{id:"abuso_info", n:"Abuso de información privilegiada", sig:"Abuso de info", g:"con", forma:2,
+ d:"Conducta contraria a la transparencia: valerse de la información reservada para obtener ventajas, propias o ajenas.", f:"L:26831:117"},
+{id:"manipulacion", n:"Manipulación y engaño", sig:"Manipulación", g:"con", forma:2,
+ d:"Actos u operaciones que alteren artificialmente el precio o el volumen, o cualquier acto de engaño sobre el mercado.", f:"L:26831:117"},
+{id:"oferta_irreg", n:"Oferta pública irregular", sig:"Oferta irregular", g:"con", forma:2,
+ d:"Ofrecer valores negociables sin la autorización correspondiente. Es la otra conducta del art. 117.", f:"L:26831:117"},
+{id:"opa", n:"Oferta pública de adquisición", sig:"OPA", g:"con", forma:2,
+ d:"Quien vaya a alcanzar una participación de control en una sociedad con oferta pública debe promoverla sobre todos los valores con derecho a voto.", f:"L:26831:87"},
+{id:"precio_eq", n:"Precio equitativo", sig:"Precio equitativo", g:"con", forma:2,
+ d:"El piso que debe respetar la contraprestación de una OPA, con los criterios que fija la ley.", f:"L:26831:88"},
+{id:"part_control", n:"Participación de control", sig:"Part. de control", g:"con", forma:2,
+ d:"La que da los votos para formar la voluntad social; dispara la obligación de promover la OPA.", f:"L:26831:87"},
+{id:"casi_total", n:"Control casi total", sig:"Control casi total", g:"con", forma:2,
+ d:"Cuando quedan en poder de terceros acciones que representen menos del 5% del capital. Habilita la declaración unilateral de voluntad de adquisición.", f:"L:26831:92"},
+{id:"retiro_op", n:"Retiro de la oferta pública", sig:"Retiro de la OP", g:"con", forma:2,
+ d:"La sociedad que decide retirarse debe promover una OPA por las acciones en circulación. El que no acepta conserva sus acciones.", f:"L:26831:97"},
+{id:"act_concertada", n:"Actuación concertada", sig:"Actuación concertada", g:"con", forma:2,
+ d:"Dos o más personas cooperando activamente, por acuerdo formal o informal, en la adquisición, tenencia o disposición de acciones.", f:"L:26831:2"},
+{id:"reg_info", n:"Régimen informativo", sig:"Régimen informativo", g:"con", forma:2,
+ d:"La obligación de informar a la CNV de forma directa, veraz, suficiente y oportuna todo hecho relevante mientras dure la oferta pública.", f:"L:26831:99"},
+{id:"prospecto", n:"Prospecto", sig:"Prospecto", g:"con", forma:2,
+ d:"El documento de la emisión. Los emisores, sus órganos y los intermediarios responden por lo que dice.", f:"L:26831:119"},
+{id:"secreto", n:"Secreto bursátil", sig:"Secreto", g:"con", forma:2,
+ d:"Los agentes deben guardar secreto de las operaciones y de los nombres. Solo cede por orden judicial o ante la CNV, el BCRA, la UIF y la SSN.", f:"L:26831:53"},
+{id:"sanciones", n:"Sanciones", sig:"Sanciones", g:"con", forma:2,
+ d:"Apercibimiento, multa de $100.000 a $100.000.000 elevable al quíntuplo, inhabilitación hasta 5 años, suspensión hasta 2 años y prohibición de hacer oferta pública.", f:"L:26831:132"},
+{id:"sumario", n:"Procedimiento sumarial", sig:"Sumario", g:"con", forma:2,
+ d:"El procedimiento por el que la CNV instruye y resuelve las infracciones.", f:"L:26831:136"},
+{id:"prescripcion", n:"Prescripción de la acción sancionatoria", sig:"Prescripción", g:"con", forma:2,
+ d:"El plazo tras el cual la CNV ya no puede perseguir la infracción.", f:"L:26831:135"},
+{id:"riesgo_sist", n:"Riesgo sistémico", sig:"Riesgo sistémico", g:"con", forma:2,
+ d:"La CNV puede tomar medidas urgentes cuando estén en riesgo el funcionamiento del mercado o los derechos de los inversores.", f:"L:26831:141"},
+{id:"reglamento", n:"Reglamento de gestión", sig:"Reglamento de gestión", g:"con", forma:2,
+ d:"El contrato del fondo: fija la política de inversión, los límites por tipo de activo y las condiciones de suscripción y rescate.", f:"L:24083:13"},
+{id:"rescate", n:"Rescate", sig:"Rescate", g:"con", forma:2,
+ d:"El derecho del cuotapartista de un fondo abierto a que le devuelvan su parte del haber.", f:"L:24083:22"},
+{id:"fondo_riesgo", n:"Fondo de riesgo", sig:"Fondo de riesgo", g:"con", forma:2,
+ d:"El patrimonio con el que la SGR responde por las garantías que otorga. Ningún socio partícipe puede tener asignado más del 5%.", f:"L:24467:46"},
+{id:"contrato_gr", n:"Contrato de garantía recíproca", sig:"Contrato de GR", g:"con", forma:2,
+ d:"El contrato por el que la SGR se obliga accesoriamente por el socio partícipe que ha de cumplir la obligación garantizada.", f:"L:24467:68"},
+{id:"contragarantia", n:"Contragarantía", sig:"Contragarantía", g:"con", forma:2,
+ d:"Lo que la SGR debe requerirle al socio partícipe para respaldar la garantía que le da.", f:"L:24467:71"},
+{id:"pyme", n:"PyME", sig:"PyME", g:"con", forma:2,
+ d:"La define la autoridad de aplicación por personal ocupado, ventas y activos, con revisión anual. La ley no fija números.", f:"L:24467:2"},
+{id:"fisc_estatal", n:"Fiscalización estatal permanente", sig:"Art. 299", g:"con", forma:2,
+ d:"El régimen del art. 299 de la Ley 19.550. Hacer oferta pública de acciones o debentures mete a la sociedad adentro.", f:"L:19550:299"},
+{id:"ctrl_societario", n:"Control societario de la CNV", sig:"Control societario", g:"con", forma:2,
+ d:"Sobre las sociedades con oferta pública la CNV concentra el control societario de manera exclusiva y excluyente.", f:"L:22169:1"},
+{id:"fci", n:"Fondo común de inversión", sig:"FCI", g:"con", forma:2,
+ d:"Patrimonio de copropiedad dividido en cuotapartes. No es sociedad y carece de personería jurídica: por eso necesita dos órganos.", f:"L:24083:1"},
+{id:"fideicomiso", n:"Fideicomiso financiero", sig:"Fideicomiso", g:"con", forma:2,
+ d:"Patrimonio separado que administra un fiduciario y contra el que se emiten títulos de deuda y certificados de participación.", f:"L:26831:2"},
+{id:"conv_liq", n:"Convenio de liquidación", sig:"Convenio", g:"con", forma:2,
+ d:"El acuerdo sin el cual un agente de negociación no puede operar: lo ata a un ALyC que responde por su liquidación.", f:"N:I:5"},
+{id:"pnm", n:"Patrimonio neto mínimo", sig:"PNM", g:"con", forma:2,
+ d:"Lo que cada categoría debe mantener en forma permanente: ALyC Integral $15.000.000, ALyC Propio $3.500.000, ACVN $2.000.000, AN $1.000.000, AP $250.000.", f:"N:I:14"},
+{id:"contraparte", n:"Contraparte central", sig:"Contraparte central", g:"con", forma:2,
+ d:"El rol que asume el mercado o la cámara cuando garantiza el cumplimiento: se pone en el medio de las dos puntas.", f:"L:26831:40"}
+);
+
+/* aristas: [origen, destino, qué relación, fuente] */
+const MREL = [
+/* la CNV sobre todo lo demás */
+["cnv","an","registra","L:26831:47"],
+["cnv","alyc_int","registra","L:26831:47"],
+["cnv","alyc_prop","registra","L:26831:47"],
+["cnv","acvn","registra","L:26831:47"],
+["cnv","acyd","registra","L:26831:47"],
+["cnv","ap","registra","L:26831:47"],
+["cnv","aa","registra","L:26831:47"],
+["cnv","aapic","registra","L:26831:47"],
+["cnv","acpic","registra","L:26831:47"],
+["cnv","adcvn","registra","L:26831:47"],
+["cnv","acr","registra","L:26831:57"],
+["cnv","mercados","autoriza y le aprueba los reglamentos","L:26831:44"],
+["cnv","camaras","autoriza y le aprueba los reglamentos","L:26831:44"],
+["cnv","ered","autoriza","L:26831:2"],
+["cnv","of_publica","autoriza","L:26831:80"],
+["cnv","sanciones","aplica","L:26831:132"],
+["cnv","sumario","instruye","L:26831:136"],
+["cnv","prescripcion","pierde la acción por","L:26831:135"],
+["cnv","riesgo_sist","puede actuar de urgencia por","L:26831:141"],
+["cnv","reg_info","recibe la información del","L:26831:99"],
+["cnv","gerente","fiscaliza y registra","L:24083:32"],
+["cnv","depositaria","fiscaliza y registra","L:24083:32"],
+["cnv","reglamento","aprueba","L:24083:11"],
+["cnv","fiduciario","tiene competencia sobre","L:26831:2"],
+["cnv","pic","autoriza sus emisiones","L:26831:2"],
+["cnv","ctrl_societario","ejerce","L:22169:1"],
+["cnv","contralor","desplaza a","L:22169:2"],
+["cnv","secreto","releva del","L:26831:53"],
+["bcra","secreto","releva del","L:26831:53"],
+["uif","secreto","releva del","L:26831:53"],
+["ssn","secreto","releva del","L:26831:53"],
+["ctrl_societario","emisora","alcanza a","L:22169:1"],
+
+/* infraestructura */
+["mercados","an","lo habilita a actuar en su ámbito","L:26831:32"],
+["mercados","alyc_int","lo habilita a actuar en su ámbito","L:26831:32"],
+["mercados","alyc_prop","lo habilita a actuar en su ámbito","L:26831:32"],
+["mercados","acvn","lo habilita a actuar en su ámbito","L:26831:32"],
+["mercados","tribunal","debe tener en su ámbito","L:26831:46"],
+["mercados","fgarantia","constituye","L:26831:45"],
+["mercados","contraparte","actúa como","L:26831:40"],
+["mercados","reg_derivados","puede llevarlo si no hay entidades","L:26831:2"],
+["mercados","acciones","lista las propias","L:26831:31"],
+["camaras","contraparte","actúa como","L:26831:40"],
+["camaras","fgarantia","constituye","L:26831:45"],
+["camaras","alyc_int","le exige márgenes y garantías","L:26831:35"],
+["camaras","futuros","garantiza","L:26831:35"],
+["camaras","opciones","garantiza","L:26831:35"],
+["camaras","reg_derivados","puede llevarlo si no hay entidades","L:26831:2"],
+["adcvn","acciones","custodia en depósito colectivo","L:26831:2"],
+["adcvn","on","custodia en depósito colectivo","L:26831:2"],
+["adcvn","publicos","custodia en depósito colectivo","L:26831:2"],
+["adcvn","cuotapartes","custodia en depósito colectivo","L:26831:2"],
+["adcvn","escriturales","lleva el registro de","L:26831:129"],
+["ered","reg_derivados","lleva","L:26831:2"],
+["reg_derivados","derivados_otc","alcanza a","L:26831:2"],
+["tribunal","inversor","resuelve sus conflictos con la emisora","L:26831:46"],
+["fgarantia","alyc_int","cubre el incumplimiento de","L:26831:45"],
+
+/* intermediación */
+["an","mercados","ingresa ofertas y registra operaciones en","N:I:3"],
+["an","conv_liq","necesita","N:I:5"],
+["conv_liq","alyc_int","lo ata a un","N:II:2"],
+["an","pnm","debe mantener","N:I:14"],
+["alyc_int","pnm","debe mantener","N:II:20"],
+["alyc_prop","pnm","debe mantener","N:II:20"],
+["acvn","pnm","debe mantener","N:VI:9"],
+["ap","pnm","debe mantener","N:IV:17"],
+["alyc_int","an","le presta el servicio de liquidación","N:II:2"],
+["alyc_int","camaras","compensa a través de","L:26831:35"],
+["alyc_prop","camaras","compensa a través de","L:26831:35"],
+["alyc_int","adcvn","deposita los valores en","L:26831:2"],
+["acvn","mercados","registra las operaciones e informa volúmenes","N:VI:18"],
+["acyd","of_publica","coloca y distribuye en","L:26831:2"],
+["an","secreto","debe guardar","L:26831:53"],
+["alyc_int","secreto","debe guardar","L:26831:53"],
+
+/* canales */
+["ap","an","actúa bajo la responsabilidad de","L:26831:2"],
+["ap","alyc_int","actúa bajo la responsabilidad de","L:26831:2"],
+["ap","inversor","capta y le gestiona órdenes","N:IV:7"],
+["aa","inversor","solo asesora a","N:V:1"],
+
+/* inversión colectiva */
+["gerente","aapic","es un","L:26831:2"],
+["fiduciario","aapic","es un","L:26831:2"],
+["depositaria","acpic","es un","L:26831:2"],
+["gerente","fci","dirige y administra","L:24083:3"],
+["depositaria","fci","custodia los activos de","L:24083:14"],
+["gerente","depositaria","no puede ser la misma entidad que","L:24083:14"],
+["gerente","fisc_estatal","queda comprendida en","L:24083:34"],
+["gerente","reglamento","suscribe","L:24083:11"],
+["depositaria","reglamento","suscribe","L:24083:11"],
+["reglamento","fci","rige la política de inversión de","L:24083:13"],
+["fci","cuotapartes","se divide en","L:24083:1"],
+["fci","pic","es un","L:26831:2"],
+["fideicomiso","pic","es un","L:26831:2"],
+["fiduciario","fideicomiso","administra","L:26831:2"],
+["fideicomiso","vdf","emite","L:26831:2"],
+["cuotapartista","cuotapartes","es titular de","L:24083:1"],
+["cuotapartista","rescate","puede pedir el","L:24083:22"],
+["depositaria","rescate","paga el","L:24083:14"],
+
+/* garantía PyME */
+["sgr","pyme","otorga garantías a la","L:24467:33"],
+["sgr","fondo_riesgo","responde con su","L:24467:46"],
+["sgr","contrato_gr","celebra","L:24467:68"],
+["sgr","contragarantia","exige","L:24467:71"],
+["socios","sgr","integran la","L:24467:33"],
+["sgr","cheque","avala","L:24467:33"],
+["sgr","pagare","avala","L:24467:33"],
+["bcra","sgr","da carácter preferido a sus garantías","L:24467:80"],
+["pyme","fce","emite","L:27440:1"],
+["afip","fce","fija el régimen de emisión de","L:27440:1"],
+
+/* control y auditoría */
+["acr","acciones","califica","L:26831:58"],
+["acr","on","califica","L:26831:58"],
+["acr","vdf","califica","L:26831:58"],
+["auditor","emisora","audita los estados contables de","L:26831:104"],
+["emisora","auditor","designa en asamblea ordinaria","L:26831:105"],
+["comite","emisora","funciona dentro de","L:26831:109"],
+["sindicatura","emisora","fiscaliza de manera colegiada","L:19550:299"],
+["consejo","emisora","vigila el directorio de","L:19550:280"],
+["info_priv","abuso_info","es el objeto del","L:26831:117"],
+["abuso_info","sanciones","se castiga con","L:26831:132"],
+["manipulacion","sanciones","se castiga con","L:26831:132"],
+["oferta_irreg","sanciones","se castiga con","L:26831:132"],
+["sumario","sanciones","termina en","L:26831:136"],
+
+/* la emisora y la oferta pública */
+["emisora","of_publica","solicita autorización de","L:26831:80"],
+["emisora","acciones","emite","L:26831:82"],
+["emisora","on","emite","L:23576:1"],
+["emisora","debentures","emite","L:19550:299"],
+["emisora","prospecto","responde por el","L:26831:119"],
+["emisora","reg_info","queda sujeta al","L:26831:99"],
+["emisora","fisc_estatal","queda comprendida en","L:19550:299"],
+["emisora","comite","debe constituir","L:26831:109"],
+["emisora","retiro_op","puede pedir el","L:26831:97"],
+["controlante","opa","debe promover la","L:26831:87"],
+["opa","part_control","se dispara al alcanzar una","L:26831:87"],
+["opa","precio_eq","debe respetar el","L:26831:88"],
+["casi_total","controlante","habilita al","L:26831:92"],
+["act_concertada","part_control","computa para la","L:26831:2"],
+["retiro_op","opa","obliga a promover una","L:26831:97"],
+
+/* el inversor */
+["inversor","an","opera a través de","L:26831:47"],
+["inversor","alyc_int","opera a través de","L:26831:47"],
+["inversor","secreto","está protegido por el","L:26831:53"],
+["inversor","mdo_capitales","participa del","L:26831:2"],
+["obligacionista","on","es tenedor de","L:23576:14"],
+["on","obligacionista","se reúne en asamblea de","L:23576:14"],
+
+/* los valores negociables */
+["acciones","valores_neg","es un","L:26831:2"],
+["on","valores_neg","es un","L:26831:2"],
+["publicos","valores_neg","es un","L:26831:2"],
+["cuotapartes","valores_neg","es un","L:26831:2"],
+["vdf","valores_neg","es un","L:26831:2"],
+["futuros","valores_neg","es un","L:26831:2"],
+["opciones","valores_neg","es un","L:26831:2"],
+["cheque","valores_neg","es un","L:26831:2"],
+["pagare","valores_neg","es un","L:26831:2"],
+["letra_cambio","valores_neg","es un","L:26831:2"],
+["letra_hip","valores_neg","es un","L:26831:2"],
+["warrants","valores_neg","es un","L:26831:2"],
+["pfijo","valores_neg","es un","L:26831:2"],
+["fce","valores_neg","es un","L:26831:2"],
+["escriturales","valores_neg","es un","L:26831:2"],
+["on_conv","on","es una","L:23576:5"],
+["acciones","escriturales","pueden ser","L:26831:129"],
+["publicos","of_publica","queda fuera de la ley al hacer","L:26831:83"],
+["letra_hip","fiduciario","puede empaquetarlas el","L:24441:49"],
+["valores_neg","of_publica","es el objeto de la","L:26831:82"],
+["valores_neg","mdo_capitales","se ofrece en el","L:26831:2"],
+["of_publica","mdo_capitales","define el","L:26831:2"],
+["derivados_otc","valores_neg","es un si se registra","L:26831:2"],
+["debentures","fisc_estatal","su oferta pública mete a la emisora en","L:19550:299"]
+];
+
 /* ------------------ render ------------------ */
 const MODNOM = {
   1:"Módulo 1 · Marco normativo, emisoras, OPA y régimen sancionatorio",
@@ -1653,6 +2896,19 @@ function render(){
 
 function filter(){
   if(vista === "glosario"){ filterGlosario(); return; }
+  if(vista === "mercado"){
+    if(msub === "estructura"){ pintarMercado(); return; }
+    if(msub === "red" && RED){
+      const q = qEl.value.trim().toLowerCase();
+      const n = q ? MNODOS.filter(x=>redGrupos[x.g] &&
+        (x.n + " " + x.sig + " " + x.d).toLowerCase().includes(q)).length : 0;
+      countEl.textContent = q
+        ? `${n} de ${MNODOS.filter(x=>redGrupos[x.g]).length} nodos coinciden`
+        : `${MNODOS.filter(x=>redGrupos[x.g]).length} nodos · ${MREL.length} relaciones`;
+      return;
+    }
+    pintarMercado(); return;
+  }
   if(vista === "cuestionario"){
     if(quiz.modo === "practica" || quiz.modo === "repaso") nuevaCola();
     pintarCuestionario(); return;
@@ -1754,13 +3010,18 @@ function setVista(v){
   leyesView.hidden = v !== "leyes";
   glosView.hidden = v !== "glosario";
   document.getElementById("cuestionario").hidden = v !== "cuestionario";
-  document.querySelector(".leyenda").hidden = v !== "leyes";
+  document.getElementById("mercado").hidden = v !== "mercado";
+  if(v !== "mercado"){ redDestruir(); estrDestruir(); }
+  document.getElementById("vMercado").setAttribute("aria-selected", v === "mercado" ? "true" : "false");
+  document.querySelector(".leyenda").hidden = (v !== "leyes" && v !== "mercado");
   onlyEl.hidden = v !== "leyes";
   allEl.hidden = v !== "leyes";
   qEl.placeholder = v === "leyes"
     ? "Buscar: prospecto, OPA, sumario, prescripción, auditor…"
     : v === "glosario"
     ? "Buscar un término: cuotaparte, fondo de riesgo, precio equitativo…"
+    : v === "mercado"
+    ? "Buscar en el mercado: liquidar, custodia, cuotaparte, contraparte central…"
     : "Buscar entre las preguntas: OPA, secreto, prospecto…";
   filter();
 }
@@ -1768,6 +3029,10 @@ function setVista(v){
 vLeyesBtn.addEventListener("click", ()=>setVista("leyes"));
 vGlosBtn.addEventListener("click", ()=>setVista("glosario"));
 document.getElementById("vCuest").addEventListener("click", ()=>setVista("cuestionario"));
+document.getElementById("vMercado").addEventListener("click", ()=>{
+  setVista("mercado");
+  if((msub === "red" && !RED) || (msub === "estructura" && !ESTR)) pintarMercado();
+});
 glosLetras.addEventListener("click", e=>{
   const b = e.target.closest("button[data-l]");
   if(!b) return;
@@ -1788,6 +3053,942 @@ glosGrid.addEventListener("click", e=>{
   const [leyId, key] = b.dataset.go.split(":");
   goTo(leyId, key);
 });
+
+
+/* ---------------- el mercado ---------------- */
+const mercView = document.getElementById("mercado");
+const mzona = document.getElementById("mzona");
+const msubEl = document.getElementById("msub");
+const MSUBS = [
+  ["estructura","Estructura"],
+  ["matriz","Quién puede qué"],
+  ["instrumentos","Instrumentos"],
+  ["fichas","Fichas"]
+];
+let msub = "estructura";
+const agPorId = id => MAGENTES.find(a=>a.id === id);
+
+function fuenteHTML(f){
+  if(!f) return "";
+  if(f.charAt(0) === "L"){
+    const p = f.split(":"), ley = p[1], art = p[2];
+    const l = leyPorId(ley);
+    const hay = (TEXTOS[ley] || {})[art];
+    const et = `Ley ${l ? l.num : ley} · art. ${esc(art)}`;
+    return hay
+      ? `<button class="mf" data-go="${ley}:${artKey(art)}">${et}</button>`
+      : `<button class="mf soft" data-go="${ley}:">${et}</button>`;
+  }
+  if(f.charAt(0) === "N"){
+    const p = f.split(":"), cap = p[1], art = p[2];
+    return `<a class="mf norm" href="${NORMBASE}${cap}.htm" target="_blank" rel="noopener"
+      title="${esc(NORMCAP[cap]||"")}">Normas CNV · Tít. VII Cap. ${esc(cap)} art. ${esc(art)}</a>`;
+  }
+  return `<span class="mf otra">${esc(f.slice(2))}</span>`;
+}
+
+function esquemaHTML(){
+  const capas = MCAPAS.map(c=>{
+    const ags = MAGENTES.filter(a=>a.capa === c.k);
+    if(!ags.length) return "";
+    return `<section class="mcapa">
+      <h3>${esc(c.n)}</h3>
+      <p class="mcd">${esc(c.d)}</p>
+      <div class="mcajas">${ags.map(a=>
+        `<button class="mcaja" data-ficha="${a.id}"><b>${esc(a.sig)}</b>${a.sig === a.n ? "" : `<span>${esc(a.n)}</span>`}</button>`
+      ).join("")}</div>
+    </section>`;
+  }).join("");
+  const pasos = MFLUJO.map((p,i)=>
+    `<div class="mpaso${p.opc?" opc":""}"><span class="mnum">${i+1}</span>
+      <b data-ficha="${p.id}">${esc(p.n)}</b><span>${esc(p.d)}</span></div>`
+  ).join("");
+  return `<section class="mcapa">
+      <h3>El recorrido de una orden</h3>
+      <p class="mcd">De dónde sale y por dónde pasa hasta quedar depositada. El paso punteado es opcional.</p>
+      <div class="mflujo">${pasos}</div>
+    </section>` + capas
+    + `<p class="mnota">Cada caja abre su ficha. Las capas no son una jerarquía formal de la ley: son el orden en que conviene leerlas para entender quién depende de quién.</p>`;
+}
+
+function matrizHTML(){
+  const ags = MAGENTES.filter(a=>a.matriz);
+  const cab = MACT.map(a=>`<th title="${esc(a.d)}">${esc(a.n)}</th>`).join("");
+  const filas = ags.map(a=>{
+    const celdas = MACT.map(x=>{
+      const v = (a.act || {})[x.k] || "no";
+      const txt = v === "si" ? "✓" : v === "no" ? "✕" : v === "conv" ? "convenio" : "con requisitos";
+      const tit = v === "si" ? "Puede" : v === "no" ? "No puede"
+        : v === "conv" ? "Solo a través de otro agente, por convenio" : "Puede, con condiciones";
+      return `<td><span class="mv ${v}" title="${tit}">${txt}</span></td>`;
+    }).join("");
+    return `<tr><td class="ma"><b data-ficha="${a.id}">${esc(a.sig)}</b><span>${esc(a.n)}</span>
+      ${a.matrizf ? fuenteHTML(a.matrizf) : ""}</td>${celdas}</tr>`;
+  }).join("");
+  return `<div class="mwrap"><table class="mtabla">
+      <thead><tr><th class="ma">Agente</th>${cab}</tr></thead>
+      <tbody>${filas}</tbody>
+    </table></div>
+    <div class="mref">
+      <span><b class="mv si">✓</b> puede</span>
+      <span><b class="mv no">✕</b> no puede</span>
+      <span><b class="mv conv">convenio</b> solo a través de otro agente</span>
+      <span><b class="mv cond">con requisitos</b> puede, con condiciones</span>
+    </div>
+    <p class="mnota">La matriz toma solo a los que te conectan con el mercado. Los mercados, las cámaras, el depositario central, la gerente, la depositaria, las calificadoras y la CNV no compiten en estas actividades: están en el esquema y en las fichas.<br>
+    Las dos comparaciones que más se preguntan: el <b>AN</b> negocia pero no liquida ni custodia, y necesita convenio con un <b>ALyC</b>; el <b>agente productor</b> capta, asesora, gestiona órdenes y administra carteras, mientras que el <b>asesor</b> solo asesora.<br>
+    De dónde sale cada marca: las prohibiciones vienen del artículo que cada fila cita, y ahí la cruz es literal. Donde la norma habilita expresamente, va el tilde. <b>Administrar carteras</b> queda en «con requisitos» para todos salvo el asesor, que lo tiene prohibido: el Título VII solo lo regula de manera expresa para el agente productor, y siempre con consentimiento expreso del cliente.</p>`;
+}
+
+function instrumentosHTML(){
+  const q = qEl.value.trim().toLowerCase();
+  const xs = MINSTR.filter(x=>!q || (x.n + " " + x.que + " " + x.fam + " " +
+    x.roles.map(r=>r.r + " " + r.q).join(" ")).toLowerCase().includes(q));
+  if(!xs.length) return `<div class="mempty">Ningún instrumento coincide con la búsqueda.</div>`;
+  return xs.map(x=>`<article class="mficha" id="minstr-${x.id}">
+    <header><h3>${esc(x.n)}</h3><span class="msig">${esc(x.fam)}</span></header>
+    <p class="mque">${esc(x.que)}</p>
+    <div class="mbloque"><h4>Quién hace qué</h4><div class="mtec">${
+      x.roles.map(r=>`<div><span class="mk">${esc(r.r)}</span><span>${esc(r.q)} ${fuenteHTML(r.f)}</span></div>`).join("")
+    }</div></div>
+  </article>`).join("");
+}
+
+function fichasHTML(){
+  const q = qEl.value.trim().toLowerCase();
+  const coincide = a => !q || (a.sig + " " + a.n + " " + a.que + " " +
+      (a.puede||[]).map(x=>x.t).join(" ") + " " + (a.nopuede||[]).map(x=>x.t).join(" ") + " " +
+      (a.tec||[]).map(x=>x.k + " " + x.v).join(" ")).toLowerCase().includes(q);
+  const xs = MAGENTES.filter(coincide);
+  const indice = `<div class="mindice">` + MAGENTES.map(a=>
+    `<button data-ir="${a.id}"${coincide(a)?"":" disabled style=\"opacity:.35\""}>${esc(a.sig)}</button>`).join("") + `</div>`;
+  if(!xs.length) return indice + `<div class="mempty">Ningún agente coincide con la búsqueda.</div>`;
+  const capaNom = {};
+  MCAPAS.forEach(c=>{ capaNom[c.k] = c.n; });
+  return indice + xs.map(a=>`<article class="mficha" id="mag-${a.id}">
+    <header>
+      <h3>${esc(a.n)}</h3>
+      <span class="msig">${esc(a.sig)}</span>
+      <span class="mcapaet">${esc(capaNom[a.capa]||"")}</span>
+      ${a.def ? fuenteHTML(a.def) : ""}
+    </header>
+    <p class="mque">${esc(a.que)}</p>
+    ${(a.puede && a.puede.length) ? `<div class="mbloque"><h4>Qué puede hacer</h4>
+      <ul class="mlista si">${a.puede.map(x=>`<li><span class="mi">✓</span><span>${esc(x.t)}${fuenteHTML(x.f)}</span></li>`).join("")}</ul></div>` : ""}
+    ${(a.nopuede && a.nopuede.length) ? `<div class="mbloque"><h4>Qué no puede hacer</h4>
+      <ul class="mlista no">${a.nopuede.map(x=>`<li><span class="mi">✕</span><span>${esc(x.t)}${fuenteHTML(x.f)}</span></li>`).join("")}</ul></div>` : ""}
+    ${(a.tec && a.tec.length) ? `<div class="mbloque"><h4>Aspectos técnicos</h4>
+      <div class="mtec">${a.tec.map(x=>`<div><span class="mk">${esc(x.k)}</span><span>${esc(x.v)} ${fuenteHTML(x.f)}</span></div>`).join("")}</div></div>` : ""}
+  </article>`).join("");
+}
+
+function pintarMercado(){
+  msubEl.innerHTML = MSUBS.map(([k,n])=>
+    `<button class="mtab" data-msub="${k}" aria-selected="${msub===k || (k==="estructura" && msub==="red")}">${n}</button>`).join("");
+  const intro = document.getElementById("mintro");
+  if(intro) intro.textContent = msub === "estructura"
+    ? "El mercado por capas: quién autoriza, quién organiza, quién intermedia, quién llega al inversor y qué se emite. Plegado se ve el esqueleto; desplegá una capa para bajar a sus entidades y agentes, y tocá cualquier nombre para ver sus relaciones con el artículo detrás."
+    : msub === "red"
+    ? "Todo lo que las ocho leyes definen, en un solo grafo: los actores, los valores negociables y los conceptos, unidos por la relación que los liga y con el artículo que la respalda. Movelo, hacé zoom y tocá un nodo para ver de qué está colgado."
+    : msub === "esquema"
+    ? "Quién es quién en el mercado de capitales argentino y por dónde pasa una operación. Cada caja abre la ficha de ese actor, y cada dato de las fichas lleva el artículo que lo dice."
+    : msub === "matriz"
+    ? "La misma pregunta de examen, en una tabla: qué puede hacer cada agente que te conecta con el mercado y qué no. Lo que define a cada categoría no es lo que hace, sino lo que tiene prohibido."
+    : msub === "instrumentos"
+    ? "Cada instrumento con su cadena completa: quién lo emite, quién lo autoriza, quién lo negocia, quién lo custodia, quién lo califica, quién lo audita y quién lo controla."
+    : "La ficha de cada actor: qué es, qué puede hacer, qué tiene prohibido y sus números. Todo con la fuente al lado.";
+  if(msub === "estructura"){
+    redDestruir();
+    const q0 = qEl.value.trim().toLowerCase();
+    const nq = q0 ? MNODOS.filter(n=>(n.n+" "+n.sig+" "+n.d).toLowerCase().includes(q0)).length : 0;
+    countEl.textContent = q0 ? `${nq} de ${MNODOS.length} coinciden`
+      : `${MNODOS.length} nodos · ${MREL.length} relaciones`;
+    estrDestruir();
+    mzona.innerHTML = estrHTML();
+    if(!mercView.hidden) estrArmar(true);
+    if(estrSel) redAbrir(estrSel);
+    return;
+  }
+  estrDestruir();
+  if(msub === "red"){
+    countEl.textContent = `${MNODOS.filter(n=>redGrupos[n.g]).length} nodos · ${MREL.length} relaciones`;
+    redDestruir();
+    mzona.innerHTML = redHTML();
+    if(!mercView.hidden){ redArmar(); if(redSel) redAbrir(redSel); }
+    return;
+  }
+  redDestruir();
+  if(msub === "esquema"){ countEl.textContent = `${MAGENTES.length} actores`; mzona.innerHTML = esquemaHTML(); return; }
+  if(msub === "matriz"){
+    countEl.textContent = `${MAGENTES.filter(a=>a.matriz).length} agentes · ${MACT.length} actividades`;
+    mzona.innerHTML = matrizHTML(); return;
+  }
+  if(msub === "instrumentos"){
+    mzona.innerHTML = instrumentosHTML();
+    const n = mzona.querySelectorAll(".mficha").length;
+    countEl.textContent = n === MINSTR.length ? `${MINSTR.length} instrumentos` : `${n} de ${MINSTR.length} instrumentos`;
+    return;
+  }
+  mzona.innerHTML = fichasHTML();
+  const n = mzona.querySelectorAll(".mficha").length;
+  countEl.textContent = n === MAGENTES.length ? `${MAGENTES.length} fichas` : `${n} de ${MAGENTES.length} fichas`;
+}
+
+function irAFicha(id){
+  redDestruir(); estrDestruir();
+  msub = "fichas";
+  qEl.value = "";
+  pintarMercado();
+  const el = document.getElementById("mag-" + id);
+  if(el){
+    el.scrollIntoView({ behavior:"smooth", block:"start" });
+    el.animate ? el.animate([{opacity:.45},{opacity:1}], {duration:420}) : null;
+  }
+}
+
+mercView.addEventListener("click", e=>{
+  const bb = e.target.closest("[data-banda]");
+  if(bb){
+    const k = bb.dataset.banda;
+    estrAbierto[k] = !estrAbierto[k];
+    estrRehacer(false);
+    return;
+  }
+  const nc = e.target.closest("[data-nchip]");
+  if(nc){
+    const id = nc.dataset.nchip;
+    estrSel = (estrSel === id) ? null : id;
+    if(estrSel){
+      const n = nodoPorId(estrSel);
+      if(n && !estrAbierto[n.g]){ estrAbierto[n.g] = true; estrRehacer(false); }
+    }
+    redAbrir(estrSel);
+    estrPintar();
+    return;
+  }
+  if(e.target.closest("#ezin")){ const r = ESTR.vp.getBoundingClientRect(); estrZoom(1.25, r.width/2, r.height/2); return; }
+  if(e.target.closest("#ezout")){ const r = ESTR.vp.getBoundingClientRect(); estrZoom(1/1.25, r.width/2, r.height/2); return; }
+  if(e.target.closest("#efit")){ estrFit(); estrPintar(); return; }
+  if(e.target.closest("#etodo")){ MGRUPOS.forEach(g=>{ estrAbierto[g.k] = true; }); estrRehacer(true); return; }
+  if(e.target.closest("#enada")){ MGRUPOS.forEach(g=>{ estrAbierto[g.k] = false; }); estrRehacer(true); return; }
+  if(e.target.closest("#ered")){ msub = "red"; redSel = estrSel; pintarMercado(); return; }
+  if(e.target.closest("#restr")){ msub = "estructura"; estrSel = redSel; pintarMercado(); return; }
+  const lg = e.target.closest("[data-rg]");
+  if(lg){ redAplicarGrupo(lg.dataset.rg); return; }
+  if(e.target.closest("#rzin")){ redZoom(1.3, RED.w/2, RED.h/2); return; }
+  if(e.target.closest("#rzout")){ redZoom(1/1.3, RED.w/2, RED.h/2); return; }
+  if(e.target.closest("#rfit")){ redCentrar(); return; }
+  const pa = e.target.closest("#rpausa");
+  if(pa){
+    RED.pausa = !RED.pausa;
+    pa.setAttribute("aria-pressed", RED.pausa ? "true" : "false");
+    pa.textContent = RED.pausa ? "Reanudar movimiento" : "Pausar movimiento";
+    return;
+  }
+  if(e.target.closest("#rcerrar")){ redAbrir(null); estrSel = null; if(ESTR) estrPintar(); return; }
+  const rn = e.target.closest("[data-rn]");
+  if(rn){
+    const id = rn.dataset.rn;
+    redAbrir(id);
+    if(msub === "estructura"){
+      estrSel = id;
+      const n = nodoPorId(id);
+      if(n && !estrAbierto[n.g]){ estrAbierto[n.g] = true; estrRehacer(false); }
+      else estrPintar();
+    }
+    return;
+  }
+  const mi = e.target.closest("[data-minstr]");
+  if(mi){
+    msub = "instrumentos"; qEl.value = ""; pintarMercado();
+    const el = document.getElementById("minstr-" + mi.dataset.minstr);
+    if(el) el.scrollIntoView({ behavior:"smooth", block:"start" });
+    return;
+  }
+  const st = e.target.closest("[data-msub]");
+  if(st){ msub = st.dataset.msub; pintarMercado(); window.scrollTo({top:0, behavior:"smooth"}); return; }
+  const fi = e.target.closest("[data-ficha]");
+  if(fi){ irAFicha(fi.dataset.ficha); return; }
+  const ir = e.target.closest("[data-ir]");
+  if(ir){
+    const el = document.getElementById("mag-" + ir.dataset.ir);
+    if(el) el.scrollIntoView({ behavior:"smooth", block:"start" });
+    return;
+  }
+  const lk = e.target.closest("button.mf[data-go]");
+  if(lk){ const p = lk.dataset.go.split(":"); goTo(p[0], p[1]); }
+});
+
+/* ---------------- la estructura: capas desplegables ---------------- */
+const MBANDAS = [
+  { k:"reg", d:"Arriba de todo está el que autoriza y registra. Nadie opera sin pasar por acá, y sobre las sociedades con oferta pública la CNV concentra además el control societario." },
+  { k:"ctl", d:"El control que mira hacia adentro de la emisora y hacia el riesgo del papel: auditoría, comité, sindicatura y calificadoras. No intermedian, verifican." },
+  { k:"inf", d:"Dónde la operación se concierta, se garantiza, se liquida y queda depositada. Son sociedades anónimas autorizadas por la CNV, con sus reglamentos aprobados de antemano." },
+  { k:"int", d:"Los que te conectan con el mercado. Acá está la línea que más se pregunta: negociar no es lo mismo que liquidar, y quien no liquida necesita convenio con quien sí." },
+  { k:"can", d:"Llegan al inversor pero no tocan ni el dinero ni los títulos. El productor capta y gestiona órdenes; el asesor solo asesora." },
+  { k:"col", d:"Administran y custodian patrimonio ajeno: fondos, fideicomisos y el aval de las PyMEs. El fondo no tiene personería, por eso necesita dos órganos separados." },
+  { k:"pta", d:"El que necesita financiarse y el que tiene el ahorro. Todo lo de arriba existe para unirlos." },
+  { k:"val", d:"Lo que se emite y se negocia. La definición del art. 2 los enumera uno por uno, de las acciones a los warrants." },
+  { k:"con", d:"Las figuras que la ley define y que atraviesan todo lo anterior: la oferta pública, el secreto, la OPA, las sanciones, el régimen informativo." }
+];
+let estrAbierto = {};
+MGRUPOS.forEach(g=>{ estrAbierto[g.k] = false; });
+let ESTR = null;
+let estrSel = null;
+
+function estrHTML(){
+  const pasos = MFLUJO.map((p,i)=>
+    `<div class="mpaso${p.opc?" opc":""}"><span class="mnum">${i+1}</span>
+      <b data-nchip="${p.id}">${esc(p.n)}</b><span>${esc(p.d)}</span></div>`).join("");
+  const q = qEl.value.trim().toLowerCase();
+  const coincide = n => !!q && (n.n + " " + n.sig + " " + n.d).toLowerCase().includes(q);
+  const CADENA = ["reg","inf","int","can","pta"];
+  const banda = b=>{
+    const g = grupoPorK(b.k);
+    const ns = MNODOS.filter(n=>n.g === b.k);
+    const forma = b.k === "val" ? " cuad" : b.k === "con" ? " rombo" : "";
+    const hay = ns.some(coincide);
+    const abierta = estrAbierto[b.k] || hay;
+    return `<section class="banda${hay?" coincide":""}" id="bd-${b.k}" data-b="${b.k}" style="--bc:${colorGrupo(b.k)}">
+      <button class="bcab${forma}" id="bh-${b.k}" data-banda="${b.k}" aria-expanded="${abierta}">
+        <span class="bpunto"></span><b>${esc(g.n)}</b><span class="bn">${ns.length}</span>
+        <span class="bmas">${abierta ? "Plegar ▴" : "Desplegar ▾"}</span>
+      </button>
+      <p class="bd">${esc(b.d)}</p>
+      ${abierta ? `<div class="bnodos">${ns.map(n=>
+        `<button class="nchip${forma}${coincide(n)?" coincide":""}" id="nc-${n.id}" data-nchip="${n.id}"
+          aria-pressed="${estrSel === n.id}"><span class="ni"></span>${esc(n.sig)}</button>`).join("")}</div>` : ""}
+    </section>`;
+  };
+  const colA = MBANDAS.filter(b=>CADENA.indexOf(b.k) >= 0)
+    .sort((a,b)=>CADENA.indexOf(a.k) - CADENA.indexOf(b.k)).map(banda).join("");
+  const colB = MBANDAS.filter(b=>CADENA.indexOf(b.k) < 0).map(banda).join("");
+  const bandas = `<div class="estrcol">${colA}</div><div class="estrcol">${colB}</div>`;
+  return `<div class="estrwrap">
+    <div class="estrbar">
+      <button class="rbtn" id="ezin">Zoom +</button>
+      <button class="rbtn" id="ezout">Zoom −</button>
+      <button class="rbtn" id="efit">Centrar</button>
+      <button class="rbtn" id="etodo">Desplegar todo</button>
+      <button class="rbtn" id="enada">Plegar todo</button>
+      <button class="rbtn" id="ered">Ver como red</button>
+      <span class="rhint">Tocá una capa para abrirla y ver quiénes la integran · tocá cualquiera para ver sus relaciones y sus citas</span>
+    </div>
+    <div class="estrviewport" id="estrvp">
+      <div class="estrlienzo" id="estrlienzo">
+        <svg class="estrsvg" id="estrsvg"></svg>
+        <div class="bflujo">
+          <h4>El recorrido de una orden</h4>
+          <p>De dónde sale y por dónde pasa hasta quedar depositada. El paso punteado es opcional.</p>
+          <div class="mflujo">${pasos}</div>
+        </div>
+        ${bandas}
+      </div>
+    </div>
+    <div class="estrpie">
+      <span><i class="c"></i>actor</span>
+      <span><i class="q"></i>valor negociable</span>
+      <span><i class="r"></i>concepto</span>
+      <span><u></u>cada línea es una relación con su artículo detrás</span>
+      <span id="econteo"></span>
+    </div>
+  </div>
+  <aside class="redpanel" id="redpanel" hidden></aside>
+  <p class="mnota">Nueve capas, ${MNODOS.length} nodos y ${MREL.length} relaciones. Plegado se ve el esqueleto; desplegá una capa para bajar al detalle de sus entidades y agentes, y tocá cualquier nombre para ver qué lo une al resto y con qué cita.</p>`;
+}
+
+function estrCaja(el, base, k){
+  const r = el.getBoundingClientRect();
+  return { x:(r.left - base.left)/k, y:(r.top - base.top)/k, w:r.width/k, h:r.height/k };
+}
+
+function estrPintar(){
+  if(!ESTR) return;
+  const { lienzo, svg, view } = ESTR;
+  const base = lienzo.getBoundingClientRect();
+  const k = view.k || 1;
+  const anc = lienzo.scrollWidth, alt = lienzo.scrollHeight;
+  svg.setAttribute("width", anc);
+  svg.setAttribute("height", alt);
+  svg.setAttribute("viewBox", `0 0 ${anc} ${alt}`);
+
+  /* cada extremo cae en su chip si la capa está abierta, o en la cabecera de la capa */
+  const elemDe = id=>{
+    const n = nodoPorId(id);
+    if(!n) return null;
+    const chip = document.getElementById("nc-" + id);
+    const e = chip || document.getElementById("bh-" + n.g);
+    return e ? { el:e, g:n.g, id: chip ? id : "banda:" + n.g } : null;
+  };
+  const agr = new Map();
+  MREL.forEach(r=>{
+    const a = elemDe(r[0]), b = elemDe(r[1]);
+    if(!a || !b || a.id === b.id) return;
+    const key = a.id + "→" + b.id;
+    if(!agr.has(key)) agr.set(key, { a, b, n:0, rels:[] });
+    const x = agr.get(key);
+    x.n++; x.rels.push(r);
+  });
+
+  /* abanico: las que salen del mismo elemento se separan */
+  const salidas = {};
+  agr.forEach(x=>{ (salidas[x.a.id] = salidas[x.a.id] || []).push(x); });
+  Object.values(salidas).forEach(lista=>lista.forEach((x,i)=>{ x.i = i; x.tot = lista.length; }));
+
+  const foco = estrSel;
+  const partes = [];
+  agr.forEach(x=>{
+    const A = estrCaja(x.a.el, base, k), B = estrCaja(x.b.el, base, k);
+    const sep = Math.min(30, (A.w - 40) / Math.max(1, x.tot));
+    const ax = A.x + A.w/2 + (x.i - (x.tot-1)/2) * sep;
+    const bx = B.x + B.w/2;
+    const cyA = A.y + A.h/2, cyB = B.y + B.h/2;
+    const dv = cyB - cyA, dh = (B.x + B.w/2) - (A.x + A.w/2);
+    const fan = (x.i - (x.tot-1)/2) * Math.min(16, 40 / Math.max(1, x.tot));
+    const n2 = v=>v.toFixed(1);
+    let d;
+    if(Math.abs(dh) > Math.abs(dv) * 1.15){
+      /* cruzan de columna: de un costado al otro */
+      const der = dh > 0;
+      const x1 = der ? A.x + A.w : A.x, x2 = der ? B.x : B.x + B.w;
+      const m = Math.max(24, Math.abs(x2 - x1) * 0.45);
+      const y1 = cyA + fan, y2 = cyB + fan;
+      d = `M${n2(x1)},${n2(y1)} C${n2(x1 + (der?m:-m))},${n2(y1)} ${n2(x2 - (der?m:-m))},${n2(y2)} ${n2(x2)},${n2(y2)}`;
+    } else if(dv > 0 && B.y > A.y + A.h - 6){
+      const y1 = A.y + A.h, y2 = B.y;
+      const dy = Math.max(16, (y2 - y1) * 0.5);
+      d = `M${n2(ax)},${n2(y1)} C${n2(ax)},${n2(y1+dy)} ${n2(bx)},${n2(y2-dy)} ${n2(bx)},${n2(y2)}`;
+    } else if(A.y > B.y + B.h - 6){
+      const gx = Math.max(A.x + A.w, B.x + B.w) + 16 + (x.i % 4) * 12;
+      d = `M${n2(A.x+A.w)},${n2(cyA)} C${n2(gx)},${n2(cyA)} ${n2(gx)},${n2(cyB)} ${n2(B.x+B.w)},${n2(cyB)}`;
+    } else {
+      const y = Math.max(A.y + A.h, B.y + B.h) + 12 + (x.i % 3) * 7;
+      d = `M${n2(ax)},${n2(A.y+A.h)} C${n2(ax)},${n2(y)} ${n2(bx)},${n2(y)} ${n2(bx)},${n2(B.y+B.h)}`;
+    }
+    const tocaFoco = foco && (x.rels.some(r=>r[0] === foco || r[1] === foco));
+    const op = foco ? (tocaFoco ? 0.95 : 0.07) : Math.min(0.6, 0.24 + x.n * 0.05);
+    const gr = Math.min(3.4, 1 + x.n * 0.45);
+    const titulo = x.rels.slice(0,6).map(r=>{
+      const s = nodoPorId(r[0]), t = nodoPorId(r[1]);
+      return `${s?s.sig:r[0]} ${r[2]} ${t?t.sig:r[1]}`;
+    }).join(" · ") + (x.rels.length > 6 ? ` · y ${x.rels.length-6} más` : "");
+    partes.push(`<path d="${d}" fill="none" stroke="${colorGrupo(x.a.g)}"
+      stroke-width="${gr.toFixed(2)}" stroke-linecap="round" opacity="${op.toFixed(2)}"><title>${esc(titulo)}</title></path>`);
+  });
+  svg.innerHTML = partes.join("");
+
+  /* atenuar lo que no toca al nodo elegido */
+  const vec = foco ? (new Set([foco, ...(MREL.filter(r=>r[0]===foco).map(r=>r[1])), ...(MREL.filter(r=>r[1]===foco).map(r=>r[0]))])) : null;
+  document.querySelectorAll("#estrlienzo .nchip").forEach(c=>{
+    const id = c.dataset.nchip;
+    c.classList.toggle("apagado", !!(vec && !vec.has(id)));
+    c.setAttribute("aria-pressed", id === foco ? "true" : "false");
+  });
+  document.querySelectorAll("#estrlienzo .banda").forEach(b=>{
+    if(!vec){ b.classList.remove("apagada"); return; }
+    const g = b.dataset.b;
+    const hay = MNODOS.some(n=>n.g === g && vec.has(n.id));
+    b.classList.toggle("apagada", !hay);
+  });
+  const ec = document.getElementById("econteo");
+  if(ec) ec.textContent = `${agr.size} líneas en pantalla`;
+}
+
+function estrAplicarVista(){
+  if(!ESTR) return;
+  const v = ESTR.view;
+  ESTR.lienzo.style.transform = `translate(${v.x}px, ${v.y}px) scale(${v.k})`;
+}
+function estrFit(){
+  if(!ESTR) return;
+  const vp = ESTR.vp.getBoundingClientRect();
+  if(!vp.width) return;
+  const anc = ESTR.lienzo.scrollWidth, alt = ESTR.lienzo.scrollHeight;
+  // se ajusta al ancho para que el texto siga siendo legible; el alto se recorre arrastrando
+  const k = Math.max(0.3, Math.min(1, (vp.width - 8) / anc));
+  ESTR.view.k = k;
+  ESTR.view.x = (vp.width - anc * k) / 2;
+  ESTR.view.y = alt * k <= vp.height ? (vp.height - alt * k) / 2 : 0;
+  estrAplicarVista();
+}
+function estrZoom(f, cx, cy){
+  const v = ESTR.view;
+  const nk = Math.max(0.2, Math.min(2.2, v.k * f));
+  v.x = cx - (cx - v.x) * (nk / v.k);
+  v.y = cy - (cy - v.y) * (nk / v.k);
+  v.k = nk;
+  estrAplicarVista();
+}
+
+function estrDestruir(){
+  if(!ESTR) return;
+  if(ESTR.ro) ESTR.ro.disconnect();
+  ESTR = null;
+}
+
+function estrArmar(reencuadrar){
+  const vp = document.getElementById("estrvp");
+  const lienzo = document.getElementById("estrlienzo");
+  const svg = document.getElementById("estrsvg");
+  if(!vp || !lienzo || !svg) return;
+  const vista = ESTR ? ESTR.view : { x:0, y:0, k:1 };
+  ESTR = { vp, lienzo, svg, view:vista, pan:null, ro:null };
+  estrAplicarVista();
+  if(reencuadrar !== false) estrFit();
+  estrPintar();
+  ESTR.ro = new ResizeObserver(()=>{ estrPintar(); });
+  ESTR.ro.observe(lienzo);
+
+  vp.addEventListener("wheel", e=>{
+    e.preventDefault();
+    const r = vp.getBoundingClientRect();
+    estrZoom(e.deltaY < 0 ? 1.12 : 1/1.12, e.clientX - r.left, e.clientY - r.top);
+  }, { passive:false });
+  vp.addEventListener("pointerdown", e=>{
+    if(e.target.closest(".bcab, .nchip, [data-nchip]")) return;
+    vp.setPointerCapture(e.pointerId);
+    ESTR.pan = { x:e.clientX, y:e.clientY };
+    vp.classList.add("arrastrando");
+  });
+  vp.addEventListener("pointermove", e=>{
+    if(!ESTR || !ESTR.pan) return;
+    ESTR.view.x += e.clientX - ESTR.pan.x;
+    ESTR.view.y += e.clientY - ESTR.pan.y;
+    ESTR.pan = { x:e.clientX, y:e.clientY };
+    estrAplicarVista();
+  });
+  const fin = ()=>{ if(ESTR){ ESTR.pan = null; } vp.classList.remove("arrastrando"); };
+  vp.addEventListener("pointerup", fin);
+  vp.addEventListener("pointercancel", fin);
+}
+
+function estrRehacer(reencuadrar){
+  const abierto = ESTR ? ESTR.view : null;
+  estrDestruir();
+  mzona.innerHTML = estrHTML();
+  if(abierto) ESTR = { view:abierto };
+  estrArmar(reencuadrar);
+  if(estrSel) redAbrir(estrSel);
+}
+
+/* ---------------- la red: grafo de fuerzas sobre canvas ---------------- */
+const nodoPorId = id => MNODOS.find(n=>n.id === id);
+const grupoPorK = k => MGRUPOS.find(g=>g.k === k);
+let redGrupos = {};                 // grupo -> visible
+MGRUPOS.forEach(g=>{ redGrupos[g.k] = true; });
+let RED = null;
+let redSel = null;                  // id del nodo abierto en el panel
+
+function esOscuro(){
+  const t = document.documentElement.getAttribute("data-theme");
+  if(t === "dark") return true;
+  if(t === "light") return false;
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+function colorGrupo(k){
+  const g = grupoPorK(k);
+  if(!g) return "#888";
+  return esOscuro() ? g.cd : g.c;
+}
+
+function redHTML(){
+  const leyenda = MGRUPOS.map(g=>{
+    const forma = g.k === "val" ? " cuad" : g.k === "con" ? " rombo" : "";
+    const n = MNODOS.filter(x=>x.g === g.k).length;
+    return `<button class="rlg${forma}" data-rg="${g.k}" aria-pressed="${redGrupos[g.k]}"
+      style="--rc:${colorGrupo(g.k)}"><i></i>${esc(g.n)}<span class="rn">${n}</span></button>`;
+  }).join("");
+  return `<div class="redwrap" id="redwrap">
+    <div class="redbar">
+      <button class="rbtn" id="rzin">Zoom +</button>
+      <button class="rbtn" id="rzout">Zoom −</button>
+      <button class="rbtn" id="rfit">Centrar</button>
+      <button class="rbtn" id="rpausa" aria-pressed="false">Pausar movimiento</button>
+      <button class="rbtn" id="restr">Ver como estructura</button>
+      <span class="rhint">Arrastrá el fondo para mover · rueda para zoom · arrastrá un nodo para fijarlo · clic para ver qué lo une al resto</span>
+    </div>
+    <canvas class="redcv" id="redcv"></canvas>
+    <div class="redleg" id="redleg">${leyenda}
+      <span class="redformas">
+        <span><i class="c"></i>actor</span>
+        <span><i class="q"></i>valor negociable</span>
+        <span><i class="r"></i>concepto</span>
+      </span>
+    </div>
+  </div>
+  <aside class="redpanel" id="redpanel" hidden></aside>
+  <p class="mnota">Cada nodo es algo que las leyes definen y cada línea es una relación con su artículo detrás: ${MNODOS.length} nodos y ${MREL.length} relaciones. El tamaño del nodo va con la cantidad de vínculos. Tocá cualquiera para ver de qué está colgado y con qué cita.</p>`;
+}
+
+function redDestruir(){
+  if(!RED) return;
+  if(RED.raf) cancelAnimationFrame(RED.raf);
+  if(RED.ro) RED.ro.disconnect();
+  RED = null;
+}
+
+function redArmar(){
+  const cv = document.getElementById("redcv");
+  if(!cv) return;
+  const ctx = cv.getContext("2d");
+  const visibles = MNODOS.filter(n=>redGrupos[n.g]);
+  const ids = new Set(visibles.map(n=>n.id));
+  const grado = {};
+  MREL.forEach(r=>{
+    if(!ids.has(r[0]) || !ids.has(r[1])) return;
+    grado[r[0]] = (grado[r[0]]||0) + 1;
+    grado[r[1]] = (grado[r[1]]||0) + 1;
+  });
+  // arranque ordenado por grupo, para que no salga de un caos
+  const porG = {};
+  MGRUPOS.forEach((g,i)=>{ porG[g.k] = i; });
+  const nodos = visibles.map((n,i)=>{
+    const ang = (porG[n.g] / MGRUPOS.length) * Math.PI*2 + (i % 11) * 0.16;
+    const rad = 120 + (i % 7) * 26;
+    return {
+      ref:n, id:n.id, x:Math.cos(ang)*rad, y:Math.sin(ang)*rad, vx:0, vy:0,
+      g:n.g, forma:n.forma, deg:grado[n.id] || 0,
+      r: Math.max(4.5, Math.min(17, 4.5 + Math.sqrt(grado[n.id]||0) * 2.6))
+    };
+  });
+  const mapa = {};
+  nodos.forEach(n=>{ mapa[n.id] = n; });
+  const aristas = MREL.filter(r=>ids.has(r[0]) && ids.has(r[1]))
+    .map(r=>({ s:mapa[r[0]], t:mapa[r[1]], v:r[2], f:r[3] }));
+  const vecinos = {};
+  aristas.forEach(a=>{
+    (vecinos[a.s.id] = vecinos[a.s.id] || new Set()).add(a.t.id);
+    (vecinos[a.t.id] = vecinos[a.t.id] || new Set()).add(a.s.id);
+  });
+  RED = {
+    cv, ctx, nodos, aristas, mapa, vecinos,
+    view:{ x:0, y:0, k:1 }, alpha:1, pausa:false,
+    hover:null, arrastre:null, pan:null, pinch:null, raf:0, ro:null, w:0, h:0
+  };
+  redMedir();
+  RED.ro = new ResizeObserver(redMedir);
+  RED.ro.observe(cv.parentElement);
+  redEventos();
+  redTick();
+}
+
+function redMedir(){
+  if(!RED) return;
+  const cv = RED.cv;
+  const r = cv.getBoundingClientRect();
+  if(!r.width || !r.height) return;      // la sección todavía está oculta
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  RED.w = r.width; RED.h = r.height;
+  cv.width = Math.round(r.width * dpr);
+  cv.height = Math.round(r.height * dpr);
+  RED.dpr = dpr;
+  if(!RED.medido){ RED.medido = true; redCentrar(); }
+}
+
+function redCentrar(){
+  if(!RED || !RED.nodos.length || !RED.w || !RED.h) return;
+  let x0=1e9, y0=1e9, x1=-1e9, y1=-1e9;
+  RED.nodos.forEach(n=>{
+    x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y);
+    x1 = Math.max(x1, n.x); y1 = Math.max(y1, n.y);
+  });
+  const m = 46;
+  const k = Math.min((RED.w - m*2) / Math.max(40, x1-x0), (RED.h - m*2) / Math.max(40, y1-y0));
+  RED.view.k = Math.max(0.25, Math.min(2.4, k));
+  RED.view.x = RED.w/2 - ((x0+x1)/2) * RED.view.k;
+  RED.view.y = RED.h/2 - ((y0+y1)/2) * RED.view.k;
+}
+
+function redPaso(){
+  const ns = RED.nodos, ls = RED.aristas, a = RED.alpha;
+  const REP = 3600, LARGO = 70, K = 0.032, G = 0.013, DAMP = 0.82;
+  for(let i=0;i<ns.length;i++){
+    const p = ns[i];
+    for(let j=i+1;j<ns.length;j++){
+      const q = ns[j];
+      let dx = q.x - p.x, dy = q.y - p.y;
+      let d2 = dx*dx + dy*dy;
+      if(d2 < 4){ d2 = 4; dx = (i%2?1:-1)*2; dy = (j%2?1:-1)*2; }
+      const d = Math.sqrt(d2);
+      const f = REP / d2;
+      const fx = dx/d*f, fy = dy/d*f;
+      p.vx -= fx; p.vy -= fy;
+      q.vx += fx; q.vy += fy;
+    }
+  }
+  for(let i=0;i<ls.length;i++){
+    const l = ls[i], s = l.s, t = l.t;
+    const dx = t.x - s.x, dy = t.y - s.y;
+    const d = Math.hypot(dx, dy) || 1;
+    const f = (d - LARGO) * K;
+    const fx = dx/d*f, fy = dy/d*f;
+    s.vx += fx; s.vy += fy;
+    t.vx -= fx; t.vy -= fy;
+  }
+  for(let i=0;i<ns.length;i++){
+    const n = ns[i];
+    n.vx -= n.x * G; n.vy -= n.y * G;
+    if(n.fijo){ n.vx = 0; n.vy = 0; continue; }
+    n.vx *= DAMP; n.vy *= DAMP;
+    n.x += n.vx * a; n.y += n.vy * a;
+  }
+  RED.alpha = Math.max(0.06, RED.alpha * 0.994);
+}
+
+const FCANVAS = "'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
+function redDibujar(){
+  const { ctx, view, nodos, aristas, dpr, w, h } = RED;
+  const cs = getComputedStyle(document.documentElement);
+  const inkc = cs.getPropertyValue("--ink").trim() || "#141A22";
+  const ink3 = cs.getPropertyValue("--ink-3").trim() || "#8792A1";
+  const surf = cs.getPropertyValue("--surface").trim() || "#fff";
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  ctx.save();
+  ctx.translate(view.x, view.y);
+  ctx.scale(view.k, view.k);
+
+  const foco = RED.hover || redSel;
+  const vec = foco ? (RED.vecinos[foco] || new Set()) : null;
+  const q = qEl.value.trim().toLowerCase();
+  const coincide = n => q && (n.ref.n + " " + n.ref.sig + " " + n.ref.d).toLowerCase().includes(q);
+
+  /* aristas */
+  aristas.forEach(l=>{
+    const rel = foco && (l.s.id === foco || l.t.id === foco);
+    ctx.globalAlpha = foco ? (rel ? 0.95 : 0.06) : 0.26;
+    ctx.strokeStyle = colorGrupo(l.s.g);
+    ctx.lineWidth = (rel ? 1.7 : 0.9) / view.k;
+    ctx.beginPath();
+    ctx.moveTo(l.s.x, l.s.y);
+    ctx.lineTo(l.t.x, l.t.y);
+    ctx.stroke();
+  });
+
+  /* nodos */
+  nodos.forEach(n=>{
+    const rel = !foco || n.id === foco || vec.has(n.id);
+    ctx.globalAlpha = rel ? 1 : 0.13;
+    const c = colorGrupo(n.g);
+    const r = n.r * (coincide(n) ? 1.5 : 1);
+    ctx.fillStyle = c;
+    ctx.strokeStyle = surf;
+    ctx.lineWidth = 1.6 / view.k;
+    ctx.beginPath();
+    if(n.forma === 0){
+      ctx.arc(n.x, n.y, r, 0, Math.PI*2);
+    } else if(n.forma === 1){
+      ctx.rect(n.x - r, n.y - r, r*2, r*2);
+    } else {
+      ctx.moveTo(n.x, n.y - r*1.25); ctx.lineTo(n.x + r*1.25, n.y);
+      ctx.lineTo(n.x, n.y + r*1.25); ctx.lineTo(n.x - r*1.25, n.y);
+      ctx.closePath();
+    }
+    ctx.fill();
+    ctx.stroke();
+    if(n.id === redSel || coincide(n)){
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = inkc;
+      ctx.lineWidth = 2 / view.k;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, r + 4.5/view.k, 0, Math.PI*2);
+      ctx.stroke();
+    }
+  });
+
+  /* etiquetas: primero las importantes, y se descarta la que se encimaría */
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  const umbral = view.k > 1.5 ? 0 : view.k > 0.9 ? 5 : 8;
+  const cajas = [];
+  const candidatos = nodos.map(n=>{
+    const destaca = n.id === foco || n.id === redSel || coincide(n) || (vec && vec.has(n.id));
+    return { n, destaca };
+  }).filter(c=>{
+    if(foco && !c.destaca) return false;
+    return c.destaca || c.n.deg >= umbral;
+  }).sort((a,b)=> (b.destaca - a.destaca) || (b.n.deg - a.n.deg));
+  candidatos.forEach(({ n, destaca })=>{
+    const fs = (destaca ? 12 : 10.5) / view.k;
+    ctx.font = `600 ${fs}px ${FCANVAS}`;
+    const txt = n.ref.sig;
+    const an = ctx.measureText(txt).width;
+    const y = n.y + n.r + 3/view.k;
+    const caja = [n.x - an/2 - 2/view.k, y - 1/view.k, n.x + an/2 + 2/view.k, y + fs + 1/view.k];
+    const choca = cajas.some(c=>!(caja[2] < c[0] || caja[0] > c[2] || caja[3] < c[1] || caja[1] > c[3]));
+    if(choca && !destaca) return;
+    cajas.push(caja);
+    ctx.globalAlpha = destaca ? 1 : 0.85;
+    ctx.lineWidth = 3.4 / view.k;
+    ctx.strokeStyle = surf;
+    ctx.fillStyle = destaca ? inkc : ink3;
+    ctx.strokeText(txt, n.x, y);
+    ctx.fillText(txt, n.x, y);
+  });
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+function redTick(){
+  if(!RED) return;
+  if(!RED.pausa && !RED.arrastre) redPaso();
+  if(!RED.encuadrado && !RED.tocado && RED.alpha < 0.3 && RED.w){
+    RED.encuadrado = true;
+    redCentrar();
+  }
+  redDibujar();
+  RED.raf = requestAnimationFrame(redTick);
+}
+
+function redAMundo(ev){
+  const r = RED.cv.getBoundingClientRect();
+  return {
+    x: (ev.clientX - r.left - RED.view.x) / RED.view.k,
+    y: (ev.clientY - r.top - RED.view.y) / RED.view.k
+  };
+}
+function redBuscarNodo(p){
+  let mejor = null, md = 1e9;
+  RED.nodos.forEach(n=>{
+    const d = Math.hypot(n.x - p.x, n.y - p.y);
+    const tope = n.r + 7 / RED.view.k;
+    if(d < tope && d < md){ md = d; mejor = n; }
+  });
+  return mejor;
+}
+function redZoom(k, cx, cy){
+  RED.tocado = true;
+  const v = RED.view;
+  const nk = Math.max(0.2, Math.min(4, v.k * k));
+  v.x = cx - (cx - v.x) * (nk / v.k);
+  v.y = cy - (cy - v.y) * (nk / v.k);
+  v.k = nk;
+}
+
+function redEventos(){
+  const cv = RED.cv;
+  cv.addEventListener("wheel", e=>{
+    e.preventDefault();
+    const r = cv.getBoundingClientRect();
+    redZoom(e.deltaY < 0 ? 1.12 : 1/1.12, e.clientX - r.left, e.clientY - r.top);
+  }, { passive:false });
+
+  const activos = new Map();
+  cv.addEventListener("pointerdown", e=>{
+    cv.setPointerCapture(e.pointerId);
+    activos.set(e.pointerId, e);
+    if(activos.size === 2){
+      const [a, b] = [...activos.values()];
+      RED.pinch = { d: Math.hypot(a.clientX-b.clientX, a.clientY-b.clientY) };
+      RED.pan = null; RED.arrastre = null;
+      return;
+    }
+    const p = redAMundo(e);
+    const n = redBuscarNodo(p);
+    if(n){ RED.arrastre = n; n.fijo = true; }
+    else { RED.pan = { x:e.clientX, y:e.clientY }; RED.tocado = true; cv.classList.add("arrastrando"); }
+  });
+  cv.addEventListener("pointermove", e=>{
+    if(activos.has(e.pointerId)) activos.set(e.pointerId, e);
+    if(RED.pinch && activos.size === 2){
+      const [a, b] = [...activos.values()];
+      const d = Math.hypot(a.clientX-b.clientX, a.clientY-b.clientY);
+      const r = cv.getBoundingClientRect();
+      redZoom(d / RED.pinch.d, (a.clientX+b.clientX)/2 - r.left, (a.clientY+b.clientY)/2 - r.top);
+      RED.pinch.d = d;
+      return;
+    }
+    if(RED.arrastre){
+      const p = redAMundo(e);
+      RED.arrastre.x = p.x; RED.arrastre.y = p.y;
+      RED.arrastre.vx = 0; RED.arrastre.vy = 0;
+      RED.alpha = Math.max(RED.alpha, 0.35);
+      return;
+    }
+    if(RED.pan){
+      RED.view.x += e.clientX - RED.pan.x;
+      RED.view.y += e.clientY - RED.pan.y;
+      RED.pan = { x:e.clientX, y:e.clientY };
+      return;
+    }
+    const n = redBuscarNodo(redAMundo(e));
+    const id = n ? n.id : null;
+    if(id !== RED.hover){
+      RED.hover = id;
+      cv.style.cursor = id ? "pointer" : "grab";
+      cv.title = n ? n.ref.n : "";
+    }
+  });
+  const soltar = e=>{
+    activos.delete(e.pointerId);
+    if(activos.size < 2) RED.pinch = null;
+    if(RED.arrastre){ RED.arrastre = null; }
+    RED.pan = null;
+    cv.classList.remove("arrastrando");
+  };
+  cv.addEventListener("pointerup", soltar);
+  cv.addEventListener("pointercancel", soltar);
+  cv.addEventListener("pointerleave", ()=>{ RED.hover = null; });
+
+  cv.addEventListener("click", e=>{
+    const n = redBuscarNodo(redAMundo(e));
+    redAbrir(n ? n.id : null);
+  });
+  cv.addEventListener("dblclick", e=>{
+    const n = redBuscarNodo(redAMundo(e));
+    if(n) n.fijo = false;
+  });
+}
+
+function redAbrir(id){
+  redSel = id;
+  const panel = document.getElementById("redpanel");
+  if(!panel) return;
+  if(!id){ panel.hidden = true; return; }
+  const n = nodoPorId(id);
+  if(!n){ panel.hidden = true; return; }
+  const g = grupoPorK(n.g);
+  const col = colorGrupo(n.g);
+  const sale = MREL.filter(r=>r[0] === id);
+  const entra = MREL.filter(r=>r[1] === id);
+  const linea = (otro, verbo, f, saliente)=>{
+    const o = nodoPorId(otro);
+    if(!o) return "";
+    return `<li>${saliente ? "" : `<button class="rnodo" data-rn="${o.id}">${esc(o.sig)}</button> `}
+      <span class="rverbo">${esc(verbo)}</span>
+      ${saliente ? `<button class="rnodo" data-rn="${o.id}">${esc(o.sig)}</button>` : ""}
+      ${fuenteHTML(f)}</li>`;
+  };
+  panel.style.setProperty("--rc", col);
+  panel.hidden = false;
+  panel.innerHTML = `
+    <header>
+      <h3>${esc(n.n)}</h3>
+      <span class="rgrp">${esc(g ? g.n : "")}</span>
+      ${n.f ? fuenteHTML(n.f) : ""}
+      <button class="rcerrar" id="rcerrar">Cerrar ✕</button>
+    </header>
+    <p class="rd">${esc(n.d)}</p>
+    ${(n.ficha || n.instr) ? `<div class="racc">
+      ${n.ficha ? `<button class="hbtn" data-ficha="${n.ficha}">Ver la ficha completa</button>` : ""}
+      ${n.instr ? `<button class="hbtn" data-minstr="${n.instr}">Ver el instrumento</button>` : ""}
+    </div>` : ""}
+    ${sale.length ? `<div class="rrel"><h4>Qué hace ${esc(n.sig)}</h4>
+      <ul>${sale.map(r=>linea(r[1], r[2], r[3], true)).join("")}</ul></div>` : ""}
+    ${entra.length ? `<div class="rrel"><h4>Quién lo alcanza</h4>
+      <ul>${entra.map(r=>linea(r[0], r[2], r[3], false)).join("")}</ul></div>` : ""}`;
+  panel.scrollIntoView({ behavior:"smooth", block:"nearest" });
+}
+
+function redAplicarGrupo(k){
+  redGrupos[k] = !redGrupos[k];
+  if(!MGRUPOS.some(g=>redGrupos[g.k])) redGrupos[k] = true;
+  if(redSel && !redGrupos[(nodoPorId(redSel)||{}).g]) redAbrir(null);
+  redDestruir();
+  mzona.innerHTML = redHTML();
+  redArmar();
+  if(redSel) redAbrir(redSel);
+}
 
 /* ---------------- cuestionario ---------------- */
 const vCuestBtn = document.getElementById("vCuest");
@@ -2701,7 +4902,8 @@ panelEl.addEventListener("click", e=>{
 cargarProgreso();
 document.getElementById("qcount").textContent = PREGUNTAS.length;
 nuevaCola();
-buildTabs(); render(); applyAllText(); renderGlosario(); pintarCuestionario(); filter();
+document.getElementById("mcount").textContent = MNODOS.length;
+buildTabs(); render(); applyAllText(); renderGlosario(); pintarCuestionario(); pintarMercado(); filter();
 </script>
 
 </body></html>
