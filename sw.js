@@ -2,7 +2,7 @@
 // Igual que Jarvis: "la red primero, el cache como respaldo". Siempre busca la
 // versión más nueva; sin señal sirve la copia guardada. Además es el que muestra
 // el aviso diario y, al tocarlo, abre la pestaña de Micro-learning.
-const CACHE = "mapa-idoneo-2026-09-24b";
+const CACHE = "mapa-idoneo-2026-09-24c";
 // El tráfico de la cuenta (Firebase) no pasa por el cache: Firestore mantiene una
 // conexión viva y guardarla rompe la sincronización.
 const SIN_CACHE = /(?:googleapis\.com|firebaseio\.com|firebaseapp\.com|identitytoolkit|securetoken)/;

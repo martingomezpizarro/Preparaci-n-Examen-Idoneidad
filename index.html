@@ -4281,6 +4281,54 @@
       color: var(--ink-3)
     }
 
+    .utarj .ucloze {
+      margin: 14px 0 0;
+      font-size: 16px;
+      line-height: 2.1;
+      text-align: left;
+      color: var(--ink)
+    }
+
+    .uhueco {
+      font: inherit;
+      font-size: 15px;
+      color: var(--ink);
+      background: var(--surface-2);
+      border: 0;
+      border-bottom: 2px solid var(--accent);
+      border-radius: 4px 4px 0 0;
+      padding: 1px 6px;
+      max-width: 100%;
+      min-width: 4ch
+    }
+
+    .uhueco:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px
+    }
+
+    .ucloze .uhok,
+    .ucloze .uhmal {
+      font-weight: 600;
+      padding: 1px 5px;
+      border-radius: 4px
+    }
+
+    .ucloze .uhok {
+      color: var(--st-central);
+      background: var(--st-central-bg)
+    }
+
+    .ucloze .uhmal {
+      color: var(--st-reemp);
+      background: var(--st-reemp-bg)
+    }
+
+    .ucloze .uhmal s {
+      font-weight: 400;
+      opacity: .75
+    }
+
     .uops {
       display: grid;
       gap: 7px;
@@ -4801,6 +4849,7 @@
         la ley. La mayoría sale del artículo 2 de la Ley 26.831, que es el diccionario del mercado de capitales; el
         resto está repartido en los artículos donde cada ley define un concepto. El chip de abajo de cada término te
         lleva al artículo exacto.</p>
+      <div class="nacc"><button class="nbtn" id="glosPracticar">Practicar completando las definiciones</button></div>
       <div class="glosleyes" id="glosleyes"></div>
       <div class="glosletras" id="glosletras"></div>
       <div class="glosgrid" id="glosgrid"></div>
@@ -7495,6 +7544,7 @@
 
     vLeyesBtn.addEventListener("click", () => setVista("leyes"));
     vGlosBtn.addEventListener("click", () => setVista("glosario"));
+    document.getElementById("glosPracticar").addEventListener("click", () => microIr(null, false, true));
     document.getElementById("vCuest").addEventListener("click", () => setVista("cuestionario"));
     document.getElementById("vMercado").addEventListener("click", () => {
       setVista("mercado");
@@ -10397,7 +10447,7 @@
       let d = null;
       try { d = JSON.parse(localStorage.getItem(LSU) || "null"); } catch (e) { }
       d = d || {};
-      d.cfg = Object.assign({ hora: "08:00", min: 10, tarj: 20, nuevas: 8, tits: ["II", "III", "V", "VI", "VII", "VIII", "XI", "XII"], banco: true, avisar: false }, d.cfg || {});
+      d.cfg = Object.assign({ hora: "08:00", min: 10, tarj: 20, nuevas: 8, tits: ["II", "III", "V", "VI", "VII", "VIII", "XI", "XII"], banco: true, glos: true, avisar: false }, d.cfg || {});
       d.c = d.c || {}; d.dias = d.dias || {};
       return d;
     }
@@ -10405,8 +10455,81 @@
     function hoyISO(off) { const d = new Date(); d.setHours(12, 0, 0, 0); if (off) d.setDate(d.getDate() + off); return d.toISOString().slice(0, 10); }
     function difDias(a, b) { return Math.round((new Date(a + "T12:00:00") - new Date(b + "T12:00:00")) / 864e5); }
 
+    /* ---- Tarjetas para completar, hechas con el glosario ----
+       De cada definición literal se eligen algunas palabras clave (siempre las mismas
+       para el mismo término) y se dejan en blanco: hay que escribirlas. */
+    const CLOZE_FRASES = ["Comisión Nacional de Valores", "valores negociables", "oferta pública", "mercado de capitales",
+      "fondos comunes de inversión", "fideicomisos financieros", "sociedades anónimas",
+      "productos de inversión colectiva", "información reservada o privilegiada", "garantía recíproca"];
+    const CLOZE_VACIAS = new Set(("presente cualquier aquellos aquellas mediante respecto conforme efectos establezca establezcan deberan podran "
+      + "traves siempre cuando dentro demas otros otras entre sobre segun desde hasta mismos mismas dicho dicha dichos dichas estos estas "
+      + "tales todos todas cuales donde tambien ademas articulo articulos inciso incisos modificaciones modificatorias reglamentacion "
+      + "respectivamente asimismo realicen realice realizar deberan debera podra tengan tenga hubieran hubiera fueran fuera sean siendo "
+      + "caso casos forma parte partes efecto vigente vigentes previstas previstos prevista previsto presente").split(" "));
+    const CLOZE = {};
+    function clozeDe(g) {
+      if (CLOZE[g.t] !== undefined) return CLOZE[g.t];
+      let txt = g.d.replace(/^[a-z]\)\s*/, "");
+      if (txt.length > 420) {
+        const m = txt.slice(180, 420).search(/[.;:]\s/);
+        txt = m >= 0 ? txt.slice(0, 180 + m + 1) : txt.slice(0, txt.lastIndexOf(" ", 420)) + "…";
+      }
+      const delTermino = new Set(sinTildes(g.t).split(/[^a-z0-9]+/).filter(w => w.length > 3).map(w => w.slice(0, 5)));
+      const cands = [];
+      const libre = (i, j) => !cands.some(c => i < c.j && j > c.i);
+      CLOZE_FRASES.forEach(f => {
+        const re = new RegExp(f.replace(/ /g, "\\s+"), "gi"); let m;
+        while ((m = re.exec(txt))) if (libre(m.index, m.index + m[0].length)) cands.push({ i: m.index, j: m.index + m[0].length, s: 30 + m[0].length });
+      });
+      // plazos y porcentajes: «seis (6) años», «noventa y cinco por ciento (95%)» → se tapa lo escrito en letras
+      const NUM = "(?:un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|quince|veinte|treinta|cuarenta|cincuenta|sesenta|setenta|ochenta|noventa|cien|ciento|veinti[a-zé]+|dieci[a-zé]+)";
+      const reN = new RegExp(`\\b${NUM}(?:\\s+(?:y\\s+)?${NUM})*(?:\\s+por\\s+ciento)?\\s*\\((\\d+)\\s*%?\\s*\\)`, "gi"); let m;
+      while ((m = reN.exec(txt))) if (libre(m.index, m.index + m[0].length))
+        cands.push({ i: m.index, j: m.index + m[0].length, s: 50, ok: [m[0].replace(/\s*\(.*$/, ""), m[1]] });
+      const reW = /\d+(?:[.,]\d+)*|[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{6,}/g;
+      while ((m = reW.exec(txt))) {
+        const w = m[0], n = sinTildes(w);
+        if (CLOZE_VACIAS.has(n) || delTermino.has(n.slice(0, 5)) || !libre(m.index, m.index + w.length)) continue;
+        // «dos (2)»: el número entre paréntesis ya está escrito en letras al lado
+        if (/^\d/.test(w) && txt[m.index - 1] === "(") continue;
+        cands.push({ i: m.index, j: m.index + w.length, s: /^\d/.test(w) || /^(juridicas?|humanas?)$/.test(n) ? 40 : w.length + (/^[A-ZÁÉÍÓÚ]/.test(w) && m.index > 0 ? 4 : 0) });
+      }
+      // desempate estable, para que la tarjeta sea siempre la misma
+      let h = 0; for (const ch of g.t) h = (h * 31 + ch.charCodeAt(0)) | 0;
+      cands.forEach((c, x) => { c.s += ((Math.abs(h) + x * 7919) % 97) / 100; });
+      const n = Math.max(2, Math.min(5, Math.round(txt.length / 110)));
+      const vistos = new Set(), elegidos = [];
+      for (const c of cands.sort((a, b) => b.s - a.s)) {
+        const r = sinTildes(txt.slice(c.i, c.j));
+        if (vistos.has(r) || elegidos.some(e => Math.abs(e.i - c.i) < 25)) continue;
+        vistos.add(r); elegidos.push(c);
+        if (elegidos.length === n) break;
+      }
+      if (elegidos.length < 2) return (CLOZE[g.t] = null);
+      elegidos.sort((a, b) => a.i - b.i);
+      const partes = []; let p = 0;
+      elegidos.forEach(c => { partes.push(txt.slice(p, c.i)); partes.push({ r: txt.slice(c.i, c.j), ok: c.ok || [txt.slice(c.i, c.j)] }); p = c.j; });
+      partes.push(txt.slice(p));
+      return (CLOZE[g.t] = partes);
+    }
+    const clozeClave = g => "g:" + sinTildes(g.t).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    function itemsGlosario() {
+      return GLOSARIO.filter(g => g.src !== "nota" && clozeDe(g)).map(g => ({ k: clozeClave(g), tipo: "g", t: "GL", g }));
+    }
+    /* compara lo escrito con la palabra original: sin tildes ni mayúsculas, y se perdona un error de tipeo */
+    function clozeOk(escrito, real) {
+      const a = sinTildes(escrito || "").replace(/[^a-z0-9]+/g, " ").trim(), b = sinTildes(real).replace(/[^a-z0-9]+/g, " ").trim();
+      if (!a) return false;
+      if (a === b) return true;
+      if (b.length < 6 || Math.abs(a.length - b.length) > 1) return false;
+      let i = 0; while (i < a.length && a[i] === b[i]) i++;
+      return a.slice(i + (a.length >= b.length ? 1 : 0)) === b.slice(i + (b.length >= a.length ? 1 : 0))
+        || (a.length === b.length && a[i] === b[i + 1] && a[i + 1] === b[i] && a.slice(i + 2) === b.slice(i + 2));
+    }
+
     function itemsDisponibles(tits) {
       const fl = FLASH.filter(c => tits.includes(c.t)).map(c => ({ k: "f:" + c.id, tipo: "f", t: c.t, c }));
+      if (U.cfg.glos) fl.push(...itemsGlosario());
       let bq = [];
       if (U.cfg.banco) {
         const mods = new Set(tits.flatMap(t => TIT_MOD[t] || []));
@@ -10534,6 +10657,7 @@
         <label>Nuevas por día (mínimo) <select id="unuevas">${opts([3, 5, 8, 10, 15, 20, 30, 40, 50], U.cfg.nuevas, "")}</select></label>
       </div>
       <div class="ufila"><label><input type="checkbox" id="ubanco" ${U.cfg.banco ? "checked" : ""}> Mezclar preguntas del banco (multiple choice) de los módulos que corresponden</label></div>
+      <div class="ufila"><label><input type="checkbox" id="uglos" ${U.cfg.glos ? "checked" : ""}> Sumar las definiciones del glosario para completar escribiendo (${itemsGlosario().length})</label></div>
       <p>Títulos de las Normas que entran en tu sesión:</p>
       <div class="utits">${tits}</div>
       <div class="nfil"><button class="nchip mini" data-uall="1">Todos</button><button class="nchip mini" data-uprio="1">Solo prioridad alta</button></div>
@@ -10572,14 +10696,19 @@
       uzona.innerHTML = microInicioHTML();
     }
 
-    function microIr(tits, soloNuevas) {
+    function microIr(tits, soloNuevas, soloGlos) {
       setVista("micro");
       let items = armarSesion(tits || U.cfg.tits);
-      if (soloNuevas) {
+      if (soloGlos) {
+        // primero las que vencen, después nuevas, hasta el cupo del día
+        const hoy = hoyISO(), gl = itemsGlosario(), cupo = Math.max(1, U.cfg.tarj || 20);
+        const venc = gl.filter(it => U.c[it.k] && U.c[it.k].due <= hoy).sort((a, b) => U.c[a.k].due.localeCompare(U.c[b.k].due));
+        items = [...venc, ...mezclar(gl.filter(it => !U.c[it.k]))].slice(0, cupo);
+      } else if (soloNuevas) {
         const { fl } = itemsDisponibles(tits || U.cfg.tits);
         items = intercalar(mezclar(fl.filter(it => !U.c[it.k])).slice(0, Math.max(5, U.cfg.nuevas)));
       }
-      if (!items.length) { SES = null; pintarMicro(); uzona.insertAdjacentHTML("afterbegin", `<p class="nvacio">No hay tarjetas pendientes para hoy en esos títulos. Sumá títulos o pedí solo tarjetas nuevas.</p>`); return; }
+      if (!items.length) { SES = null; pintarMicro(); if (soloGlos) { uzona.insertAdjacentHTML("afterbegin", `<p class="nvacio">Ya repasaste todas las definiciones del glosario que vencían hoy.</p>`); return; } uzona.insertAdjacentHTML("afterbegin", `<p class="nvacio">No hay tarjetas pendientes para hoy en esos títulos. Sumá títulos o pedí solo tarjetas nuevas.</p>`); return; }
       SES = { items, i: 0, visto: false, sel: [], bien: 0, hechas: 0, t0: Date.now(), repetidas: new Set(), pila: [] };
       pintarMicro();
       window.scrollTo({ top: microView.offsetTop - 10, behavior: "smooth" });
@@ -10605,6 +10734,28 @@
         </div>`
             : `<p class="uaviso">Respondé en voz alta o por escrito antes de dar vuelta. Recordar cuesta: ese esfuerzo es lo que fija.</p>
         <div class="nacc"><button class="nbtn" data-uver="1">Mostrar respuesta</button><button class="nbtn sec" data-uir="${c.t}">Ver el Título ${c.t}</button></div>`}`;
+      } else if (it.tipo === "g") {
+        const g = it.g, l = leyPorId(g.l), partes = clozeDe(g);
+        let nb = 0, bien = 0;
+        const cuerpoCloze = partes.map(x => {
+          if (typeof x === "string") return esc(x);
+          const i = nb++, v = SES.sel[i] || "";
+          if (!SES.visto) return `<input class="uhueco" data-uhueco="${i}" value="${esc(v)}" size="${Math.max(4, x.r.length)}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Palabra ${i + 1}">`;
+          const ok = x.ok.some(r => clozeOk(v, r)); if (ok) bien++;
+          return ok ? `<b class="uhok">${esc(x.r)}</b>` : `<b class="uhmal">${v.trim() ? `<s>${esc(v)}</s> ` : ""}${esc(x.r)}</b>`;
+        }).join("");
+        cuerpo = `<div class="utag"><span class="mf">Glosario</span><span>Ley ${esc(l ? l.num : g.l)} · art. ${esc(g.a)}</span>${U.c[it.k] ? `<span>· caja ${U.c[it.k].box}</span>` : "<span>· nueva</span>"}</div>
+      <p class="uq">${esc(g.t)}</p>
+      <p class="ucloze">${cuerpoCloze}</p>
+      ${SES.visto ? `<p class="uverdict ${bien === nb ? "ok" : "mal"}">${bien} de ${nb} palabras.</p>
+        <div class="ugrades">
+          <button class="g1" data-ug="1">Otra vez<small>mañana</small></button>
+          <button class="g2" data-ug="2">Difícil<small>${diasTxt(2, it.k)}</small></button>
+          <button class="g3" data-ug="3">Bien<small>${diasTxt(3, it.k)}</small></button>
+          <button class="g4" data-ug="4">Fácil<small>${diasTxt(4, it.k)}</small></button>
+        </div>`
+            : `<p class="uaviso">Escribí la palabra que falta en cada hueco. No importan las tildes ni las mayúsculas, y se perdona un error de tipeo. Enter pasa al siguiente.</p>
+        <div class="nacc"><button class="nbtn" data-ucheck="1">Comprobar</button></div>`}`;
       } else {
         const p = it.p, multi = p.ok.length > 1;
         const letras = "abcdefgh";
@@ -10628,6 +10779,10 @@
       <article class="utarj">${cuerpo}</article>
       <div class="nacc">${SES.pila && SES.pila.length ? `<button class="hbtn" data-uant="1">← Anterior</button>` : ""}<button class="hbtn" data-ufin="1">Terminar acá</button></div>
     </div>`;
+      if (it.tipo === "g" && !SES.visto) {
+        const h = [...uzona.querySelectorAll("[data-uhueco]")].find(x => !x.value) || uzona.querySelector("[data-uhueco]");
+        if (h) h.focus({ preventScroll: true });
+      }
     }
     function igual(a, b) { return a.length === b.length && a.every(x => b.includes(x)); }
     function diasTxt(g, k) {
@@ -10742,6 +10897,7 @@
       if (nu) U.cfg.nuevas = +nu.value;
       const ta = document.getElementById("utarj"); if (ta) U.cfg.tarj = +ta.value;
       if (ba) U.cfg.banco = ba.checked;
+      const gl = document.getElementById("uglos"); if (gl) U.cfg.glos = gl.checked;
       U.cfgT = Date.now();
       guardarU(); programarAviso(); pintarMicro();
     }
@@ -10755,7 +10911,7 @@
         }
         U.cfg.avisar = e.target.checked; guardarU(); programarAviso(); pintarMicro(); return;
       }
-      if (["uhora", "umin", "unuevas", "utarj", "ubanco"].includes(e.target.id)) cfgCambio();
+      if (["uhora", "umin", "unuevas", "utarj", "ubanco", "uglos"].includes(e.target.id)) cfgCambio();
     });
     microView.addEventListener("click", e => {
       const ut = e.target.closest("[data-ut]");
@@ -10794,7 +10950,7 @@
         else SES.sel = [i];
         pintarTarjeta(); return;
       }
-      if (e.target.closest("[data-ucheck]")) { SES.visto = true; pintarTarjeta(); return; }
+      if (e.target.closest("[data-ucheck]")) { leerHuecos(); SES.visto = true; pintarTarjeta(); return; }
       const g = e.target.closest("[data-ug]");
       if (g) {
         const it = SES.items[SES.i], val = +g.dataset.ug, hoy = hoyISO();
@@ -10815,6 +10971,17 @@
       if (e.target.closest("[data-uant]")) { microAnterior(); return; }
       if (e.target.closest("[data-ufin]")) { finSesion(); return; }
     });
+    function leerHuecos() {
+      uzona.querySelectorAll("[data-uhueco]").forEach(x => { SES.sel[+x.dataset.uhueco] = x.value; });
+    }
+    uzona.addEventListener("input", e => { if (SES && e.target.matches("[data-uhueco]")) SES.sel[+e.target.dataset.uhueco] = e.target.value; });
+    uzona.addEventListener("keydown", e => {
+      if (!SES || e.key !== "Enter" || !e.target.matches("[data-uhueco]")) return;
+      e.preventDefault();
+      const hs = [...uzona.querySelectorAll("[data-uhueco]")], i = hs.indexOf(e.target);
+      if (i < hs.length - 1) hs[i + 1].focus();
+      else { leerHuecos(); SES.visto = true; pintarTarjeta(); }
+    });
     function microAnterior() {
       if (!SES || !SES.pila || !SES.pila.length) return;
       const p = SES.pila.pop();
@@ -10831,7 +10998,7 @@
       if (e.key === "ArrowLeft" && SES.pila && SES.pila.length) { e.preventDefault(); microAnterior(); return; }
       const it = SES.items[SES.i]; if (!it) return;
       if (!SES.visto && (e.key === " " || e.key === "Enter") && it.tipo === "f") { e.preventDefault(); SES.visto = true; pintarTarjeta(); }
-      else if (SES.visto && it.tipo === "f" && ["1", "2", "3", "4"].includes(e.key)) { uzona.querySelector(`[data-ug="${e.key}"]`)?.click(); }
+      else if (SES.visto && (it.tipo === "f" || it.tipo === "g") && ["1", "2", "3", "4"].includes(e.key)) { uzona.querySelector(`[data-ug="${e.key}"]`)?.click(); }
     });
 
     document.getElementById("vMicro").addEventListener("click", () => setVista("micro"));

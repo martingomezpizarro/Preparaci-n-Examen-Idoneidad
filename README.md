@@ -25,6 +25,8 @@ Los artículos que la bibliografía pide expresamente están marcados con el mó
 
 **El glosario.** Las definiciones que las propias leyes dan de sí mismas, literales, con un chip que te lleva al artículo exacto. La mayoría sale del art. 2 de la Ley 26.831.
 
+Cada definición se puede practicar también como tarjeta para completar: se tapan algunas palabras clave (siempre las mismas para cada término: plazos, porcentajes, humanas/jurídicas, «Comisión Nacional de Valores»…) y hay que escribirlas. No importan tildes ni mayúsculas y se perdona un error de tipeo. Entran en la sesión diaria de micro-learning con la misma repetición espaciada que las demás tarjetas, o se practican solas desde el botón del glosario.
+
 **El cuestionario.** 942 preguntas en tres modos: práctica (una por vez, con corrección inmediata), simulacro (todas seguidas, cronometradas) y repaso (todo a la vista para leer de corrido). Filtrás por módulo, por origen y por «solo las que fallé». El progreso queda en el navegador.
 
 ## Los dos bancos de preguntas
