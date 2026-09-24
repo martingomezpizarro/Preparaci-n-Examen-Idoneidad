@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Mapa normativo del idóneo — Examen de idoneidad CNV</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2E5EAA">
+<link rel="apple-touch-icon" href="icono-192.png">
 <meta name="description" content="Las ocho leyes de la bibliografía del examen de idoneidad de la CNV, abiertas por dentro: estructura, texto literal de cada artículo, glosario y un cuestionario de 942 preguntas con corrección inmediata.">
 <meta name="author" content="Martín Gómez Pizarro">
 <meta name="color-scheme" content="light dark">
@@ -994,6 +997,202 @@ footer a{color:var(--ink-3)}
   li.art{grid-template-columns:46px 1fr}
   .ch .crange{margin-left:0; flex-basis:100%}
 }
+
+/* ---------- estados de práctica (Normas y quién es quién) ---------- */
+:root{
+  --st-central:#2E7D52; --st-central-bg:#E3F2E9;
+  --st-activo:#2E5EAA;  --st-activo-bg:#E4EBF7;
+  --st-nicho:#9A6A12;   --st-nicho-bg:#F7EEDB;
+  --st-sinuso:#6B7480;  --st-sinuso-bg:#ECEEF1;
+  --st-reemp:#B3453C;   --st-reemp-bg:#F7E4E2;
+  --hoy-bg:#FFF7E6; --hoy-line:#E6C27A; --hoy-ink:#6B4A0E;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --st-central:#5EC48C; --st-central-bg:#1B3327;
+    --st-activo:#84AAE8;  --st-activo-bg:#20303F;
+    --st-nicho:#D9B05E;   --st-nicho-bg:#352A15;
+    --st-sinuso:#A2ADBB;  --st-sinuso-bg:#262D36;
+    --st-reemp:#E8786E;   --st-reemp-bg:#3A2220;
+    --hoy-bg:#2A2416; --hoy-line:#6B5528; --hoy-ink:#E8CF96;
+  }
+}
+:root[data-theme="dark"]{
+  --st-central:#5EC48C; --st-central-bg:#1B3327;
+  --st-activo:#84AAE8;  --st-activo-bg:#20303F;
+  --st-nicho:#D9B05E;   --st-nicho-bg:#352A15;
+  --st-sinuso:#A2ADBB;  --st-sinuso-bg:#262D36;
+  --st-reemp:#E8786E;   --st-reemp-bg:#3A2220;
+  --hoy-bg:#2A2416; --hoy-line:#6B5528; --hoy-ink:#E8CF96;
+}
+.est{display:inline-flex; align-items:center; gap:5px; font-family:var(--f-mono); font-size:10px; font-weight:600;
+  letter-spacing:.03em; text-transform:uppercase; border-radius:5px; padding:2px 7px; white-space:nowrap}
+.est::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor}
+.est.central{color:var(--st-central); background:var(--st-central-bg)}
+.est.activo{color:var(--st-activo); background:var(--st-activo-bg)}
+.est.nicho{color:var(--st-nicho); background:var(--st-nicho-bg)}
+.est.sinuso{color:var(--st-sinuso); background:var(--st-sinuso-bg)}
+.est.reemplazado{color:var(--st-reemp); background:var(--st-reemp-bg)}
+.prio{font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3); letter-spacing:.05em; white-space:nowrap}
+.prio b{color:var(--accent); font-weight:600}
+.hoybox{margin-top:10px; background:var(--hoy-bg); border:1px solid var(--hoy-line); border-radius:9px;
+  padding:10px 13px; font-size:13.5px; line-height:1.55; color:var(--ink); text-align:left}
+.hoybox b.hl{font-family:var(--f-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--hoy-ink); margin-right:6px}
+
+/* ---------- las Normas, título por título ---------- */
+.nmeta{margin-top:16px; background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:16px 18px; box-shadow:var(--shadow)}
+.nmeta h3, .nsec h3{margin:0; font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); font-weight:600}
+.nmeta p{margin:6px 0 0; font-size:13.5px; color:var(--ink-2); text-align:left}
+.nruta{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; counter-reset:ruta}
+.nruta button{counter-increment:ruta; display:inline-flex; gap:6px; align-items:baseline; cursor:pointer; text-align:left;
+  border:1px solid var(--line-strong); background:var(--surface-2); color:var(--ink); border-radius:8px; padding:6px 10px;
+  font-family:var(--f-body); font-size:12.5px; max-width:100%}
+.nruta button::before{content:counter(ruta); font-family:var(--f-mono); font-size:10px; color:var(--surface); background:var(--accent); border-radius:4px; padding:0 5px}
+.nruta button b{font-family:var(--f-mono); font-size:11.5px}
+.nruta button span{color:var(--ink-2)}
+.nruta button:hover{border-color:var(--accent)}
+.nfil{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:14px}
+.nfil .nlab{font-family:var(--f-mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); margin-right:4px}
+.nchip{font-family:var(--f-body); font-size:12px; cursor:pointer; border:1px solid var(--line-strong); background:var(--surface);
+  color:var(--ink-2); border-radius:999px; padding:4px 11px}
+.nchip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--surface)}
+.nchip.mini{padding:3px 9px; font-size:11.5px}
+.ntit{margin-top:10px; background:var(--surface); border:1px solid var(--line); border-radius:11px; box-shadow:var(--shadow); overflow:hidden}
+.ntit.p3{border-left:3px solid var(--accent)}
+.ntit.p2{border-left:3px solid var(--line-strong)}
+.ntit.p1{border-left:3px solid var(--line)}
+.nhead{display:grid; grid-template-columns:62px 1fr auto; gap:12px; align-items:center; width:100%; cursor:pointer;
+  background:transparent; border:0; color:var(--ink); text-align:left; padding:14px 16px; font-family:var(--f-body)}
+.nhead:hover{background:var(--surface-2)}
+.nnum{font-family:var(--f-mono); font-size:12px; font-weight:600; color:var(--accent)}
+.nname{font-family:var(--f-display); font-size:17px; font-weight:600; line-height:1.3}
+.nsubl{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:4px}
+.nsubl .np{font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3)}
+.nflecha{font-family:var(--f-mono); color:var(--ink-3); font-size:14px; transition:transform .2s}
+.ntit[data-open="1"] .nflecha{transform:rotate(90deg)}
+.nbody{padding:4px 18px 18px 18px; border-top:1px solid var(--line)}
+.nbody > p.nque{margin:12px 0 0; font-size:14px; color:var(--ink); text-align:left}
+.nleyes{display:flex; flex-wrap:wrap; gap:5px; align-items:center; margin-top:10px}
+.nleyes .nlab{font-family:var(--f-mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); margin-right:4px}
+.ncaps{margin-top:14px; display:grid; gap:10px}
+.ncap{border:1px solid var(--line); border-radius:9px; padding:11px 13px; background:var(--surface-2)}
+.ncap h4{margin:0; display:flex; flex-wrap:wrap; gap:8px; align-items:baseline; font-size:14px; font-weight:600}
+.ncap h4 .nc{font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3); font-weight:600}
+.ncap ul{margin:7px 0 0; padding-left:18px}
+.ncap li{font-size:13.5px; line-height:1.55; margin:3px 0; color:var(--ink)}
+.ncap .nleyes{margin-top:8px}
+.nnums{margin-top:14px; border:1px solid var(--line); border-radius:9px; overflow:hidden}
+.nnums table{border-collapse:collapse; width:100%; font-size:13px}
+.nnums th{font-family:var(--f-mono); font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); text-align:left; padding:8px 10px; background:var(--surface-2); font-weight:600}
+.nnums td{padding:8px 10px; border-top:1px solid var(--line); vertical-align:top}
+.nnums td:first-child{font-weight:600; width:34%}
+.nnums td:last-child{font-family:var(--f-mono); font-size:11px; color:var(--ink-3); white-space:nowrap}
+.nacc{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+.nbtn{font-family:var(--f-body); font-size:13px; font-weight:600; cursor:pointer; border:1px solid var(--accent);
+  background:var(--accent); color:var(--surface); border-radius:8px; padding:7px 14px}
+.nbtn.sec{background:transparent; color:var(--accent)}
+.nbtn:hover{filter:brightness(1.07)}
+.nvacio{margin-top:14px; color:var(--ink-3); font-size:13px}
+@media(max-width:560px){
+  .nhead{grid-template-columns:44px 1fr auto; padding:12px 12px; gap:8px}
+  .nname{font-size:15.5px}
+  .nbody{padding:4px 12px 14px}
+  .nnums td:last-child{white-space:normal}
+  .nnums td:first-child{width:auto}
+}
+
+/* ---------- quién es quién hoy ---------- */
+.hoygrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:10px; margin-top:14px}
+.hoyc{background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:13px 15px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:6px}
+.hoyc .hoyt{display:flex; justify-content:space-between; gap:8px; align-items:flex-start}
+.hoyc .hoyt b{font-family:var(--f-mono); font-size:12.5px}
+.hoyc .hoyt span.cat{display:block; font-size:12px; color:var(--ink-2); font-family:var(--f-body); font-weight:400}
+.hoyc p{margin:0; font-size:13px; color:var(--ink); text-align:left; line-height:1.5}
+.hoyc p.nom{color:var(--ink-2); font-size:12.5px}
+.hoyc p.nom::before{content:"En la práctica: "; font-family:var(--f-mono); font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3)}
+.hoyc .hoyf{margin-top:auto; display:flex; gap:6px; align-items:center}
+.ntl{margin-top:16px; background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:16px 18px; box-shadow:var(--shadow)}
+.ntl ol{list-style:none; margin:10px 0 0; padding:0; display:grid; gap:8px}
+.ntl li{display:grid; grid-template-columns:88px 1fr; gap:10px; font-size:13.5px; align-items:baseline}
+.ntl li b{font-family:var(--f-mono); font-size:11.5px; color:var(--accent)}
+@media(max-width:520px){ .ntl li{grid-template-columns:1fr; gap:2px} }
+
+/* ---------- micro-learning ---------- */
+#micro[hidden]{display:none}
+.uintro{margin:22px 0 0; color:var(--ink-2); text-align:left}
+.ugrid{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:12px; margin-top:16px}
+@media(max-width:860px){ .ugrid{grid-template-columns:1fr} }
+.ucard{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px 18px; box-shadow:var(--shadow)}
+.ucard h3{margin:0 0 4px; font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); font-weight:600}
+.ucard p{margin:6px 0 0; font-size:13.5px; color:var(--ink-2); text-align:left}
+.uhoy{border-left:3px solid var(--accent)}
+.ucard p.ubig{font-family:var(--f-display); font-size:26px; font-weight:600; line-height:1.2; margin:4px 0 0; color:var(--ink)}
+.ustats{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px}
+.ustat{background:var(--surface-2); border:1px solid var(--line); border-radius:9px; padding:8px 10px}
+.ustat b{display:block; font-family:var(--f-mono); font-size:18px; font-weight:600; color:var(--ink)}
+.ustat span{font-size:11.5px; color:var(--ink-3)}
+.ufila{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:12px}
+.ufila label{font-size:13px; color:var(--ink-2); display:flex; gap:6px; align-items:center}
+.ufila input[type=time], .ufila select{font-family:var(--f-mono); font-size:13px; padding:5px 8px; border-radius:7px;
+  border:1px solid var(--line-strong); background:var(--surface-2); color:var(--ink)}
+.utits{display:flex; flex-wrap:wrap; gap:5px; margin-top:10px}
+.ucajas{display:flex; gap:3px; margin-top:10px; height:34px; align-items:flex-end}
+.ucajas div{flex:1; background:var(--accent); opacity:.85; border-radius:3px 3px 0 0; min-height:2px; position:relative}
+.ucajas div span{position:absolute; top:-15px; left:0; right:0; text-align:center; font-family:var(--f-mono); font-size:9.5px; color:var(--ink-3)}
+.ucajlab{display:flex; gap:3px; margin-top:3px}
+.ucajlab span{flex:1; text-align:center; font-family:var(--f-mono); font-size:9px; color:var(--ink-3)}
+.udias{display:flex; gap:4px; margin-top:10px; flex-wrap:wrap}
+.udias i{width:16px; height:16px; border-radius:4px; background:var(--surface-2); border:1px solid var(--line)}
+.udias i.on{background:var(--st-central); border-color:var(--st-central)}
+.udias i.hoy{outline:2px solid var(--accent); outline-offset:1px}
+.utec{margin:8px 0 0; padding:0; list-style:none; display:grid; gap:8px}
+.utec li{font-size:13px; line-height:1.5; color:var(--ink)}
+.utec li b{display:block; font-size:13px}
+.utec li em{font-style:normal; font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3)}
+/* sesión */
+.usesion{margin-top:16px; max-width:760px; margin-inline:auto}
+.ubarra{height:6px; background:var(--surface-2); border:1px solid var(--line); border-radius:99px; overflow:hidden}
+.ubarra i{display:block; height:100%; background:var(--accent); transition:width .25s}
+.umeta{display:flex; justify-content:space-between; gap:10px; margin-top:8px; font-family:var(--f-mono); font-size:11px; color:var(--ink-3)}
+.utarj{margin-top:12px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:22px 22px 18px; box-shadow:var(--shadow); min-height:220px}
+.utarj .utag{display:flex; flex-wrap:wrap; gap:6px; align-items:center; font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3)}
+.utarj .uq{font-family:var(--f-display); font-size:21px; line-height:1.4; margin:12px 0 0; color:var(--ink); text-align:left}
+.utarj .ua{margin-top:16px; padding-top:14px; border-top:1px dashed var(--line-strong); font-size:15px; line-height:1.6; text-align:left}
+.utarj .uf{margin-top:8px; font-family:var(--f-mono); font-size:11px; color:var(--ink-3)}
+.uops{display:grid; gap:7px; margin-top:14px}
+.uop{display:flex; gap:10px; align-items:flex-start; text-align:left; cursor:pointer; border:1px solid var(--line-strong); background:var(--surface-2);
+  color:var(--ink); border-radius:9px; padding:10px 12px; font-family:var(--f-body); font-size:14px; line-height:1.45}
+.uop[aria-pressed="true"]{border-color:var(--accent); background:var(--accent-soft)}
+.uop.ok{border-color:var(--st-central); background:var(--st-central-bg)}
+.uop.mal{border-color:var(--st-reemp); background:var(--st-reemp-bg)}
+.uop .ul{font-family:var(--f-mono); font-size:12px; color:var(--ink-3); min-width:14px}
+.ugrades{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:16px}
+.ugrades button{cursor:pointer; border-radius:9px; padding:9px 6px; font-family:var(--f-body); font-size:13px; font-weight:600; border:1px solid var(--line-strong); background:var(--surface); color:var(--ink)}
+.ugrades button small{display:block; font-family:var(--f-mono); font-size:10px; font-weight:400; color:var(--ink-3); margin-top:2px}
+.ugrades .g1{border-color:var(--st-reemp); color:var(--st-reemp)}
+.ugrades .g2{border-color:var(--st-nicho); color:var(--st-nicho)}
+.ugrades .g3{border-color:var(--st-central); color:var(--st-central)}
+.ugrades .g4{border-color:var(--st-activo); color:var(--st-activo)}
+@media(max-width:520px){ .ugrades{grid-template-columns:repeat(2,1fr)} .utarj{padding:18px 15px} .utarj .uq{font-size:18px} }
+.uverdict{margin-top:12px; font-weight:600}
+.uverdict.ok{color:var(--st-central)} .uverdict.mal{color:var(--st-reemp)}
+.uaviso{margin-top:10px; font-size:12.5px; color:var(--ink-3); text-align:left}
+
+/* ---------- perfil ---------- */
+#perfil[hidden]{display:none}
+.pform{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+.pform input{flex:1 1 220px; font-family:var(--f-body); font-size:15px; padding:9px 12px; border-radius:8px; border:1px solid var(--line-strong); background:var(--surface-2); color:var(--ink)}
+.ufila input[type=text], .ufila input[type=date]{font-family:var(--f-body); font-size:13.5px; padding:5px 8px; border-radius:7px; border:1px solid var(--line-strong); background:var(--surface-2); color:var(--ink)}
+.pbar{display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 72px; gap:10px; align-items:center; margin-top:8px; font-size:12.5px}
+.pbar .pl{color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.pbar .pt{position:relative; height:8px; border-radius:99px; background:var(--surface-2); border:1px solid var(--line); overflow:hidden}
+.pbar .pt i{display:block; height:100%; background:var(--accent); border-radius:99px}
+.pbar .pt b{position:absolute; top:-2px; bottom:-2px; width:2px; background:var(--st-reemp); opacity:.7}
+.pbar .pv{font-family:var(--f-mono); font-size:11.5px; text-align:right; color:var(--ink)}
+.pbar .pv small{color:var(--ink-3)}
+.ustats:has(.ustat:nth-child(4)){grid-template-columns:repeat(3,1fr)}
+@media(max-width:520px){ .pbar{grid-template-columns:1fr 60px; } .pbar .pt{grid-column:1/-1; order:3} .ustats{grid-template-columns:repeat(2,1fr)!important} }
 </style>
 
 <div class="wrap">
@@ -1018,6 +1217,8 @@ footer a{color:var(--ink-3)}
   <button class="vbtn" id="vGlosario" role="tab" aria-selected="false">Glosario<span class="vc" id="gcount"></span></button>
   <button class="vbtn" id="vCuest" role="tab" aria-selected="false">Cuestionario<span class="vc" id="qcount"></span></button>
   <button class="vbtn" id="vMercado" role="tab" aria-selected="false">El mercado<span class="vc" id="mcount"></span></button>
+  <button class="vbtn" id="vMicro" role="tab" aria-selected="false">Micro-learning<span class="vc" id="ucount"></span></button>
+  <button class="vbtn" id="vPerfil" role="tab" aria-selected="false">Mi perfil<span class="vc" id="pcount"></span></button>
 </nav>
 
 <div id="leyesView">
@@ -1052,6 +1253,16 @@ footer a{color:var(--ink-3)}
   <div id="mzona"></div>
 </section>
 
+<section id="micro" hidden>
+  <p class="uintro" id="uintro"></p>
+  <div id="uzona"></div>
+</section>
+
+<section id="perfil" hidden>
+  <p class="uintro" id="pintro"></p>
+  <div id="pzona"></div>
+</section>
+
 <section class="leyenda">
   <h3>Cómo leer esta página</h3>
   <ul>
@@ -1069,6 +1280,7 @@ footer a{color:var(--ink-3)}
 
 <footer>
   <p>Textos actualizados tomados de InfoLeg (Ministerio de Justicia), incluidas las reformas de la Ley 27.440; la Ley 22.169, que no tiene texto actualizado publicado, va en su versión original. Las definiciones del glosario son literales. Los resúmenes, en cambio, son una ayuda de estudio: ante cualquier duda de examen, manda el texto legal, no el resumen.</p>
+  <p>La pestaña <b>El mercado → Las Normas</b> resume el PDF de las Normas de la CNV (N.T. 2013 y mod., edición actualizada a enero de 2018) y marca con «Hoy» lo que cambió después, con datos públicos a septiembre de 2026. El <b>Micro-learning</b> guarda tu progreso en este navegador y, si creás una cuenta en «Mi perfil», también en la nube (Firebase, de Google), asociado a tu mail y visible solo para vos.</p>
   <p><b>Esta página no es material oficial de la Comisión Nacional de Valores, no cuenta con su aval ni con su autorización.</b> Es una ayuda de estudio de uso libre y sin fines de lucro.</p>
   <p>Textos actualizados tomados de InfoLeg (Ministerio de Justicia). Parte del cuestionario proviene del banco público de <a href="https://github.com/octavioes/cnv-idoneo-v2" rel="noopener">idoneocnv.com</a> (licencia MIT, de @octavioesc), armado sobre la Guía de Estudio que publica la CNV. El resto sale de simulaciones que circulan entre quienes rindieron. Código y detalle de atribuciones en el <a href="https://github.com/martingomezpizarro/Preparaci-n-Examen-Idoneidad" id="repolink" rel="noopener">repositorio</a>.</p>
 </footer>
@@ -1958,12 +2170,13 @@ const MAGENTES = [
       {t:"Registrar operaciones de clientes de otros agentes", f:"N:II:10"}
     ],
     tec:[
-      {k:"Patrimonio neto mínimo", v:"$15.000.000, de forma permanente", f:"N:II:20"},
+      {k:"Patrimonio neto mínimo", v:"$15.000.000 en el T.O. 2013; hoy 470.350 UVA", f:"N:II:20"},
+      {k:"Hoy", v:"Subcategorías vigentes: Integral, Propio, Participante Directo e I AGRO. Puede asesorar y administrar carteras en forma discrecional, total o parcial, con mandato expreso", f:"X:Normas CNV vigentes · Tít. VII Cap. II"},
       {k:"Contrapartida líquida", v:"Al menos el 50% del patrimonio neto mínimo", f:"N:II:22"},
       {k:"Responsabilidad", v:"Por las obligaciones propias, las de sus clientes y las de los agentes con los que firme convenio de liquidación", f:"N:II:2"}
     ],
     matrizf:"N:II:2",
-    act:{ neg:"si", prim:"si", liq:"si", liq3:"si", fon:"si", val:"si", cap:"si", ase:"si", car:"cond", ord:"si" }
+    act:{ neg:"si", prim:"si", liq:"si", liq3:"si", fon:"si", val:"si", cap:"si", ase:"si", car:"si", ord:"si" }
   },
   {
     id:"alyc_prop", sig:"ALyC Propio", n:"Agente de liquidación y compensación y agente de negociación — Propio", capa:"inter",
@@ -1980,12 +2193,12 @@ const MAGENTES = [
       {t:"Financiar a sus clientes", f:"N:II:9"}
     ],
     tec:[
-      {k:"Patrimonio neto mínimo", v:"$3.500.000, de forma permanente", f:"N:II:20"},
+      {k:"Patrimonio neto mínimo", v:"$3.500.000 en el T.O. 2013; hoy 470.350 UVA, igual que el Integral", f:"N:II:20"},
       {k:"Contrapartida líquida", v:"Al menos el 50% del patrimonio neto mínimo", f:"N:II:22"},
       {k:"Responsabilidad", v:"Limitada a las obligaciones propias y a las de sus clientes", f:"N:II:2"}
     ],
     matrizf:"N:II:2",
-    act:{ neg:"si", prim:"si", liq:"si", liq3:"no", fon:"si", val:"si", cap:"si", ase:"si", car:"cond", ord:"si" }
+    act:{ neg:"si", prim:"si", liq:"si", liq3:"no", fon:"si", val:"si", cap:"si", ase:"si", car:"si", ord:"si" }
   },
   {
     id:"an", sig:"AN", n:"Agente de negociación", capa:"inter",
@@ -2002,11 +2215,12 @@ const MAGENTES = [
       {t:"Liquidar directamente sus operaciones: necesita convenio con un ALyC", f:"N:I:5"}
     ],
     tec:[
-      {k:"Patrimonio neto mínimo", v:"$1.000.000, de forma permanente, verificable en los estados contables trimestrales y anuales", f:"N:I:14"},
+      {k:"Patrimonio neto mínimo", v:"$1.000.000 en el T.O. 2013; hoy 65.350 UVA", f:"N:I:14"},
+      {k:"Hoy", v:"Puede asesorar y administrar carteras en forma discrecional, total o parcial, con mandato expreso. En la práctica quedan pocos AN: casi todos se registran como ALyC", f:"X:Normas CNV vigentes · Tít. VII Cap. I"},
       {k:"Convenio obligatorio", v:"Con un agente de liquidación y compensación, sin el cual no puede operar", f:"N:I:5"}
     ],
     matrizf:"N:I:3",
-    act:{ neg:"si", prim:"si", liq:"conv", liq3:"no", fon:"no", val:"no", cap:"si", ase:"si", car:"cond", ord:"si" }
+    act:{ neg:"si", prim:"si", liq:"conv", liq3:"no", fon:"no", val:"no", cap:"si", ase:"si", car:"si", ord:"si" }
   },
   {
     id:"acvn", sig:"ACVN", n:"Agente de corretaje de valores negociables", capa:"inter",
@@ -2035,53 +2249,72 @@ const MAGENTES = [
   {
     id:"ap", sig:"AP", n:"Agente productor", capa:"canal",
     matriz:true,
-    que:"La puerta de entrada: difunde y promociona bajo la responsabilidad de un agente registrado. Capta clientes para que el AN o el ALyC les dé el alta, los asesora, les gestiona las órdenes y hasta puede administrarles la cartera con consentimiento expreso. Lo único que nunca toca es el dinero y los títulos.",
+    que:"La puerta de entrada, y la categoría más numerosa del mercado. Por contrato con un AN, un ALyC o un AAGI, asesora, difunde y promociona valores negociables, capta clientes para que el agente les dé el alta y les acerca la documentación. Cobra una parte de la comisión del agente. Nunca toca el dinero ni los títulos, y hoy tampoco gestiona órdenes ni administra carteras: eso lo permitía el texto original de 2013 y ya no rige.",
     def:"L:26831:2",
     puede:[
-      {t:"Captar clientes para su posterior alta por parte del AN o del ALyC", f:"N:IV:7"},
-      {t:"Informar sobre los servicios de los agentes que lo contratan", f:"N:IV:7"},
-      {t:"Suministrar la documentación necesaria para el registro de clientes", f:"N:IV:7"},
-      {t:"Asesorar sobre inversiones", f:"N:IV:7"},
-      {t:"Gestionar órdenes de clientes autorizados", f:"N:IV:7"},
-      {t:"Administrar carteras, con consentimiento expreso del cliente", f:"N:IV:7"}
+      {t:"Asesorar sobre inversiones en el mercado de capitales (vigente)", f:"X:Normas CNV vigentes · Tít. VII (Agente Productor)"},
+      {t:"Difundir y promocionar valores negociables autorizados", f:"X:Normas CNV Tít. VII Cap. IV art. 1 (PDF 2018)"},
+      {t:"Captar clientes para su posterior alta por parte del AN, ALyC o AAGI con el que tenga contrato", f:"X:Normas CNV Tít. VII Cap. IV art. 6 (PDF 2018)"},
+      {t:"Informar sobre los servicios del agente y proveer la documentación de alta del cliente", f:"X:Normas CNV Tít. VII Cap. IV art. 6 (PDF 2018)"}
     ],
     nopuede:[
-      {t:"Recibir ni custodiar fondos ni valores de clientes", f:"N:IV:13"},
-      {t:"Compartir domicilio con los agentes que lo contratan", f:"N:IV:13"},
-      {t:"Delegar sus servicios en terceros", f:"N:IV:13"},
-      {t:"Usar contraseñas o firmas electrónicas ajenas", f:"N:IV:13"}
+      {t:"Recibir ni custodiar fondos ni valores negociables de clientes", f:"X:Normas CNV Tít. VII Cap. IV art. 9 (PDF 2018)"},
+      {t:"Gestionar órdenes ni administrar carteras de clientes", f:"X:Normas CNV Tít. VII Cap. IV art. 9 inc. i (PDF 2018)"},
+      {t:"Compartir domicilio con el agente, usar su denominación o actuar como su representante", f:"X:Normas CNV Tít. VII Cap. IV art. 9 (PDF 2018)"},
+      {t:"Delegar sus servicios en terceros ni usar contraseñas o firmas electrónicas del cliente", f:"X:Normas CNV Tít. VII Cap. IV art. 9 (PDF 2018)"}
     ],
     tec:[
-      {k:"Patrimonio neto mínimo", v:"$250.000, de forma permanente", f:"N:IV:17"},
-      {k:"Actúa bajo responsabilidad ajena", v:"Difunde y promociona bajo la responsabilidad del agente registrado que lo contrata", f:"L:26831:2"}
+      {k:"Patrimonio neto mínimo", v:"No tiene. (El texto original de 2013 le pedía $250.000.)", f:"X:Normas CNV Tít. VII Cap. IV (PDF 2018)"},
+      {k:"Retribución", v:"Un porcentaje de la comisión del AN o ALyC por cesión de comisiones; el agente no puede cobrarle más al cliente que trae el AP", f:"X:Normas CNV Tít. VII Cap. IV art. 8 (PDF 2018)"},
+      {k:"Idoneidad", v:"El AP persona humana y sus empleados en contacto con el público se inscriben en el registro de idóneos", f:"X:Normas CNV Tít. VII Cap. IV art. 4 (PDF 2018)"}
     ],
-    matrizf:"N:IV:7",
-    act:{ neg:"no", prim:"no", liq:"no", liq3:"no", fon:"no", val:"no", cap:"si", ase:"si", car:"cond", ord:"si" }
+    matrizf:"X:Normas CNV Tít. VII Cap. IV arts. 6 y 9",
+    act:{ neg:"no", prim:"no", liq:"no", liq3:"no", fon:"no", val:"no", cap:"si", ase:"si", car:"no", ord:"no" }
   },
   {
-    id:"aa", sig:"AAMC", n:"Agente asesor de mercado de capitales", capa:"canal",
+    id:"aa", sig:"AAMC", n:"Agente asesor de mercado de capitales (eliminado)", capa:"canal",
     matriz:true,
-    que:"Asesora y cobra honorarios convenidos con su cliente, y hasta ahí llega. Es el contracara del agente productor: los dos asesoran, pero el asesor no puede captar clientes para un intermediario, ni gestionar órdenes, ni administrar carteras. Esa comparación es pregunta de examen.",
+    que:"Categoría eliminada en 2018 por la RG 731: el asesoramiento pasó a los AN, ALyC y AP, y la gestión independiente de carteras, al AAGI. Igual conviene conocerla porque aparece en preguntas viejas: asesoraba y cobraba honorarios del cliente, y tenía prohibido todo lo demás (captar clientes para un intermediario, gestionar órdenes, administrar carteras, custodiar).",
     puede:[
-      {t:"Prestar cualquier tipo de asesoramiento en el ámbito del mercado de capitales", f:"N:V:1"},
+      {t:"Prestar asesoramiento en el ámbito del mercado de capitales", f:"N:V:1"},
       {t:"Percibir los honorarios que convenga con sus clientes", f:"N:V:5"}
     ],
     nopuede:[
-      {t:"Recibir ni custodiar fondos de clientes", f:"N:V:4"},
-      {t:"Recibir ni custodiar valores negociables", f:"N:V:4"},
-      {t:"Captar clientes para agentes de negociación o de liquidación y compensación", f:"N:V:4"},
-      {t:"Prestar información sobre los servicios de esos intermediarios ni proveer su documentación", f:"N:V:4"},
-      {t:"Gestionar órdenes de clientes", f:"N:V:4"},
-      {t:"Administrar carteras", f:"N:V:4"},
-      {t:"Delegar sus servicios en terceros", f:"N:V:4"},
-      {t:"Usar la denominación sin estar registrado previamente", f:"N:V:3"}
+      {t:"Recibir ni custodiar fondos ni valores negociables", f:"N:V:4"},
+      {t:"Captar clientes para AN o ALyC, ni darles información o documentación de esos agentes", f:"N:V:4"},
+      {t:"Gestionar órdenes ni administrar carteras", f:"N:V:4"},
+      {t:"Delegar sus servicios en terceros", f:"N:V:4"}
     ],
     tec:[
-      {k:"Patrimonio neto mínimo", v:"El capítulo no le exige uno", f:"N:V:1"},
+      {k:"Estado", v:"Eliminada en 2018 (RG 731)", f:"X:RG CNV 731/2018"},
       {k:"Retribución", v:"Honorarios convenidos con el cliente", f:"N:V:5"}
     ],
     matrizf:"N:V:4",
     act:{ neg:"no", prim:"no", liq:"no", liq3:"no", fon:"no", val:"no", cap:"no", ase:"si", car:"no", ord:"no" }
+  },
+  {
+    id:"aagi", sig:"AAGI", n:"Agente asesor global de inversión", capa:"canal",
+    matriz:true,
+    que:"El asesor independiente con mandato: sociedad anónima de objeto exclusivo que asesora, gestiona órdenes y administra carteras de sus clientes, operando a través de un ALyC local o de un intermediario del exterior regulado. Tampoco toca el dinero ni los títulos: la custodia queda en el ALyC o en el broker del exterior.",
+    puede:[
+      {t:"Asesorar sobre inversiones en el mercado de capitales", f:"X:Normas CNV Tít. VII Cap. VII art. 2 (PDF 2018)"},
+      {t:"Gestionar órdenes de sus clientes con mandato expreso", f:"X:Normas CNV Tít. VII Cap. VII art. 2 (PDF 2018)"},
+      {t:"Administrar carteras de inversión con mandato expreso", f:"X:Normas CNV Tít. VII Cap. VII art. 2 (PDF 2018)"},
+      {t:"Operar a través de un ALyC o de intermediarios del exterior de países cooperadores", f:"X:Normas CNV Tít. VII Cap. VII art. 2 (PDF 2018)"}
+    ],
+    nopuede:[
+      {t:"Cobrar o pagar por el cliente, salvo su propia remuneración", f:"X:Normas CNV Tít. VII Cap. VII art. 6 (PDF 2018)"},
+      {t:"Recibir, transferir o custodiar fondos o valores de clientes", f:"X:Normas CNV Tít. VII Cap. VII art. 6 (PDF 2018)"},
+      {t:"Compartir domicilio con otro agente, ni ser cliente del ALyC con el que tiene convenio", f:"X:Normas CNV Tít. VII Cap. VII art. 6 (PDF 2018)"},
+      {t:"Hacer rotación excesiva de la cartera para generar comisiones", f:"X:Normas CNV Tít. VII Cap. VII art. 9 (PDF 2018)"},
+      {t:"Inscribirse en otra categoría de agente", f:"X:Normas CNV Tít. VII Cap. VII art. 5 (PDF 2018)"}
+    ],
+    tec:[
+      {k:"Patrimonio neto mínimo", v:"$2.500.000 en el texto de 2018", f:"X:Normas CNV Tít. VII Cap. VII art. 22 (PDF 2018)"},
+      {k:"Perfil de riesgo", v:"Revisión al menos anual, comunicada al cliente", f:"X:Normas CNV Tít. VII Cap. VII art. 8 (PDF 2018)"}
+    ],
+    matrizf:"X:Normas CNV Tít. VII Cap. VII arts. 2 y 6",
+    act:{ neg:"no", prim:"no", liq:"no", liq3:"no", fon:"no", val:"no", cap:"si", ase:"si", car:"si", ord:"si" }
   },
   {
     id:"acyd", sig:"ACyD", n:"Agentes de colocación y distribución", capa:"canal",
@@ -3078,6 +3311,8 @@ function render(){
 }
 
 function filter(){
+  if(vista === "micro"){ pintarMicro(); return; }
+  if(vista === "perfil"){ countEl.textContent = ""; pintarPerfil(); return; }
   if(vista === "glosario"){ filterGlosario(); return; }
   if(vista === "mercado"){
     if(msub === "estructura"){ pintarMercado(); return; }
@@ -3194,6 +3429,11 @@ function setVista(v){
   glosView.hidden = v !== "glosario";
   document.getElementById("cuestionario").hidden = v !== "cuestionario";
   document.getElementById("mercado").hidden = v !== "mercado";
+  document.getElementById("micro").hidden = v !== "micro";
+  document.getElementById("perfil").hidden = v !== "perfil";
+  document.getElementById("vPerfil").setAttribute("aria-selected", v === "perfil" ? "true" : "false");
+  document.getElementById("vMicro").setAttribute("aria-selected", v === "micro" ? "true" : "false");
+  document.querySelector(".controls .search").hidden = v === "micro" || v === "perfil";
   if(v !== "mercado"){ redDestruir(); estrDestruir(); }
   document.getElementById("vMercado").setAttribute("aria-selected", v === "mercado" ? "true" : "false");
   document.querySelector(".leyenda").hidden = (v !== "leyes" && v !== "mercado");
@@ -3204,7 +3444,7 @@ function setVista(v){
     : v === "glosario"
     ? "Buscar un término: cuotaparte, fondo de riesgo, precio equitativo…"
     : v === "mercado"
-    ? "Buscar en el mercado: liquidar, custodia, cuotaparte, contraparte central…"
+    ? "Buscar en el mercado y las Normas: caución, OPA, idóneo, ALyC, Caja de Valores…"
     : "Buscar entre las preguntas: OPA, secreto, prospecto…";
   filter();
 }
@@ -3243,12 +3483,14 @@ const mercView = document.getElementById("mercado");
 const mzona = document.getElementById("mzona");
 const msubEl = document.getElementById("msub");
 const MSUBS = [
+  ["normas","Las Normas, título por título"],
+  ["hoy","Quién es quién hoy"],
   ["estructura","Estructura"],
   ["matriz","Quién puede qué"],
   ["instrumentos","Instrumentos"],
   ["fichas","Fichas"]
 ];
-let msub = "estructura";
+let msub = "normas";
 const agPorId = id => MAGENTES.find(a=>a.id === id);
 
 function fuenteHTML(f){
@@ -3319,8 +3561,8 @@ function matrizHTML(){
       <span><b class="mv cond">con requisitos</b> puede, con condiciones</span>
     </div>
     <p class="mnota">La matriz toma solo a los que te conectan con el mercado. Los mercados, las cámaras, el depositario central, la gerente, la depositaria, las calificadoras y la CNV no compiten en estas actividades: están en el esquema y en las fichas.<br>
-    Las dos comparaciones que más se preguntan: el <b>AN</b> negocia pero no liquida ni custodia, y necesita convenio con un <b>ALyC</b>; el <b>agente productor</b> capta, asesora, gestiona órdenes y administra carteras, mientras que el <b>asesor</b> solo asesora.<br>
-    De dónde sale cada marca: las prohibiciones vienen del artículo que cada fila cita, y ahí la cruz es literal. Donde la norma habilita expresamente, va el tilde. <b>Administrar carteras</b> queda en «con requisitos» para todos salvo el asesor, que lo tiene prohibido: el Título VII solo lo regula de manera expresa para el agente productor, y siempre con consentimiento expreso del cliente.</p>`;
+    Las dos comparaciones que más se preguntan: el <b>AN</b> negocia pero no liquida ni custodia, y necesita convenio con un <b>ALyC</b>; el <b>agente productor</b> capta y asesora pero no gestiona órdenes ni administra carteras, cosa que sí hace el <b>AAGI</b> con mandato expreso.<br>
+    Versión: la matriz sigue las Normas vigentes. El texto original de 2013, que es el que abren los chips ámbar, le permitía al productor gestionar órdenes y administrar carteras y le prohibía al AN administrarlas; la RG 731 de 2018 dio vuelta las dos cosas y eliminó al asesor de mercado de capitales (AAMC), que queda en la tabla solo como referencia histórica.</p>`;
 }
 
 function instrumentosHTML(){
@@ -3369,7 +3611,11 @@ function pintarMercado(){
   msubEl.innerHTML = MSUBS.map(([k,n])=>
     `<button class="mtab" data-msub="${k}" aria-selected="${msub===k || (k==="estructura" && msub==="red")}">${n}</button>`).join("");
   const intro = document.getElementById("mintro");
-  if(intro) intro.textContent = msub === "estructura"
+  if(intro) intro.textContent = msub === "normas"
+    ? "Las Normas de la CNV (N.T. 2013 y mod.) como columna vertebral del estudio: los 19 títulos, capítulo por capítulo, con lo que dice la norma, la ley que la respalda, los números de examen y cómo se usa hoy en la práctica. Abrí un título para bajar al detalle y repasalo con tarjetas."
+    : msub === "hoy"
+    ? "La mirada realista: cada categoría que definen las Normas, si hoy se usa o no, qué hace en la práctica y con nombres reales. Lo que no existe más, marcado como tal."
+    : msub === "estructura"
     ? "El mercado por capas: quién autoriza, quién organiza, quién intermedia, quién llega al inversor y qué se emite. Plegado se ve el esqueleto; desplegá una capa para bajar a sus entidades y agentes, y tocá cualquier nombre para ver sus relaciones con el artículo detrás."
     : msub === "red"
     ? "Todo lo que las ocho leyes definen, en un solo grafo: los actores, los valores negociables y los conceptos, unidos por la relación que los liga y con el artículo que la respalda. Movelo, hacé zoom y tocá un nodo para ver de qué está colgado."
@@ -3380,6 +3626,11 @@ function pintarMercado(){
     : msub === "instrumentos"
     ? "Cada instrumento con su cadena completa: quién lo emite, quién lo autoriza, quién lo negocia, quién lo custodia, quién lo califica, quién lo audita y quién lo controla."
     : "La ficha de cada actor: qué es, qué puede hacer, qué tiene prohibido y sus números. Todo con la fuente al lado.";
+  if(msub === "normas" || msub === "hoy"){
+    redDestruir(); estrDestruir();
+    mzona.innerHTML = msub === "normas" ? normasHTML() : hoyActoresHTML();
+    return;
+  }
   if(msub === "estructura"){
     redDestruir();
     const q0 = qEl.value.trim().toLowerCase();
@@ -4775,7 +5026,7 @@ const INTRO = {
   practica: "Una pregunta por vez, con corrección inmediata. Hay dos bancos: las simulaciones corregidas de la carpeta, verificadas contra el texto legal y con el artículo que las responde enganchado, y las de la Guía de Estudio de la CNV que publica idoneocnv.com, que traen la clave de su autor pero todavía no están cruzadas contra la ley — van marcadas «Respuesta a confirmar». Filtralas por origen acá abajo.",
   simulacro: "Elegís cuántas preguntas, cuánto tiempo y de qué módulos o ley, y el simulacro corre sin corrección hasta el final. Al cerrarlo queda guardado en el historial.",
   repaso: "Todas las preguntas con su respuesta y su fundamento a la vista, para leer de corrido.",
-  historial: "Todo lo que respondiste en este navegador: el registro de cada simulacro, tu dominio por módulo, la curva de progreso y las preguntas que se te siguen escapando. No se comparte con nadie ni sale de este dispositivo."
+  historial: "Todo lo que respondiste en este navegador: el registro de cada simulacro, tu dominio por módulo, la curva de progreso y las preguntas que se te siguen escapando. Queda en este dispositivo y, si entrás con tu cuenta desde «Mi perfil», también en la nube para verlo en cualquier otro."
 };
 
 function bindSetup(){
@@ -5086,7 +5337,1463 @@ cargarProgreso();
 document.getElementById("qcount").textContent = PREGUNTAS.length;
 nuevaCola();
 document.getElementById("mcount").textContent = MNODOS.length;
+/* ================= Normas CNV (N.T. 2013 y mod.) — recorrido título por título =================
+   Fuente del texto: el PDF «Normas 2013» (edición actualizada a enero de 2018, 806 págs.).
+   est: central · activo · nicho · sinuso · reemplazado     prio: 3 alta · 2 media · 1 baja (para el examen)
+   f: "L:<ley>:<art>" abre el artículo cargado en la página · texto libre = cita a las Normas u otra norma */
+
+const NORMAS_META = {
+  version: "Edición actualizada a enero de 2018 (tu PDF: 806 páginas, 19 títulos)",
+  hoy: "La CNV no volvió a numerar las Normas: se siguen llamando «N.T. 2013 y mod.» y se van reformando por resolución general. Desde 2018 hubo cambios grandes: la Ley 27.440 (mayo 2018) y, sobre todo en 2025, las RG 1046 (custodia: ADCVN y ACRYP), 1097 (nuevo Título I con todas las definiciones) y 1102 (sociedades gerentes que además pueden ser AN). Cuando un número o una regla de tu PDF ya cambió, esta página te lo marca con «Hoy».",
+  ruta: [
+    ["VII", "Los agentes: quién puede qué. Es el corazón del examen y de tu trabajo."],
+    ["VI", "Mercados, cámaras y operaciones: contado, caución, pase, opciones, cheques, pagarés."],
+    ["II", "Emisoras: oferta pública, prospecto, PyME, CEDEAR, comité de auditoría."],
+    ["V", "FCI y fideicomisos financieros: los productos de inversión colectiva."],
+    ["XII", "Transparencia: hechos relevantes, información privilegiada, idóneos."],
+    ["III", "Retiro de la oferta pública y OPA."],
+    ["XI", "Prevención de lavado (Módulo 2)."],
+    ["VIII", "Depósito colectivo y custodia."],
+    ["IX", "Calificadoras de riesgo."],
+    ["IV", "Régimen informativo periódico (estados contables, plazos)."],
+    ["XIII", "Denuncias y sumarios."],
+    ["XIX", "Crowdfunding."],
+    ["I", "Resto: I, X, XIV a XVIII, de lectura rápida."]
+  ]
+};
+
+const NORMAS = [
+{
+  id:"I", n:"Disposiciones preliminares", pags:"15", est:"reemplazado", prio:1,
+  que:"Una sola página: enumera todo lo que la CNV reglamenta con estas Normas en aplicación de la Ley 26.831 y su decreto reglamentario (1023/13): oferta pública, emisoras, mercados, cada categoría de agente, sistemas de negociación, registros y las normas complementarias a la UIF.",
+  leyes:["L:26831:1","L:26831:2","L:26831:19"],
+  caps:[
+    {c:"Único", n:"Alcance de las Normas", pts:[
+      "Diez incisos que funcionan como índice: autorización de oferta pública; intermediación; emisoras y sus controlantes; órganos sociales y auditores; mercados; agentes (negociación, productores, colocación y distribución, corretaje, liquidación y compensación, administración y custodia de productos de inversión colectiva, depósito colectivo, calificación de riesgo); sistemas e interconexión; registros; PLAFT.",
+      "Sirve para ubicar: cada inciso tiene su título más adelante."
+    ]}
+  ],
+  hoy:"En diciembre de 2025 la RG 1097 reemplazó este título por uno nuevo, con dos capítulos: el ámbito de la CNV y un diccionario de unas 130 definiciones que antes estaban dispersas (entre ellas «Inversor Calificado», con 14 categorías, y «Valor Negociable Temático» para los bonos verdes, sociales y sustentables). Si en el examen te preguntan por una definición, hoy vive acá.",
+  num:[]
+},
+{
+  id:"II", n:"Emisoras", pags:"17 – 158", est:"central", prio:3,
+  que:"Todo lo que tiene que cumplir quien sale a buscar financiamiento con oferta pública: qué es cada clase de acción, cómo se hacen las asambleas, cómo se integran y controlan el directorio, la sindicatura, el comité de auditoría y el auditor externo, cómo se pide la oferta pública, los regímenes PyME, las emisoras extranjeras y los CEDEAR, el prospecto y las fusiones y escisiones.",
+  leyes:["L:26831:59","L:26831:60","L:26831:64","L:26831:72","L:26831:79","L:26831:80","L:26831:84","L:26831:104","L:26831:109","L:26831:110","L:23576:1","L:23576:10","L:24467:32","L:19550:299"],
+  caps:[
+    {c:"Cap. I", n:"Acciones y otros valores negociables", pts:[
+      "Igualdad de derechos: lo que se emite goza de los mismos derechos que lo de su clase en circulación (art. 1).",
+      "Define acciones ordinarias, preferidas, rescatables y no rescatables (arts. 2 a 5).",
+      "Recompra de acciones propias (arts. 10 a 13, junto con los arts. 64 a 67 de la Ley 26.831): con ganancias realizadas y líquidas o reservas libres, informe de la sindicatura y del comité, hecho relevante, tope del 10% del capital; lo que exceda se vende en 90 días hábiles. No se puede recomprar si hay una OPA en curso."
+    ], f:["L:26831:64"]},
+    {c:"Cap. II", n:"Asambleas y modificaciones estatutarias", pts:[
+      "La ordinaria que trata balance y memoria se celebra dentro de los 4 meses del cierre (art. 3).",
+      "Delegación en el directorio para fijar las condiciones de una emisión: hasta 2 años; la subdelegación, hasta 3 meses prorrogables (art. 1).",
+      "Voto divergente del custodio con certificado del agente de depósito colectivo (arts. 9 a 13). Beneficiario final de los accionistas personas jurídicas (art. 24).",
+      "Un funcionario de la CNV puede ir a la asamblea como veedor: su presencia no convalida nada (art. 20)."
+    ], f:["L:26831:70","L:26831:71"]},
+    {c:"Cap. III", n:"Órganos de administración y fiscalización. Auditoría externa", pts:[
+      "Honorarios del directorio (art. 261 de la 19.550): tope del 5% de la utilidad computable si no hay dividendos, que sube con la distribución hasta el 25%; el exceso va como punto expreso del orden del día.",
+      "Independencia de directores: no lo es quien tenga o represente una «participación significativa» (15% del capital o más), ni quien haya sido empleado en los últimos 3 años, entre otros supuestos (art. 11).",
+      "Comité de auditoría: lo designa el directorio; la mayoría, independientes; plan de actuación dentro de los 60 días del ejercicio (arts. 15 a 18).",
+      "Auditor externo: lo designa la asamblea; registro de auditores en la CNV con 5 años de matrícula y 3 de experiencia; rotación del socio clave (máximo 7 años). Los minoritarios con 5% pueden pedir una auditoría (art. 26).",
+      "Dividendos en efectivo: se pagan dentro de los 30 días corridos de aprobados (art. 37)."
+    ], f:["L:26831:79","L:26831:104","L:26831:109","L:26831:110"]},
+    {c:"Cap. IV", n:"Fiscalización societaria", pts:[
+      "Trámites registrales ante la CNV como autoridad de control societario: reformas de estatuto, aumentos de capital, inscripciones, impresión de láminas, libros por medios computarizados."
+    ], f:["L:22169:1"]},
+    {c:"Cap. V", n:"Oferta pública primaria", pts:[
+      "Qué se presenta para ingresar al régimen: antecedentes, 3 últimos balances, informe de contador de que es empresa en marcha, prospecto.",
+      "Autorización automática para quien ya está en el régimen: la CNV tiene 5 o 10 días hábiles para observar; si no, queda autorizada (arts. 16 a 23).",
+      "Programas globales de ON: series y clases dentro de un monto máximo, emisiones dentro de los 5 años, plazo mínimo de amortización 7 días hábiles, suplemento de prospecto por cada serie (arts. 32 a 54).",
+      "ON en UVA o UVI: plazo mínimo 2 años (art. 40 bis).",
+      "Valores de corto plazo (hasta 1 año) solo para inversores calificados, en un registro especial (arts. 56 a 61)."
+    ], f:["L:26831:80","L:26831:84","L:23576:10"]},
+    {c:"Cap. VI", n:"Pequeñas y medianas empresas", pts:[
+      "PyME CNV: se mide por ingresos anuales promedio de 3 ejercicios, con topes por sector. No pueden serlo los bancos, las aseguradoras, los mercados ni las de servicios públicos, ni las controladas por grupos que no son PyME.",
+      "Beneficios: sin comité de auditoría, sin tasas de fiscalización ni aranceles, síndico titular y suplente (optativo en la SRL).",
+      "Régimen PyME CNV: en tu PDF, solo para inversores calificados (lista del art. 12: el Estado, sociedades, FCI, personas humanas con patrimonio mayor a $700.000, extranjeros, ANSES…).",
+      "Régimen PyME CNV Garantizada: la ON la garantiza al 100% una entidad de garantía (SGR, fondo de garantía público o banco) y se coloca por subasta."
+    ], hoy:"Topes actuales publicados por la CNV: PyME CNV, hasta 19.000.000 UVA y solo inversores calificados; PyME CNV Garantizada, hasta 10.000.000 UVA y para cualquier inversor. La Garantizada es la vía más usada por las PyMEs: el inversor en realidad está corriendo el riesgo de la SGR.", f:["L:24467:32","L:24467:33"]},
+    {c:"Cap. VII", n:"Entidades de garantía", pts:[
+      "SGR, fondos de garantía públicos y bancos que garantizan ON PyME Garantizadas. Necesitan calificación de riesgo y un trámite ante la CNV para quedar habilitadas."
+    ], hoy:"Nombres reales: Garantizar SGR (la más grande), Acindar Pymes SGR, Aval Federal SGR; fondos públicos como FoGaBA (Provincia de Buenos Aires).", f:["L:24467:46","L:24467:68"]},
+    {c:"Cap. VIII", n:"Emisoras extranjeras. CEDEAR y CEVA. ADR", pts:[
+      "Emisores extranjeros pueden hacer oferta pública en el país (régimen general o especial).",
+      "CEDEAR: certificado emitido en el país que representa acciones del exterior depositadas afuera; puede ser patrocinado (con participación del emisor) o no. CEVA: lo mismo sobre otros valores (arts. 8 a 21).",
+      "ADR: la emisora local deposita sus acciones y en el exterior se emiten certificados (arts. 22 y 23)."
+    ], hoy:"Los CEDEAR son hoy uno de los productos más operados por el minorista: Apple, Tesla, Mercado Libre, Coca-Cola y también ETF como SPY o QQQ. Los emiten Banco Comafi y Caja de Valores. Del otro lado, las argentinas con ADR en Nueva York: YPF, Grupo Galicia, Banco Macro, Pampa Energía, Telecom, TGS, entre otras."},
+    {c:"Cap. IX", n:"Prospecto", pts:[
+      "Documento básico de la oferta pública. Se puede circular un prospecto preliminar antes de la autorización y hacer reuniones informativas (roadshow).",
+      "Leyenda obligatoria en la primera página: la CNV no juzga la calidad de la inversión; la veracidad es responsabilidad del directorio, la sindicatura y los auditores.",
+      "No hace falta prospecto en ciertos casos (acciones liberadas, entre otros)."
+    ], f:["L:26831:119","L:26831:120"]},
+    {c:"Cap. X", n:"Reorganización societaria", pts:[
+      "Fusión y escisión entre sociedades bajo control de la CNV: prospecto, estados contables especiales, conformidad administrativa y cancelación de la oferta pública de la absorbida."
+    ]}
+  ],
+  hoy:"En BYMA cotizan las acciones de las principales empresas locales: las del panel líder (S&P Merval) incluyen YPF, Grupo Galicia, Banco Macro, Pampa Energía, TGS, Central Puerto, Loma Negra, Ternium Argentina, Aluar y Transener. En ON el grueso lo emiten energéticas y bancos (YPF, Pampa, Vista, Tecpetrol, Pan American Energy, TGS) y cada vez más en dólares. Las secciones de «nuevos proyectos» y «tecnológica» existen en la norma pero prácticamente no se usan.",
+  num:[
+    ["Recompra de acciones propias", "Hasta 10% del capital; exceso a vender en 90 días hábiles", "Cap. I art. 12"],
+    ["Asamblea que aprueba el balance", "Dentro de los 4 meses del cierre", "Cap. II art. 3"],
+    ["Honorarios del directorio sin dividendos", "5% de la utilidad computable (hasta 25% si se distribuye todo)", "Cap. III arts. 4 y 5"],
+    ["Participación significativa (independencia)", "15% del capital", "Cap. III art. 11"],
+    ["Pago de dividendos en efectivo", "30 días corridos desde la asamblea", "Cap. III art. 37"],
+    ["Minoritarios que piden auditoría", "5% del capital", "Cap. III art. 26"],
+    ["Programa global de ON", "Emisiones dentro de 5 años; amortización mínima 7 días hábiles", "Cap. V arts. 38 y 43"],
+    ["ON en UVA o UVI", "Plazo mínimo 2 años", "Cap. V art. 40 bis"],
+    ["Valores de corto plazo", "Hasta 1 año, solo inversores calificados", "Cap. V art. 56"]
+  ]
+},
+{
+  id:"III", n:"Retiro de la oferta pública, cancelaciones, OPA y aportes irrevocables", pags:"159 – 187", est:"nicho", prio:3,
+  que:"Cómo se sale del régimen de oferta pública (voluntariamente, por disolución o porque ya no hay títulos en circulación), cuándo es obligatorio lanzar una oferta pública de adquisición (OPA) y a qué precio, y cómo se tratan los aportes irrevocables y la capitalización de deudas.",
+  leyes:["L:26831:86","L:26831:87","L:26831:88","L:26831:90","L:26831:91","L:26831:92","L:26831:97","L:26831:98"],
+  caps:[
+    {c:"Cap. I", n:"Retiro del régimen de oferta pública", pts:[
+      "El retiro voluntario de acciones exige una OPA previa (art. 2). Se informa dentro de 2 días hábiles; a los 10 días corridos se suspende la negociación.",
+      "La emisora sigue cumpliendo todo hasta que la cancelación se haga efectiva (art. 11)."
+    ], f:["L:26831:97","L:26831:98"]},
+    {c:"Cap. II", n:"Ofertas públicas de adquisición", pts:[
+      "Toda OPA necesita autorización previa de la CNV y un precio equitativo (arts. 1 a 7).",
+      "En tu PDF (anterior a la Ley 27.440): participación significativa del 35% (obliga a ofertar al menos hasta el 50%) y del 50% (obliga a ofertar por el 100%) (arts. 9 a 12).",
+      "El directorio de la sociedad afectada debe ser neutral y emitir opinión fundada (arts. 36 a 41). La OPA es irrevocable salvo supuestos tasados (art. 43). Hay reglas para ofertas competidoras (arts. 77 a 86).",
+      "Quien no lanza la OPA obligatoria pierde los derechos políticos de esas acciones (art. 92)."
+    ], hoy:"La Ley 27.440 (2018) cambió el disparador: hoy la OPA es obligatoria cuando alguien alcanza una participación de control (50% o más de los votos, o menos si ejerce una influencia dominante), y el precio equitativo tiene reglas propias. Leé el art. 87 de la 26.831 reformado: es lo que se toma.", f:["L:26831:87","L:26831:88"]},
+    {c:"Cap. III", n:"Aportes irrevocables y capitalización de deudas", pts:[
+      "La primera asamblea tiene que decidir si capitaliza el aporte; si no, se devuelve. Informe especial de contador."
+    ]}
+  ],
+  hoy:"Son operaciones de pocas veces por año, pero muy de examen. Ejemplos reales: la OPA de Pampa Energía sobre Petrobras Argentina (2016) y los retiros de la oferta pública de empresas que quedaron con poco flotante.",
+  num:[
+    ["OPA obligatoria (tu PDF)", "35% (ofertar hasta 50%) y 50% (ofertar el 100%)", "Cap. II arts. 9 a 12"],
+    ["OPA obligatoria (hoy, Ley 27.440)", "Participación de control: 50% o influencia dominante", "Ley 26.831 art. 87"],
+    ["Control casi total", "95% del capital", "Ley 26.831 art. 92"]
+  ]
+},
+{
+  id:"IV", n:"Régimen informativo periódico", pags:"188 – 244", est:"central", prio:2,
+  que:"Qué información financiera presenta la emisora, cuándo y con qué normas contables: memoria, estados financieros anuales y trimestrales, reseña informativa, informes de la comisión fiscalizadora y del auditor, código de gobierno societario.",
+  leyes:["L:26831:60","L:26831:99","L:26831:104"],
+  caps:[
+    {c:"Cap. I", n:"Régimen informativo", pts:[
+      "Anuales: dentro de 70 días corridos del cierre (o 2 días después de aprobados por el directorio, lo que ocurra primero), y al menos 20 días antes de la asamblea.",
+      "Trimestrales: dentro de 42 días corridos del cierre del trimestre. Con NIIF se admite la forma condensada de la NIC 34.",
+      "Código de gobierno societario: se informa con la lógica «cumplir o explicar» en un anexo de la memoria (no aplica a PyMEs, CEDEAR ni programas de corto plazo).",
+      "Bancos y aseguradoras presentan con las normas del BCRA y de la SSN."
+    ]},
+    {c:"Cap. II", n:"Otra información periódica", pts:["Informe trimestral sobre ON, CEDEAR y certificados de participación emitidos; avales de entidades financieras."]},
+    {c:"Cap. III", n:"Forma de presentación y criterios de valuación", pts:[
+      "Emisoras de acciones y ON: NIIF (RT 26 de la FACPCE). El resto, normas contables profesionales argentinas.",
+      "Reserva legal, cómputo de capital y resultados, orden de absorción de pérdidas, reserva especial por adopción de NIIF."
+    ]}
+  ],
+  hoy:"Todo se presenta por la AIF (Título XV) y es público en la web de la CNV. Desde 2018 se volvió a aplicar el ajuste por inflación (NIC 29). La bibliografía suma el informe extenso del auditor con los KAM (cuestiones clave de auditoría): está en tu carpeta como PPT del Módulo 1.",
+  num:[
+    ["Estados financieros anuales", "70 días corridos del cierre", "Cap. I art. 1"],
+    ["Estados trimestrales", "42 días corridos del cierre del trimestre", "Cap. I art. 1"],
+    ["Antelación a la asamblea", "20 días corridos", "Cap. I art. 1"]
+  ]
+},
+{
+  id:"V", n:"Productos de inversión colectiva: FCI y fideicomisos financieros", pags:"245 – 366", est:"central", prio:3,
+  que:"El reglamento de la Ley 24.083 de fondos comunes de inversión (sociedad gerente y depositaria, reglamento de gestión, colocación, liquidez, tipos de fondos) y el de los fideicomisos financieros del Código Civil y Comercial (fiduciarios, prospecto, contrato, valores fiduciarios).",
+  leyes:["L:24083:1","L:24083:3","L:24083:4","L:24083:6","L:24083:7","L:24083:13","L:24083:14","L:24083:32","L:26831:2"],
+  caps:[
+    {c:"Cap. I", n:"Fondos comunes de inversión", pts:[
+      "La sociedad gerente se inscribe como Agente de Administración de Productos de Inversión Colectiva (ACPIC); la depositaria, como Agente de Custodia (ACPIC custodia) (art. 1).",
+      "Patrimonio neto mínimo del gerente en tu PDF: $500.000 más $100.000 por cada fondo adicional.",
+      "Valuación diaria del patrimonio del fondo para suscripciones y rescates; rescates en especie con autorización.",
+      "La denominación no puede inducir a error; los fondos especializados tienen que respetar su objeto."
+    ], f:["L:24083:3","L:24083:4"]},
+    {c:"Cap. II", n:"Colocación, reglamento de gestión y tipos de fondos", pts:[
+      "Agentes de colocación y distribución de FCI (ACyD FCI) por convenio con el gerente; los que venden deben ser idóneos.",
+      "Márgenes de liquidez, custodia de los activos, valor de cuotaparte, publicidad.",
+      "Reglamento de gestión tipo: cláusulas generales iguales para todos y cláusulas particulares.",
+      "Regímenes especiales: FCI PyMEs, economías regionales e infraestructura, fondos cerrados, fondos cerrados de créditos, innovación tecnológica, fondos comunes de dinero (money market) y cuotapartes en UVA o UVI."
+    ], hoy:"Los fondos money market (liquidez inmediata) son más de la mitad del patrimonio de la industria. Según CAFCI, a fines de 2024 lideraban Galicia (Fima), Santander, Macro, Bind y BBVA. Desde la RG 1102/2025 una sociedad gerente puede registrarse también como AN, con separación funcional."},
+    {c:"Cap. III", n:"Otras disposiciones de FCI", pts:[
+      "Registro de idóneos de FCI, modalidades de suscripción (presencial, internet, teléfono), liquidación y cancelación de un fondo, operaciones del fondo."
+    ]},
+    {c:"Cap. IV", n:"Fideicomisos financieros", pts:[
+      "Fiduciante transfiere bienes a un fiduciario, que emite valores representativos de deuda (VRD) o certificados de participación (CP) a favor de los beneficiarios (art. 1).",
+      "No hay fideicomiso unilateral; fiduciario y fiduciante no pueden tener accionistas comunes con 10% o más (arts. 2 y 3).",
+      "Fiduciarios: entidades financieras o sociedades inscriptas en el Registro de Fiduciarios Financieros de la CNV (arts. 6 y 7).",
+      "El fiduciario puede delegar la cobranza (administrador), pero siempre designa un Agente de Control y Revisión (arts. 23 a 28).",
+      "Los CP se ofrecen al público en general; los VRD tienen prioridad de cobro."
+    ], hoy:"Fiduciarios reales muy activos: TMF Trust, Banco de Valores (hoy VALO) y Rosario Fiduciaria. Los fideicomisos más frecuentes securitizan préstamos de consumo y tarjetas de crédito (por ejemplo, Mercado Crédito de Mercado Libre o los de tarjetas regionales) y también hay fideicomisos agro e inmobiliarios.", f:["L:24441:1"]}
+  ],
+  hoy:"Es el producto de entrada del inversor minorista: la mayoría de las billeteras y apps invierten el saldo en un FCI money market.",
+  num:[
+    ["PN mínimo sociedad gerente (tu PDF)", "$500.000 + $100.000 por fondo", "Cap. I"],
+    ["Fideicomiso: accionistas comunes", "No pueden tener 10% o más en fiduciario y fiduciante", "Cap. IV art. 3"]
+  ]
+},
+{
+  id:"VI", n:"Mercados y cámaras compensadoras", pags:"367 – 460", est:"central", prio:3,
+  que:"Cómo se organizan los mercados y las cámaras (requisitos, patrimonio, fondos de garantía, gobierno), cómo se liquida y se garantiza, cómo se coloca en primaria (libro o licitación) y qué operaciones existen en secundaria: contado, plazo firme, pase, caución, opciones, préstamo, futuros, cheques, letras, pagarés, warrants, plazos fijos, remates y el hacedor de mercado.",
+  leyes:["L:26831:28","L:26831:29","L:26831:31","L:26831:32","L:26831:34","L:26831:35","L:26831:38","L:26831:39","L:26831:40","L:26831:41","L:26831:44","L:26831:45","L:26831:46"],
+  caps:[
+    {c:"Cap. I", n:"Mercados", pts:[
+      "Sociedades anónimas que hacen oferta pública de sus propias acciones (VN $1.000, un voto) y aplican el código de gobierno societario (arts. 5 y 6).",
+      "En tu PDF, ningún accionista puede tener más del 20% (art. 7). No pueden competir con los agentes, salvo organizar un ALyC Integral (art. 9).",
+      "PN mínimo $25.000.000, o $10.000.000 si usan una cámara compensadora (art. 12). Fondo de garantía del art. 45 con al menos el 50% de las utilidades (art. 15).",
+      "Tienen que tener tribunal arbitral, sistema de monitoreo en tiempo real (stock watch), registro central de órdenes, interconexión con los demás mercados y aprobación previa de la CNV para sus reglamentos.",
+      "Pueden delegar funciones en entidades calificadas (como las bolsas de comercio)."
+    ], f:["L:26831:32","L:26831:45"]},
+    {c:"Cap. II", n:"Cámaras compensadoras", pts:[
+      "Liquidan, compensan y pueden actuar como contraparte central de las operaciones garantizadas. PN mínimo $20.000.000 (art. 7). También constituyen fondo de garantía.",
+      "El mercado que usa una cámara sigue siendo solidariamente responsable."
+    ], f:["L:26831:35"]},
+    {c:"Cap. III", n:"Liquidación y compensación", pts:[
+      "Márgenes y garantías con metodologías de valor en riesgo, aforos, reposición de márgenes; orden de uso de los fondos de garantía ante un incumplimiento.",
+      "Ciberseguridad y ciberresiliencia de las infraestructuras críticas (Sección VII y anexo)."
+    ]},
+    {c:"Cap. IV", n:"Colocación primaria", pts:[
+      "Dos mecanismos: formación de libro (book building) o subasta/licitación pública, siempre por sistemas de un mercado (art. 1).",
+      "Licitación: ofertas firmes, precio de corte uniforme, prorrateo, tramo no competitivo de hasta el 50% salvo emisiones para calificados; puede ser ciega o abierta (arts. 7 y 8).",
+      "Prospecto publicado al menos 3 días hábiles antes; 1 día para emisores frecuentes (2 emisiones en 12 meses) (arts. 8 y 11).",
+      "Monto mínimo de suscripción de hasta $20.000 (art. 5). Estabilización de precios hasta 30 días desde que empieza a negociarse (art. 12)."
+    ]},
+    {c:"Cap. V", n:"Negociación secundaria. Operaciones", pts:[
+      "Regla: prioridad precio-tiempo, por interferencia de ofertas y garantizado. Excepción: segmento bilateral no garantizado para renta fija entre agentes o con calificados (arts. 2 y 3).",
+      "Tipos: contado (inmediato, 24 h y 48 h; venta en descubierto y en corto) y a plazo (plazo firme hasta 11 meses, pase de 7 días o más, caución, opciones directas, préstamo de valores, futuros y opciones sobre futuros) (arts. 13 a 21).",
+      "Caución: el tomador deja valores en garantía, aforados, y recibe pesos; tasa con divisor 365 y CFT en el boleto (art. 17).",
+      "Cheques de pago diferido: segmentos patrocinado, avalado (por una SGR) y directo (garantizado o no); congelamiento de 2 minutos para mejorar la tasa; liquidación a 24 h; en el directo, plazo mínimo 20 días (arts. 27 a 43).",
+      "Pagarés: emitidos por PyMEs, avalados por SGR o fondos públicos, 180 días a 3 años (art. 53). También letras de cambio, warrants y plazos fijos de 365 días o más (arts. 49 a 64).",
+      "CEDIN, remates judiciales y hacedor de mercado (un ALyC que da liquidez con puntas de compra y venta, solo por cuenta propia) (arts. 44 a 72)."
+    ], hoy:"Desde el 27/05/2024 el contado normal de BYMA es T+1 (24 h): el viejo «48 horas» de tu PDF ya no es el estándar. La caución es la herramienta de financiamiento de corto plazo más usada (en pesos y ahora también en dólares). Los cheques se negocian hoy mayormente como ECHEQ, y en 2025 se reglamentó el pagaré producto. El CEDIN (del blanqueo de 2013) prácticamente no existe."}
+  ],
+  hoy:"Los mercados que importan hoy son tres. BYMA (Bolsas y Mercados Argentinos, nacida en 2017 del Merval y la Bolsa de Buenos Aires): acciones, bonos, ON, CEDEAR, cauciones y opciones, y es su propia contraparte central. A3 Mercados (fusión del MAE y Matba Rofex, operativa desde 2025): futuros de dólar y de granos, renta fija mayorista y operaciones entre bancos; su cámara es Argentina Clearing y Registro (ACyRSA). El MAV (Mercado Argentino de Valores, Rosario): el mercado PyME de cheques, pagarés y facturas.",
+  num:[
+    ["PN mínimo mercado (tu PDF)", "$25.000.000 ($10.000.000 si usa cámara)", "Cap. I art. 12"],
+    ["PN mínimo cámara (tu PDF)", "$20.000.000", "Cap. II art. 7"],
+    ["Tenencia máxima por accionista de un mercado (tu PDF)", "20%", "Cap. I art. 7"],
+    ["Fondo de garantía del art. 45", "Al menos 50% de las utilidades anuales", "Cap. I art. 15"],
+    ["Tramo no competitivo", "Hasta 50% de lo adjudicado", "Cap. IV art. 8"],
+    ["Difusión del prospecto", "3 días hábiles (1 día emisor frecuente)", "Cap. IV arts. 8 y 11"],
+    ["Contado normal", "Tu PDF: 48 h · Hoy en BYMA: T+1 (desde 27/05/2024)", "Cap. V art. 14"],
+    ["Plazo firme", "Hasta 11 meses", "Cap. V art. 15"],
+    ["Pase", "Plazo no menor a 7 días", "Cap. V art. 16"],
+    ["Cheque directo", "Mínimo 20 días entre la negociación y el pago", "Cap. V art. 33"],
+    ["Pagaré negociable", "PyME, avalado, de 180 días a 3 años", "Cap. V art. 53"],
+    ["Estabilización", "Hasta 30 días corridos", "Cap. IV art. 12"]
+  ]
+},
+{
+  id:"VII", n:"Agentes de negociación, liquidación y compensación, productores, asesores y corretaje", pags:"461 – 543", est:"central", prio:3,
+  que:"Cada categoría de agente que intermedia o llega al inversor: qué puede hacer, qué tiene prohibido, cuánto patrimonio necesita, cómo se organiza y cómo tiene que tratar a sus clientes. Es el título donde está la respuesta a «quién puede qué».",
+  leyes:["L:26831:2","L:26831:47","L:26831:48","L:26831:49","L:26831:51","L:26831:53","L:26831:54","L:26831:55","L:26831:56"],
+  caps:[
+    {c:"Cap. I", n:"Agentes de negociación (AN)", pts:[
+      "Actúan en primaria y secundaria, para cartera propia o de clientes, con instrucciones precisas (art. 3).",
+      "En tu PDF no pueden cobrar ni pagar, ni recibir o custodiar valores, ni liquidar, ni ser depositantes en Caja de Valores, ni administrar carteras en forma discrecional (art. 4). Liquidan por convenio con un ALyC (art. 5).",
+      "Normas de conducta: conocer al cliente y su perfil de riesgo, prioridad a la orden del cliente sobre la cartera propia, no multiplicar operaciones (churning), mejor ejecución (arts. 29 a 33).",
+      "PN mínimo en tu PDF $1.000.000 con contrapartida del 20% (arts. 14 y 16)."
+    ], hoy:"Hoy el AN puede asesorar y administrar carteras en forma discrecional, total o parcial, con mandato expreso, y su PN mínimo es de 65.350 UVA. En la práctica quedan pocos AN «puros»: casi todos se registran directamente como ALyC."},
+    {c:"Cap. II", n:"Agentes de liquidación y compensación (ALyC)", pts:[
+      "Subcategorías en tu PDF: Integral (liquida lo suyo, lo de sus clientes y lo de otros AN por convenio, y responde por todo) y Propio (solo lo suyo y lo de sus clientes) (art. 2).",
+      "Custodian fondos y valores, con segregación estricta de los activos de clientes (arts. 5 y 7). No pueden disponer de los fondos de los clientes ni financiarlos (arts. 8 y 9). Los saldos líquidos solo se invierten donde el cliente autoriza y la renta es del cliente (art. 10).",
+      "PN mínimo en tu PDF: Integral $15.000.000, Propio $3.500.000, con contrapartida líquida del 50% (arts. 20 y 22)."
+    ], hoy:"Hoy hay cuatro subcategorías: Integral, Propio, Participante Directo (solo futuros y opciones) y ALyC I AGRO. PN mínimo: 470.350 UVA (1.175.000 UVA el I AGRO). Pueden asesorar y administrar carteras en forma discrecional. Nombres reales: Allaria, Balanz, PPI, Cocos, IOL invertironline, Bull Market, Adcap, Galicia Securities, Santander, Macro y Comafi, entre muchos otros."},
+    {c:"Cap. III", n:"Fondo de garantía para reclamos de clientes", pts:[
+      "Lo integran todos los agentes que registran operaciones con un porcentaje de los derechos de mercado; lo administra el mercado, pero no es suyo. La CNV resuelve el reclamo y el mercado paga y recobra al agente."
+    ], f:["L:26831:45"]},
+    {c:"Cap. IV", n:"Agentes productores (AP)", pts:[
+      "En tu PDF: difunden y promocionan valores negociables por contrato con uno o más AN o ALyC. Pueden captar clientes, informar sobre los servicios del agente y darle la documentación de alta (art. 6).",
+      "No pueden recibir ni custodiar fondos o valores, compartir domicilio con el agente, usar sus claves, representar al agente, delegar, gestionar órdenes ni administrar carteras (art. 9).",
+      "Cobran una parte de la comisión del agente; el agente no puede cobrarle más al cliente que trae el AP (art. 8). Sin patrimonio neto mínimo."
+    ], hoy:"Hoy el AP además asesora sobre inversiones, puede vincularse también con un AAGI y referenciar FCI, pero sigue sin poder gestionar órdenes ni administrar carteras. Es tu categoría: la más numerosa del mercado, con miles de inscriptos. Ojo: el texto original de 2013 le permitía gestionar órdenes y administrar carteras; eso ya no rige."},
+    {c:"Cap. V", n:"Agentes asesores de mercados de capitales (AA)", pts:[
+      "Asesoran y cobran honorarios del cliente. Tienen prohibido todo lo demás: custodiar, captar clientes para un AN o ALyC, darle información o documentación de esos agentes, gestionar órdenes, administrar carteras (art. 4)."
+    ], hoy:"Categoría eliminada en 2018 (RG 731): el asesoramiento pasó a los AN, ALyC y AP, y la gestión profesional independiente, al AAGI.", est:"reemplazado"},
+    {c:"Cap. VI", n:"Agentes de corretaje de valores negociables (ACVN)", pts:[
+      "Ponen en relación a dos partes difundiendo precios y volúmenes en un sistema, sin estar ligados a ninguna (art. 1). No tocan fondos ni valores.",
+      "PN mínimo en tu PDF $2.000.000, contrapartida 20% (arts. 9 y 11)."
+    ], hoy:"Muy pocos inscriptos, en el mercado mayorista. Ejemplo real: Tradition Argentina S.A., ACVN N° 487.", est:"nicho"},
+    {c:"Cap. VII", n:"Agente asesor global de inversión (AAGI)", pts:[
+      "Sociedad anónima de objeto exclusivo: asesora, gestiona órdenes y administra carteras con mandato expreso, operando a través de un ALyC o de un intermediario del exterior regulado (art. 2).",
+      "No cobra ni paga por el cliente, no custodia, no comparte domicilio con otro agente, no puede ser cliente del ALyC con el que tiene convenio (art. 6). Revisión anual del perfil de riesgo; prohibida la rotación excesiva (arts. 8 y 9).",
+      "PN mínimo en tu PDF $2.500.000."
+    ], hoy:"Existe y crece de a poco: es la figura del family office o asesor independiente que administra carteras en un ALyC local o en un broker del exterior.", est:"activo"}
+  ],
+  hoy:"La idea que ordena todo: el que toca la plata y los títulos es el ALyC. El AN negocia; el AP, el AAGI y el ACVN nunca tocan fondos ni valores del cliente.",
+  num:[
+    ["AN · PN mínimo", "Tu PDF: $1.000.000 (contrapartida 20%) · Hoy: 65.350 UVA", "Cap. I arts. 14 y 16"],
+    ["ALyC Integral · PN mínimo", "Tu PDF: $15.000.000 · Hoy: 470.350 UVA", "Cap. II art. 20"],
+    ["ALyC Propio · PN mínimo", "Tu PDF: $3.500.000 · Hoy: 470.350 UVA", "Cap. II art. 20"],
+    ["ALyC · contrapartida líquida", "50% del PN mínimo", "Cap. II art. 22"],
+    ["ACVN · PN mínimo", "Tu PDF: $2.000.000 (contrapartida 20%)", "Cap. VI art. 9"],
+    ["AAGI · PN mínimo", "Tu PDF: $2.500.000", "Cap. VII art. 22"],
+    ["AP · PN mínimo", "No tiene", "Cap. IV"],
+    ["Plazo de la CNV para inscribir un agente", "20 días hábiles", "Cap. I art. 17 · Ley 26.831 art. 49"],
+    ["Denegado el registro, reintento", "2 años", "Cap. I art. 18"]
+  ]
+},
+{
+  id:"VIII", n:"Agentes de depósito colectivo y de custodia, registro y pago", pags:"544 – 588", est:"central", prio:2,
+  que:"Dónde quedan los títulos: el agente de depósito colectivo (que recibe los valores de los depositantes y les abre subcuentas a cada comitente) y el agente de custodia, registro y pago (que lleva registros escriturales, custodia y paga los servicios).",
+  leyes:["L:26831:2","L:26831:129","L:26831:130","L:26831:131"],
+  caps:[
+    {c:"Cap. I", n:"Agentes de depósito colectivo (ADC)", pts:[
+      "Sociedad anónima; PN mínimo en tu PDF $74.000.000 (art. 10). Queda inscripta automáticamente como ACRyP (art. 7).",
+      "Depositantes (los ALyC) y subcuentas comitentes a nombre de cada cliente; resumen mensual al titular y bloqueo de subcuentas (arts. 31 a 40).",
+      "Marco propio: Ley 20.643 de depósito colectivo."
+    ], hoy:"Hay un solo depositario central: Caja de Valores S.A., del grupo BYMA. Con la RG 1046/2025 la figura pasó a llamarse Agente Depositario Central de Valores Negociables (ADCVN), con un PN mínimo de 25.500.000 UVA y la función exclusiva de depositario y custodio central de los valores con oferta pública. Tu número de comitente en el ALyC es, en el fondo, una subcuenta en Caja de Valores."},
+    {c:"Cap. II", n:"Agentes de custodia, registro y pago (ACRyP)", pts:[
+      "Llevan el registro electrónico de valores escriturales (anotación en cuenta), la custodia directa o indirecta y el pago de servicios (arts. 1 a 5)."
+    ], hoy:"La categoría pasó por un nombre intermedio (ARyP, sin custodia) y la RG 1046/2025 la volvió a ACRYP: es la única categoría para custodia, registro y pago de valores individuales (pagarés, cheques, facturas), y ahora pueden inscribirse también los mercados, las cámaras y los bancos."}
+  ],
+  hoy:"Caja de Valores es la pieza que nadie ve y que todos usan: guarda los títulos, paga cupones y dividendos a través de los depositantes y emite CEDEAR.",
+  num:[
+    ["ADC · PN mínimo", "Tu PDF: $74.000.000 · Hoy (ADCVN): 25.500.000 UVA", "Cap. I art. 10 · RG 1046/2025"]
+  ]
+},
+{
+  id:"IX", n:"Agentes de calificación de riesgos", pags:"589 – 648", est:"activo", prio:2,
+  que:"Quién puede calificar el riesgo de un valor negociable, con qué metodologías, cómo funciona el consejo de calificación y qué reglas de independencia y conflicto de intereses tiene. Dos variantes: sociedades anónimas y universidades públicas.",
+  leyes:["L:26831:57","L:26831:58"],
+  caps:[
+    {c:"Cap. I", n:"ACR sociedades anónimas y otras organizaciones", pts:[
+      "Registro, prohibiciones (no pueden calificar a quien les paga por otros servicios, por ejemplo), metodologías publicadas, consejo de calificación con actas, informes y código de conducta basado en IOSCO.",
+      "PN mínimo en tu PDF $1.500.000."
+    ]},
+    {c:"Cap. II", n:"ACR universidades públicas (ACR UP)", pts:["Mismo esquema, adaptado a una universidad pública."]}
+  ],
+  hoy:"Registradas hoy en la CNV: Evaluadora Latinoamericana, FIX SCR (afiliada a Fitch), Moody's Local AR y S&P Global Ratings Argentina; y cuatro universidades públicas (UNTREF ACR UP, la UBA, la UNM y la UNICEN). La calificación es obligatoria en algunos productos (por ejemplo, para las entidades de garantía y muchos fideicomisos) y optativa en otros.",
+  num:[["ACR · PN mínimo (tu PDF)", "$1.500.000", "Cap. I"]]
+},
+{
+  id:"X", n:"Registro de mercados, cámaras y agentes", pags:"649 – 653", est:"activo", prio:1,
+  que:"Cómo funcionan los registros públicos de la CNV: asientos, inscripción con efecto constitutivo, suspensión preventiva, caducidad y cancelación.",
+  leyes:["L:26831:47","L:26831:49","L:26831:50","L:26831:52"],
+  caps:[{c:"Único", n:"Secciones I a VIII", pts:[
+    "Los registros son públicos; la inscripción es constitutiva (sin inscripción no se es agente).",
+    "La CNV puede suspender la inscripción como medida preventiva, declarar la caducidad (por inactividad o falta de requisitos) o cancelarla (a pedido o por incumplimiento)."
+  ]}],
+  hoy:"Es lo que consultás en cnv.gov.ar cuando querés saber si alguien está registrado: antes de invertir con un intermediario, se busca su matrícula ahí.",
+  num:[]
+},
+{
+  id:"XI", n:"Prevención del lavado de dinero y financiación del terrorismo", pags:"654 – 661", est:"central", prio:3,
+  que:"Las normas complementarias a las de la UIF para el mercado de capitales: quiénes son sujetos obligados, cómo pueden entrar y salir los fondos de los clientes, cómo se trata a los inversores del exterior y qué idoneidad e integridad se exige.",
+  leyes:["L:26831:1"],
+  caps:[{c:"Único", n:"Secciones I a V", pts:[
+    "Sujetos obligados: los incisos 4, 5 y 22 del art. 20 de la Ley 25.246 (agentes, fiduciarios, sociedades gerentes, entre otros). La norma de fondo es la de la UIF.",
+    "Medios de pago (art. 3): efectivo hasta $1.000 por cliente y por día (Ley 25.345); cheques de cuentas del cliente y, para pagarle, cruzados o «no a la orden»; transferencias solo desde y hacia cuentas bancarias a la vista del cliente. Como máximo 2 pagos por día y por cliente entre efectivo y cheque.",
+    "Operaciones de inversores del exterior y de jurisdicciones no cooperantes: debida diligencia reforzada.",
+    "Requisitos de idoneidad, integridad y solvencia para directivos y accionistas; comunicados preventivos de la CNV."
+  ]}],
+  num:[
+    ["Efectivo por cliente y por día (tu PDF)", "Hasta $1.000, para recibir y para pagar", "Secc. II art. 3"],
+    ["Pagos en efectivo y cheque", "Máximo 2 por día y por cliente", "Secc. II art. 3"]
+  ],
+  hoy:"Es el Módulo 2 del examen y en tu banco de preguntas pesa bastante. En la práctica lo vivís en el alta de cada cliente: legajo, perfil transaccional, declaración de PEP y de sujeto obligado, beneficiario final y origen de fondos."
+},
+{
+  id:"XII", n:"Transparencia en el ámbito de la oferta pública", pags:"662 – 696", est:"central", prio:3,
+  que:"Qué hay que informar y cuándo (hechos relevantes, tenencias), qué deberes tiene cada participante (reserva, lealtad, diligencia, código de conducta, publicidad no engañosa), qué conductas están prohibidas (uso de información privilegiada, manipulación, oferta no autorizada) y el registro de idóneos.",
+  leyes:["L:26831:99","L:26831:100","L:26831:102","L:26831:103","L:26831:112","L:26831:116","L:26831:117"],
+  caps:[
+    {c:"Cap. I", n:"Disposiciones generales", pts:[
+      "Hecho relevante: todo hecho que por su importancia pueda afectar la colocación o el curso de negociación; lista ejemplificativa en el art. 3. Se informa de inmediato por la AIF.",
+      "Régimen de tenencias: directores, síndicos, gerentes y accionistas informan sus tenencias y cambios; también quien alcance el 5% de los votos. En los mercados, desde el 2%."
+    ]},
+    {c:"Cap. II", n:"Obligaciones de los participantes", pts:[
+      "Deber de reserva sobre información no pública; deber de lealtad y diligencia; código de protección al inversor; publicidad veraz y no engañosa."
+    ], f:["L:26831:102"]},
+    {c:"Cap. III", n:"Conductas contrarias a la transparencia", pts:[
+      "Abuso de información privilegiada, manipulación y engaño al mercado, e intervención u oferta pública no autorizada. Reglamenta el art. 117 de la Ley 26.831."
+    ], f:["L:26831:117"]},
+    {c:"Cap. IV", n:"Procedimiento ante incumplimientos", pts:["Sanciones del art. 132 de la Ley 26.831 y deber de colaboración (art. 103)."], f:["L:26831:132"]},
+    {c:"Cap. V", n:"Registro de idóneos", pts:[
+      "Tienen que inscribirse todos los que venden, promocionan o asesoran en contacto con el público a través de un agente (art. 1).",
+      "Requisitos: aprobar el examen (con título secundario, sin curso previo obligatorio), estar vinculado a un agente, inscribirse, hacer los cursos de actualización y cumplir normas de conducta (arts. 3 y 5).",
+      "La idoneidad es de la persona, no del agente; 2 años inactivo o sin actualización implica la baja (art. 4).",
+      "Eximiciones: CFA nivel 1 exime de los módulos 3 a 6; CEFA, CIIA y AFC eximen del examen (art. 7)."
+    ]},
+    {c:"Cap. VI", n:"Derechos, aranceles y comisiones", pts:["Mercados, cámaras y agentes publican sus aranceles y comisiones."]}
+  ],
+  hoy:"Es el título que te toca directamente como idóneo. Los hechos relevantes de todas las emisoras se leen en tiempo real en la AIF de la CNV y en los boletines de BYMA.",
+  num:[
+    ["Idóneo inactivo", "Baja a los 2 años o sin cursos de actualización", "Cap. V art. 4"],
+    ["CFA nivel 1", "Exime de los módulos 3, 4, 5 y 6", "Cap. V art. 7"],
+    ["Tenencias en mercados", "Informan quienes superen el 2%", "Cap. I"]
+  ]
+},
+{
+  id:"XIII", n:"Procedimiento de investigaciones", pags:"697 – 709", est:"activo", prio:2,
+  que:"Cómo la CNV recibe denuncias (incluso anónimas), investiga de oficio y sustancia sumarios, con el procedimiento abreviado como alternativa.",
+  leyes:["L:26831:136","L:26831:138","L:26831:139","L:26831:140"],
+  caps:[
+    {c:"Cap. I", n:"Denuncias e investigaciones", pts:[
+      "El denunciante no es parte del procedimiento. Las investigaciones son reservadas. Puede terminar por reconocimiento de los investigados."
+    ]},
+    {c:"Cap. II", n:"Procedimiento sumarial", pts:[
+      "Abreviado: audiencia preliminar ante un conductor, informe y resolución (art. 140 de la Ley 26.831).",
+      "Sumario: lo instruye una dependencia distinta de la que investigó; derechos del sumariado, prueba, memorial y resolución del directorio."
+    ], f:["L:26831:138"]}
+  ],
+  hoy:"Es la etapa previa a las sanciones del art. 132. Las resoluciones de sumarios son públicas en la web de la CNV.",
+  num:[]
+},
+{
+  id:"XIV", n:"Oficina de Coordinación de Políticas de DDHH, Memoria, Verdad y Justicia", pags:"710 – 711", est:"nicho", prio:1,
+  que:"Informes sobre la actuación de la CNV y de empresas durante la última dictadura. Siete artículos, sin impacto en la operatoria.",
+  leyes:[], caps:[], hoy:"Casi nunca aparece en el examen.", num:[]
+},
+{
+  id:"XV", n:"Autopista de la Información Financiera (AIF)", pags:"712 – 743", est:"central", prio:1,
+  que:"El sistema por el que todos los fiscalizados mandan información a la CNV: credenciales de operador y firmante, deberes de cada uno y qué se envía.",
+  leyes:["L:26831:5"],
+  caps:[
+    {c:"Cap. I", n:"Remisión de información", pts:["Credenciales de operador (carga) y firmante (firma digital); la información publicada tiene carácter de declaración jurada."]},
+    {c:"Cap. II", n:"Fiduciarios financieros", pts:["Información de cada fideicomiso por la AIF."]},
+    {c:"Cap. III", n:"Emisoras de ON", pts:["Información específica de las emisiones."]}
+  ],
+  hoy:"Es la fuente primaria que usás a diario: hechos relevantes, estados contables, prospectos y registros de agentes están en la AIF.",
+  num:[]
+},
+{
+  id:"XVI", n:"Disposiciones generales", pags:"744 – 753", est:"activo", prio:1,
+  que:"Notificaciones, forma de las futuras resoluciones y delegación de facultades del directorio de la CNV en sus gerencias (Emisoras, Productos de Inversión Colectiva, Agentes y Mercados, Prevención del Lavado).",
+  leyes:["L:26831:23"],
+  caps:[{c:"Único", n:"Notificaciones y delegaciones", pts:["Qué puede resolver cada gerencia sin pasar por el directorio (autorización automática de oferta pública, reorganizaciones, registros)."]}],
+  hoy:"La RG 1097/2025 derogó la sección de definiciones de este título y la llevó al nuevo Título I.",
+  num:[]
+},
+{
+  id:"XVII", n:"Tasas de fiscalización y control y aranceles de autorización", pags:"754 – 761", est:"activo", prio:1,
+  que:"Cuánto cobra la CNV y cuándo: tasa anual de fiscalización y arancel de autorización por cada emisión.",
+  leyes:["L:26831:14","L:26831:15","L:26831:16"],
+  caps:[{c:"Único", n:"Tasas y aranceles", pts:["Mora automática si no se paga. Exenciones: PyMEs y otras previstas en la ley (art. 16 de la Ley 26.831)."]}],
+  hoy:"Para el examen alcanza con saber que existen y que las PyMEs están exentas.",
+  num:[]
+},
+{
+  id:"XVIII", n:"Disposiciones transitorias", pags:"762 – 786", est:"reemplazado", prio:1,
+  que:"Las reglas para pasar del régimen de la Ley 17.811 al de la 26.831: cómo se reconvirtieron los viejos mercados de valores, las bolsas de comercio y los agentes de bolsa, plazos de adecuación de cada categoría.",
+  leyes:["L:26831:154","L:26831:155"],
+  caps:[{c:"Caps. I a XIV", n:"Transición por actor", pts:["Un capítulo por actor: productos de inversión colectiva, mercados, cámaras, AN y ALyC, depósito colectivo, productores, corretaje, calificadoras, idóneos, bolsas de comercio, denuncias penales y emisoras."]}],
+  hoy:"Es historia: explica de dónde vienen los nombres de hoy. Las viejas sociedades de bolsa se convirtieron en ALyC, el Merval y la Bolsa de Buenos Aires se fusionaron en BYMA (2017) y las bolsas de comercio quedaron como entidades calificadas.",
+  num:[]
+},
+{
+  id:"XIX", n:"Plataformas de financiamiento colectivo (crowdfunding)", pags:"787 – 806", est:"nicho", prio:2,
+  que:"El régimen de la Ley 27.349 de apoyo al capital emprendedor: plataformas (PFC) que ponen en contacto a emprendedores con inversores, con límites por proyecto y por inversor.",
+  leyes:[],
+  caps:[{c:"Cap. I", n:"Secciones I a XV", pts:[
+    "La PFC es una sociedad anónima de objeto exclusivo; PN mínimo en tu PDF $250.000; tiene que designar un responsable de PFC.",
+    "Proyecto: hasta $20.000.000 de emisiones en 12 meses; período de suscripción no menor a 30 días.",
+    "Inversor: no más del 20% de sus ingresos brutos anuales por año calendario en crowdfunding, y no más del 5% de un proyecto ni más de $20.000 (salvo inversores calificados).",
+    "Mercado de reventa dentro de la propia plataforma."
+  ]}],
+  hoy:"Existe, pero el uso es chico y hay muy pocas plataformas registradas. Es de las figuras que conviene conocer para el examen sin profundizar.",
+  num:[
+    ["PFC · PN mínimo (tu PDF)", "$250.000", "art. 11"],
+    ["Tope por proyecto (tu PDF)", "$20.000.000 en 12 meses", "art. 45"],
+    ["Tope por inversor", "20% de ingresos brutos anuales; 5% del proyecto o $20.000", "arts. 55 y 56"]
+  ]
+}
+];
+
+/* ================= Quién es quién hoy (práctica del mercado, septiembre 2026) ================= */
+const HOY_ACTORES = [
+  {cat:"Regulador", sig:"CNV", est:"central", tit:"I–XIX", que:"Autoriza, registra, supervisa y sanciona. Todo pasa por su registro y por la AIF.", nombres:"Comisión Nacional de Valores"},
+  {cat:"Mercados", sig:"Mercado", est:"central", tit:"VI", que:"Organizan la negociación y garantizan las operaciones. Tres jugadores relevantes.", nombres:"BYMA (acciones, bonos, CEDEAR, cauciones, opciones) · A3 Mercados (fusión MAE + Matba Rofex: futuros, dólar, renta fija mayorista) · MAV (cheques, pagarés, facturas PyME)"},
+  {cat:"Cámaras compensadoras", sig:"Cámara", est:"central", tit:"VI", que:"Liquidan y actúan como contraparte central.", nombres:"Argentina Clearing y Registro (ACyRSA, del grupo A3) · BYMA opera su propia compensación"},
+  {cat:"Depositario central", sig:"ADCVN", est:"central", tit:"VIII", que:"Guarda los títulos con oferta pública, abre subcuentas a cada comitente y paga servicios.", nombres:"Caja de Valores S.A. (grupo BYMA): es el único"},
+  {cat:"Custodia, registro y pago", sig:"ACRYP", est:"activo", tit:"VIII", que:"Registro escritural, custodia y pago de valores individuales. Rediseñado en 2025 (RG 1046).", nombres:"Caja de Valores y, desde 2025, pueden inscribirse mercados, cámaras y bancos"},
+  {cat:"Liquidación y compensación", sig:"ALyC", est:"central", tit:"VII", que:"El «broker» que conocés: abre la cuenta comitente, custodia, liquida, asesora y puede administrar carteras.", nombres:"Allaria · Balanz · PPI · Cocos Capital · IOL invertironline · Bull Market Brokers · Adcap · Galicia Securities · bancos como Santander, Macro, Comafi y BBVA"},
+  {cat:"Negociación", sig:"AN", est:"nicho", tit:"VII", que:"Negocia pero liquida a través de un ALyC Integral. Quedan pocos.", nombres:"Mayormente agentes chicos del interior que liquidan por un ALyC Integral"},
+  {cat:"Productor", sig:"AP", est:"central", tit:"VII", que:"Capta y asesora clientes para un AN, ALyC o AAGI, sin tocar plata ni títulos. Es tu categoría.", nombres:"Miles de personas humanas y sociedades inscriptas; cobran una parte de la comisión"},
+  {cat:"Asesor global", sig:"AAGI", est:"activo", tit:"VII", que:"Asesor independiente que gestiona órdenes y administra carteras con mandato, en un ALyC o afuera.", nombres:"Family offices y boutiques de gestión"},
+  {cat:"Asesor de mercado de capitales", sig:"AAMC", est:"reemplazado", tit:"VII", que:"Eliminado en 2018 (RG 731). Sus funciones se repartieron entre AN, ALyC, AP y AAGI.", nombres:"No existe más"},
+  {cat:"Corretaje", sig:"ACVN", est:"nicho", tit:"VII", que:"Pone en contacto a dos partes en el segmento mayorista.", nombres:"Tradition Argentina S.A. (ACVN N° 487), entre muy pocos"},
+  {cat:"Sociedades gerentes de FCI", sig:"ACPIC", est:"central", tit:"V", que:"Administran los fondos comunes. Desde 2025 pueden ser también AN.", nombres:"Fima (Galicia) · Santander Asset Management · Macro · Bind · BBVA · Balanz · Pellegrini (Banco Nación)"},
+  {cat:"Depositarias de FCI", sig:"ACPIC custodia", est:"central", tit:"V", que:"Custodian los activos del fondo; no pueden ser el mismo banco que actúa como gerente del fondo.", nombres:"Bancos como VALO (ex Banco de Valores), Comafi, Galicia y Santander"},
+  {cat:"Fiduciarios financieros", sig:"Fiduciario", est:"activo", tit:"V", que:"Emiten los valores de los fideicomisos financieros.", nombres:"TMF Trust · VALO · Rosario Fiduciaria"},
+  {cat:"Calificadoras", sig:"ACR", est:"activo", tit:"IX", que:"Califican el riesgo crediticio.", nombres:"FIX SCR (Fitch) · Moody's Local AR · S&P Global Ratings Argentina · Evaluadora Latinoamericana · UNTREF ACR UP y otras universidades públicas"},
+  {cat:"Entidades de garantía", sig:"SGR", est:"central", tit:"II", que:"Avalan cheques, pagarés y ON PyME: el inversor corre el riesgo de la SGR.", nombres:"Garantizar · Acindar Pymes · Aval Federal · FoGaBA (fondo público bonaerense)"},
+  {cat:"Plataformas de crowdfunding", sig:"PFC", est:"nicho", tit:"XIX", que:"Financiamiento colectivo de emprendimientos.", nombres:"Muy pocas registradas; uso marginal"}
+];
+
+/* ================= Tarjetas de micro-learning (recuperación activa) ================= */
+const FLASH = [
+/* I */
+{id:"n-I-1", t:"I", q:"¿Qué resolución reemplazó en 2025 el Título I de las Normas y qué contiene ahora?", a:"La RG 1097/2025. El Título I pasó a tener el ámbito de la CNV y un glosario de unas 130 definiciones, entre ellas Inversor Calificado (14 categorías) y Valor Negociable Temático.", f:"RG 1097/2025"},
+{id:"n-I-2", t:"I", q:"¿Qué ley y qué decreto reglamentan las Normas CNV?", a:"La Ley 26.831 de Mercado de Capitales y su Decreto Reglamentario 1023/13.", f:"Tít. I"},
+/* II */
+{id:"n-II-1", t:"II", q:"Recompra de acciones propias: ¿tope y plazo para vender el exceso?", a:"Hasta el 10% del capital social; lo que exceda se enajena dentro de los 90 días hábiles desde la adquisición.", f:"Tít. II Cap. I art. 12"},
+{id:"n-II-2", t:"II", q:"¿Con qué fondos puede una emisora recomprar sus acciones?", a:"Con ganancias realizadas y líquidas o reservas libres o facultativas del último balance, acreditando liquidez y solvencia, con informe del órgano de fiscalización y de contador independiente.", f:"Tít. II Cap. I art. 12 · Ley 26.831 art. 64"},
+{id:"n-II-3", t:"II", q:"¿Cuándo NO puede una emisora recomprar sus propias acciones?", a:"Si hay una OPA conocida, si no pasó 1 día hábil desde el anuncio de la recompra, o si las acciones no están totalmente integradas.", f:"Tít. II Cap. I art. 13"},
+{id:"n-II-4", t:"II", q:"¿Dentro de qué plazo se celebra la asamblea ordinaria que trata el balance?", a:"Dentro de los 4 meses de la fecha de cierre del ejercicio.", f:"Tít. II Cap. II art. 3"},
+{id:"n-II-5", t:"II", q:"Delegación en el directorio para fijar las condiciones de una emisión: ¿plazos?", a:"Las facultades delegadas se ejercen dentro de los 2 años; la subdelegación no puede superar 3 meses (prorrogable).", f:"Tít. II Cap. II art. 1"},
+{id:"n-II-6", t:"II", q:"¿Qué efecto tiene la presencia del veedor de la CNV en una asamblea?", a:"Actúa como inspector con función de veeduría; su presencia no convalida el acto ni las resoluciones.", f:"Tít. II Cap. II art. 20"},
+{id:"n-II-7", t:"II", q:"Honorarios del directorio sin distribución de dividendos: ¿tope?", a:"5% de la utilidad computable; se incrementa proporcionalmente con la distribución hasta el 25% si se reparte todo.", f:"Tít. II Cap. III art. 4 · Ley 19.550 art. 261"},
+{id:"n-II-8", t:"II", q:"¿Qué porcentaje define una «participación significativa» a los fines de la independencia de directores?", a:"El 15% del capital social (o menos si da derecho a elegir directores por clase o hay convenios de gobierno).", f:"Tít. II Cap. III art. 11"},
+{id:"n-II-9", t:"II", q:"¿Quién designa al comité de auditoría y cómo se integra?", a:"Lo designa el directorio entre sus miembros con versación financiera o contable; la mayoría deben ser independientes.", f:"Tít. II Cap. III arts. 15 y 16 · Ley 26.831 art. 109"},
+{id:"n-II-10", t:"II", q:"¿En qué plazo presenta el comité de auditoría su plan de actuación?", a:"Dentro de los 60 días corridos de iniciado el ejercicio.", f:"Tít. II Cap. III art. 18"},
+{id:"n-II-11", t:"II", q:"Registro de auditores externos: ¿antigüedad en la matrícula y experiencia exigidas?", a:"5 años de matrícula y 3 años de experiencia en auditoría.", f:"Tít. II Cap. III art. 30"},
+{id:"n-II-12", t:"II", q:"¿Qué porcentaje del capital necesitan los minoritarios para pedir la designación de un auditor?", a:"El 5% del capital social; pueden proponer hasta 3 estudios independientes y se hacen cargo del costo.", f:"Tít. II Cap. III art. 26 · Ley 26.831 art. 108"},
+{id:"n-II-13", t:"II", q:"¿En qué plazo se pagan los dividendos en efectivo aprobados por la asamblea?", a:"Dentro de los 30 días corridos de su aprobación.", f:"Tít. II Cap. III art. 37"},
+{id:"n-II-14", t:"II", q:"Autorización automática de oferta pública: ¿cuánto tiene la CNV para observar?", a:"5 días hábiles para acciones liberadas; 10 días hábiles para acciones por suscripción o valores de deuda. Sin observaciones, queda autorizada sin resolución expresa.", f:"Tít. II Cap. V arts. 18 a 20"},
+{id:"n-II-15", t:"II", q:"Programa global de ON: ¿plazo para emitir y plazo mínimo de amortización?", a:"Las emisiones se hacen dentro de los 5 años de la autorización; el plazo mínimo de amortización es de 7 días hábiles.", f:"Tít. II Cap. V arts. 38 y 43"},
+{id:"n-II-16", t:"II", q:"¿Plazo mínimo de una ON denominada en UVA o UVI?", a:"2 años desde la emisión.", f:"Tít. II Cap. V art. 40 bis"},
+{id:"n-II-17", t:"II", q:"Valores representativos de deuda de corto plazo: ¿plazo máximo y quién puede comprarlos?", a:"Hasta 1 año (365 días); solo inversores calificados.", f:"Tít. II Cap. V arts. 56 y 61"},
+{id:"n-II-18", t:"II", q:"¿Quiénes NO pueden ser PyME CNV aunque cumplan los topes de ingresos?", a:"Bancos, compañías de seguros, mercados autorizados, empresas de servicios públicos y las controladas o vinculadas a grupos que no son PyME.", f:"Tít. II Cap. VI arts. 4 y 5"},
+{id:"n-II-19", t:"II", q:"¿Qué beneficios tiene una emisora PyME CNV?", a:"No necesita comité de auditoría, está exenta de tasas y aranceles de la CNV y tiene un régimen informativo simplificado.", f:"Tít. II Cap. VI arts. 8 y 9"},
+{id:"n-II-20", t:"II", q:"PyME CNV Garantizada: ¿quién garantiza y quién puede invertir hoy?", a:"La garantiza al 100% una entidad de garantía (SGR, fondo público o banco); hoy puede comprarla cualquier inversor, con tope de emisión de 10.000.000 UVA.", f:"Tít. II Cap. VI Secc. III · CNV"},
+{id:"n-II-21", t:"II", q:"¿Qué es un CEDEAR y qué diferencia hay entre patrocinado y no patrocinado?", a:"Un certificado emitido en el país que representa valores del exterior depositados afuera. Patrocinado: participa el emisor del subyacente y asume deberes de información; no patrocinado: los deberes se limitan a lo que publica en su mercado de origen.", f:"Tít. II Cap. VIII arts. 8 a 15"},
+{id:"n-II-22", t:"II", q:"¿Qué leyenda obligatoria lleva la primera página de un prospecto?", a:"Que la CNV no emitió juicio sobre los datos y que la veracidad de la información es responsabilidad del directorio, la sindicatura y los auditores.", f:"Tít. II Cap. IX art. 7"},
+/* III */
+{id:"n-III-1", t:"III", q:"¿Qué exige el retiro voluntario de la oferta pública de acciones?", a:"Una oferta pública de adquisición previa, a precio equitativo, dirigida a todos los accionistas.", f:"Tít. III Cap. I art. 2 · Ley 26.831 art. 97"},
+{id:"n-III-2", t:"III", q:"En el texto de tu PDF, ¿qué porcentajes de participación significativa obligan a una OPA?", a:"35% (obliga a ofertar al menos hasta el 50%) y más del 50% (obliga a ofertar por el 100%).", f:"Tít. III Cap. II arts. 9 a 11"},
+{id:"n-III-3", t:"III", q:"Después de la Ley 27.440, ¿qué dispara la OPA obligatoria?", a:"Alcanzar una participación de control: 50% o más de los votos, o un porcentaje menor si se ejerce una influencia dominante.", f:"Ley 26.831 art. 87"},
+{id:"n-III-4", t:"III", q:"¿Qué sanción tiene quien adquiere el control sin lanzar la OPA obligatoria?", a:"No puede ejercer los derechos políticos de esas acciones y los acuerdos son ineficaces a efectos administrativos; además, sanciones del art. 132.", f:"Tít. III Cap. II arts. 92 a 95"},
+{id:"n-III-5", t:"III", q:"¿Qué deber tiene el directorio de la sociedad afectada por una OPA?", a:"Neutralidad (no puede frustrar la oferta) y emitir un informe con su opinión fundada sobre la oferta.", f:"Tít. III Cap. II arts. 36 a 40"},
+{id:"n-III-6", t:"III", q:"¿Se puede revocar una OPA?", a:"No: es irrevocable. Solo se puede desistir en los supuestos tasados (por ejemplo, oferta competidora o autorización denegada de defensa de la competencia).", f:"Tít. III Cap. II arts. 43 y 55"},
+{id:"n-III-7", t:"III", q:"¿Qué es el control casi total?", a:"Cuando alguien tiene el 95% o más del capital: los minoritarios pueden exigirle que compre, y él puede declarar la adquisición del remanente.", f:"Ley 26.831 art. 92"},
+/* IV */
+{id:"n-IV-1", t:"IV", q:"¿Plazo para presentar los estados financieros anuales?", a:"70 días corridos desde el cierre, o 2 días desde su aprobación por el directorio (lo que ocurra primero), y al menos 20 días antes de la asamblea.", f:"Tít. IV Cap. I art. 1"},
+{id:"n-IV-2", t:"IV", q:"¿Plazo para presentar los estados financieros trimestrales?", a:"42 días corridos desde el cierre del trimestre.", f:"Tít. IV Cap. I art. 1"},
+{id:"n-IV-3", t:"IV", q:"¿Con qué normas contables presentan las emisoras de acciones y ON?", a:"Con NIIF, por la Resolución Técnica 26 de la FACPCE. Bancos y aseguradoras, con las normas del BCRA y de la SSN.", f:"Tít. IV Cap. III art. 1"},
+{id:"n-IV-4", t:"IV", q:"¿Cómo se informa el cumplimiento del código de gobierno societario?", a:"En un anexo de la memoria, bajo la lógica «cumplir o explicar»: cumplimiento total, parcial o no cumplimiento, justificando.", f:"Tít. IV Cap. I art. 1"},
+/* V */
+{id:"n-V-1", t:"V", q:"¿En qué categorías se inscriben la sociedad gerente y la depositaria de un FCI?", a:"Gerente: Agente de Administración de Productos de Inversión Colectiva. Depositaria: Agente de Custodia de Productos de Inversión Colectiva.", f:"Tít. V Cap. I art. 1"},
+{id:"n-V-2", t:"V", q:"¿Puede una entidad financiera ser gerente y depositaria del mismo FCI?", a:"No: la entidad financiera que es sociedad gerente no puede ser depositaria del mismo fondo.", f:"Ley 24.083 art. 14"},
+{id:"n-V-3", t:"V", q:"¿Qué tipo de FCI concentra más de la mitad del patrimonio de la industria?", a:"Los money market (fondos comunes de dinero), de liquidez inmediata.", f:"CAFCI · Tít. V Cap. II Secc. IX"},
+{id:"n-V-4", t:"V", q:"¿Qué cambió la RG 1102/2025 para las sociedades gerentes?", a:"Pueden inscribirse además como AN, con separación funcional y controles de conflicto de intereses; no pueden intervenir en operaciones de sus propios fondos.", f:"RG 1102/2025"},
+{id:"n-V-5", t:"V", q:"Fideicomiso financiero: ¿qué dos tipos de valores fiduciarios hay?", a:"Valores representativos de deuda (VRD), con prioridad de cobro, y certificados de participación (CP), que emite siempre el fiduciario.", f:"Tít. V Cap. IV arts. 29 a 36"},
+{id:"n-V-6", t:"V", q:"¿Puede constituirse un fideicomiso financiero por acto unilateral?", a:"No. Y fiduciario y fiduciante no pueden tener accionistas comunes con el 10% o más del capital.", f:"Tít. V Cap. IV arts. 2 y 3"},
+{id:"n-V-7", t:"V", q:"¿Qué figura debe designar siempre el fiduciario financiero?", a:"Un Agente de Control y Revisión, que controla la cartera fideicomitida y la cobranza.", f:"Tít. V Cap. IV art. 27"},
+{id:"n-V-8", t:"V", q:"¿Quiénes pueden ser fiduciarios financieros?", a:"Entidades financieras autorizadas o sociedades inscriptas en el Registro de Fiduciarios Financieros de la CNV.", f:"Tít. V Cap. IV arts. 6 y 7"},
+/* VI */
+{id:"n-VI-1", t:"VI", q:"¿Qué forma jurídica tiene un mercado y qué pasa con sus acciones?", a:"Sociedad anónima que hace oferta pública de sus propias acciones (ordinarias, VN $1.000, un voto) y aplica el código de gobierno societario.", f:"Tít. VI Cap. I arts. 5 y 6 · Ley 26.831 art. 31"},
+{id:"n-VI-2", t:"VI", q:"¿Qué porcentaje de las utilidades va al fondo de garantía del art. 45?", a:"Al menos el 50% de las utilidades anuales líquidas y realizadas.", f:"Tít. VI Cap. I art. 15"},
+{id:"n-VI-3", t:"VI", q:"PN mínimo de un mercado y de una cámara en tu PDF", a:"Mercado $25.000.000 ($10.000.000 si usa cámara compensadora); cámara $20.000.000.", f:"Tít. VI Cap. I art. 12 · Cap. II art. 7"},
+{id:"n-VI-4", t:"VI", q:"¿Cuáles son los dos mecanismos de colocación primaria?", a:"Formación de libro (book building) y subasta o licitación pública, siempre por sistemas informáticos de un mercado.", f:"Tít. VI Cap. IV art. 1"},
+{id:"n-VI-5", t:"VI", q:"Licitación pública: ¿tope del tramo no competitivo?", a:"Hasta el 50% de lo adjudicado (no se exige si la emisión es para inversores calificados).", f:"Tít. VI Cap. IV art. 8"},
+{id:"n-VI-6", t:"VI", q:"¿Cuántos días antes se publica el prospecto definitivo y cuándo se reduce?", a:"3 días hábiles antes de la licitación; 1 día hábil para un emisor frecuente (2 emisiones en los últimos 12 meses).", f:"Tít. VI Cap. IV arts. 8 y 11"},
+{id:"n-VI-7", t:"VI", q:"¿Hasta cuándo pueden hacerse operaciones de estabilización?", a:"Hasta 30 días corridos desde el primer día de negociación secundaria, solo por agentes de la colocación y avisado en el prospecto.", f:"Tít. VI Cap. IV art. 12"},
+{id:"n-VI-8", t:"VI", q:"¿Cuál es la regla general de negociación secundaria?", a:"Prioridad precio-tiempo, por interferencia de ofertas y con garantía del mercado o la cámara.", f:"Tít. VI Cap. V art. 2"},
+{id:"n-VI-9", t:"VI", q:"¿Qué plazos de contado prevé tu PDF y cuál es el estándar hoy?", a:"Contado inmediato, 24 h y 48 h (contado normal). Desde el 27/05/2024 el contado normal en BYMA es T+1.", f:"Tít. VI Cap. V art. 14 · BYMA"},
+{id:"n-VI-10", t:"VI", q:"Venta en descubierto vs. venta en corto", a:"Descubierto: vendés y comprás después para entregar. En corto: vendés valores que tomaste prestados en la misma jornada, a precio igual o mayor que la última operación.", f:"Tít. VI Cap. V art. 14"},
+{id:"n-VI-11", t:"VI", q:"Plazo firme: ¿hasta cuántos meses?", a:"Hasta 11 meses, con liquidación el último día hábil del mes pactado.", f:"Tít. VI Cap. V art. 15"},
+{id:"n-VI-12", t:"VI", q:"Pase: ¿plazo mínimo?", a:"7 días.", f:"Tít. VI Cap. V art. 16"},
+{id:"n-VI-13", t:"VI", q:"Caución: ¿quién entrega la garantía y qué recibe?", a:"El tomador deja valores negociables en garantía (aforados) sin perder su propiedad y recibe pesos; al vencimiento devuelve el valor aforado más gastos. Divisor 365 y CFT en el boleto.", f:"Tít. VI Cap. V art. 17"},
+{id:"n-VI-14", t:"VI", q:"¿Sobre qué instrumentos NO se puede hacer plazo firme, pase ni caución?", a:"Cheques de pago diferido, letras de cambio, pagarés, certificados de depósito, warrants y plazos fijos.", f:"Tít. VI Cap. V arts. 15 a 17"},
+{id:"n-VI-15", t:"VI", q:"¿Para qué se permite el préstamo de valores?", a:"Para cubrir faltantes transitorios en la liquidación y para concertar ventas en corto. Tiene garantía del mercado o la cámara.", f:"Tít. VI Cap. V art. 19"},
+{id:"n-VI-16", t:"VI", q:"Segmentos de cheques de pago diferido", a:"Patrocinado (el librador se registra en la CNV), avalado (garantizado por una SGR u otra entidad de garantía) y directo (garantizado o no garantizado).", f:"Tít. VI Cap. V art. 31"},
+{id:"n-VI-17", t:"VI", q:"¿Qué es el congelamiento de plaza en la negociación de cheques?", a:"Después de cada concertación hay 2 minutos para que otro comprador mejore la tasa; se repite hasta que el precio se estabiliza.", f:"Tít. VI Cap. V art. 29"},
+{id:"n-VI-18", t:"VI", q:"Cheque directo: ¿plazo mínimo hasta el pago?", a:"20 días corridos entre su ofrecimiento a la negociación y la fecha de pago.", f:"Tít. VI Cap. V art. 33"},
+{id:"n-VI-19", t:"VI", q:"Pagaré negociable en el mercado: ¿requisitos?", a:"Emitido por una PyME, con cláusula «sin protesto», plazo de 180 días a 3 años y avalado por una SGR o un fondo de garantía público.", f:"Tít. VI Cap. V art. 53"},
+{id:"n-VI-20", t:"VI", q:"¿Qué hace el hacedor de mercado y quién puede serlo?", a:"Un ALyC habilitado por el mercado que da liquidez con puntas de compra y venta con diferencial máximo, siempre por cuenta propia.", f:"Tít. VI Cap. V arts. 70 y 71"},
+{id:"n-VI-21", t:"VI", q:"¿Qué es A3 Mercados?", a:"El mercado nacido de la fusión del MAE y Matba Rofex (operativo desde 2025): futuros, dólar, renta fija mayorista. Su cámara es Argentina Clearing y Registro.", f:"Práctica actual"},
+{id:"n-VI-22", t:"VI", q:"¿De qué se especializa el MAV?", a:"Es el mercado del financiamiento PyME: cheques, pagarés y facturas de crédito electrónicas.", f:"Práctica actual"},
+/* VII */
+{id:"n-VII-1", t:"VII", q:"¿Qué no puede hacer un AN según tu PDF?", a:"Cobrar o pagar a clientes, recibir o transferir valores, custodiar valores o fondos, liquidar directamente, ser depositante en Caja de Valores ni administrar carteras en forma discrecional.", f:"Tít. VII Cap. I art. 4"},
+{id:"n-VII-2", t:"VII", q:"¿Cómo liquida sus operaciones un AN?", a:"A través de un ALyC Integral miembro del mercado, con convenio firmado antes de empezar a operar.", f:"Tít. VII Cap. I art. 5"},
+{id:"n-VII-3", t:"VII", q:"¿Qué aspectos tiene que contemplar el perfil de riesgo del cliente?", a:"Experiencia, conocimiento de los instrumentos, objetivo de inversión, situación financiera, horizonte, porcentaje de ahorros destinado, nivel de ahorro que está dispuesto a arriesgar y cualquier otra circunstancia relevante.", f:"Tít. VII Cap. I art. 29"},
+{id:"n-VII-4", t:"VII", q:"¿Qué debe priorizar un agente cuando tiene una orden de un cliente y quiere operar para cartera propia?", a:"La orden del cliente: no puede anteponer su cartera propia a órdenes de clientes pendientes de la misma especie y condiciones.", f:"Tít. VII Cap. I art. 29 h)"},
+{id:"n-VII-5", t:"VII", q:"Diferencia entre ALyC Integral y ALyC Propio", a:"El Integral liquida además para otros AN por convenio y responde por ellos; el Propio solo liquida lo suyo y lo de sus clientes.", f:"Tít. VII Cap. II art. 2"},
+{id:"n-VII-6", t:"VII", q:"¿Qué subcategorías de ALyC existen hoy?", a:"Integral, Propio, Participante Directo (solo futuros y opciones) y ALyC I AGRO.", f:"Normas vigentes Tít. VII Cap. II art. 5"},
+{id:"n-VII-7", t:"VII", q:"PN mínimo de ALyC y AN hoy", a:"ALyC Propio o Integral: 470.350 UVA (I AGRO: 1.175.000 UVA). AN: 65.350 UVA. Contrapartida líquida del ALyC: 50%.", f:"Normas vigentes"},
+{id:"n-VII-8", t:"VII", q:"¿Puede un ALyC financiar a sus clientes?", a:"No: no puede conceder financiamiento, préstamos ni adelantos a clientes, a AN ni a clientes de AN, ni siquiera por cesión de derechos.", f:"Tít. VII Cap. II art. 9"},
+{id:"n-VII-9", t:"VII", q:"¿Qué pasa con los saldos líquidos de los clientes al final del día?", a:"Solo se invierten en los activos que el cliente autorizó y la renta es del cliente.", f:"Tít. VII Cap. II art. 10"},
+{id:"n-VII-10", t:"VII", q:"¿Quién administra el fondo de garantía para reclamos de clientes y de quién es?", a:"Lo administra el mercado, pero no es de su propiedad; lo integran los agentes con un porcentaje de los derechos de mercado.", f:"Tít. VII Cap. III arts. 1 y 6"},
+{id:"n-VII-11", t:"VII", q:"¿Qué puede hacer hoy un agente productor?", a:"Asesorar, difundir y promocionar valores, captar clientes para el AN, ALyC o AAGI con el que tiene contrato y referenciar FCI.", f:"Normas vigentes Tít. VII (AP)"},
+{id:"n-VII-12", t:"VII", q:"¿Qué tiene prohibido el agente productor?", a:"Recibir o custodiar fondos y valores, compartir domicilio con el agente, usar su denominación, representarlo, delegar, usar claves del cliente, gestionar órdenes y administrar carteras.", f:"Tít. VII Cap. IV art. 9"},
+{id:"n-VII-13", t:"VII", q:"¿Cómo cobra el agente productor?", a:"Con una parte de la comisión del AN o ALyC (cesión de comisiones). El agente no puede cobrarle más al cliente que trae el AP.", f:"Tít. VII Cap. IV art. 8"},
+{id:"n-VII-14", t:"VII", q:"¿Qué pasó con el agente asesor de mercado de capitales (AAMC)?", a:"Se eliminó en 2018 (RG 731): el asesoramiento pasó a AN, ALyC y AP, y la gestión independiente, al AAGI.", f:"RG 731/2018"},
+{id:"n-VII-15", t:"VII", q:"¿Qué es un ACVN y qué no puede hacer?", a:"Pone en relación a dos partes difundiendo ofertas en un sistema, sin estar ligado a ninguna. No recibe ni custodia fondos o valores ni opera para sí en su sistema.", f:"Tít. VII Cap. VI art. 1"},
+{id:"n-VII-16", t:"VII", q:"¿Qué servicios presta un AAGI y a través de quién?", a:"Asesoramiento, gestión de órdenes y administración de carteras con mandato expreso, operando por un ALyC o un intermediario del exterior regulado de un país cooperador.", f:"Tít. VII Cap. VII art. 2"},
+{id:"n-VII-17", t:"VII", q:"¿Cada cuánto revisa el AAGI el perfil del cliente?", a:"Como mínimo una vez por año, y le comunica el resultado.", f:"Tít. VII Cap. VII art. 8"},
+{id:"n-VII-18", t:"VII", q:"¿En cuánto tiempo resuelve la CNV la inscripción de un agente?", a:"20 días hábiles desde que la documentación está completa; si la deniega, se puede reintentar recién a los 2 años.", f:"Tít. VII Cap. I arts. 17 y 18 · Ley 26.831 art. 49"},
+{id:"n-VII-19", t:"VII", q:"Incompatibilidad de condenados para integrar un agente: ¿por cuánto tiempo?", a:"Hasta 10 años después de cumplida la condena (delitos de los arts. 176 a 180 del Código Penal, con ánimo de lucro o contra la fe pública). Fallidos: 5 años desde la rehabilitación.", f:"Tít. VII Cap. I art. 7"},
+/* VIII */
+{id:"n-VIII-1", t:"VIII", q:"¿Quién es el único depositario central de valores en la Argentina?", a:"Caja de Valores S.A., del grupo BYMA (hoy ADCVN).", f:"Práctica actual · RG 1046/2025"},
+{id:"n-VIII-2", t:"VIII", q:"¿Qué cambió la RG 1046/2025 en custodia?", a:"El ADCVN queda como depositario central de los valores con oferta pública (PN 25.500.000 UVA) y el ACRYP pasa a ser la única categoría para custodia, registro y pago de valores individuales; pueden serlo mercados, cámaras y bancos.", f:"RG 1046/2025"},
+{id:"n-VIII-3", t:"VIII", q:"Depositante y comitente en Caja de Valores: ¿quién es quién?", a:"El depositante es el agente (ALyC) que tiene cuenta en Caja de Valores; el comitente es el cliente, titular de una subcuenta dentro de la cuenta del depositante.", f:"Tít. VIII Cap. I"},
+{id:"n-VIII-4", t:"VIII", q:"¿Qué hace un ACRyP?", a:"Registra valores escriturales por anotación en cuenta y puede custodiar y pagar los servicios de esos valores.", f:"Tít. VIII Cap. II art. 1"},
+/* IX */
+{id:"n-IX-1", t:"IX", q:"¿Qué dos variantes de agente de calificación de riesgo existen?", a:"Sociedades anónimas u otras organizaciones y universidades públicas (ACR UP).", f:"Tít. IX"},
+{id:"n-IX-2", t:"IX", q:"Nombrá calificadoras registradas en la CNV", a:"FIX SCR (Fitch), Moody's Local AR, S&P Global Ratings Argentina, Evaluadora Latinoamericana y universidades como UNTREF ACR UP.", f:"Registro CNV"},
+{id:"n-IX-3", t:"IX", q:"¿Qué órgano decide la calificación dentro de una ACR?", a:"El consejo de calificación, que sesiona con actas y aplica metodologías publicadas.", f:"Tít. IX Cap. I Secc. XI a XIII"},
+/* X */
+{id:"n-X-1", t:"X", q:"¿Qué efecto tiene la inscripción en los registros de la CNV?", a:"Constitutivo: sin inscripción no se puede actuar como mercado, cámara o agente.", f:"Tít. X art. 11"},
+{id:"n-X-2", t:"X", q:"Suspensión, caducidad y cancelación del registro: ¿diferencia?", a:"Suspensión: medida preventiva. Caducidad: por inactividad o falta de requisitos. Cancelación: a pedido del agente o por incumplimiento de requisitos esenciales.", f:"Tít. X Secc. VI a VIII"},
+/* XI */
+{id:"n-XI-1", t:"XI", q:"¿Qué incisos del art. 20 de la Ley 25.246 alcanzan al mercado de capitales?", a:"Los incisos 4, 5 y 22 (agentes, fiduciarios y demás sujetos del mercado de capitales).", f:"Tít. XI"},
+{id:"n-XI-2", t:"XI", q:"¿Por qué medios entran y salen los fondos de los clientes?", a:"Transferencias solo desde y hacia cuentas bancarias a la vista del cliente; cheques de sus cuentas (para pagarle, cruzados o no a la orden); efectivo hasta $1.000 por cliente y por día.", f:"Tít. XI Secc. II art. 3"},
+{id:"n-XI-4", t:"XI", q:"¿Cuántos pagos por día y por cliente puede hacer un ALyC en efectivo y cheque?", a:"Como máximo 2 pagos por día y por cliente, sumando efectivo y cheques.", f:"Tít. XI Secc. II art. 3"},
+{id:"n-XI-3", t:"XI", q:"¿Quién dicta la norma de fondo de prevención de lavado y quién la complementa?", a:"La UIF dicta la norma de fondo; la CNV dicta normas complementarias para sus sujetos.", f:"Tít. I · Tít. XI"},
+/* XII */
+{id:"n-XII-1", t:"XII", q:"¿Qué es un hecho relevante?", a:"Todo hecho o situación que por su importancia pueda afectar la colocación de los valores o el curso de su negociación. Se informa de inmediato por la AIF.", f:"Tít. XII Cap. I art. 2 · Ley 26.831 art. 99"},
+{id:"n-XII-2", t:"XII", q:"¿Quiénes deben inscribirse en el registro de idóneos?", a:"Todos los que venden, promocionan o asesoran en contacto con el público inversor a través de un agente registrado.", f:"Tít. XII Cap. V art. 1"},
+{id:"n-XII-3", t:"XII", q:"Requisitos para ser idóneo", a:"Aprobar el examen, estar vinculado a un agente, solicitar la inscripción, hacer los cursos de actualización y cumplir las normas de conducta.", f:"Tít. XII Cap. V art. 3"},
+{id:"n-XII-4", t:"XII", q:"¿Qué pasa si un idóneo queda 2 años inactivo?", a:"Se lo da de baja del registro; lo mismo si no hace los cursos de actualización.", f:"Tít. XII Cap. V art. 4"},
+{id:"n-XII-5", t:"XII", q:"¿Se exige un curso previo para rendir el examen de idoneidad?", a:"No. Se exige título secundario, documento y CUIT.", f:"Tít. XII Cap. V art. 5"},
+{id:"n-XII-6", t:"XII", q:"¿De qué módulos exime el CFA nivel 1?", a:"De los módulos 3, 4, 5 y 6: hay que rendir el 1 y el 2.", f:"Tít. XII Cap. V art. 7"},
+{id:"n-XII-7", t:"XII", q:"¿La idoneidad es de la persona o del agente?", a:"De la persona: es independiente del agente donde trabaja.", f:"Tít. XII Cap. V art. 4"},
+{id:"n-XII-8", t:"XII", q:"¿Qué tres conductas contrarias a la transparencia prohíbe el art. 117?", a:"Uso de información privilegiada, manipulación y engaño en el mercado, e intervenir u ofrecer en la oferta pública sin autorización.", f:"Tít. XII Cap. III · Ley 26.831 art. 117"},
+/* XIII */
+{id:"n-XIII-1", t:"XIII", q:"¿El denunciante es parte en el procedimiento de la CNV?", a:"No, en ningún caso.", f:"Tít. XIII Cap. I art. 6"},
+{id:"n-XIII-2", t:"XIII", q:"¿Qué carácter tienen las investigaciones de la CNV?", a:"Reservado.", f:"Tít. XIII Cap. I art. 13"},
+{id:"n-XIII-3", t:"XIII", q:"¿Quién instruye el sumario?", a:"Una dependencia distinta de la que investigó, a cargo de un conductor del sumario.", f:"Ley 26.831 art. 138 · Tít. XIII Cap. II"},
+/* XV */
+{id:"n-XV-1", t:"XV", q:"¿Qué dos credenciales existen en la AIF?", a:"Operador (carga la información) y firmante (la firma y le da carácter de declaración jurada).", f:"Tít. XV Cap. I"},
+/* XVII */
+{id:"n-XVII-1", t:"XVII", q:"¿Qué dos conceptos cobra la CNV?", a:"Tasa de fiscalización y control (anual) y arancel de autorización (por cada emisión). Las PyMEs están exentas.", f:"Tít. XVII · Ley 26.831 art. 16"},
+/* XVIII */
+{id:"n-XVIII-1", t:"XVIII", q:"¿De qué fusión nace BYMA y en qué año?", a:"Del Merval y la Bolsa de Comercio de Buenos Aires, en 2017.", f:"Práctica actual"},
+/* XIX */
+{id:"n-XIX-1", t:"XIX", q:"Crowdfunding: ¿cuánto puede invertir por año un inversor no calificado?", a:"Hasta el 20% de sus ingresos brutos anuales, y no más del 5% de un proyecto ni más de $20.000.", f:"Tít. XIX arts. 55 y 56"},
+{id:"n-XIX-2", t:"XIX", q:"Crowdfunding: ¿tope de emisión por proyecto y período mínimo de suscripción?", a:"$20.000.000 en 12 meses (texto de tu PDF) y al menos 30 días de suscripción.", f:"Tít. XIX arts. 45 y 46"},
+{id:"n-XIX-3", t:"XIX", q:"¿Qué ley crea el sistema de financiamiento colectivo?", a:"La Ley 27.349 de Apoyo al Capital Emprendedor (2017).", f:"Tít. XIX"}
+];
+
+/* Qué módulos del banco de preguntas se cruzan con cada título (para mezclar en la sesión) */
+const TIT_MOD = { I:[1], II:[1,4], III:[1], IV:[4], V:[6], VI:[5], VII:[5], VIII:[5], IX:[5], X:[5], XI:[2], XII:[3], XIII:[3], XIV:[1], XV:[3], XVI:[1], XVII:[1], XVIII:[1], XIX:[5] };
+
+const TECNICAS = [
+  {n:"Práctica de recuperación", d:"Intentar recordar antes de ver la respuesta. Por eso cada tarjeta te pide pensar primero.", ref:"Roediger & Karpicke (2006)"},
+  {n:"Repetición espaciada", d:"Lo que sabés vuelve cada vez más lejos (1, 3, 7, 16, 35 días); lo que fallás vuelve mañana.", ref:"Ebbinghaus · Cepeda et al. (2006)"},
+  {n:"Intercalado", d:"La sesión mezcla títulos en vez de agotar uno: cuesta más y se retiene mejor.", ref:"Rohrer & Taylor (2007)"},
+  {n:"Autoexplicación", d:"Antes de dar vuelta, explicá en voz alta por qué es así. Si no podés, marcá «Difícil».", ref:"Chi et al. (1994)"},
+  {n:"Codificación dual", d:"Después de la sesión, mirá el mapa de «Estructura»: texto y esquema juntos fijan mejor.", ref:"Paivio (1971)"},
+  {n:"Dificultades deseables", d:"Si una sesión se siente fácil, subí las tarjetas nuevas. Un poco de esfuerzo es la señal de que está funcionando.", ref:"Bjork (1994)"},
+  {n:"Sesiones cortas y diarias", d:"10 a 20 minutos todos los días rinden más que 3 horas el domingo.", ref:"Dunlosky et al. (2013)"}
+];
+
+
+/* =================== El mercado · Las Normas y Quién es quién hoy =================== */
+const EST_NOM = { central:"Se usa todos los días", activo:"Activo", nicho:"Nicho · poco uso", sinuso:"Sin uso práctico", reemplazado:"Reemplazado o eliminado" };
+const nOpen = {};
+let nEst = "", nPrio = false;
+const ntPorId = id => NORMAS.find(n=>n.id === id);
+const flashDe = t => FLASH.filter(c=>c.t === t);
+
+function estHTML(e){ return e ? `<span class="est ${e}">${esc(EST_NOM[e] || e)}</span>` : ""; }
+function prioHTML(p){ return `<span class="prio" title="Peso para el examen">${"<b>★</b>".repeat(p)}${"☆".repeat(3-p)}</span>`; }
+function refsHTML(arr){ return (arr||[]).map(f=>fuenteHTML(f)).join(" "); }
+function hoyHTML(t){ return t ? `<div class="hoybox"><b class="hl">Hoy</b>${esc(t)}</div>` : ""; }
+
+function normaTexto(n){
+  return [n.id, n.n, n.que, n.hoy, ...(n.caps||[]).flatMap(c=>[c.c, c.n, c.hoy||"", ...(c.pts||[])]),
+    ...(n.num||[]).flat()].join(" ").toLowerCase();
+}
+
+function normasHTML(){
+  const q = qEl.value.trim().toLowerCase();
+  const lista = NORMAS.filter(n=>(!nEst || n.est === nEst) && (!nPrio || n.prio === 3) && (!q || normaTexto(n).includes(q)));
+  const chipsEst = [["","Todos"],["central","Se usan todos los días"],["activo","Activos"],["nicho","Nicho"],["reemplazado","Reemplazados"]]
+    .map(([k,t])=>`<button class="nchip mini" data-nest="${k}" aria-pressed="${nEst===k}">${t}</button>`).join("");
+  const ruta = NORMAS_META.ruta.map(([id,t])=>`<button data-nt="${id}"><b>Tít. ${id}</b><span>${esc(t)}</span></button>`).join("");
+  const cards = lista.map(n=>{
+    const open = !!(nOpen[n.id] || (q && lista.length <= 6));
+    const nf = flashDe(n.id).length;
+    const body = !open ? "" : `<div class="nbody">
+      <p class="nque">${esc(n.que)}</p>
+      ${(n.leyes&&n.leyes.length)?`<div class="nleyes"><span class="nlab">Se apoya en</span>${refsHTML(n.leyes)}</div>`:""}
+      ${(n.caps&&n.caps.length)?`<div class="ncaps">${n.caps.map(c=>`<section class="ncap">
+        <h4><span class="nc">${esc(c.c)}</span>${esc(c.n)} ${c.est?estHTML(c.est):""}</h4>
+        <ul>${(c.pts||[]).map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
+        ${hoyHTML(c.hoy)}
+        ${(c.f&&c.f.length)?`<div class="nleyes"><span class="nlab">Ley</span>${refsHTML(c.f)}</div>`:""}
+      </section>`).join("")}</div>`:""}
+      ${hoyHTML(n.hoy)}
+      ${(n.num&&n.num.length)?`<div class="nnums"><table><thead><tr><th>Dato de examen</th><th>Valor</th><th>Dónde</th></tr></thead><tbody>
+        ${n.num.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("")}</tbody></table></div>`:""}
+      <div class="nacc">
+        ${nf?`<button class="nbtn" data-microt="${n.id}">Repasar el Título ${n.id} · ${nf} tarjetas</button>`:""}
+        <button class="nbtn sec" data-nt-cerrar="${n.id}">Cerrar</button>
+      </div>
+    </div>`;
+    return `<article class="ntit p${n.prio}" id="nt-${n.id}" data-open="${open?1:0}">
+      <button class="nhead" data-nt-tog="${n.id}" aria-expanded="${open}">
+        <span class="nnum">Tít. ${n.id}</span>
+        <span><span class="nname">${esc(n.n)}</span>
+          <span class="nsubl">${estHTML(n.est)} ${prioHTML(n.prio)} <span class="np">págs. ${esc(n.pags)} · ${(n.caps||[]).length} cap.</span></span></span>
+        <span class="nflecha">›</span>
+      </button>${body}</article>`;
+  }).join("");
+  countEl.textContent = (q || nEst || nPrio) ? `${lista.length} de ${NORMAS.length} títulos` : `${NORMAS.length} títulos · ${FLASH.length} tarjetas`;
+  return `<div class="nmeta">
+      <h3>Qué versión estás leyendo</h3>
+      <p><b>${esc(NORMAS_META.version)}.</b> ${esc(NORMAS_META.hoy)}</p>
+    </div>
+    <div class="nmeta">
+      <h3>Por dónde empezar</h3>
+      <p>El orden sugerido para el examen, de lo que más pesa a lo que menos. Tocá un título para abrirlo.</p>
+      <div class="nruta">${ruta}</div>
+    </div>
+    <div class="nfil"><span class="nlab">Uso en la práctica</span>${chipsEst}
+      <button class="nchip mini" data-nprio="1" aria-pressed="${nPrio}">★★★ Solo prioridad alta</button>
+      <button class="nchip mini" data-ntodos="1">Abrir todos</button>
+      <button class="nchip mini" data-nninguno="1">Cerrar todos</button>
+    </div>
+    ${cards || `<p class="nvacio">Ningún título coincide con el filtro o la búsqueda.</p>`}
+    <p class="mnota">Fuente: el PDF «Normas 2013» de tu carpeta (N.T. 2013 y mod., actualizado a enero de 2018). Los chips azules abren el artículo de la ley cargado en esta página. Los recuadros «Hoy» marcan lo que cambió después o cómo se usa en la práctica, con datos a septiembre de 2026.</p>`;
+}
+
+function hoyActoresHTML(){
+  const q = qEl.value.trim().toLowerCase();
+  const lista = HOY_ACTORES.filter(a=>!q || [a.cat,a.sig,a.que,a.nombres].join(" ").toLowerCase().includes(q));
+  countEl.textContent = q ? `${lista.length} de ${HOY_ACTORES.length} actores` : `${HOY_ACTORES.length} actores`;
+  const cards = lista.map(a=>`<article class="hoyc">
+      <div class="hoyt"><b>${esc(a.sig)}<span class="cat">${esc(a.cat)}</span></b>${estHTML(a.est)}</div>
+      <p>${esc(a.que)}</p>
+      <p class="nom">${esc(a.nombres)}</p>
+      <div class="hoyf">${a.tit.split(/[–,]/).length===1?`<button class="mf norm" data-nt="${esc(a.tit)}">Normas · Tít. ${esc(a.tit)}</button>`:`<span class="mf otra">Normas · Tít. ${esc(a.tit)}</span>`}</div>
+    </article>`).join("");
+  const hitos = [
+    ["2012–2013","Ley 26.831 y Decreto 1023/13: nace el régimen actual y se dictan las Normas (N.T. 2013)."],
+    ["2017","El Merval y la Bolsa de Comercio de Buenos Aires se fusionan en BYMA."],
+    ["May. 2018","Ley 27.440 de Financiamiento Productivo: reforma la 26.831 (OPA por toma de control, facturas de crédito electrónicas, FCI) y la RG 731 reordena los agentes: se elimina el AAMC y los AN y ALyC pueden administrar carteras."],
+    ["May. 2024","BYMA pasa el contado normal a T+1."],
+    ["2025","MAE y Matba Rofex empiezan a operar como A3 Mercados."],
+    ["Ene. 2025","RG 1046: el depositario central pasa a ser ADCVN y el ACRYP queda como única categoría para custodia, registro y pago de valores individuales."],
+    ["Dic. 2025","RG 1097 (nuevo Título I con todas las definiciones) y RG 1102 (la sociedad gerente de FCI puede ser también AN)."]
+  ].map(([f,t])=>`<li><b>${f}</b><span>${esc(t)}</span></li>`).join("");
+  return `<div class="nfil"><span class="nlab">Referencias</span>${Object.keys(EST_NOM).map(k=>estHTML(k)).join(" ")}</div>
+    <div class="hoygrid">${cards || `<p class="nvacio">Ningún actor coincide con la búsqueda.</p>`}</div>
+    <section class="ntl"><h3 class="nlab" style="margin:0;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Lo que cambió desde tu PDF</h3><ol>${hitos}</ol></section>
+    <p class="mnota">Nombres tomados de los registros públicos de la CNV, de la prensa financiera y de los propios mercados; los rankings cambian todos los meses. Antes de operar con alguien, confirmá su matrícula en cnv.gov.ar.</p>`;
+}
+
+function abrirTitulo(id){
+  msub = "normas"; nOpen[id] = true; nEst = ""; nPrio = false; qEl.value = "";
+  if(typeof vista !== "undefined" && vista !== "mercado") setVista("mercado"); else pintarMercado();
+  requestAnimationFrame(()=>{
+    const el = document.getElementById("nt-" + id);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+}
+
+mercView.addEventListener("click", e=>{
+  const tg = e.target.closest("[data-nt-tog]");
+  if(tg){ const id = tg.dataset.ntTog; nOpen[id] = !nOpen[id]; pintarMercado(); if(nOpen[id]) document.getElementById("nt-"+id)?.scrollIntoView({block:"nearest"}); return; }
+  const ce = e.target.closest("[data-nt-cerrar]");
+  if(ce){ nOpen[ce.dataset.ntCerrar] = false; pintarMercado(); document.getElementById("nt-"+ce.dataset.ntCerrar)?.scrollIntoView({block:"nearest"}); return; }
+  const nt = e.target.closest("[data-nt]");
+  if(nt){ abrirTitulo(nt.dataset.nt); return; }
+  const ne = e.target.closest("[data-nest]");
+  if(ne){ nEst = ne.dataset.nest; pintarMercado(); return; }
+  if(e.target.closest("[data-nprio]")){ nPrio = !nPrio; pintarMercado(); return; }
+  if(e.target.closest("[data-ntodos]")){ NORMAS.forEach(n=>nOpen[n.id] = true); pintarMercado(); return; }
+  if(e.target.closest("[data-nninguno]")){ NORMAS.forEach(n=>nOpen[n.id] = false); pintarMercado(); return; }
+  const mt = e.target.closest("[data-microt]");
+  if(mt){ microIr([mt.dataset.microt]); return; }
+});
+
+/* =================== Micro-learning =================== */
+const LSU = "mapa-idoneo-micro-v1";
+const INTERV = [0,1,3,7,16,35,90];
+const microView = document.getElementById("micro");
+const uzona = document.getElementById("uzona");
+let U = cargarU();
+let SES = null;
+
+function cargarU(){
+  let d = null;
+  try{ d = JSON.parse(localStorage.getItem(LSU) || "null"); }catch(e){}
+  d = d || {};
+  d.cfg = Object.assign({hora:"08:00", min:10, nuevas:8, tits:["II","III","V","VI","VII","VIII","XI","XII"], banco:true, avisar:false}, d.cfg || {});
+  d.c = d.c || {}; d.dias = d.dias || {};
+  return d;
+}
+function guardarU(){ try{ localStorage.setItem(LSU, JSON.stringify(U)); }catch(e){} }
+function hoyISO(off){ const d = new Date(); d.setHours(12,0,0,0); if(off) d.setDate(d.getDate()+off); return d.toISOString().slice(0,10); }
+function difDias(a,b){ return Math.round((new Date(a+"T12:00:00") - new Date(b+"T12:00:00"))/864e5); }
+
+function itemsDisponibles(tits){
+  const fl = FLASH.filter(c=>tits.includes(c.t)).map(c=>({k:"f:"+c.id, tipo:"f", t:c.t, c}));
+  let bq = [];
+  if(U.cfg.banco){
+    const mods = new Set(tits.flatMap(t=>TIT_MOD[t]||[]));
+    bq = PREGUNTAS.filter(p=>mods.has(p.mod) && p.ok && p.ok.length && p.op && p.op.length > 1)
+      .map(p=>({k:"q:"+p.id, tipo:"q", t:"M"+p.mod, p}));
+  }
+  return {fl, bq};
+}
+
+function armarSesion(tits){
+  const hoy = hoyISO();
+  const {fl, bq} = itemsDisponibles(tits);
+  const cupo = Math.max(6, Math.round(U.cfg.min * 2));
+  const vencidas = [...fl, ...bq].filter(it=>U.c[it.k] && U.c[it.k].due <= hoy)
+    .sort((a,b)=>U.c[a.k].due.localeCompare(U.c[b.k].due));
+  const nuevasF = mezclar(fl.filter(it=>!U.c[it.k])).slice(0, Math.ceil(U.cfg.nuevas * (U.cfg.banco ? .6 : 1)));
+  const nuevasQ = U.cfg.banco ? mezclar(bq.filter(it=>!U.c[it.k])).slice(0, Math.floor(U.cfg.nuevas * .4)) : [];
+  let items = [...vencidas.slice(0, cupo), ...nuevasF, ...nuevasQ].slice(0, Math.max(cupo, 1));
+  return intercalar(items);
+}
+function mezclar(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+function intercalar(items){
+  const g = {}; items.forEach(it=>{ (g[it.t] = g[it.t] || []).push(it); });
+  const grupos = mezclar(Object.values(g)); const out = [];
+  while(grupos.some(x=>x.length)) grupos.forEach(x=>{ if(x.length) out.push(x.shift()); });
+  return out;
+}
+
+function calificar(k, g){
+  const hoy = hoyISO();
+  const s = U.c[k] || {box:0, reps:0, lapses:0};
+  if(g === 1){ s.box = 1; s.due = hoy; s.lapses++; }
+  else if(g === 2){ s.box = Math.max(1, s.box); s.due = hoyISO(Math.max(1, Math.round(INTERV[s.box]/2))); }
+  else if(g === 3){ s.box = Math.min(6, s.box + 1); s.due = hoyISO(INTERV[s.box]); }
+  else { s.box = Math.min(6, s.box + 2); s.due = hoyISO(INTERV[s.box]); }
+  s.reps++; s.last = hoy; U.c[k] = s;
+  const d = U.dias[hoy] = U.dias[hoy] || {n:0, bien:0};
+  d.n++; if(g >= 3) d.bien++;
+  guardarU();
+}
+
+function racha(){
+  let n = 0, off = 0;
+  if(!U.dias[hoyISO()]) off = -1;
+  while(U.dias[hoyISO(off)]){ n++; off--; }
+  return n;
+}
+function pendientesHoy(){
+  const {fl, bq} = itemsDisponibles(U.cfg.tits);
+  const hoy = hoyISO();
+  const venc = [...fl, ...bq].filter(it=>U.c[it.k] && U.c[it.k].due <= hoy).length;
+  const nuevas = fl.filter(it=>!U.c[it.k]).length + bq.filter(it=>!U.c[it.k]).length;
+  return {venc, nuevas, total: fl.length + bq.length};
+}
+
+function microInicioHTML(){
+  const p = pendientesHoy();
+  const hechasHoy = (U.dias[hoyISO()] || {}).n || 0;
+  const aprox = Math.min(Math.max(6, U.cfg.min*2), p.venc + Math.min(p.nuevas, U.cfg.nuevas));
+  const cajas = [0,0,0,0,0,0,0];
+  Object.keys(U.c).forEach(k=>{ cajas[U.c[k].box || 0]++; });
+  const mx = Math.max(1, ...cajas);
+  const dias = Array.from({length:21}, (_,i)=>hoyISO(i-20)).map(d=>`<i class="${U.dias[d]?"on":""}${d===hoyISO()?" hoy":""}" title="${d}${U.dias[d]?` · ${U.dias[d].n} tarjetas`:""}"></i>`).join("");
+  const tits = NORMAS.filter(n=>flashDe(n.id).length).map(n=>
+    `<button class="nchip mini" data-ut="${n.id}" aria-pressed="${U.cfg.tits.includes(n.id)}" title="${esc(n.n)}">Tít. ${n.id} · ${flashDe(n.id).length}</button>`).join("");
+  const opts = (arr, v, suf) => arr.map(x=>`<option value="${x}"${+v===x?" selected":""}>${x}${suf}</option>`).join("");
+  const notif = ("Notification" in window);
+  return `<div class="ugrid">
+    <section class="ucard uhoy">
+      <h3>Tu sesión de hoy</h3>
+      <p class="ubig">${hechasHoy ? `Hoy ya repasaste ${hechasHoy} tarjeta${hechasHoy===1?"":"s"}.` : `${aprox} tarjeta${aprox===1?"":"s"}, unos ${U.cfg.min} minutos.`}</p>
+      <p>${p.venc} para repasar porque vencen hoy y ${p.nuevas} nuevas disponibles entre tarjetas y preguntas de los títulos que elegiste. Tu horario: <b>${esc(U.cfg.hora)}</b>.</p>
+      <div class="ustats">
+        <div class="ustat"><b>${racha()}</b><span>días seguidos</span></div>
+        <div class="ustat"><b>${Object.keys(U.c).length}</b><span>tarjetas vistas</span></div>
+        <div class="ustat"><b>${Object.values(U.c).filter(s=>s.box>=4).length}</b><span>ya consolidadas</span></div>
+      </div>
+      <div class="nacc"><button class="nbtn" data-uempezar="1">${hechasHoy ? "Hacer otra ronda" : "Empezar la sesión"}</button>
+        <button class="nbtn sec" data-uextra="1">Solo tarjetas nuevas</button></div>
+      <div class="udias" aria-label="Últimos 21 días">${dias}</div>
+    </section>
+    <section class="ucard">
+      <h3>Cómo querés estudiar</h3>
+      <div class="ufila">
+        <label>Hora <input type="time" id="uhora" value="${esc(U.cfg.hora)}"></label>
+        <label>Minutos <select id="umin">${opts([5,10,15,20,30,45], U.cfg.min, " min")}</select></label>
+        <label>Nuevas por día <select id="unuevas">${opts([3,5,8,10,15,20], U.cfg.nuevas, "")}</select></label>
+      </div>
+      <div class="ufila"><label><input type="checkbox" id="ubanco" ${U.cfg.banco?"checked":""}> Mezclar preguntas del banco (multiple choice) de los módulos que corresponden</label></div>
+      <p>Títulos de las Normas que entran en tu sesión:</p>
+      <div class="utits">${tits}</div>
+      <div class="nfil"><button class="nchip mini" data-uall="1">Todos</button><button class="nchip mini" data-uprio="1">Solo prioridad alta</button></div>
+    </section>
+    <section class="ucard">
+      <h3>El aviso diario</h3>
+      <p>Como en Jarvis: una notificación a tu hora que dice «Es momento de aprender». Tocás y se abre esta pestaña.</p>
+      ${notif ? `<div class="ufila"><label><input type="checkbox" id="uavisar" ${U.cfg.avisar && Notification.permission==="granted"?"checked":""}> Avisarme todos los días a las <b>${esc(U.cfg.hora)}</b></label></div>
+      <div class="nacc"><button class="nbtn sec" data-uprobar="1">Probar el aviso ahora</button><button class="nbtn sec" data-uprobar1="1">Probar en 1 minuto</button></div>
+      <p class="uaviso">${esApp() ? "Estás usando la app instalada: los avisos salen por el sistema, igual que los de Jarvis." : "Para que funcione en el celular, instalala como app: en Chrome, menú ⋮ → «Instalar app» o «Agregar a la pantalla principal» (en iPhone, Compartir → «Agregar a inicio»). Abrila desde el ícono y activá el aviso ahí."} Si el celular está dormido a esa hora, el aviso llega apenas vuelve a la vida, hasta 30 minutos tarde; si la app estuvo cerrada del todo, el que suena seguro es el del calendario.</p>`
+      : `<p class="uaviso">Este navegador no permite notificaciones: usá el calendario.</p>`}
+      <div class="nacc">
+        <button class="nbtn sec" data-uics="1">Respaldo: evento diario (.ics)</button>
+        <a class="nbtn sec" id="ugcal" target="_blank" rel="noopener" href="${gcalURL()}">Respaldo: Google Calendar</a>
+      </div>
+    </section>
+    <section class="ucard">
+      <h3>Cómo va tu memoria</h3>
+      <p>Cada tarjeta sube de caja cuando la sabés y vuelve a la caja 1 cuando la fallás. Caja 1 vuelve mañana; la 6, en tres meses.</p>
+      <div class="ucajas">${cajas.slice(1).map(v=>`<div style="height:${Math.round(4 + 30*v/mx)}px"><span>${v}</span></div>`).join("")}</div>
+      <div class="ucajlab">${[1,2,3,4,5,6].map(b=>`<span>${b} · ${INTERV[b]}d</span>`).join("")}</div>
+      <div class="nacc"><button class="hbtn peligro" data-ureset="1">Borrar mi progreso</button></div>
+    </section>
+    <section class="ucard" style="grid-column:1/-1">
+      <h3>Por qué funciona así</h3>
+      <ul class="utec">${TECNICAS.map(t=>`<li><b>${esc(t.n)}</b>${esc(t.d)} <em>${esc(t.ref)}</em></li>`).join("")}</ul>
+    </section>
+  </div>`;
+}
+
+function pintarMicro(){
+  const intro = document.getElementById("uintro");
+  intro.textContent = "Todos los días, a tu hora, una sesión corta con las Normas: primero recordás, después ves la respuesta, y el sistema decide cuándo te la vuelve a mostrar. Mezcla títulos y suma preguntas del banco.";
+  if(SES){ pintarTarjeta(); return; }
+  countEl.textContent = `${FLASH.length} tarjetas · ${Object.keys(U.c).length} vistas`;
+  uzona.innerHTML = microInicioHTML();
+}
+
+function microIr(tits, soloNuevas){
+  setVista("micro");
+  let items = armarSesion(tits || U.cfg.tits);
+  if(soloNuevas){
+    const {fl} = itemsDisponibles(tits || U.cfg.tits);
+    items = intercalar(mezclar(fl.filter(it=>!U.c[it.k])).slice(0, Math.max(5, U.cfg.nuevas)));
+  }
+  if(!items.length){ SES = null; pintarMicro(); uzona.insertAdjacentHTML("afterbegin", `<p class="nvacio">No hay tarjetas pendientes para hoy en esos títulos. Sumá títulos o pedí solo tarjetas nuevas.</p>`); return; }
+  SES = {items, i:0, visto:false, sel:[], bien:0, hechas:0, t0:Date.now(), repetidas:new Set()};
+  pintarMicro();
+  window.scrollTo({top: microView.offsetTop - 10, behavior:"smooth"});
+}
+
+function pintarTarjeta(){
+  const it = SES.items[SES.i];
+  if(!it){ finSesion(); return; }
+  const n = SES.items.length, pct = Math.round(100*SES.i/n);
+  const min = Math.floor((Date.now()-SES.t0)/60000);
+  countEl.textContent = `Tarjeta ${SES.i+1} de ${n}`;
+  let cuerpo = "";
+  if(it.tipo === "f"){
+    const c = it.c, nt = ntPorId(c.t);
+    cuerpo = `<div class="utag"><span class="mf norm">Tít. ${c.t}</span><span>${esc(nt ? nt.n : "")}</span>${U.c[it.k]?`<span>· caja ${U.c[it.k].box}</span>`:"<span>· nueva</span>"}</div>
+      <p class="uq">${esc(c.q)}</p>
+      ${SES.visto ? `<div class="ua">${esc(c.a)}<div class="uf">${esc(c.f)}</div></div>
+        <div class="ugrades">
+          <button class="g1" data-ug="1">Otra vez<small>mañana</small></button>
+          <button class="g2" data-ug="2">Difícil<small>${diasTxt(2,it.k)}</small></button>
+          <button class="g3" data-ug="3">Bien<small>${diasTxt(3,it.k)}</small></button>
+          <button class="g4" data-ug="4">Fácil<small>${diasTxt(4,it.k)}</small></button>
+        </div>`
+      : `<p class="uaviso">Respondé en voz alta o por escrito antes de dar vuelta. Recordar cuesta: ese esfuerzo es lo que fija.</p>
+        <div class="nacc"><button class="nbtn" data-uver="1">Mostrar respuesta</button><button class="nbtn sec" data-uir="${c.t}">Ver el Título ${c.t}</button></div>`}`;
+  } else {
+    const p = it.p, multi = p.ok.length > 1;
+    const letras = "abcdefgh";
+    const ops = p.op.map((o,i)=>{
+      let cls = "";
+      if(SES.visto){ if(p.ok.includes(i)) cls = " ok"; else if(SES.sel.includes(i)) cls = " mal"; }
+      return `<button class="uop${cls}" data-uop="${i}" aria-pressed="${SES.sel.includes(i)}" ${SES.visto?"disabled":""}><span class="ul">${letras[i]})</span><span>${esc(o)}</span></button>`;
+    }).join("");
+    const acierto = SES.visto && igual(SES.sel, p.ok);
+    cuerpo = `<div class="utag"><span class="mf">${esc(MODNOM[p.mod] || "Banco")}</span><span>${esc(p.id)}</span>${multi?"<span>· más de una correcta</span>":""}</div>
+      <p class="uq">${esc(p.q)}</p>
+      <div class="uops">${ops}</div>
+      ${SES.visto ? `<p class="uverdict ${acierto?"ok":"mal"}">${acierto ? "Correcta." : "No era esa."}</p>
+        ${p.porque ? `<div class="ua">${esc(p.porque)}</div>` : ""}
+        <div class="nacc"><button class="nbtn" data-ug="${acierto?3:1}">Seguir</button></div>`
+      : `<div class="nacc"><button class="nbtn" data-ucheck="1" ${SES.sel.length?"":"disabled"}>Comprobar</button></div>`}`;
+  }
+  uzona.innerHTML = `<div class="usesion">
+      <div class="ubarra"><i style="width:${pct}%"></i></div>
+      <div class="umeta"><span>${SES.i} de ${n} · ${SES.bien} bien</span><span>${min} de ${U.cfg.min} min</span></div>
+      <article class="utarj">${cuerpo}</article>
+      <div class="nacc"><button class="hbtn" data-ufin="1">Terminar acá</button></div>
+    </div>`;
+}
+function igual(a,b){ return a.length === b.length && a.every(x=>b.includes(x)); }
+function diasTxt(g, k){
+  const s = U.c[k] || {box:0};
+  let b = s.box, d;
+  if(g === 2){ b = Math.max(1,b); d = Math.max(1, Math.round(INTERV[b]/2)); }
+  else if(g === 3){ b = Math.min(6,b+1); d = INTERV[b]; }
+  else { b = Math.min(6,b+2); d = INTERV[b]; }
+  return d === 1 ? "mañana" : `en ${d} días`;
+}
+
+function finSesion(){
+  const s = SES; SES = null;
+  const mins = Math.max(1, Math.round((Date.now()-s.t0)/60000));
+  const tec = TECNICAS[new Date().getDate() % TECNICAS.length];
+  uzona.innerHTML = `<div class="usesion"><article class="utarj">
+      <div class="utag"><span class="est central">Sesión terminada</span></div>
+      <p class="uq">${s.hechas} tarjeta${s.hechas===1?"":"s"} en ${mins} min · ${s.bien} bien${s.hechas?` (${Math.round(100*s.bien/s.hechas)}%)`:""}.</p>
+      <p class="uaviso">Racha: ${racha()} día${racha()===1?"":"s"}. Mañana a las ${esc(U.cfg.hora)} te esperan las que fallaste y las que vencen.</p>
+      <div class="hoybox"><b class="hl">Técnica</b><b>${esc(tec.n)}.</b> ${esc(tec.d)}</div>
+      <div class="nacc"><button class="nbtn" data-uvolver="1">Volver</button><button class="nbtn sec" data-uempezar="1">Otra ronda</button></div>
+    </article></div>`;
+  countEl.textContent = `${FLASH.length} tarjetas · ${Object.keys(U.c).length} vistas`;
+}
+
+function icsTexto(){
+  const [h,m] = U.cfg.hora.split(":").map(Number);
+  const ini = new Date(); ini.setHours(h, m, 0, 0);
+  if(ini < new Date()) ini.setDate(ini.getDate()+1);
+  const fin = new Date(ini.getTime() + U.cfg.min*60000);
+  const f = d => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}T${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}00`;
+  const url = location.href.split("#")[0] + "#micro";
+  return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Mapa normativo del idoneo//ES","CALSCALE:GREGORIAN","BEGIN:VEVENT",
+    "UID:micro-idoneo-" + Date.now() + "@mapa-idoneo","DTSTAMP:" + f(new Date()),
+    "DTSTART:" + f(ini),"DTEND:" + f(fin),"RRULE:FREQ=DAILY",
+    "SUMMARY:Micro-learning · Normas CNV (" + U.cfg.min + " min)",
+    "DESCRIPTION:Tu sesión diaria de tarjetas y preguntas. Abrí: " + url,
+    "URL:" + url,
+    "BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Es tu momento de estudiar","TRIGGER:PT0M","END:VALARM",
+    "END:VEVENT","END:VCALENDAR"].join("\r\n");
+}
+function gcalURL(){
+  const [h,m] = U.cfg.hora.split(":").map(Number);
+  const ini = new Date(); ini.setHours(h, m, 0, 0);
+  if(ini < new Date()) ini.setDate(ini.getDate()+1);
+  const fin = new Date(ini.getTime() + U.cfg.min*60000);
+  const f = d => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}T${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}00`;
+  const url = location.href.split("#")[0] + "#micro";
+  const p = new URLSearchParams({action:"TEMPLATE", text:`Micro-learning · Normas CNV (${U.cfg.min} min)`, dates:`${f(ini)}/${f(fin)}`,
+    details:`Tu sesión diaria de tarjetas y preguntas: ${url}`, recur:"RRULE:FREQ=DAILY", ctz:"America/Argentina/Buenos_Aires"});
+  return "https://calendar.google.com/calendar/render?" + p.toString();
+}
+function bajarICS(){
+  const blob = new Blob([icsTexto()], {type:"text/calendar;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "micro-learning-normas-cnv.ics";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+/* ---- Aviso diario, igual que en Jarvis ----
+   La app instalada (PWA) muestra el aviso por el service worker (Android no deja
+   hacer new Notification() desde la página). Revisa la hora cada 20 segundos y
+   cada vez que la app vuelve a la vida; si el celular estaba dormido, el aviso
+   llega igual dentro de los 30 minutos siguientes. Sin servidor. */
+const LSAV = "mapa-idoneo-micro-avisado";
+const AVISO_TARDE = 30;
+function fechaLocal(){ const d = new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function mostrarAviso(titulo, cuerpo){
+  const opts = { body:cuerpo, icon:"icono-192.png", badge:"icono-192.png", tag:"micro-idoneo", renotify:true,
+    data:{ url: location.href.split("#")[0] + "#micro" } };
+  const porPagina = ()=>{ try{ const n = new Notification(titulo, opts); n.onclick = ()=>{ window.focus(); location.hash = "micro"; setVista("micro"); }; }catch(e){} };
+  if(navigator.serviceWorker && navigator.serviceWorker.getRegistration){
+    navigator.serviceWorker.getRegistration().then(reg=>{
+      if(reg && reg.showNotification) return reg.showNotification(titulo, opts);
+      porPagina();
+    }).catch(porPagina);
+  } else porPagina();
+}
+function textoAviso(){
+  const p = pendientesHoy();
+  const n = Math.min(Math.max(6, U.cfg.min*2), p.venc + Math.min(p.nuevas, U.cfg.nuevas));
+  return `${U.cfg.min} minutos con las Normas CNV · ${n} tarjetas te esperan.`;
+}
+function tickAviso(){
+  if(!U.cfg.avisar || !("Notification" in window) || Notification.permission !== "granted") return;
+  const f = fechaLocal();
+  let av = ""; try{ av = localStorage.getItem(LSAV) || ""; }catch(e){}
+  if(av === f) return;
+  const [h,m] = U.cfg.hora.split(":").map(Number);
+  const d = new Date(), ahora = d.getHours()*60 + d.getMinutes(), obj = h*60 + m;
+  const atraso = ahora - obj;
+  if(atraso < 0 || atraso > AVISO_TARDE) return;
+  mostrarAviso(atraso <= 1 ? "Es momento de aprender" : `Es momento de aprender (era a las ${U.cfg.hora})`, textoAviso());
+  try{ localStorage.setItem(LSAV, f); }catch(e){}
+}
+function programarAviso(){ tickAviso(); }
+setInterval(tickAviso, 20000);
+setTimeout(tickAviso, 2500);
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) tickAviso(); });
+window.addEventListener("focus", tickAviso);
+window.addEventListener("pageshow", tickAviso);
+window.addEventListener("online", tickAviso);
+if("serviceWorker" in navigator && /^https?:$/.test(location.protocol)){
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+const esApp = ()=> (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+
+function cfgCambio(){
+  const h = document.getElementById("uhora"), mi = document.getElementById("umin"), nu = document.getElementById("unuevas"), ba = document.getElementById("ubanco");
+  if(h && h.value) U.cfg.hora = h.value;
+  if(mi) U.cfg.min = +mi.value;
+  if(nu) U.cfg.nuevas = +nu.value;
+  if(ba) U.cfg.banco = ba.checked;
+  U.cfgT = Date.now();
+  guardarU(); programarAviso(); pintarMicro();
+}
+
+microView.addEventListener("change", e=>{
+  if(e.target.id === "uavisar"){
+    if(e.target.checked && Notification.permission !== "granted"){
+      Notification.requestPermission().then(p=>{ U.cfg.avisar = p === "granted"; guardarU(); programarAviso(); pintarMicro(); });
+      e.target.checked = false;
+      return;
+    }
+    U.cfg.avisar = e.target.checked; guardarU(); programarAviso(); pintarMicro(); return;
+  }
+  if(["uhora","umin","unuevas","ubanco"].includes(e.target.id)) cfgCambio();
+});
+microView.addEventListener("click", e=>{
+  const ut = e.target.closest("[data-ut]");
+  if(ut){ const id = ut.dataset.ut; U.cfg.tits = U.cfg.tits.includes(id) ? U.cfg.tits.filter(x=>x!==id) : [...U.cfg.tits, id]; guardarU(); pintarMicro(); return; }
+  if(e.target.closest("[data-uall]")){ U.cfg.tits = NORMAS.filter(n=>flashDe(n.id).length).map(n=>n.id); guardarU(); pintarMicro(); return; }
+  if(e.target.closest("[data-uprio]")){ U.cfg.tits = NORMAS.filter(n=>n.prio===3).map(n=>n.id); guardarU(); pintarMicro(); return; }
+  if(e.target.closest("[data-uempezar]")){ microIr(); return; }
+  if(e.target.closest("[data-uextra]")){ microIr(null, true); return; }
+  if(e.target.closest("[data-uvolver]")){ SES = null; pintarMicro(); return; }
+  if(e.target.closest("[data-uics]")){ bajarICS(); return; }
+  if(e.target.closest("[data-uprobar]")){
+    const go = ()=>mostrarAviso("Es momento de aprender", textoAviso());
+    if(Notification.permission === "granted") go(); else Notification.requestPermission().then(p=>{ if(p==="granted") go(); pintarMicro(); });
+    return;
+  }
+  if(e.target.closest("[data-uprobar1]")){
+    const b = e.target.closest("[data-uprobar1]");
+    const go = ()=>{ b.textContent = "Sonará en 1 minuto…"; setTimeout(()=>mostrarAviso("Es momento de aprender", "Prueba: así te va a llegar todos los días."), 60000); };
+    if(Notification.permission === "granted") go(); else Notification.requestPermission().then(p=>{ if(p==="granted") go(); });
+    return;
+  }
+  if(e.target.closest("[data-ureset]")){
+    if(uzona.querySelector("[data-ureset]").dataset.conf === "1"){ U.c = {}; U.dias = {}; guardarU(); pintarMicro(); return; }
+    const b = uzona.querySelector("[data-ureset]"); b.dataset.conf = "1"; b.textContent = "Tocá otra vez para confirmar"; return;
+  }
+  if(!SES) return;
+  if(e.target.closest("[data-uver]")){ SES.visto = true; pintarTarjeta(); return; }
+  const ir = e.target.closest("[data-uir]");
+  if(ir){ const t = ir.dataset.uir; SES = null; abrirTitulo(t); return; }
+  const op = e.target.closest("[data-uop]");
+  if(op && !SES.visto){
+    const i = +op.dataset.uop, p = SES.items[SES.i].p;
+    if(p.ok.length > 1) SES.sel = SES.sel.includes(i) ? SES.sel.filter(x=>x!==i) : [...SES.sel, i];
+    else SES.sel = [i];
+    pintarTarjeta(); return;
+  }
+  if(e.target.closest("[data-ucheck]")){ SES.visto = true; pintarTarjeta(); return; }
+  const g = e.target.closest("[data-ug]");
+  if(g){
+    const it = SES.items[SES.i], val = +g.dataset.ug;
+    calificar(it.k, val);
+    SES.hechas++; if(val >= 3) SES.bien++;
+    if(val === 1 && !SES.repetidas.has(it.k)){ SES.repetidas.add(it.k); SES.items.push(it); }
+    SES.i++; SES.visto = false; SES.sel = [];
+    pintarTarjeta(); window.scrollTo({top: microView.offsetTop - 10, behavior:"smooth"});
+    return;
+  }
+  if(e.target.closest("[data-ufin]")){ finSesion(); return; }
+});
+document.addEventListener("keydown", e=>{
+  if(!SES || vista !== "micro" || /input|select|textarea/i.test(e.target.tagName)) return;
+  const it = SES.items[SES.i]; if(!it) return;
+  if(!SES.visto && (e.key === " " || e.key === "Enter") && it.tipo === "f"){ e.preventDefault(); SES.visto = true; pintarTarjeta(); }
+  else if(SES.visto && it.tipo === "f" && ["1","2","3","4"].includes(e.key)){ uzona.querySelector(`[data-ug="${e.key}"]`)?.click(); }
+});
+
+document.getElementById("vMicro").addEventListener("click", ()=>setVista("micro"));
+function abrirPorHash(){
+  const h = (location.hash || "").slice(1);
+  if(h === "micro") setVista("micro");
+  else if(h === "normas"){ msub = "normas"; setVista("mercado"); }
+  else if(h === "hoy"){ msub = "hoy"; setVista("mercado"); }
+}
+window.addEventListener("hashchange", abrirPorHash);
+abrirPorHash();
+programarAviso();
+
 buildTabs(); render(); applyAllText(); renderGlosario(); pintarCuestionario(); pintarMercado(); filter(); medirBarra();
+document.getElementById("ucount").textContent = FLASH.length;
+
+/* =================== Cuenta, nube y perfil =================== */
+/* Pegá acá la configuración web de tu proyecto de Firebase (Consola → ⚙ Configuración del proyecto →
+   Tus apps → Web → firebaseConfig). Mientras quede en null, la página funciona como siempre, sin cuenta. */
+const FIREBASE_CONFIG = null;
+
+const FB_VER = "12.17.1";
+const LSMAIL = "mapa-idoneo-mail";
+const perfilView = document.getElementById("perfil");
+const pzona = document.getElementById("pzona");
+const NUBE = { listo:false, user:null, db:null, estado:"", ultimo:0, error:"", timer:null, cargando:false, perfil:{} };
+
+function cargarScript(src){
+  return new Promise((ok, mal)=>{ const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = mal; document.head.appendChild(s); });
+}
+async function nubeIniciar(){
+  if(!FIREBASE_CONFIG || NUBE.listo || NUBE.cargando) return;
+  NUBE.cargando = true;
+  try{
+    const b = `https://www.gstatic.com/firebasejs/${FB_VER}/`;
+    await cargarScript(b + "firebase-app-compat.js");
+    await Promise.all([cargarScript(b + "firebase-auth-compat.js"), cargarScript(b + "firebase-firestore-compat.js")]);
+    firebase.initializeApp(FIREBASE_CONFIG);
+    NUBE.db = firebase.firestore();
+    NUBE.listo = true;
+    const auth = firebase.auth();
+    auth.languageCode = "es";
+    if(auth.isSignInWithEmailLink(location.href)){
+      let mail = ""; try{ mail = localStorage.getItem(LSMAIL) || ""; }catch(e){}
+      if(mail) await completarLink(mail);
+      else { NUBE.estado = "pedir-mail"; setVista("perfil"); }
+    }
+    auth.getRedirectResult().catch(e=>{ NUBE.error = errorTxt(e); pintarPerfil(); });
+    auth.onAuthStateChanged(async u=>{
+      NUBE.user = u;
+      actualizarBotonPerfil();
+      if(u){ await nubeTraer(); }
+      else { NUBE.perfil = {}; }
+      if(vista === "perfil") pintarPerfil();
+    });
+  }catch(e){
+    NUBE.error = "No se pudo conectar con el servicio de cuentas. Revisá la conexión.";
+  }
+  NUBE.cargando = false;
+  if(vista === "perfil") pintarPerfil();
+}
+async function completarLink(mail){
+  try{
+    await firebase.auth().signInWithEmailLink(mail, location.href);
+    try{ localStorage.removeItem(LSMAIL); }catch(e){}
+    history.replaceState(null, "", location.pathname + "#perfil");
+    NUBE.estado = ""; setVista("perfil");
+  }catch(e){ NUBE.error = errorTxt(e); NUBE.estado = "pedir-mail"; setVista("perfil"); }
+}
+function errorTxt(e){
+  const c = (e && e.code) || "";
+  if(c.includes("invalid-email")) return "Ese mail no parece válido.";
+  if(c.includes("expired") || c.includes("invalid-action-code")) return "El link ya venció o ya se usó. Pedí uno nuevo.";
+  if(c.includes("popup-closed") || c.includes("cancelled")) return "";
+  if(c.includes("network")) return "Sin conexión: probá de nuevo en un rato.";
+  if(c.includes("unauthorized-domain")) return "Este dominio todavía no está autorizado en Firebase.";
+  if(c.includes("operation-not-allowed")) return "Ese método de ingreso no está activado en Firebase.";
+  return (e && e.message) || "Algo salió mal.";
+}
+
+/* ---- documentos: usuarios/{uid} (perfil + resumen) · usuarios/{uid}/datos/quiz · usuarios/{uid}/datos/micro ---- */
+const refUsuario = ()=> NUBE.db.collection("usuarios").doc(NUBE.user.uid);
+const refDato = k => refUsuario().collection("datos").doc(k);
+
+function fundirQuiz(d){
+  Object.entries((d && d.respuestas) || {}).forEach(([id, r])=>{
+    if(!pregPorId(id) || !r) return;
+    const a = quiz.respuestas[id];
+    if(!a){ quiz.respuestas[id] = { bien:!!r.bien, elegidas:r.elegidas||[], v:r.v||1, ok:r.ok||(r.bien?1:0), t:r.t||0 }; return; }
+    const nuevo = (r.t||0) > (a.t||0);
+    quiz.respuestas[id] = { bien: nuevo ? !!r.bien : a.bien, elegidas: nuevo ? (r.elegidas||[]) : a.elegidas,
+      v: Math.max(a.v||1, r.v||1), ok: Math.max(a.ok||0, r.ok||0), t: Math.max(a.t||0, r.t||0) };
+  });
+  const vistos = new Set(quiz.hist.map(h=>h.ts));
+  ((d && d.hist) || []).forEach(h=>{ if(h && h.ts && !vistos.has(h.ts)){ quiz.hist.push(h); vistos.add(h.ts); } });
+  quiz.hist.sort((a,b)=>a.ts-b.ts);
+}
+function fundirMicro(d){
+  if(!d) return;
+  const localVacio = !Object.keys(U.c).length;
+  Object.entries(d.c || {}).forEach(([k, r])=>{
+    const a = U.c[k];
+    if(!a || (r.reps||0) > (a.reps||0) || ((r.reps||0) === (a.reps||0) && (r.last||"") > (a.last||""))) U.c[k] = r;
+  });
+  Object.entries(d.dias || {}).forEach(([f, r])=>{
+    const a = U.dias[f];
+    U.dias[f] = a ? { n:Math.max(a.n||0, r.n||0), bien:Math.max(a.bien||0, r.bien||0) } : r;
+  });
+  if(d.cfg && (localVacio || (d.cfgT||0) > (U.cfgT||0))){ U.cfg = Object.assign(U.cfg, d.cfg); U.cfgT = d.cfgT || 0; }
+}
+
+async function nubeTraer(){
+  if(!NUBE.user) return;
+  NUBE.estado = "sincronizando"; pintarPerfil();
+  try{
+    const [pu, pq, pm] = await Promise.all([refUsuario().get(), refDato("quiz").get(), refDato("micro").get()]);
+    NUBE.perfil = (pu.exists && pu.data().perfil) || {};
+    if(pq.exists) fundirQuiz(pq.data());
+    if(pm.exists) fundirMicro(pm.data());
+    guardarLocalSinNube();
+    await nubeSubir(true);
+    try{ pintarCuestionario(); }catch(e){}
+    if(vista === "micro") pintarMicro();
+  }catch(e){ NUBE.error = errorTxt(e); NUBE.estado = "error"; }
+  pintarPerfil();
+}
+
+function resumen(){
+  const rs = Object.values(quiz.respuestas);
+  const v = rs.reduce((s,r)=>s+(r.v||0),0), ok = rs.reduce((s,r)=>s+(r.ok||0),0);
+  const ult = quiz.hist.slice(-3);
+  return {
+    preguntasVistas: rs.length, intentos: v, acierto: v ? Math.round(100*ok/v) : null,
+    simulacros: quiz.hist.length,
+    promedioUlt3: ult.length ? Math.round(ult.reduce((s,h)=>s+(h.pct||0),0)/ult.length) : null,
+    tarjetasVistas: Object.keys(U.c).length,
+    consolidadas: Object.values(U.c).filter(s=>s.box>=4).length,
+    racha: racha(), diasEstudiados: Object.keys(U.dias).length
+  };
+}
+
+async function nubeSubir(todo){
+  if(!NUBE.user || !NUBE.db) return;
+  clearTimeout(NUBE.timer);
+  NUBE.estado = "guardando";
+  try{
+    const ahora = Date.now();
+    const u = NUBE.user;
+    const perfil = Object.assign({ email:u.email || "", nombre:u.displayName || "", creado:ahora }, NUBE.perfil, { email:u.email || "", ultimo:ahora });
+    NUBE.perfil = perfil;
+    await Promise.all([
+      refUsuario().set({ perfil, resumen:Object.assign(resumen(), { actualizado:ahora }) }, { merge:true }),
+      refDato("quiz").set({ respuestas:quiz.respuestas, hist:quiz.hist.slice(-200), cfg:quiz.cfg, t:ahora }),
+      refDato("micro").set({ c:U.c, dias:U.dias, cfg:U.cfg, cfgT:U.cfgT||0, t:ahora })
+    ]);
+    NUBE.ultimo = ahora; NUBE.estado = "ok"; NUBE.error = "";
+  }catch(e){ NUBE.estado = "error"; NUBE.error = errorTxt(e); }
+  if(vista === "perfil") pintarPerfil();
+  actualizarBotonPerfil();
+}
+function nubeProgramar(){
+  if(!NUBE.user) return;
+  clearTimeout(NUBE.timer);
+  NUBE.estado = "pendiente";
+  NUBE.timer = setTimeout(()=>nubeSubir(), 2500);
+}
+
+/* cada guardado local también agenda una subida (sin tocar el código original) */
+let SIN_NUBE = false;
+function guardarLocalSinNube(){ SIN_NUBE = true; guardarProgreso(); guardarHist(); guardarU(); SIN_NUBE = false; }
+{
+  const gp = guardarProgreso, gh = guardarHist, gu = guardarU;
+  guardarProgreso = function(){ gp(); if(!SIN_NUBE) nubeProgramar(); };
+  guardarHist = function(){ gh(); if(!SIN_NUBE) nubeProgramar(); };
+  guardarU = function(){ gu(); if(!SIN_NUBE) nubeProgramar(); };
+}
+window.addEventListener("pagehide", ()=>{ if(NUBE.estado === "pendiente") nubeSubir(); });
+document.addEventListener("visibilitychange", ()=>{ if(document.hidden && NUBE.estado === "pendiente") nubeSubir(); });
+
+/* ---- vista de perfil ---- */
+function actualizarBotonPerfil(){
+  const b = document.getElementById("vPerfil"); if(!b) return;
+  const n = NUBE.user ? ((NUBE.perfil.nombre || NUBE.user.displayName || NUBE.user.email || "").split(/[ @]/)[0]) : "";
+  b.firstChild.textContent = NUBE.user ? `Mi perfil · ${n}` : "Mi perfil";
+  const pc = document.getElementById("pcount"); if(pc) pc.textContent = NUBE.user ? "●" : "";
+}
+function haceTxt(t){
+  if(!t) return "todavía no";
+  const s = Math.round((Date.now()-t)/1000);
+  return s < 60 ? "recién" : s < 3600 ? `hace ${Math.round(s/60)} min` : `hace ${Math.round(s/3600)} h`;
+}
+function barrasModulo(){
+  const agg = {};
+  Object.entries(quiz.respuestas).forEach(([id, r])=>{
+    const q = pregPorId(id); if(!q) return;
+    const a = agg[q.mod] = agg[q.mod] || {v:0, ok:0, n:0};
+    a.v += r.v||0; a.ok += r.ok||0; a.n++;
+  });
+  return Object.keys(MODNOM).map(m=>{
+    const a = agg[m] || {v:0, ok:0, n:0}, tot = PREGUNTAS.filter(q=>q.mod == m).length;
+    const pct = a.v ? Math.round(100*a.ok/a.v) : 0;
+    return `<div class="pbar"><span class="pl">${esc(MODNOM[m].replace(/^Módulo (\d) · /, "M$1 · "))}</span>
+      <span class="pt"><i style="width:${pct}%"></i><b style="left:70%"></b></span>
+      <span class="pv">${a.v ? pct + "%" : "—"} <small>${a.n}/${tot}</small></span></div>`;
+  }).join("");
+}
+function barrasTitulo(){
+  return NORMAS.filter(n=>flashDe(n.id).length).map(n=>{
+    const cs = flashDe(n.id), tot = cs.length;
+    const vis = cs.filter(c=>U.c["f:"+c.id]).length, cons = cs.filter(c=>(U.c["f:"+c.id]||{}).box>=4).length;
+    const pct = Math.round(100*cons/tot);
+    return `<div class="pbar"><span class="pl">Tít. ${n.id} · ${esc(n.n.length > 34 ? n.n.slice(0,32) + "…" : n.n)}</span>
+      <span class="pt"><i style="width:${Math.round(100*vis/tot)}%;opacity:.35"></i><i style="width:${pct}%;position:absolute;left:0;top:0"></i></span>
+      <span class="pv">${cons}/${tot}</span></div>`;
+  }).join("");
+}
+function pintarPerfil(){
+  if(!pzona) return;
+  if(vista === "perfil") countEl.textContent = "";
+  const r = resumen();
+  const intro = document.getElementById("pintro");
+  intro.textContent = "Tu cuenta guarda el historial de simulacros, las respuestas del cuestionario y el micro-learning, para que los tengas en el celular y en la compu. Sin cuenta, todo sigue funcionando y queda solo en este dispositivo.";
+  let cuentaHTML;
+  if(!FIREBASE_CONFIG){
+    cuentaHTML = `<section class="ucard uhoy"><h3>Cuenta</h3>
+      <p>El ingreso con cuenta todavía no está activado en esta página. Mientras tanto, tu progreso queda guardado en este navegador y podés pasarlo a otro dispositivo con «Exportar» desde el Historial del cuestionario.</p></section>`;
+  } else if(!NUBE.listo){
+    cuentaHTML = `<section class="ucard uhoy"><h3>Cuenta</h3><p>${NUBE.error ? esc(NUBE.error) : "Conectando…"}</p></section>`;
+  } else if(!NUBE.user){
+    const pedir = NUBE.estado === "pedir-mail", enviado = NUBE.estado === "enviado";
+    cuentaHTML = `<section class="ucard uhoy"><h3>${pedir ? "Confirmá tu mail" : "Entrar"}</h3>
+      ${enviado ? `<p class="ubig" style="font-size:20px">Revisá tu correo.</p><p>Te mandamos un link a <b>${esc(NUBE.mailEnviado||"")}</b>. Abrilo desde este mismo dispositivo y quedás adentro. Si no llega en un minuto, mirá en spam.</p>
+        <div class="nacc"><button class="nbtn sec" data-potro="1">Usar otro mail</button></div>`
+      : `<p>${pedir ? "Abriste el link en un dispositivo distinto del que lo pidió: escribí de nuevo tu mail para confirmar." : "Sin contraseña: escribí tu mail y te mandamos un link para entrar."}</p>
+        <form class="pform" data-pmail="1"><input type="email" id="pmail" required autocomplete="email" placeholder="tu@mail.com">
+        <button class="nbtn" type="submit">${pedir ? "Entrar" : "Mandarme el link"}</button></form>
+        <div class="nacc"><button class="nbtn sec" data-pgoogle="1">Entrar con Google</button></div>`}
+      ${NUBE.error ? `<p class="uaviso" style="color:var(--st-reemp)">${esc(NUBE.error)}</p>` : ""}
+      <p class="uaviso">Si entrás, lo que ya hiciste en este dispositivo se suma a tu cuenta: no se pierde nada. Tus datos quedan asociados a tu mail y solo vos podés leerlos.</p>
+    </section>`;
+  } else {
+    const p = NUBE.perfil, dias = p.examen ? difDias(p.examen, hoyISO()) : null;
+    const est = { sincronizando:"Sincronizando…", guardando:"Guardando…", pendiente:"Cambios por guardar…", error:"No se pudo guardar", ok:`Guardado ${haceTxt(NUBE.ultimo)}` }[NUBE.estado] || `Guardado ${haceTxt(NUBE.ultimo)}`;
+    cuentaHTML = `<section class="ucard uhoy"><h3>Tu perfil</h3>
+      <p class="ubig">${esc(p.nombre || NUBE.user.displayName || "Hola")}</p>
+      <p>${esc(NUBE.user.email || "")} · <span class="est ${NUBE.estado === "error" ? "reemplazado" : "central"}">${esc(est)}</span></p>
+      ${NUBE.error ? `<p class="uaviso" style="color:var(--st-reemp)">${esc(NUBE.error)}</p>` : ""}
+      <div class="ufila">
+        <label>Nombre <input type="text" id="pnombre" value="${esc(p.nombre || "")}" placeholder="Cómo te llamás" maxlength="60"></label>
+        <label>Fecha del examen <input type="date" id="pexamen" value="${esc(p.examen || "")}"></label>
+      </div>
+      ${dias != null ? `<p><b>${dias > 0 ? `Faltan ${dias} días` : dias === 0 ? "El examen es hoy" : "El examen ya pasó"}</b>${dias > 0 ? ` · a tu ritmo actual te da para unas ${Math.max(0, dias)} sesiones de micro-learning.` : ""}</p>` : ""}
+      <div class="nacc"><button class="nbtn sec" data-psync="1">Sincronizar ahora</button><button class="hbtn" data-psalir="1">Cerrar sesión</button><button class="hbtn peligro" data-pborrar="1">Borrar mis datos de la nube</button></div>
+    </section>`;
+  }
+  pzona.innerHTML = `<div class="ugrid">
+    ${cuentaHTML}
+    <section class="ucard"><h3>Resumen</h3>
+      <div class="ustats">
+        <div class="ustat"><b>${r.preguntasVistas}</b><span>preguntas vistas de ${PREGUNTAS.length}</span></div>
+        <div class="ustat"><b>${r.acierto == null ? "—" : r.acierto + "%"}</b><span>acierto acumulado</span></div>
+        <div class="ustat"><b>${r.simulacros}</b><span>simulacros</span></div>
+        <div class="ustat"><b>${r.promedioUlt3 == null ? "—" : r.promedioUlt3 + "%"}</b><span>promedio últimos 3</span></div>
+        <div class="ustat"><b>${r.racha}</b><span>días seguidos de micro-learning</span></div>
+        <div class="ustat"><b>${r.consolidadas}/${FLASH.length}</b><span>tarjetas consolidadas</span></div>
+      </div>
+      <div class="nacc"><button class="nbtn sec" data-pir="cuestionario">Ir al cuestionario</button><button class="nbtn sec" data-pir="micro">Ir al micro-learning</button></div>
+    </section>
+    <section class="ucard"><h3>Dominio por módulo (cuestionario)</h3>${barrasModulo()}<p class="uaviso">La marca es el 70% que pide el examen.</p></section>
+    <section class="ucard"><h3>Normas por título (micro-learning)</h3>${barrasTitulo()}<p class="uaviso">Claro: tarjetas vistas. Oscuro: consolidadas (caja 4 o más).</p></section>
+  </div>`;
+}
+
+perfilView.addEventListener("submit", async e=>{
+  const f = e.target.closest("[data-pmail]"); if(!f) return;
+  e.preventDefault();
+  const mail = document.getElementById("pmail").value.trim();
+  if(!mail) return;
+  NUBE.error = "";
+  if(NUBE.estado === "pedir-mail"){ await completarLink(mail); return; }
+  try{
+    await firebase.auth().sendSignInLinkToEmail(mail, { url: location.origin + location.pathname + "#perfil", handleCodeInApp:true });
+    try{ localStorage.setItem(LSMAIL, mail); }catch(e){}
+    NUBE.estado = "enviado"; NUBE.mailEnviado = mail;
+  }catch(err){ NUBE.error = errorTxt(err); }
+  pintarPerfil();
+});
+perfilView.addEventListener("change", e=>{
+  if(!NUBE.user) return;
+  if(e.target.id === "pnombre"){ NUBE.perfil.nombre = e.target.value.trim(); actualizarBotonPerfil(); nubeProgramar(); }
+  if(e.target.id === "pexamen"){ NUBE.perfil.examen = e.target.value; nubeProgramar(); pintarPerfil(); }
+});
+perfilView.addEventListener("click", async e=>{
+  if(e.target.closest("[data-pgoogle]")){
+    const prov = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(prov).catch(err=>{
+      if(/popup-blocked|operation-not-supported/.test(err.code || "")) firebase.auth().signInWithRedirect(prov);
+      else { NUBE.error = errorTxt(err); pintarPerfil(); }
+    });
+    return;
+  }
+  if(e.target.closest("[data-potro]")){ NUBE.estado = ""; pintarPerfil(); return; }
+  if(e.target.closest("[data-psync]")){ await nubeTraer(); return; }
+  if(e.target.closest("[data-psalir]")){ if(NUBE.estado === "pendiente") await nubeSubir(); await firebase.auth().signOut(); return; }
+  const pb = e.target.closest("[data-pborrar]");
+  if(pb){
+    if(pb.dataset.conf !== "1"){ pb.dataset.conf = "1"; pb.textContent = "Tocá otra vez para borrar todo de la nube"; return; }
+    try{
+      await Promise.all([refDato("quiz").delete(), refDato("micro").delete()]);
+      await refUsuario().delete();
+      await firebase.auth().signOut();
+    }catch(err){ NUBE.error = errorTxt(err); pintarPerfil(); }
+    return;
+  }
+  const ir = e.target.closest("[data-pir]");
+  if(ir){ setVista(ir.dataset.pir); return; }
+});
+document.getElementById("vPerfil").addEventListener("click", ()=>setVista("perfil"));
+if(location.hash === "#perfil") setVista("perfil");
+nubeIniciar();
+
 </script>
 
 </body></html>
