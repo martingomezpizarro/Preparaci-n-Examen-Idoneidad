@@ -23,7 +23,9 @@ Una sola página HTML, sin dependencias ni build. Abrís `index.html` y funciona
 
 Los artículos que la bibliografía pide expresamente están marcados con el módulo del programa que los toma. El filtro «Solo bibliografía» deja nada más esos. Cada artículo muestra además las otras leyes que su propio texto cita, y de qué reforma viene su redacción actual.
 
-**El glosario.** Las definiciones que las propias leyes dan de sí mismas, literales, con un chip que te lleva al artículo exacto. La mayoría sale del art. 2 de la Ley 26.831.
+**El glosario.** Las definiciones que las propias leyes dan de sí mismas, literales, con un chip que te lleva al artículo exacto. La mayoría sale del art. 2 de la Ley 26.831. Además están las 135 definiciones del Título I de las Normas CNV, tal como quedó con la RG 1097/2025 (arts. 2 y 3: siglas, tipos de acción, Inversor Calificado, Valor Negociable Temático y más). El PDF de la resolución está en el repo.
+
+Cada definición se puede practicar también como tarjeta para completar: se tapan algunas palabras clave (siempre las mismas para cada término; en las más importantes, como «Inversor Calificado», elegidas a mano: plazos, porcentajes, humanas/jurídicas, «Comisión Nacional de Valores»…) y hay que escribirlas. No importan tildes ni mayúsculas y se perdona un error de tipeo. Entran en la sesión diaria de micro-learning con la misma repetición espaciada que las demás tarjetas, o se practican solas desde el botón del glosario.
 
 **El cuestionario.** 942 preguntas en tres modos: práctica (una por vez, con corrección inmediata), simulacro (todas seguidas, cronometradas) y repaso (todo a la vista para leer de corrido). Filtrás por módulo, por origen y por «solo las que fallé». El progreso queda en el navegador.
 
@@ -70,7 +72,7 @@ Todo vive en `index.html`. Los datos están en constantes al principio del `<scr
 |---|---|
 | `LEYES` | Estructura de cada ley: títulos, capítulos, artículos, módulos que los piden |
 | `TEXTOS` | Texto literal de cada artículo, indexado por ley y número |
-| `GLOSARIO` | Términos, definición literal y el artículo de donde sale |
+| `GLOSARIO` | Términos, definición literal y el artículo de donde sale (`l: "RG1097"` para el Título I de las Normas; `nc` la deja fuera de las tarjetas; `hue` fija los huecos a mano) |
 | `PREGUNTAS` | El banco completo |
 
 Una pregunta tiene esta forma:

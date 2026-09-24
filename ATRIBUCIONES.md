@@ -8,6 +8,8 @@ Tomados de los **textos actualizados de InfoLeg** (Dirección Nacional del Siste
 
 Las leyes, decretos y demás actos oficiales **no son objeto de propiedad intelectual** (Ley 11.723, art. 1, interpretado a contrario; y el criterio general de publicidad de los actos de gobierno). Se reproducen literalmente y sin alteración.
 
+Las **135 definiciones del Título I de las Normas CNV** que figuran en el glosario salen de la **Resolución General CNV 1097/2025** (B.O. 24/12/2025), copiadas literalmente del PDF del Boletín Oficial que está en este repositorio (`RG 1097.pdf`). Rige el mismo criterio: son actos oficiales.
+
 Los **resúmenes y epígrafes** de cada artículo, en cambio, son elaboración propia de este proyecto y van bajo la licencia MIT del repositorio.
 
 ## 2. Banco de preguntas «Guía CNV · idoneocnv» (721 preguntas)
