@@ -1334,6 +1334,18 @@
       margin-left: 0
     }
 
+    .qnext.qant {
+      margin-left: 0
+    }
+
+    .qnext.qant + .qnext {
+      margin-left: 8px
+    }
+
+    .qpie .count + .qnext.qant {
+      margin-left: auto
+    }
+
     .qprog {
       height: 3px;
       background: var(--line);
@@ -4588,11 +4600,83 @@
     .ini-cta { margin-top: 12px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--st-central); border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow); }
     .ini-cta p { margin: 0 0 6px; color: var(--ink-2); font-size: 14px; text-align: left; }
     .ini-aviso { margin-top: 30px; font-size: 12px; color: var(--ink-3); }
+    /* textos de Inicio justificados */
+    .ini-hero p.lead, .ini p.sub, .ini-card p, .ini-fuentes span, .ini-prin > div, .ini-cta p, .ini-aviso, .ini p {
+      text-align: justify; hyphens: auto; -webkit-hyphens: auto;
+    }
     @media (max-width: 600px) {
       .ini-hero { padding: 18px 0 16px; }
       .ini-hero p.lead { font-size: 14.5px; }
       .ini h2 { font-size: 19px; margin-top: 26px; }
       .ini-fuentes > div { grid-template-columns: 1fr; gap: 3px; }
+    }
+
+
+    .utarjlab { margin: 12px 0 6px !important; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+    .utarjchips { margin-bottom: 4px; }
+    /* =================== Estructura jerárquica del mercado =================== */
+    .jer { margin-top: 16px; display: flex; flex-direction: column; align-items: stretch; }
+    .jnivel { --c: var(--accent); position: relative; background: var(--surface); border: 1px solid var(--line);
+      border-top: 3px solid var(--c); border-radius: 12px; padding: 12px 14px 14px; box-shadow: var(--shadow); }
+    .jnivel > .jlab { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0 0 10px; }
+    .jnivel > .jlab b { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--c); font-weight: 600; }
+    .jnivel > .jlab span { font-size: 12.5px; color: var(--ink-3); }
+    .jcajas { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .jcaja { --c2: var(--c); font-family: var(--f-body); text-align: left; cursor: pointer; color: var(--ink);
+      background: var(--surface-2); border: 1px solid var(--line-strong); border-left: 4px solid var(--c2);
+      border-radius: 9px; padding: 9px 12px; display: flex; flex-direction: column; gap: 2px; flex: 1 1 180px; max-width: 340px; }
+    .jcaja:hover { border-color: var(--c2); }
+    .jcaja[aria-pressed="true"] { background: color-mix(in srgb, var(--c2) 12%, var(--surface)); border-color: var(--c2); }
+    .jcaja .js { font-family: var(--f-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+    .jcaja .jn { font-weight: 600; font-size: 14px; line-height: 1.3; }
+    .jcaja .jd { font-size: 12.5px; color: var(--ink-2); line-height: 1.4; }
+    .jcaja.xl { flex: 1 1 280px; max-width: 460px; padding: 14px 16px; }
+    .jcaja.xl .jn { font-size: 16.5px; font-family: var(--f-display); }
+    .jcaja.xxl { flex: 1 1 100%; max-width: 620px; padding: 14px 18px; align-items: center; text-align: center; }
+    .jcaja.xxl .jn { font-size: 20px; font-family: var(--f-display); }
+    .jcaja.sm { flex: 0 1 200px; padding: 7px 10px; }
+    .jcaja.sm .jn { font-size: 13px; }
+    .jcaja.baja { opacity: .6; }
+    .jcaja.baja .jn { text-decoration: line-through; text-decoration-thickness: 1px; }
+    .jcaja.apagada { opacity: .25; }
+    .jflecha { align-self: center; display: flex; flex-direction: column; align-items: center; padding: 4px 0; color: var(--ink-3);
+      font-size: 12px; text-align: center; max-width: 46ch; line-height: 1.35; }
+    .jflecha::before { content: ""; width: 1px; height: 12px; background: var(--line-strong); margin-bottom: 3px; }
+    .jflecha::after { content: "▼"; font-size: 8px; margin-top: 2px; color: var(--line-strong); }
+    .jsuper { position: relative; padding-left: 26px; margin-top: 4px; }
+    .jsuper::before { content: ""; position: absolute; left: 8px; top: 0; bottom: 0; width: 3px; border-radius: 2px;
+      background: linear-gradient(var(--reg), color-mix(in srgb, var(--reg) 15%, transparent)); }
+    .jsuper > .jsuplab { position: absolute; left: -1px; top: 16px; writing-mode: vertical-rl; transform: rotate(180deg);
+      font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--reg); background: var(--bg); padding: 4px 0; }
+    .jsuper > div { display: flex; flex-direction: column; }
+    .jsub { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); }
+    .jsub .jsubt { width: 100%; text-align: center; font-size: 11.5px; color: var(--ink-3); }
+    .jbase { margin-top: 0; border-radius: 12px 12px 4px 4px; border-top-width: 5px;
+      background: repeating-linear-gradient(135deg, var(--surface) 0 10px, var(--surface-2) 10px 20px); }
+    .jdet { margin-top: 10px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 9px; padding: 12px 14px; }
+    .jdet h4 { margin: 0 0 4px; font-family: var(--f-display); font-size: 17px; font-weight: 600; }
+    .jdet p { margin: 0; font-size: 13.5px; color: var(--ink-2); line-height: 1.55; text-align: justify; hyphens: auto; }
+    .jdet .nacc { margin-top: 10px; }
+    .jsec { margin-top: 30px; }
+    .jsec > h3 { font-family: var(--f-display); font-size: 21px; font-weight: 600; margin: 0 0 4px; }
+    .jsec > p { margin: 0 0 12px; color: var(--ink-2); font-size: 13.5px; max-width: 80ch; }
+    .jemis { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+    .jemi { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 8px; }
+    .jemi .jquien { font-size: 12px; color: var(--ink-3); }
+    .jemi .jquien b { display: block; font-size: 14.5px; color: var(--ink); font-weight: 600; margin-bottom: 1px; }
+    .jemi .jcaja { max-width: none; flex: 0 0 auto; }
+    .jemi .jflecha { padding: 0; }
+    .jemi .jflecha::before { height: 6px; }
+    .jestado { margin-top: 12px; border: 2px dashed var(--pta, #4a3aa7); }
+    .jestado .jcajas { justify-content: flex-start; }
+    .jestado .jnota { margin: 8px 0 0; font-size: 12.5px; color: var(--ink-2); text-align: justify; hyphens: auto; }
+    .jer, .jsec { --reg: #2a78d6; --inf: #1baf7a; --liq: #eb6834; --neg: #d9853b; --can: #d55181; --col: #008300; --ctl: #e34948; --pta: #6a5acd; --val: #c98500; }
+    @media (max-width: 600px) {
+      .jsuper { padding-left: 16px; }
+      .jsuper::before { left: 3px; }
+      .jsuper > .jsuplab { display: none; }
+      .jcaja, .jcaja.xl, .jcaja.sm { flex: 1 1 100%; max-width: none; }
+      .jnivel { padding: 10px 10px 12px; }
     }
 
     /* =================== Celular: más aire útil, menos chorizo =================== */
@@ -4779,9 +4863,9 @@
             que estudiás es la de 2018 y no la original.</span></li>
         <li><span class="tag"
             style="background:var(--accent);color:var(--surface);border-color:var(--accent)">Mer</span><span>La pestaña
-            <b>El mercado</b> arma el mapa de quién es quién. <b>Estructura</b>: nueve capas plegadas que se despliegan
-            una por una hasta el detalle de cada entidad y agente, con las líneas de relación entre ellas; tocá
-            cualquier nombre y se apaga todo lo que no lo toca. <b>Quién puede qué</b>: la matriz de qué puede hacer
+            <b>El mercado</b> arma el mapa de quién es quién. <b>Estructura</b>: el mercado de arriba hacia abajo, con la CNV
+            por encima de todos, los agentes que liquidan y custodian más grandes que los que solo negocian, el
+            inversor y, en la base, la Caja de Valores; abajo, qué se emite y quién lo emite. Tocá una caja para ver qué es. <b>Quién puede qué</b>: la matriz de qué puede hacer
             cada agente y qué tiene prohibido. <b>Instrumentos</b>: cada valor negociable con quién lo emite, lo
             negocia, lo custodia, lo califica y lo controla. <b>Fichas</b>: el detalle de cada actor con sus
             números.</span></li>
@@ -7414,7 +7498,7 @@
     document.getElementById("vCuest").addEventListener("click", () => setVista("cuestionario"));
     document.getElementById("vMercado").addEventListener("click", () => {
       setVista("mercado");
-      if ((msub === "red" && !RED) || (msub === "estructura" && !ESTR)) pintarMercado();
+      if (msub === "red" || msub === "estructura") pintarMercado();
     });
     glosLetras.addEventListener("click", e => {
       const b = e.target.closest("button[data-l]");
@@ -7575,7 +7659,7 @@
         : msub === "hoy"
           ? "La mirada realista: cada categoría que definen las Normas, si hoy se usa o no, qué hace en la práctica y con nombres reales. Lo que no existe más, marcado como tal."
           : msub === "estructura"
-            ? "El mercado por capas: quién autoriza, quién organiza, quién intermedia, quién llega al inversor y qué se emite. Plegado se ve el esqueleto; desplegá una capa para bajar a sus entidades y agentes, y tocá cualquier nombre para ver sus relaciones con el artículo detrás."
+            ? "El mercado de arriba hacia abajo: la CNV por encima de todos, después donde se concierta la operación, los agentes que liquidan y custodian, los que solo negocian, los que llegan al inversor, el inversor y, en la base, la Caja de Valores. Abajo, qué se emite y quién lo emite. Tocá cualquier caja para ver qué es."
             : msub === "red"
               ? "Todo lo que las ocho leyes definen, en un solo grafo: los actores, los valores negociables y los conceptos, unidos por la relación que los liga y con el artículo que la respalda. Movelo, hacé zoom y tocá un nodo para ver de qué está colgado."
               : msub === "esquema"
@@ -7590,16 +7674,13 @@
         mzona.innerHTML = msub === "normas" ? normasHTML() : hoyActoresHTML();
         return;
       }
-      if (msub === "estructura") {
-        redDestruir();
-        const q0 = qEl.value.trim().toLowerCase();
-        const nq = q0 ? MNODOS.filter(n => (n.n + " " + n.sig + " " + n.d).toLowerCase().includes(q0)).length : 0;
-        countEl.textContent = q0 ? `${nq} de ${MNODOS.length} coinciden`
-          : `${MNODOS.length} nodos · ${MREL.length} relaciones`;
-        estrDestruir();
-        mzona.innerHTML = estrHTML();
-        if (!mercView.hidden) estrArmar(true);
-        if (estrSel) redAbrir(estrSel);
+      if (msub === "estructura" || msub === "red") {
+        msub = "estructura";
+        redDestruir(); estrDestruir();
+        mzona.innerHTML = jerarquiaHTML();
+        const tot = mzona.querySelectorAll("[data-jtxt]").length;
+        const nq = jerFiltrar();
+        countEl.textContent = qEl.value.trim() ? `${nq} de ${tot} coinciden` : `${tot} actores e instrumentos`;
         return;
       }
       estrDestruir();
@@ -7640,6 +7721,17 @@
     }
 
     mercView.addEventListener("click", e => {
+      const js = e.target.closest("[data-jsel]");
+      if (js) {
+        jerSel = jerSel === js.dataset.jsel ? null : js.dataset.jsel;
+        const y = js.getBoundingClientRect().top;
+        pintarMercado();
+        const nb = mzona.querySelector(`[data-jsel="${js.dataset.jsel}"]`);
+        if (nb) window.scrollBy(0, nb.getBoundingClientRect().top - y);
+        return;
+      }
+      const jt = e.target.closest("[data-jtit]");
+      if (jt) { msub = "normas"; pintarMercado(); if (typeof abrirTitulo === "function") abrirTitulo(jt.dataset.jtit); return; }
       const bb = e.target.closest("[data-banda]");
       if (bb) {
         const k = bb.dataset.banda;
@@ -7712,7 +7804,139 @@
       if (lk) { const p = lk.dataset.go.split(":"); goTo(p[0], p[1]); }
     });
 
-    /* ---------------- la estructura: capas desplegables ---------------- */
+
+    /* ---------------- la estructura: jerarquía del mercado ----------------
+       De arriba hacia abajo: el regulador, la infraestructura donde se concierta,
+       los que liquidan y custodian (más grandes), los que solo negocian (más chicos),
+       los que llegan al inversor, el inversor y, en la base, donde quedan los valores.
+       Tocar una caja abre su descripción y el enlace a la ficha. */
+    let jerSel = null;
+    const JNIVELES = [
+      { k: "reg", c: "--reg", t: "Regula y supervisa", s: "Por encima de todos", tam: "xxl", cajas: [
+        { id: "cnv", sig: "CNV", n: "Comisión Nacional de Valores", d: "Autoriza la oferta pública, registra a cada agente y los sanciona." }
+      ], sub: { t: "Controlan a la emisora y califican el papel — no intermedian, verifican", cajas: [
+        { id: "auditor", sig: "Auditor", n: "Auditor externo" },
+        { id: "comite", sig: "Comité", n: "Comité de auditoría" },
+        { id: "acr", sig: "ACR", n: "Calificadoras de riesgo" }
+      ] } },
+      { flecha: "autoriza, registra, supervisa y sanciona a todos los de abajo" },
+      { super: true },
+      { k: "inf", c: "--inf", t: "Donde se concierta y se garantiza", s: "Infraestructura", cajas: [
+        { id: "mercados", sig: "Mercados", n: "Mercados", d: "Organizan la operación: BYMA, A3 Mercados, MAV." },
+        { id: "camaras", sig: "Cámaras", n: "Cámaras compensadoras", d: "Liquidan y compensan; si garantizan, son contraparte central." }
+      ] },
+      { flecha: "acceden a los sistemas del mercado a través de" },
+      { k: "liq", c: "--liq", t: "Liquidan, compensan y custodian", s: "Pueden tener la plata y los títulos del cliente", tam: "xl", cajas: [
+        { id: "alyc_int", sig: "ALyC Integral", n: "Agente de liquidación y compensación integral", d: "Negocia, liquida lo propio y lo de terceros, y liquida para otros agentes." },
+        { id: "alyc_prop", sig: "ALyC Propio", n: "Agente de liquidación y compensación propio", d: "Negocia y liquida lo suyo y lo de sus clientes, no para otros agentes." },
+        { id: "acpic", sig: "ACPIC", n: "Custodia de productos de inversión colectiva", d: "La depositaria del FCI: guarda sus activos." }
+      ] },
+      { flecha: "el que solo negocia liquida por convenio con un ALyC" },
+      { k: "neg", c: "--neg", t: "Solo negocian", s: "No liquidan ni custodian", tam: "sm", cajas: [
+        { id: "an", sig: "AN", n: "Agente de negociación", d: "Ingresa ofertas al mercado; no toca plata ni títulos." },
+        { id: "acvn", sig: "ACVN", n: "Agente de corretaje", d: "Acerca a las partes; no opera en el mercado." }
+      ] },
+      { flecha: "le acercan clientes, asesoran o administran" },
+      { k: "can", c: "--can", t: "Llegan al inversor, asesoran o administran", s: "Canales y administradores", tam: "sm", cajas: [
+        { id: "ap", sig: "AP", n: "Agente productor", d: "Capta clientes y gestiona sus órdenes para un ALyC o AN." },
+        { id: "aagi", sig: "AAGI", n: "Asesor global de inversión", d: "Asesora y puede administrar carteras con mandato." },
+        { id: "aapic", sig: "AAPIC", n: "Administración de productos de inversión colectiva", d: "La sociedad gerente del FCI." },
+        { id: "acyd", sig: "ACyD", n: "Colocación y distribución", d: "Colocan cuotapartes de FCI." },
+        { id: "aa", sig: "AAMC", n: "Asesor de mercado de capitales", d: "Categoría eliminada.", baja: true }
+      ] },
+      { flecha: "operan siempre a través de un agente" },
+      { k: "pta", c: "--pta", t: "Inversores", s: "El que pone el ahorro", cajas: [
+        { id: "inversor", sig: "Persona humana", n: "Inversor particular", d: "Persona física que abre una cuenta comitente." },
+        { id: "inversor", sig: "Persona jurídica", n: "Empresas", d: "Sociedades que invierten su caja." },
+        { id: "inversor", sig: "Institucionales", n: "Inversores calificados", d: "FCI, aseguradoras, FGS, bancos: acceden a productos reservados." }
+      ] },
+      { flecha: "los valores de todos terminan depositados en" },
+      { k: "base", c: "--inf", t: "Debajo de todo: donde quedan los valores", s: "Depósito, registro y pago", base: true, tam: "xl", cajas: [
+        { id: "adcvn", sig: "ADCVN", n: "Caja de Valores S.A.", d: "Depositario central único: tu cuenta comitente es una subcuenta ahí." },
+        { id: null, sig: "ACRyP", n: "Custodia, registro y pago", d: "Registro escritural, custodia y pago de servicios de valores individuales.",
+          det: "Llevan el registro electrónico de valores escriturales (anotación en cuenta), la custodia directa o indirecta y el pago de sus servicios (Normas, Tít. VIII Cap. II). El depositario central queda inscripto automáticamente como ACRyP, y desde la RG 1046/2025 pueden inscribirse también mercados, cámaras y bancos.", tit: "VIII" }
+      ] },
+      { finSuper: true }
+    ];
+
+    const JEMISORES = [
+      { q: "Empresas", s: "Sociedades anónimas, SAU, cooperativas", ins: [["acciones", "Acciones"], ["on", "Obligaciones negociables"]] },
+      { q: "PyMEs", s: "Financiamiento de corto plazo", ins: [["pyme", "Cheques, pagarés y facturas de crédito"]] },
+      { q: "Fiduciante y fiduciario financiero", s: "Fideicomisos financieros", ins: [["fideicomiso", "Valores fiduciarios"]] },
+      { q: "Sociedad gerente y depositaria", s: "Fondos comunes de inversión", ins: [["fci", "Cuotapartes de FCI"]] },
+      { q: "Bancos", s: "Créditos con garantía hipotecaria", ins: [["letras", "Letras hipotecarias"]] },
+      { q: "Los mercados", s: "Contratos que se negocian, no se emiten", ins: [["derivados", "Futuros, opciones y pases"]] }
+    ];
+
+    function jCaja(c, nivel, i) {
+      const key = nivel.k + ":" + i;
+      const tam = c.tam || nivel.tam || "";
+      return `<button class="jcaja ${tam}${c.baja ? " baja" : ""}" data-jsel="${key}" aria-pressed="${jerSel === key}" data-jtxt="${esc((c.sig + " " + c.n + " " + (c.d || "")).toLowerCase())}">
+        <span class="js">${esc(c.sig)}</span><span class="jn">${esc(c.n)}</span>${c.d && tam !== "xxl" ? `<span class="jd">${esc(c.d)}</span>` : c.d ? `<span class="jd">${esc(c.d)}</span>` : ""}</button>`;
+    }
+    function jDetalle(c) {
+      const a = c.id ? agPorId(c.id) : null;
+      const txt = c.det || (a ? a.que : c.d);
+      return `<div class="jdet"><h4>${esc(c.n)}${a && a.n !== c.n ? ` <span class="msig" style="font-family:var(--f-mono);font-size:10px;color:var(--ink-3)">${esc(a.sig)}</span>` : ""}</h4>
+        <p>${esc(txt || "")}</p>
+        <div class="nacc">${a ? `<button class="nbtn" data-ficha="${a.id}">Ver la ficha completa</button>` : ""}${c.tit ? `<button class="nbtn sec" data-jtit="${c.tit}">Ver el Título ${c.tit} de las Normas</button>` : ""}</div></div>`;
+    }
+    function jNivel(nv) {
+      const sel = jerSel && jerSel.split(":");
+      const cajas = nv.cajas.map((c, i) => jCaja(c, nv, i)).join("");
+      let det = sel && sel[0] === nv.k ? jDetalle(nv.cajas[+sel[1]]) : "";
+      let sub = "";
+      if (nv.sub) {
+        const sk = nv.k + "s";
+        sub = `<div class="jsub"><span class="jsubt">${esc(nv.sub.t)}</span>${nv.sub.cajas.map((c, i) => jCaja(Object.assign({ tam: "sm" }, c), { k: sk, tam: "sm" }, i)).join("")}</div>`;
+        if (sel && sel[0] === sk) det = jDetalle(nv.sub.cajas[+sel[1]]);
+      }
+      return `<section class="jnivel${nv.base ? " jbase" : ""}" style="--c:var(${nv.c})">
+        <p class="jlab"><b>${esc(nv.t)}</b><span>${esc(nv.s)}</span></p>
+        <div class="jcajas">${cajas}</div>${sub}${det}</section>`;
+    }
+    function jerarquiaHTML() {
+      let h = `<div class="jer">`;
+      JNIVELES.forEach(nv => {
+        if (nv.flecha) h += `<div class="jflecha">${esc(nv.flecha)}</div>`;
+        else if (nv.super) h += `<div class="jsuper"><span class="jsuplab">Supervisa la CNV</span><div>`;
+        else if (nv.finSuper) h += `</div></div>`;
+        else h += jNivel(nv);
+      });
+      h += `</div>`;
+      const sel = jerSel && jerSel.split(":");
+      const emis = JEMISORES.map((e, i) => {
+        const ins = e.ins.map(([id, n]) => {
+          const m = MINSTR.find(x => x.id === id);
+          return `<button class="jcaja sm" style="--c2:var(--val)" data-minstr="${id}" data-jtxt="${esc((n + " " + e.q).toLowerCase())}"><span class="js">${esc(m ? m.fam : "")}</span><span class="jn">${esc(n)}</span></button>`;
+        }).join("");
+        return `<div class="jemi"><div class="jquien"><b>${esc(e.q)}</b>${esc(e.s)}</div><div class="jflecha">emiten</div>${ins}</div>`;
+      }).join("");
+      const pub = MINSTR.find(x => x.id === "publicos");
+      h += `<section class="jsec">
+        <h3>Qué se emite y quién lo emite</h3>
+        <p>Del otro lado del inversor está el que necesita financiarse. Cada emisor, con el valor negociable que pone en el mercado; tocá un instrumento para ver su cadena completa.</p>
+        <div class="jemis">${emis}</div>
+        <section class="jnivel jestado" style="--c:var(--pta)">
+          <p class="jlab"><b>Aparte: el Estado</b><span>Nación, provincias, Ciudad de Buenos Aires, municipios, entes autárquicos</span></p>
+          <div class="jcajas"><button class="jcaja xl" style="--c2:var(--val)" data-minstr="publicos" data-jtxt="títulos públicos bonos letras estado"><span class="js">${esc(pub ? pub.fam : "Renta fija pública")}</span><span class="jn">Títulos públicos: bonos y letras</span><span class="jd">Se negocian en los mismos mercados y se depositan en la Caja de Valores.</span></button></div>
+          <p class="jnota">Van aparte porque su oferta pública no la autoriza la CNV: los valores del Estado nacional, las provincias, la Ciudad, los municipios, los entes autárquicos y los organismos multilaterales de crédito quedan fuera de la Ley 26.831 (art. 83). La CNV sí controla a los agentes que los negocian.</p>
+        </section>
+      </section>`;
+      return h;
+    }
+    function jerFiltrar() {
+      const q = qEl.value.trim().toLowerCase();
+      let n = 0;
+      mzona.querySelectorAll("[data-jtxt]").forEach(b => {
+        const ok = !q || b.dataset.jtxt.includes(q);
+        b.classList.toggle("apagada", !ok);
+        if (ok && q) n++;
+      });
+      return n;
+    }
+
+    /* ---------------- (anterior) la estructura: capas desplegables — ya no se muestra ---------------- */
     const MBANDAS = [
       { k: "reg", d: "Arriba de todo está el que autoriza y registra. Nadie opera sin pasar por acá, y sobre las sociedades con oferta pública la CNV concentra además el control societario." },
       { k: "ctl", d: "El control que mira hacia adentro de la emisora y hacia el riesgo del papel: auditoría, comité, sindicatura y calificadoras. No intermedian, verifican." },
@@ -8507,7 +8731,24 @@
       const xs = pool();
       // en repaso dirigido, primero las que más veces fallaste
       quiz.cola = quiz.dificiles ? xs.slice().sort((a, b) => fallas(b.id) - fallas(a.id)) : mezclar(xs);
-      quiz.i = 0; quiz.marcadas = []; quiz.resuelta = false;
+      quiz.i = 0; quiz.marcadas = []; quiz.resuelta = false; quiz.pasos = [];
+    }
+
+    /* Recuerda cómo quedó cada pregunta de la cola para poder volver a ella
+       (práctica) sin volver a contarla como respondida. */
+    function guardarPaso() {
+      if (!quiz.pasos) quiz.pasos = [];
+      quiz.pasos[quiz.i] = { marcadas: quiz.marcadas.slice(), resuelta: quiz.resuelta };
+    }
+    function irAPaso(i) {
+      guardarPaso();
+      quiz.i = i;
+      const p = quiz.pasos[i];
+      quiz.marcadas = p ? p.marcadas.slice() : [];
+      quiz.resuelta = p ? p.resuelta : false;
+    }
+    function btnAnterior() {
+      return quiz.i > 0 ? `<button class="qnext sec qant" id="qant">← Anterior</button>` : "";
     }
 
     function statHTML() {
@@ -8719,7 +8960,7 @@
     function empezarSimulacro() {
       const cola = armarCola(quiz.cfg);
       if (!cola.length) return;
-      quiz.cola = cola; quiz.i = 0; quiz.marcadas = []; quiz.resuelta = false;
+      quiz.cola = cola; quiz.i = 0; quiz.marcadas = []; quiz.resuelta = false; quiz.pasos = [];
       quiz.simul = {
         activo: true, fin: false, t0: Date.now(),
         limite: quiz.cfg.min ? quiz.cfg.min * 60000 : 0,
@@ -9050,7 +9291,7 @@
           `</div>` +
           `<div class="qprog"><i style="width:${pct}%"></i></div>` +
           tarjeta(q, { revelada: false, elegidas: quiz.marcadas, listado: false }) +
-          `<div class="qpie"><span class="count">Pregunta ${quiz.i + 1} de ${quiz.cola.length}</span>` +
+          `<div class="qpie"><span class="count">Pregunta ${quiz.i + 1} de ${quiz.cola.length}</span>` + btnAnterior() +
           (q.ok.length > 1 ? "" :
             quiz.marcadas.length ? `<button class="qnext" id="qsig">Siguiente</button>`
               : `<button class="qnext sec" id="qsalteo">Saltear</button>`) +
@@ -9087,7 +9328,7 @@
       qzona.innerHTML =
         `<div class="qprog"><i style="width:${pct}%"></i></div>` +
         tarjeta(q, { revelada: quiz.resuelta, elegidas: quiz.marcadas, listado: false }) +
-        `<div class="qpie"><span class="count">Pregunta ${quiz.i + 1} de ${quiz.cola.length}</span></div>`;
+        `<div class="qpie"><span class="count">Pregunta ${quiz.i + 1} de ${quiz.cola.length}</span>` + btnAnterior() + `</div>`;
     }
 
     function responder(q, elegidas) {
@@ -9123,16 +9364,24 @@
         const q = quiz.cola[quiz.i];
         if (quiz.modo === "simulacro") {
           quiz.simul.hechas[q.id] = quiz.marcadas.slice();
-          quiz.i++; quiz.marcadas = [];
-          if (quiz.i >= quiz.cola.length) { terminarSimulacro(false); return; }
+          if (quiz.i + 1 >= quiz.cola.length) { terminarSimulacro(false); return; }
+          quiz.i++; quiz.marcadas = (quiz.simul.hechas[quiz.cola[quiz.i].id] || []).slice();
         } else { quiz.resuelta = true; responder(q, quiz.marcadas); }
         pintarCuestionario(); return;
       }
       if (e.target.closest("#qsig") || e.target.closest("#qsalteo")) {
         if (quiz.modo === "simulacro") {
-          quiz.i++; quiz.marcadas = [];
-          if (quiz.i >= quiz.cola.length) { terminarSimulacro(false); return; }
-        } else { quiz.i++; quiz.marcadas = []; quiz.resuelta = false; }
+          if (quiz.i + 1 >= quiz.cola.length) { terminarSimulacro(false); return; }
+          quiz.i++; quiz.marcadas = (quiz.simul.hechas[quiz.cola[quiz.i].id] || []).slice();
+        } else irAPaso(quiz.i + 1);
+        pintarCuestionario(); return;
+      }
+      if (e.target.closest("#qant")) {
+        if (quiz.i > 0) {
+          if (quiz.modo === "simulacro") {
+            quiz.i--; quiz.marcadas = (quiz.simul.hechas[quiz.cola[quiz.i].id] || []).slice();
+          } else irAPaso(quiz.i - 1);
+        }
         pintarCuestionario(); return;
       }
 
@@ -10136,7 +10385,9 @@
 
     /* =================== Micro-learning =================== */
     const LSU = "mapa-idoneo-micro-v1";
-    const INTERV = [0, 1, 3, 7, 16, 35, 90];
+    /* días hasta el próximo repaso según la caja (1 a 7) */
+    const INTERV = [0, 2, 4, 8, 16, 35, 75, 150];
+    const CAJA_MAX = 7;
     const microView = document.getElementById("micro");
     const uzona = document.getElementById("uzona");
     let U = cargarU();
@@ -10146,7 +10397,7 @@
       let d = null;
       try { d = JSON.parse(localStorage.getItem(LSU) || "null"); } catch (e) { }
       d = d || {};
-      d.cfg = Object.assign({ hora: "08:00", min: 10, nuevas: 8, tits: ["II", "III", "V", "VI", "VII", "VIII", "XI", "XII"], banco: true, avisar: false }, d.cfg || {});
+      d.cfg = Object.assign({ hora: "08:00", min: 10, tarj: 20, nuevas: 8, tits: ["II", "III", "V", "VI", "VII", "VIII", "XI", "XII"], banco: true, avisar: false }, d.cfg || {});
       d.c = d.c || {}; d.dias = d.dias || {};
       return d;
     }
@@ -10168,12 +10419,22 @@
     function armarSesion(tits) {
       const hoy = hoyISO();
       const { fl, bq } = itemsDisponibles(tits);
-      const cupo = Math.max(6, Math.round(U.cfg.min * 2));
+      const cupo = Math.max(1, U.cfg.tarj || 20);
+      // las que vencen, primero las más atrasadas; las que no entran hoy quedan para mañana
       const vencidas = [...fl, ...bq].filter(it => U.c[it.k] && U.c[it.k].due <= hoy)
         .sort((a, b) => U.c[a.k].due.localeCompare(U.c[b.k].due));
-      const nuevasF = mezclar(fl.filter(it => !U.c[it.k])).slice(0, Math.ceil(U.cfg.nuevas * (U.cfg.banco ? .6 : 1)));
-      const nuevasQ = U.cfg.banco ? mezclar(bq.filter(it => !U.c[it.k])).slice(0, Math.floor(U.cfg.nuevas * .4)) : [];
-      let items = [...vencidas.slice(0, cupo), ...nuevasF, ...nuevasQ].slice(0, Math.max(cupo, 1));
+      const frescasF = mezclar(fl.filter(it => !U.c[it.k]));
+      const frescasQ = U.cfg.banco ? mezclar(bq.filter(it => !U.c[it.k])) : [];
+      // nuevas intercaladas: 60 % tarjetas de las Normas, 40 % preguntas del banco
+      const nuevas = [];
+      while (frescasF.length || frescasQ.length) {
+        const qToca = frescasQ.length && (!frescasF.length || nuevas.filter(x => x.tipo === "q").length < nuevas.length * .4);
+        nuevas.push(qToca ? frescasQ.shift() : frescasF.shift());
+      }
+      // siempre entra un mínimo de nuevas, para seguir avanzando sobre el temario
+      const minNuevas = Math.min(U.cfg.nuevas || 0, cupo);
+      const rep = vencidas.slice(0, cupo - Math.min(minNuevas, nuevas.length));
+      const items = [...rep, ...nuevas.slice(0, cupo - rep.length)];
       return intercalar(items);
     }
     function mezclar(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; } return a; }
@@ -10184,13 +10445,32 @@
       return out;
     }
 
+    /* Cuántos días hasta volver a verla y en qué caja queda, según la nota.
+       Otra vez: mañana (y vuelve al final de la sesión). Difícil: no sube de caja,
+       vuelve en un poco más de la mitad del intervalo (mínimo 2 días). Bien: sube una
+       caja (una nueva vuelve en 4 días). Fácil: sube dos (una nueva, en 8). */
+    function plan(k, g) {
+      const s = U.c[k] || { box: 0 };
+      let b = s.box || 0, d;
+      if (g === 1) { b = 1; d = 1; }
+      else if (g === 2) { b = Math.max(1, b); d = Math.max(2, Math.round(INTERV[b] * .6)); }
+      else if (g === 3) { b = Math.min(CAJA_MAX, Math.max(2, b + 1)); d = INTERV[b]; }
+      else { b = Math.min(CAJA_MAX, Math.max(3, b + 2)); d = INTERV[b]; }
+      return { b, d };
+    }
+    /* un poco de azar en los intervalos largos para que no venzan todas el mismo día */
+    function dispersar(d, k) {
+      if (d < 4) return d;
+      let h = 0; for (const ch of k + hoyISO()) h = (h * 31 + ch.charCodeAt(0)) | 0;
+      const f = ((Math.abs(h) % 1000) / 1000 - .5) * .3;   // ±15 %
+      return Math.max(2, Math.round(d * (1 + f)));
+    }
     function calificar(k, g) {
       const hoy = hoyISO();
       const s = U.c[k] || { box: 0, reps: 0, lapses: 0 };
-      if (g === 1) { s.box = 1; s.due = hoy; s.lapses++; }
-      else if (g === 2) { s.box = Math.max(1, s.box); s.due = hoyISO(Math.max(1, Math.round(INTERV[s.box] / 2))); }
-      else if (g === 3) { s.box = Math.min(6, s.box + 1); s.due = hoyISO(INTERV[s.box]); }
-      else { s.box = Math.min(6, s.box + 2); s.due = hoyISO(INTERV[s.box]); }
+      const pl = plan(k, g);
+      s.box = pl.b; s.due = hoyISO(dispersar(pl.d, k));
+      if (g === 1) s.lapses = (s.lapses || 0) + 1;
       s.reps++; s.last = hoy; U.c[k] = s;
       const d = U.dias[hoy] = U.dias[hoy] || { n: 0, bien: 0 };
       d.n++; if (g >= 3) d.bien++;
@@ -10214,8 +10494,13 @@
     function microInicioHTML() {
       const p = pendientesHoy();
       const hechasHoy = (U.dias[hoyISO()] || {}).n || 0;
-      const aprox = Math.min(Math.max(6, U.cfg.min * 2), p.venc + Math.min(p.nuevas, U.cfg.nuevas));
-      const cajas = [0, 0, 0, 0, 0, 0, 0];
+      const aprox = Math.min(U.cfg.tarj || 20, p.venc + p.nuevas);
+      const faltan = p.nuevas;
+      const ritmo = Math.max(1, Math.min(U.cfg.nuevas || 1, U.cfg.tarj || 20));
+      const diasFin = Math.ceil(faltan / ritmo);
+      const chipsTarj = [10, 20, 30, 40, 60, 80, 100].map(x =>
+        `<button class="nchip mini" data-utarj="${x}" aria-pressed="${(U.cfg.tarj || 20) === x}">${x}</button>`).join("");
+      const cajas = [0, 0, 0, 0, 0, 0, 0, 0];
       Object.keys(U.c).forEach(k => { cajas[U.c[k].box || 0]++; });
       const mx = Math.max(1, ...cajas);
       const dias = Array.from({ length: 21 }, (_, i) => hoyISO(i - 20)).map(d => `<i class="${U.dias[d] ? "on" : ""}${d === hoyISO() ? " hoy" : ""}" title="${d}${U.dias[d] ? ` · ${U.dias[d].n} tarjetas` : ""}"></i>`).join("");
@@ -10226,8 +10511,11 @@
       return `<div class="ugrid">
     <section class="ucard uhoy">
       <h3>Tu sesión de hoy</h3>
-      <p class="ubig">${hechasHoy ? `Hoy ya repasaste ${hechasHoy} tarjeta${hechasHoy === 1 ? "" : "s"}.` : `${aprox} tarjeta${aprox === 1 ? "" : "s"}, unos ${U.cfg.min} minutos.`}</p>
+      <p class="ubig">${hechasHoy ? `Hoy ya repasaste ${hechasHoy} tarjeta${hechasHoy === 1 ? "" : "s"}.` : `${aprox} tarjeta${aprox === 1 ? "" : "s"} para hoy.`}</p>
       <p>${p.venc} para repasar porque vencen hoy y ${p.nuevas} nuevas disponibles entre tarjetas y preguntas de los títulos que elegiste. Tu horario: <b>${esc(U.cfg.hora)}</b>.</p>
+      <p class="utarjlab">Tarjetas por día</p>
+      <div class="nfil utarjchips">${chipsTarj}</div>
+      <p class="uaviso">De esas, al menos <b>${Math.min(U.cfg.nuevas, U.cfg.tarj || 20)}</b> son nuevas y el resto repasos. ${faltan ? `Te quedan <b>${faltan}</b> sin ver en los títulos elegidos: a este ritmo las viste todas en unos <b>${diasFin} día${diasFin === 1 ? "" : "s"}</b>.` : "Ya viste todas las de los títulos elegidos."}</p>
       <div class="ustats">
         <div class="ustat"><b>${racha()}</b><span>días seguidos</span></div>
         <div class="ustat"><b>${Object.keys(U.c).length}</b><span>tarjetas vistas</span></div>
@@ -10241,8 +10529,9 @@
       <h3>Cómo querés estudiar</h3>
       <div class="ufila">
         <label>Hora <input type="time" id="uhora" value="${esc(U.cfg.hora)}"></label>
-        <label>Minutos <select id="umin">${opts([5, 10, 15, 20, 30, 45], U.cfg.min, " min")}</select></label>
-        <label>Nuevas por día <select id="unuevas">${opts([3, 5, 8, 10, 15, 20], U.cfg.nuevas, "")}</select></label>
+        <label>Minutos (para el aviso) <select id="umin">${opts([5, 10, 15, 20, 30, 45], U.cfg.min, " min")}</select></label>
+        <label>Tarjetas por día <select id="utarj">${opts([10, 15, 20, 30, 40, 50, 60, 80, 100], U.cfg.tarj || 20, "")}</select></label>
+        <label>Nuevas por día (mínimo) <select id="unuevas">${opts([3, 5, 8, 10, 15, 20, 30, 40, 50], U.cfg.nuevas, "")}</select></label>
       </div>
       <div class="ufila"><label><input type="checkbox" id="ubanco" ${U.cfg.banco ? "checked" : ""}> Mezclar preguntas del banco (multiple choice) de los módulos que corresponden</label></div>
       <p>Títulos de las Normas que entran en tu sesión:</p>
@@ -10263,9 +10552,9 @@
     </section>
     <section class="ucard">
       <h3>Cómo va tu memoria</h3>
-      <p>Cada tarjeta sube de caja cuando la sabés y vuelve a la caja 1 cuando la fallás. Caja 1 vuelve mañana; la 6, en tres meses.</p>
+      <p>Cada tarjeta sube de caja cuando la sabés y vuelve a la caja 1 cuando la fallás. Fallarla la trae mañana; saberla bien la va alejando: 4 días, 8, dos semanas, un mes… hasta cinco meses en la caja 7. Así los repasos no se amontonan y queda lugar para material nuevo todos los días.</p>
       <div class="ucajas">${cajas.slice(1).map(v => `<div style="height:${Math.round(4 + 30 * v / mx)}px"><span>${v}</span></div>`).join("")}</div>
-      <div class="ucajlab">${[1, 2, 3, 4, 5, 6].map(b => `<span>${b} · ${INTERV[b]}d</span>`).join("")}</div>
+      <div class="ucajlab">${[1, 2, 3, 4, 5, 6, 7].map(b => `<span>${b} · ${INTERV[b]}d</span>`).join("")}</div>
       <div class="nacc"><button class="hbtn peligro" data-ureset="1">Borrar mi progreso</button></div>
     </section>
     <section class="ucard" style="grid-column:1/-1">
@@ -10291,7 +10580,7 @@
         items = intercalar(mezclar(fl.filter(it => !U.c[it.k])).slice(0, Math.max(5, U.cfg.nuevas)));
       }
       if (!items.length) { SES = null; pintarMicro(); uzona.insertAdjacentHTML("afterbegin", `<p class="nvacio">No hay tarjetas pendientes para hoy en esos títulos. Sumá títulos o pedí solo tarjetas nuevas.</p>`); return; }
-      SES = { items, i: 0, visto: false, sel: [], bien: 0, hechas: 0, t0: Date.now(), repetidas: new Set() };
+      SES = { items, i: 0, visto: false, sel: [], bien: 0, hechas: 0, t0: Date.now(), repetidas: new Set(), pila: [] };
       pintarMicro();
       window.scrollTo({ top: microView.offsetTop - 10, behavior: "smooth" });
     }
@@ -10337,17 +10626,13 @@
       <div class="ubarra"><i style="width:${pct}%"></i></div>
       <div class="umeta"><span>${SES.i} de ${n} · ${SES.bien} bien</span><span>${min} de ${U.cfg.min} min</span></div>
       <article class="utarj">${cuerpo}</article>
-      <div class="nacc"><button class="hbtn" data-ufin="1">Terminar acá</button></div>
+      <div class="nacc">${SES.pila && SES.pila.length ? `<button class="hbtn" data-uant="1">← Anterior</button>` : ""}<button class="hbtn" data-ufin="1">Terminar acá</button></div>
     </div>`;
     }
     function igual(a, b) { return a.length === b.length && a.every(x => b.includes(x)); }
     function diasTxt(g, k) {
-      const s = U.c[k] || { box: 0 };
-      let b = s.box, d;
-      if (g === 2) { b = Math.max(1, b); d = Math.max(1, Math.round(INTERV[b] / 2)); }
-      else if (g === 3) { b = Math.min(6, b + 1); d = INTERV[b]; }
-      else { b = Math.min(6, b + 2); d = INTERV[b]; }
-      return d === 1 ? "mañana" : `en ${d} días`;
+      const { d } = plan(k, g);
+      return d === 1 ? "mañana" : d < 30 ? `en ${d} días` : d < 60 ? `en ~${Math.round(d / 7)} semanas` : `en ~${Math.round(d / 30)} meses`;
     }
 
     function finSesion() {
@@ -10455,6 +10740,7 @@
       if (h && h.value) U.cfg.hora = h.value;
       if (mi) U.cfg.min = +mi.value;
       if (nu) U.cfg.nuevas = +nu.value;
+      const ta = document.getElementById("utarj"); if (ta) U.cfg.tarj = +ta.value;
       if (ba) U.cfg.banco = ba.checked;
       U.cfgT = Date.now();
       guardarU(); programarAviso(); pintarMicro();
@@ -10469,11 +10755,13 @@
         }
         U.cfg.avisar = e.target.checked; guardarU(); programarAviso(); pintarMicro(); return;
       }
-      if (["uhora", "umin", "unuevas", "ubanco"].includes(e.target.id)) cfgCambio();
+      if (["uhora", "umin", "unuevas", "utarj", "ubanco"].includes(e.target.id)) cfgCambio();
     });
     microView.addEventListener("click", e => {
       const ut = e.target.closest("[data-ut]");
       if (ut) { const id = ut.dataset.ut; U.cfg.tits = U.cfg.tits.includes(id) ? U.cfg.tits.filter(x => x !== id) : [...U.cfg.tits, id]; guardarU(); pintarMicro(); return; }
+      const utj = e.target.closest("[data-utarj]");
+      if (utj) { U.cfg.tarj = +utj.dataset.utarj; U.cfgT = Date.now(); guardarU(); pintarMicro(); return; }
       if (e.target.closest("[data-uall]")) { U.cfg.tits = NORMAS.filter(n => flashDe(n.id).length).map(n => n.id); guardarU(); pintarMicro(); return; }
       if (e.target.closest("[data-uprio]")) { U.cfg.tits = NORMAS.filter(n => n.prio === 3).map(n => n.id); guardarU(); pintarMicro(); return; }
       if (e.target.closest("[data-uempezar]")) { microIr(); return; }
@@ -10509,18 +10797,38 @@
       if (e.target.closest("[data-ucheck]")) { SES.visto = true; pintarTarjeta(); return; }
       const g = e.target.closest("[data-ug]");
       if (g) {
-        const it = SES.items[SES.i], val = +g.dataset.ug;
+        const it = SES.items[SES.i], val = +g.dataset.ug, hoy = hoyISO();
+        // foto de antes de calificar, para que «Anterior» pueda deshacerlo
+        const paso = {
+          k: it.k, hoy, sel: SES.sel.slice(), bien: val >= 3, repite: false,
+          c: U.c[it.k] ? JSON.parse(JSON.stringify(U.c[it.k])) : null,
+          d: U.dias[hoy] ? Object.assign({}, U.dias[hoy]) : null
+        };
         calificar(it.k, val);
         SES.hechas++; if (val >= 3) SES.bien++;
-        if (val === 1 && !SES.repetidas.has(it.k)) { SES.repetidas.add(it.k); SES.items.push(it); }
+        if (val === 1 && !SES.repetidas.has(it.k)) { SES.repetidas.add(it.k); SES.items.push(it); paso.repite = true; }
+        (SES.pila = SES.pila || []).push(paso);
         SES.i++; SES.visto = false; SES.sel = [];
         pintarTarjeta(); window.scrollTo({ top: microView.offsetTop - 10, behavior: "smooth" });
         return;
       }
+      if (e.target.closest("[data-uant]")) { microAnterior(); return; }
       if (e.target.closest("[data-ufin]")) { finSesion(); return; }
     });
+    function microAnterior() {
+      if (!SES || !SES.pila || !SES.pila.length) return;
+      const p = SES.pila.pop();
+      if (p.c) U.c[p.k] = p.c; else delete U.c[p.k];
+      if (p.d) U.dias[p.hoy] = p.d; else delete U.dias[p.hoy];
+      guardarU();
+      SES.hechas--; if (p.bien) SES.bien--;
+      if (p.repite) { SES.items.pop(); SES.repetidas.delete(p.k); }
+      SES.i--; SES.visto = true; SES.sel = p.sel;
+      pintarTarjeta(); window.scrollTo({ top: microView.offsetTop - 10, behavior: "smooth" });
+    }
     document.addEventListener("keydown", e => {
       if (!SES || vista !== "micro" || /input|select|textarea/i.test(e.target.tagName)) return;
+      if (e.key === "ArrowLeft" && SES.pila && SES.pila.length) { e.preventDefault(); microAnterior(); return; }
       const it = SES.items[SES.i]; if (!it) return;
       if (!SES.visto && (e.key === " " || e.key === "Enter") && it.tipo === "f") { e.preventDefault(); SES.visto = true; pintarTarjeta(); }
       else if (SES.visto && it.tipo === "f" && ["1", "2", "3", "4"].includes(e.key)) { uzona.querySelector(`[data-ug="${e.key}"]`)?.click(); }
@@ -10989,9 +11297,9 @@
           ${card("hoy", "Quién es quién hoy", "17 actores", "La mirada realista: cada categoría de la norma, si hoy se usa o no, qué hace en la práctica y con nombres reales: BYMA, A3, Caja de Valores, los ALyC, las calificadoras.", "Ver el mercado real")}
           ${card("leyes", "Las leyes", `${nL} leyes · ${nArts} art.`, "Las ocho leyes de la bibliografía abiertas por dentro: estructura, qué regula cada bloque, el texto literal de cada artículo y qué módulo del examen lo toma.", "Leer las leyes")}
           ${card("glosario", "Glosario", `${nG} términos`, "Las definiciones que dan las propias leyes, tal cual las escriben, filtrables por ley y por letra.", "Abrir el glosario")}
-          ${card("mercado", "El mapa del mercado", "estructura · matriz", "El esquema por capas, la red de relaciones, la matriz de «quién puede qué» y la ficha de cada agente e instrumento.", "Ver el mapa")}
+          ${card("mercado", "El mapa del mercado", "estructura · matriz", "La estructura de arriba hacia abajo, de la CNV a la Caja de Valores, la matriz de «quién puede qué» y la ficha de cada agente e instrumento.", "Ver el mapa")}
           ${card("cuestionario", "Cuestionario", `${nP} preguntas`, "Práctica con corrección inmediata, simulacros con reloj como el examen real (60 preguntas, 45 minutos), repaso e historial con tu dominio por módulo.", "Practicar")}
-          ${card("micro", "Micro-learning", `${nF} tarjetas`, "Todos los días, a tu hora, una sesión de 10 minutos: primero recordás, después ves la respuesta, y lo que fallás vuelve antes. Con aviso en el celular.", "Sesión de hoy")}
+          ${card("micro", "Micro-learning", `${nF} tarjetas`, "Todos los días, a tu hora, la cantidad de tarjetas que elijas: primero recordás, después ves la respuesta, y lo que fallás vuelve antes. Con aviso en el celular.", "Sesión de hoy")}
           ${card("perfil", "Mi perfil", on ? "sesión iniciada" : "opcional", "Tu cuenta: fecha del examen, cuántos días faltan, tu dominio por módulo y por título, y todo tu progreso sincronizado.", on ? "Ver mi perfil" : "Crear mi cuenta")}
         </div>
 
