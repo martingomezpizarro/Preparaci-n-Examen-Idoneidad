@@ -2647,6 +2647,14 @@
       #srcdlg .agx-dv em { grid-column: 1 }
     }
 
+    /* subrayados propios */
+    mark.sub, #srcdlg mark.sub, #srcdlg mark mark.sub { background: rgba(255, 205, 40, .38); color: inherit; border-bottom: 2px solid #D9A400; padding: 0 1px; border-radius: 2px; cursor: pointer; box-decoration-break: clone; -webkit-box-decoration-break: clone }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) mark.sub, :root:not([data-theme="light"]) #srcdlg mark.sub { background: rgba(255, 200, 40, .26); border-bottom-color: #E8B83A } }
+    :root[data-theme="dark"] mark.sub, :root[data-theme="dark"] #srcdlg mark.sub { background: rgba(255, 200, 40, .26); border-bottom-color: #E8B83A }
+    .subbtn { position: fixed; z-index: 2147483000; font-family: var(--f-body); font-size: 12.5px; font-weight: 600; background: var(--ink); color: var(--surface); border: 0; border-radius: 999px; padding: 7px 14px; min-height: 32px; box-shadow: 0 6px 20px rgba(0, 0, 0, .25); cursor: pointer }
+    .subbtn[hidden] { display: none }
+    .literal .subw, #srcdlg .subw { white-space: inherit }
+
     /* fichas e instrumentos */
     .mindice {
       display: flex;
@@ -7482,7 +7490,7 @@
           `<button class="showtxt" aria-expanded="false" aria-controls="t-${ley.id}-${key}">Texto completo</button>` +
           grupos +
           `</div>` +
-          `<div class="literal" id="t-${ley.id}-${key}" hidden>${esc(lit)}` +
+          `<div class="literal" id="t-${ley.id}-${key}" hidden>${subW("L:" + ley.id + ":" + key, esc(lit))}` +
           `<span class="lsrc">Ley ${esc(ley.num)} — ${esc(ley.fuente || "texto actualizado, InfoLeg")}</span>` +
           `</div>`;
       }
@@ -8007,13 +8015,13 @@
       let head = `<div class="agx-dv"><span>Tu PDF</span><b>${esc(valor)}</b>${m.n ? `<em>${esc(m.n)}</em>` : ""}</div>`;
       const hoy = tipo === "m" ? (m.he ? AGX_EST[m.he][1] + (m.ht ? ". " + m.ht : "") : "") : (m.hs || m.hoy || "");
       if (hoy) head += `<div class="agx-dv hoy"><span>Hoy</span><b>${esc(hoy)}</b>${m.uva ? `<em>≈ ${agxPesos(m.uva)} con la UVA a $${AGX.uva.v.toLocaleString("es-AR")} (${esc(AGX.uva.f)}, ${esc(AGX.uva.fuente)})</em>` : ""}</div>`;
-      if (m.hv) head += `<div class="agx-vig">${m.hv.t ? `<span>Texto vigente · Normas CNV · ${esc(agxCapEt(m.hv.cap))}, art. ${esc(m.hv.art)}</span><q>${esc(m.hv.t)}</q>` : ""}<small>${esc(m.hv.rg)}</small></div>`;
+      if (m.hv) head += `<div class="agx-vig">${m.hv.t ? `<span>Texto vigente · Normas CNV · ${esc(agxCapEt(m.hv.cap))}, art. ${esc(m.hv.art)}</span><q>${subW("V:" + m.hv.cap + ":" + m.hv.art, esc(m.hv.t))}</q>` : ""}<small>${esc(m.hv.rg)}</small></div>`;
       if (m.hv && x) head += `<div class="agx-sep">Tu PDF (edición 2018) · ${esc(x.et.replace("Normas CNV · ", ""))}</div>`;
       if (a.hoy) head += `<div class="agx-dv hoy"><span>La categoría</span><b>${esc(a.hoy)}</b></div>`;
       const dlg = document.getElementById("srcdlg");
       document.getElementById("sdtit").textContent = `${a.sig} · ${f.n}`;
       document.getElementById("sdmeta").textContent = x ? `${x.et} · ${x.meta}` : `${a.tit} · sin un artículo que lo diga en forma literal`;
-      document.getElementById("sdbody").innerHTML = `<div class="agx-dhead">${head}</div>` + (x ? marcar(x.txt, m.ex) : "");
+      document.getElementById("sdbody").innerHTML = `<div class="agx-dhead">${head}</div>` + (x ? subW(m.c.slice(0, 2) === "L:" ? m.c : "N:" + m.c, marcar(x.txt, m.ex)) : "");
       let foot = "";
       if (a.ficha) foot += `<button class="lk" data-agx-ficha="${a.ficha}">Ficha de ${esc(a.sig)}</button>`;
       if (x && x.go) foot += `<button class="lk" data-go="${esc(x.go)}" data-cerrar="1">Ver en el mapa de la ley</button>`;
@@ -9181,13 +9189,13 @@
       if (r.t === "N") {
         const n = NORMTXT[r.k] || {};
         meta = `Normas CNV (N.T. 2013 y mod.) · edición 2018 de tu carpeta (Bibliografia/Normas 2013.pdf) · pág. ${n.p || r.p}`;
-        body = marcar(n.t, r.ex);
+        body = subW("N:" + r.k, marcar(n.t, r.ex));
         if (r.url) foot += `<a class="lk ext2" href="${esc(r.url)}" target="_blank" rel="noopener">Ver el capítulo en el texto vigente (InfoLeg) ↗</a>`;
       } else if (r.t === "L") {
         const l = leyPorId(r.ley);
         const txt = (TEXTOS[r.ley] || {})[r.art] || r.ex || "";
         meta = `Texto actualizado de InfoLeg${l && l.infoleg ? "" : ""}`;
-        body = marcar(txt, r.ex);
+        body = (TEXTOS[r.ley] || {})[r.art] ? subW("L:" + r.ley + ":" + artKey(r.art), marcar(txt, r.ex)) : marcar(txt, r.ex);
         foot += `<button class="lk" data-go="${esc(r.ley)}:${esc(r.art)}" data-cerrar="1">Ver en el mapa de la ley</button>`;
         if (l && l.infoleg) foot += `<a class="lk ext2" href="${esc(l.infoleg)}" target="_blank" rel="noopener">InfoLeg ↗</a>`;
       } else if (r.t === "D") {
@@ -9209,6 +9217,142 @@
       const g = e.target.closest("#srcdlg [data-go]");
       if (g) { document.getElementById("srcdlg").close(); const [l, k] = g.dataset.go.split(":"); goTo(l, k); }
     }, true);
+
+    /* ---------------- Subrayados propios en los textos literales ----------------
+       Cualquier texto envuelto en <span class="subw" data-sub="CLAVE"> se puede subrayar:
+       se selecciona, aparece «Subrayar», y queda guardado por clave con los rangos de
+       caracteres sobre el textContent del contenedor. Claves: "L:<ley>:<art>" (leyes) y
+       "N:<Tít|Cap|Secc|art>" (Normas CNV). Se guarda en localStorage y viaja con el
+       documento «micro» de la cuenta (campo sub), fundiendo por fecha de cada artículo.
+       ---------------------------------------------------------------------------- */
+    const LSSUB = "mapa-idoneo-sub-v1";
+    const SUB = (() => { try { const g = JSON.parse(localStorage.getItem(LSSUB) || "null"); if (g && typeof g === "object") return g; } catch (e) { } return {}; })();
+    function subGuardar() {
+      try { localStorage.setItem(LSSUB, JSON.stringify(SUB)); } catch (e) { }
+      if (typeof nubeProgramar === "function") { try { nubeProgramar(); } catch (e) { } }
+    }
+    const subW = (clave, html) => `<span class="subw" data-sub="${esc(clave)}">${html}</span>`;
+    function subNodos(el) {
+      const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+        acceptNode: n => n.parentElement && n.parentElement.closest(".lsrc") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+      });
+      const out = []; let n, pos = 0;
+      while ((n = w.nextNode())) { out.push({ n, a: pos, b: pos + n.data.length }); pos += n.data.length; }
+      return out;
+    }
+    function subLimpiar(el) {
+      el.querySelectorAll("mark.sub").forEach(m => { const p = m.parentNode; while (m.firstChild) p.insertBefore(m.firstChild, m); p.removeChild(m); });
+      el.normalize();
+    }
+    function subAplicar(el) {
+      subLimpiar(el);
+      el.dataset.subok = "1";
+      const reg = SUB[el.dataset.sub];
+      if (!reg || !reg.r || !reg.r.length) return;
+      reg.r.forEach(([s, e], i) => {
+        subNodos(el).forEach(({ n, a, b }) => {
+          const x = Math.max(s, a), y = Math.min(e, b);
+          if (y <= x) return;
+          let t = n;
+          if (x > a) t = t.splitText(x - a);
+          if (y < b) t.splitText(y - x);
+          const m = document.createElement("mark");
+          m.className = "sub"; m.dataset.i = i; m.title = "Tu subrayado · tocalo para quitarlo";
+          t.parentNode.insertBefore(m, t); m.appendChild(t);
+        });
+      });
+    }
+    function subOffset(el, nodo, off) {
+      const ns = subNodos(el);
+      if (nodo.nodeType !== 3) {            // selección apuntando a un elemento: tomo el texto que empieza ahí
+        const r = document.createRange(); r.setStart(el, 0); r.setEnd(nodo, off);
+        const frag = r.cloneContents(); frag.querySelectorAll && frag.querySelectorAll(".lsrc").forEach(x => x.remove());
+        return frag.textContent.length;
+      }
+      const h = ns.find(x => x.n === nodo);
+      return h ? h.a + off : 0;
+    }
+    function subAgregar(clave, s, e) {
+      const reg = SUB[clave] || { r: [] };
+      let rs = reg.r.concat([[s, e]]).sort((p, q) => p[0] - q[0]);
+      const fus = [];
+      rs.forEach(r => { const u = fus[fus.length - 1]; if (u && r[0] <= u[1]) u[1] = Math.max(u[1], r[1]); else fus.push(r.slice()); });
+      SUB[clave] = { r: fus, t: Date.now() };
+      subGuardar();
+    }
+    function subQuitar(clave, i) {
+      const reg = SUB[clave]; if (!reg) return;
+      reg.r.splice(i, 1); reg.t = Date.now();
+      subGuardar();
+    }
+    function subTodos(clave) { document.querySelectorAll(".subw").forEach(el => { if (el.dataset.sub === clave) subAplicar(el); }); }
+    function subFundir(d) {
+      if (!d || typeof d !== "object") return;
+      Object.entries(d).forEach(([k, r]) => { if (!SUB[k] || (r.t || 0) > (SUB[k].t || 0)) SUB[k] = r; });
+      try { localStorage.setItem(LSSUB, JSON.stringify(SUB)); } catch (e) { }
+      document.querySelectorAll(".subw").forEach(subAplicar);
+    }
+
+    /* botón flotante */
+    const subBtn = document.createElement("button");
+    subBtn.className = "subbtn"; subBtn.type = "button"; subBtn.hidden = true;
+    document.body.appendChild(subBtn);
+    let subPend = null;
+    function subOcultar() { subBtn.hidden = true; subPend = null; }
+    function subMostrar(rect, txt, pend) {
+      subPend = pend; subBtn.textContent = txt; subBtn.hidden = false;
+      const dlg = document.getElementById("srcdlg");
+      const host = dlg && dlg.open && dlg.contains(pend.el) ? dlg : document.body;
+      if (subBtn.parentNode !== host) host.appendChild(subBtn);
+      const bw = subBtn.offsetWidth || 90, x = Math.min(window.innerWidth - bw - 8, Math.max(8, rect.left + rect.width / 2 - bw / 2));
+      const y = Math.min(window.innerHeight - 44, Math.max(8, rect.top > 48 ? rect.top - 40 : rect.bottom + 8));
+      subBtn.style.left = x + "px"; subBtn.style.top = y + "px";
+    }
+    function subRevisar() {
+      const sel = window.getSelection();
+      if (!sel || sel.isCollapsed || !sel.rangeCount) { if (subPend && subPend.tipo === "add") subOcultar(); return; }
+      const rg = sel.getRangeAt(0);
+      const cont = n => (n.nodeType === 3 ? n.parentElement : n).closest(".subw");
+      const el = cont(rg.startContainer);
+      if (!el || el !== cont(rg.endContainer)) { subOcultar(); return; }
+      const s = subOffset(el, rg.startContainer, rg.startOffset), e = subOffset(el, rg.endContainer, rg.endOffset);
+      if (e - s < 2) { subOcultar(); return; }
+      subMostrar(rg.getBoundingClientRect(), "Subrayar", { tipo: "add", el, s, e });
+    }
+    let subT = null;
+    document.addEventListener("selectionchange", () => { clearTimeout(subT); subT = setTimeout(subRevisar, 220); });
+    subBtn.addEventListener("mousedown", e => e.preventDefault());
+    subBtn.addEventListener("click", e => {
+      e.preventDefault(); e.stopPropagation();
+      const p = subPend; if (!p) return;
+      const clave = p.el.dataset.sub;
+      if (p.tipo === "add") { subAgregar(clave, p.s, p.e); const sel = window.getSelection(); if (sel) sel.removeAllRanges(); }
+      else subQuitar(clave, p.i);
+      subTodos(clave);
+      subOcultar();
+    });
+    document.addEventListener("click", e => {
+      if (e.target === subBtn) return;
+      const m = e.target.closest && e.target.closest("mark.sub");
+      const sel = window.getSelection();
+      if (m && (!sel || sel.isCollapsed)) {
+        const el = m.closest(".subw");
+        subMostrar(m.getBoundingClientRect(), "Quitar subrayado", { tipo: "del", el, i: +m.dataset.i });
+        return;
+      }
+      if (subPend && subPend.tipo === "del") subOcultar();
+    }, true);
+    window.addEventListener("scroll", () => { if (!subBtn.hidden) subOcultar(); }, true);
+
+    /* aplicar a todo contenedor nuevo, venga de donde venga (leyes, diálogo, Agentes) */
+    new MutationObserver(ms => {
+      for (const m of ms) for (const n of m.addedNodes) {
+        if (n.nodeType !== 1) continue;
+        if (n.matches && n.matches(".subw:not([data-subok])")) subAplicar(n);
+        if (n.querySelectorAll) n.querySelectorAll(".subw:not([data-subok])").forEach(subAplicar);
+      }
+    }).observe(document.body, { childList: true, subtree: true });
+    document.querySelectorAll(".subw").forEach(subAplicar);
 
     /* ---- pool de práctica y repaso ---- */
     function pool() {
@@ -11449,6 +11593,7 @@
         U.dias[f] = a ? { n: Math.max(a.n || 0, r.n || 0), bien: Math.max(a.bien || 0, r.bien || 0) } : r;
       });
       if (d.cfg && (localVacio || (d.cfgT || 0) > (U.cfgT || 0))) { U.cfg = Object.assign(U.cfg, d.cfg); U.cfgT = d.cfgT || 0; }
+      if (d.sub) subFundir(d.sub);
     }
 
     async function nubeTraer() {
@@ -11493,7 +11638,7 @@
         await Promise.all([
           refUsuario().set({ perfil, resumen: Object.assign(resumen(), { actualizado: ahora }) }, { merge: true }),
           refDato("quiz").set({ respuestas: quiz.respuestas, hist: quiz.hist.slice(-200), cfg: quiz.cfg, t: ahora }),
-          refDato("micro").set({ c: U.c, dias: U.dias, cfg: U.cfg, cfgT: U.cfgT || 0, t: ahora })
+          refDato("micro").set({ c: U.c, dias: U.dias, cfg: U.cfg, cfgT: U.cfgT || 0, sub: SUB, t: ahora })
         ]);
         NUBE.ultimo = ahora; NUBE.estado = "ok"; NUBE.error = "";
       } catch (e) { NUBE.estado = "error"; NUBE.error = errorTxt(e); }
