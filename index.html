@@ -5050,8 +5050,8 @@
             style="background:var(--accent);color:var(--surface);border-color:var(--accent)">Mer</span><span>La pestaña
             <b>El mercado</b> arma el mapa de quién es quién. <b>Estructura</b>: el mercado de arriba hacia abajo, con la CNV
             por encima de todos, los agentes que liquidan y custodian más grandes que los que solo negocian, el
-            inversor y, en la base, la Caja de Valores; abajo, qué se emite y quién lo emite. Tocá una caja para ver qué es. <b>Agentes</b>: los catorce agentes en una sola tabla, comparados
-            sección por sección, con el artículo de cada dato. <b>Instrumentos</b>: cada valor negociable con quién lo emite, lo
+            inversor y, en la base, la Caja de Valores; abajo, qué se emite y quién lo emite. Tocá una caja para ver qué es. <b>Agentes</b>: los catorce agentes en una sola tabla, con qué puede hacer
+            cada uno, qué tiene prohibido y cómo se compara con los demás sección por sección, con el artículo de cada dato. <b>Instrumentos</b>: cada valor negociable con quién lo emite, lo
             negocia, lo custodia, lo califica y lo controla. <b>Fichas</b>: el detalle de cada actor con sus
             números.</span></li>
         <li><span class="mf">Ley 26.831 · art. 2</span><span>Chip de fuente del mapa: lleva al texto literal del
@@ -7964,7 +7964,8 @@
       const cab = `<tr><th class="ma agx-esq" scope="col">${agxEst.rep ? "Repaso: tocá cada «?»" : "Tocá una celda para leer el artículo"}</th>${vis.map(a =>
         `<th scope="col" class="agx-col"><b${a.ficha ? ` data-ficha="${a.ficha}" title="Ver la ficha"` : ""}>${esc(a.sig)}</b><span>${esc(a.n)}</span><span class="agx-tit">${esc(a.tit)}</span>${a.hoy ? `<span class="agx-tag" title="${esc(a.hoy)}">${a.id === "aa" ? "eliminado" : "cambió"}</span>` : ""}</th>`).join("")}</tr>`;
 
-      const bloques = AGX.filas.map(g => ({ k: g.k, n: g.n, filas: g.filas, tipo: "c" }));
+      const bloques = [{ k: "qpq", n: "Quién puede qué", filas: AGX.act, tipo: "m" }]
+        .concat(AGX.filas.map(g => ({ k: g.k, n: g.n, filas: g.filas, tipo: "c" })));
       let filas = 0, ocultas = 0;
       const cuerpo = bloques.map(b => {
         const trs = b.filas.map(f => {
@@ -7986,7 +7987,11 @@
       const ancho = (window.innerWidth <= 560 ? 112 + vis.length * 106 : 190 + vis.length * 124);
       return ctl + `<div class="mwrap agx-wrap"><table class="agx-t" style="min-width:${ancho}px"><thead>${cab}</thead>${cuerpo}</table></div>
     <div class="mref">
-      <span><b class="agx-e na">—</b> su capítulo no lo regula</span>
+      <span><b class="agx-e si">✓</b> puede</span>
+      <span><b class="agx-e no">✕</b> prohibido por la norma</span>
+      <span><b class="agx-e conv">convenio</b> a través de otro agente</span>
+      <span><b class="agx-e cond">con requisitos</b> puede, con condiciones</span>
+      <span><b class="agx-e na">—</b> no es su función · o su capítulo no lo regula</span>
       <span><i class="agx-dot"></i> hoy es distinto</span>
     </div>
     <p class="mnota">Cada celda sale de <b>tu PDF de las Normas</b> (edición 2018) o de la ley, y debajo del dato va el artículo; tocála para leerlo con la frase resaltada. Donde la norma cambió después, el punto ámbar lo avisa y «Cómo es hoy» muestra el valor actual. Los <b>patrimonios y contrapartidas vigentes</b> salen del texto actualizado oficial de las Normas (argentina.gob.ar, leído el ${esc(AGX.uva.f)}), con el artículo y la resolución que los fijó; los pesos son aproximados, con la UVA a $${AGX.uva.v.toLocaleString("es-AR")} (${esc(AGX.uva.fuente)}).<br>
@@ -8096,7 +8101,7 @@
               : msub === "esquema"
                 ? "Quién es quién en el mercado de capitales argentino y por dónde pasa una operación. Cada caja abre la ficha de ese actor, y cada dato de las fichas lleva el artículo que lo dice."
                 : msub === "agentes"
-                  ? "Todos los agentes en una sola tabla, con las mismas preguntas que las Normas le hacen a cada categoría: qué es, cómo se inscribe, cuánto patrimonio necesita, cómo se organiza y cuándo se le cancela el registro. Cada celda lleva su artículo: tocála para leerlo."
+                  ? "Todos los agentes en una sola tabla. Arriba, quién puede qué; abajo, las mismas preguntas que las Normas le hacen a cada categoría: qué es, cómo se inscribe, cuánto patrimonio necesita, cómo se organiza y cuándo se le cancela el registro. Cada celda lleva su artículo: tocála para leerlo."
                 : msub === "matriz"
                   ? "La misma pregunta de examen, en una tabla: qué puede hacer cada agente que te conecta con el mercado y qué no. Lo que define a cada categoría no es lo que hace, sino lo que tiene prohibido."
                   : msub === "instrumentos"
@@ -11806,7 +11811,7 @@
           ${card("hoy", "Quién es quién hoy", "17 actores", "La mirada realista: cada categoría de la norma, si hoy se usa o no, qué hace en la práctica y con nombres reales: BYMA, A3, Caja de Valores, los ALyC, las calificadoras.", "Ver el mercado real")}
           ${card("leyes", "Las leyes", `${nL} leyes · ${nArts} art.`, "Las ocho leyes de la bibliografía abiertas por dentro: estructura, qué regula cada bloque, el texto literal de cada artículo y qué módulo del examen lo toma.", "Leer las leyes")}
           ${card("glosario", "Glosario", `${nG} términos`, "Las definiciones que dan las propias leyes, tal cual las escriben, filtrables por ley y por letra.", "Abrir el glosario")}
-          ${card("mercado", "El mapa del mercado", "estructura · agentes", "La estructura de arriba hacia abajo, de la CNV a la Caja de Valores, la comparación de los agentes sección por sección y la ficha de cada agente e instrumento.", "Ver el mapa")}
+          ${card("mercado", "El mapa del mercado", "estructura · matriz", "La estructura de arriba hacia abajo, de la CNV a la Caja de Valores, la matriz de «quién puede qué» y la ficha de cada agente e instrumento.", "Ver el mapa")}
           ${card("cuestionario", "Cuestionario", `${nP} preguntas`, "Práctica con corrección inmediata, simulacros con reloj como el examen real (60 preguntas, 45 minutos), repaso e historial con tu dominio por módulo.", "Practicar")}
           ${card("micro", "Micro-learning", `${nF} tarjetas`, "Todos los días, a tu hora, la cantidad de tarjetas que elijas: primero recordás, después ves la respuesta, y lo que fallás vuelve antes. Con aviso en el celular.", "Sesión de hoy")}
           ${card("perfil", "Mi perfil", on ? "sesión iniciada" : "opcional", "Tu cuenta: fecha del examen, cuántos días faltan, tu dominio por módulo y por título, y todo tu progreso sincronizado.", on ? "Ver mi perfil" : "Crear mi cuenta")}
