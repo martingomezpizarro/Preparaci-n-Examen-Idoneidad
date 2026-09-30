@@ -9827,17 +9827,15 @@
       if (subBtn.parentNode !== host) host.appendChild(subBtn);
       const bw = subBtn.offsetWidth || 90;
       if (SUB_TACTIL) {
-        // En táctil el menú del sistema («Copiar, Seleccionar todo…») se pega a la selección
-        // y siempre queda por encima de la página. El botón va al borde opuesto de la
-        // pantalla: selección en la mitad de arriba → botón abajo, y al revés.
+        // En táctil el botón va siempre arriba de la pantalla, centrado: así nunca lo tapan
+        // la hoja de búsqueda de Google ni la barra de navegación, que aparecen abajo.
         subBtn.classList.add("tactil");
-        const vv = window.visualViewport, alto = vv ? vv.height : window.innerHeight, ancho = vv ? vv.width : window.innerWidth;
+        const vv = window.visualViewport, ancho = vv ? vv.width : window.innerWidth;
         const ox = vv ? vv.offsetLeft : 0, oy = vv ? vv.offsetTop : 0;
-        const w2 = subBtn.offsetWidth || bw, h2 = subBtn.offsetHeight || 44;
-        const medio = rect ? (rect.top + rect.bottom) / 2 - oy : alto / 2;
+        const w2 = subBtn.offsetWidth || bw;
         subBtn.style.left = Math.max(8, ox + (ancho - w2) / 2) + "px";
-        subBtn.style.top = (medio < alto / 2 ? oy + alto - h2 - 24 : oy + 16) + "px";
-        subBtn.dataset.lado = medio < alto / 2 ? "abajo" : "arriba";
+        subBtn.style.top = (oy + 16) + "px";
+        subBtn.dataset.lado = "arriba";
         return;
       }
       const x = Math.min(window.innerWidth - bw - 8, Math.max(8, rect.left + rect.width / 2 - bw / 2));
