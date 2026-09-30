@@ -1483,6 +1483,17 @@
     #srcdlg .sd-x{border:1px solid var(--line);background:var(--surface-2);color:var(--ink-2);border-radius:6px;padding:3px 9px;cursor:pointer;font-size:13px}
     #srcdlg .sd-b{padding:12px 16px 16px;max-height:min(62vh,560px);overflow:auto;font-size:13.5px;line-height:1.6;white-space:pre-wrap;text-align:justify;hyphens:auto}
     #srcdlg mark{background:var(--accent-soft);color:var(--ink);padding:0 2px;border-radius:2px}
+    /* el scroll del texto no se contagia a la página, y la página no se mueve con el panel abierto */
+    #srcdlg .sd-b{overscroll-behavior:contain}
+    html:has(dialog#srcdlg[open]), html:has(dialog#srcdlg[open]) body{overflow:hidden}
+    /* En celular el panel ocupa casi toda la pantalla: con la zona de texto chica, al arrastrar
+       la manija de selección siempre quedás cerca de un borde y el navegador desplaza el texto. */
+    @media (pointer:coarse){
+      dialog#srcdlg{margin:8px auto;height:calc(100dvh - 16px);max-height:calc(100dvh - 16px)}
+      dialog#srcdlg[open]{display:flex;flex-direction:column}
+      #srcdlg .sd-b{flex:1 1 auto;max-height:none;min-height:0}
+      #srcdlg .sd-h,#srcdlg .sd-f{flex:0 0 auto}
+    }
     #srcdlg .sd-f{display:flex;flex-wrap:wrap;gap:6px;padding:10px 16px 14px;border-top:1px solid var(--line)}
 
     .qsinverif {
