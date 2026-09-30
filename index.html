@@ -11663,6 +11663,7 @@
       if (c.includes("network")) return "Sin conexión: probá de nuevo en un rato.";
       if (c.includes("unauthorized-domain")) return "Este dominio todavía no está autorizado en Firebase.";
       if (c.includes("operation-not-allowed")) return "Ese método de ingreso no está activado en Firebase.";
+      if (c.includes("permission-denied")) return "La base de datos rechazó el guardado: las reglas de seguridad de Firestore no están publicadas o vencieron. Tu progreso sigue a salvo en este dispositivo.";
       return (e && e.message) || "Algo salió mal.";
     }
 
