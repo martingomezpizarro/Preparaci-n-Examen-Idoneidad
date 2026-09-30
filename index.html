@@ -1475,7 +1475,7 @@
     .qnota{border-left-color:var(--line-strong)}
     .qcambio b,.qnota b{color:var(--ink)}
     .qcorr{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;border:1px solid #2E8B57;color:#2E8B57;border-radius:4px;padding:1px 6px}
-    dialog#srcdlg{max-width:min(760px,calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:12px;padding:0;background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.25)}
+    dialog#srcdlg{margin:max(16px,6vh) auto auto;max-width:min(760px,calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:12px;padding:0;background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.25)}
     dialog#srcdlg::backdrop{background:rgba(0,0,0,.45)}
     #srcdlg .sd-h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
     #srcdlg .sd-h h3{margin:0;font-size:15px;line-height:1.35}
@@ -2745,6 +2745,7 @@
     :root[data-theme="dark"] mark.sub, :root[data-theme="dark"] #srcdlg mark.sub { background: rgba(255, 200, 40, .26); border-bottom-color: #E8B83A }
     .subbtn { position: fixed; z-index: 2147483000; font-family: var(--f-body); font-size: 12.5px; font-weight: 600; background: var(--ink); color: var(--surface); border: 0; border-radius: 999px; padding: 7px 14px; min-height: 32px; box-shadow: 0 6px 20px rgba(0, 0, 0, .25); cursor: pointer }
     .subbtn[hidden] { display: none }
+    .subbtn.dock { position: static; box-shadow: none; order: -1 }
     .subbtn.tactil { font-size: 15px; padding: 11px 22px; min-height: 44px; background: #D9A400; color: #141A22; touch-action: manipulation }
     .literal .subw, #srcdlg .subw { white-space: inherit }
 
@@ -9680,8 +9681,9 @@
       document.getElementById("sdbody").innerHTML = body;
       document.getElementById("sdfoot").innerHTML = foot;
       if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
-      const mk = dlg.querySelector("mark");
-      if (mk) mk.scrollIntoView({ block: "center" });
+      // centrar la cita dentro del panel sin mover la página de atrás
+      const mk = dlg.querySelector("#sdbody mark"), bd = document.getElementById("sdbody");
+      if (mk && bd) bd.scrollTop += mk.getBoundingClientRect().top - bd.getBoundingClientRect().top - bd.clientHeight / 2;
     }
     document.addEventListener("click", e => {
       const b = e.target.closest("[data-src]");
@@ -9931,19 +9933,32 @@
     function subMostrar(rect, txt, pend) {
       subPend = pend; subBtn.textContent = txt; subBtn.hidden = false;
       const dlg = document.getElementById("srcdlg");
-      const host = dlg && dlg.open && dlg.contains(pend.el) ? dlg : document.body;
+      const enDlg = !!(dlg && dlg.open && dlg.contains(pend.el));
+      const pie = enDlg ? document.getElementById("sdfoot") : null;
+      if (SUB_TACTIL && pie) {
+        // En el panel del artículo, el botón queda fijo en la barra de abajo del panel:
+        // nunca se superpone con la selección ni con el menú «Copiar · Seleccionar todo».
+        subBtn.classList.add("tactil", "dock");
+        if (subBtn.parentNode !== pie) pie.insertBefore(subBtn, pie.firstChild);
+        subBtn.style.left = ""; subBtn.style.top = "";
+        return;
+      }
+      subBtn.classList.remove("dock");
+      const host = enDlg ? dlg : document.body;
       if (subBtn.parentNode !== host) host.appendChild(subBtn);
       const bw = subBtn.offsetWidth || 90;
       if (SUB_TACTIL) {
-        // En táctil el botón va siempre arriba de la pantalla, centrado: así nunca lo tapan
-        // la hoja de búsqueda de Google ni la barra de navegación, que aparecen abajo.
+        // Fuera del panel: arriba de la pantalla, salvo que la selección esté arriba (ahí el
+        // menú del sistema se pone arriba de ella); entonces baja, pero sin llegar al borde
+        // inferior, que tapa la hoja de búsqueda de Google.
         subBtn.classList.add("tactil");
-        const vv = window.visualViewport, ancho = vv ? vv.width : window.innerWidth;
+        const vv = window.visualViewport, alto = vv ? vv.height : window.innerHeight, ancho = vv ? vv.width : window.innerWidth;
         const ox = vv ? vv.offsetLeft : 0, oy = vv ? vv.offsetTop : 0;
         const w2 = subBtn.offsetWidth || bw;
+        const selArriba = rect ? (rect.top - oy) < alto * 0.4 : false;
         subBtn.style.left = Math.max(8, ox + (ancho - w2) / 2) + "px";
-        subBtn.style.top = (oy + 16) + "px";
-        subBtn.dataset.lado = "arriba";
+        subBtn.style.top = (selArriba ? oy + Math.min(rect.bottom - oy + 70, alto * 0.72) : oy + 16) + "px";
+        subBtn.dataset.lado = selArriba ? "medio" : "arriba";
         return;
       }
       const x = Math.min(window.innerWidth - bw - 8, Math.max(8, rect.left + rect.width / 2 - bw / 2));
