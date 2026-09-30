@@ -9524,7 +9524,10 @@
 
     function refChip(r, owner, i) {
       const lab = esc(r.et);
-      if (r.t === "V" && r.nv) return `<button class="lk" data-nvgo="${esc(r.nv)}">${lab}</button>`;
+      if (r.nv && (r.t === "V" || r.t === "N")) {
+        const [nt, nc, na] = r.nv.split("|");
+        return `<button class="lk nvcita" data-src="${esc(owner)}|${i}"${r.t === "N" ? ` title="En tu PDF de 2018: ${lab}"` : ""}>${esc(nvEt(nt, nc, na).replace("Normas CNV", "Normas CNV vigentes"))}</button>`;
+      }
       if (r.t === "O" || r.t === "V") return r.url ? `<a class="lk ext2" href="${esc(r.url)}" target="_blank" rel="noopener">${lab} ↗</a>` : `<span class="lk ext">${lab}</span>`;
       return `<button class="lk" data-src="${esc(owner)}|${i}">${lab}</button>`;
     }
@@ -9609,6 +9612,50 @@
       const obj = tipo === "f" ? FLASH.find(c => c.id === id) : PREGUNTAS.find(q => q.id === id);
       const r = obj && obj.refs && obj.refs[i];
       if (!r) return;
+      abrirRef(r);
+    }
+    /* Cita a las Normas con artículo vigente: primero el texto actualizado (RG, «Qué cambió»),
+       y el texto del PDF de 2018 queda abajo, plegado. Si no se puede bajar el título, vuelve al PDF. */
+    function abrirVigente(r) {
+      const dlg = document.getElementById("srcdlg");
+      const [t, c, a] = r.nv.split("|");
+      document.getElementById("sdtit").textContent = nvEt(t, c, a).replace("Normas CNV", "Normas CNV vigentes");
+      document.getElementById("sdmeta").textContent = "Cargando el texto vigente…";
+      document.getElementById("sdbody").innerHTML = "";
+      document.getElementById("sdfoot").innerHTML = "";
+      if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); }
+      nvCargar(t).then(() => {
+        const x = NVART[r.nv];
+        if (!x) throw new Error("sin artículo");
+        const art = x.art, cap = x.cap, sec = x.sec;
+        const ubic = [cap.c === "U" ? "" : cap.c === "P" ? "Capítulo preliminar" : `Capítulo ${cap.c}${cap.n ? " · " + cap.n : ""}`,
+          sec.s && sec.s !== "ANEXOS" ? `Sección ${sec.s}${sec.n ? " · " + sec.n : ""}` : ""].filter(Boolean).join(" › ");
+        const rg = (art.rg || []).join(", ");
+        document.getElementById("sdmeta").textContent = `Texto vigente${rg ? " · según " + rg : ""}${ubic ? " · " + ubic : ""} · al día hasta la ${x.tit.al}`;
+        const ex = r.ex;
+        const k18 = r.t === "N" && NORMTXT[r.k] ? r.k : art.k18;
+        const n18 = k18 && NORMTXT[k18];
+        let body = art.ep ? `<p class="nvep"><b>${esc(art.ep)}</b></p>` : "";
+        if (art.pend) body += `<div class="nvpend"><b>Todavía no rige:</b> ${esc(art.pend)}</div>`;
+        if (art.derog) body += `<div class="nvpend"><b>Derogado:</b> el capítulo fue derogado; el texto queda solo como referencia.</div>`;
+        if (art.fut) body += `<div class="nvpend"><b>Cambia pronto:</b> ${esc(art.futNota || "")}</div>`;
+        if (art.d18) body += `<div class="nv18"><b>Qué cambió:</b> ${esc(art.d18)}</div>`;
+        body += subW("NV:" + r.nv, art.p.map(p => {
+          const inc = /^(?:[a-zñ]{1,2}|[ivxl]{1,6}|\d{1,2})[\)\.]\s/i.test(p) && !/^\d{1,2}\.\d/.test(p);
+          return `<p${inc ? ` class="inc"` : ""}>${marcar(p, ex)}</p>`;
+        }).join(""), `${nvEt(t, c, a)}${art.ep ? " — " + art.ep : ""}`);
+        if (art.fut) body += `<details class="nvfut"><summary>Texto que va a regir con la RG 1163/2026</summary>${art.fut.map(p => `<p>${esc(p)}</p>`).join("")}</details>`;
+        if (art.cnv) body += `<p class="nvfuente">${esc(art.cnv)}</p>`;
+        if (n18) body += `<details class="nvcmp"><summary>Cómo decía tu PDF de 2018 (${esc(n18.loc || "")}${n18.p ? ", pág. " + esc(n18.p) : ""})</summary><p>${subW("N:" + k18, marcar(n18.t, r.t === "N" ? r.ex : ""))}</p></details>`;
+        document.getElementById("sdbody").innerHTML = body;
+        document.getElementById("sdfoot").innerHTML = `<button class="lk" data-nvgo="${esc(r.nv)}">Ver el artículo en su título</button>` +
+          (cap.url ? `<a class="lk ext2" href="${esc(cap.url)}" target="_blank" rel="noopener">Texto oficial (InfoLeg) ↗</a>` : "");
+        const mk = dlg.querySelector("#sdbody > .subw mark");
+        if (mk) mk.scrollIntoView({ block: "center" });
+      }).catch(() => abrirRef(Object.assign({}, r, { nv: null })));
+    }
+    function abrirRef(r) {
+      if (r.nv && (r.t === "N" || r.t === "V")) return abrirVigente(r);
       const dlg = document.getElementById("srcdlg");
       let meta = "", body = "", foot = "";
       if (r.t === "N") {
