@@ -2653,6 +2653,7 @@
     :root[data-theme="dark"] mark.sub, :root[data-theme="dark"] #srcdlg mark.sub { background: rgba(255, 200, 40, .26); border-bottom-color: #E8B83A }
     .subbtn { position: fixed; z-index: 2147483000; font-family: var(--f-body); font-size: 12.5px; font-weight: 600; background: var(--ink); color: var(--surface); border: 0; border-radius: 999px; padding: 7px 14px; min-height: 32px; box-shadow: 0 6px 20px rgba(0, 0, 0, .25); cursor: pointer }
     .subbtn[hidden] { display: none }
+    .subbtn.tactil { font-size: 15px; padding: 11px 22px; min-height: 44px; background: #D9A400; color: #141A22; touch-action: manipulation }
     .literal .subw, #srcdlg .subw { white-space: inherit }
 
     /* fichas e instrumentos */
@@ -9298,19 +9299,27 @@
     subBtn.className = "subbtn"; subBtn.type = "button"; subBtn.hidden = true;
     document.body.appendChild(subBtn);
     let subPend = null;
+    const SUB_TACTIL = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches) || ("ontouchstart" in window);
     function subOcultar() { subBtn.hidden = true; subPend = null; }
     function subMostrar(rect, txt, pend) {
       subPend = pend; subBtn.textContent = txt; subBtn.hidden = false;
       const dlg = document.getElementById("srcdlg");
       const host = dlg && dlg.open && dlg.contains(pend.el) ? dlg : document.body;
       if (subBtn.parentNode !== host) host.appendChild(subBtn);
-      const bw = subBtn.offsetWidth || 90, x = Math.min(window.innerWidth - bw - 8, Math.max(8, rect.left + rect.width / 2 - bw / 2));
+      const bw = subBtn.offsetWidth || 90;
+      if (SUB_TACTIL) {                      // en táctil el menú del sistema tapa la selección: arriba y al centro
+        subBtn.classList.add("tactil");
+        subBtn.style.left = Math.max(8, (window.innerWidth - bw) / 2) + "px";
+        subBtn.style.top = "calc(env(safe-area-inset-top, 0px) + 14px)";
+        return;
+      }
+      const x = Math.min(window.innerWidth - bw - 8, Math.max(8, rect.left + rect.width / 2 - bw / 2));
       const y = Math.min(window.innerHeight - 44, Math.max(8, rect.top > 48 ? rect.top - 40 : rect.bottom + 8));
       subBtn.style.left = x + "px"; subBtn.style.top = y + "px";
     }
     function subRevisar() {
       const sel = window.getSelection();
-      if (!sel || sel.isCollapsed || !sel.rangeCount) { if (subPend && subPend.tipo === "add") subOcultar(); return; }
+      if (!sel || sel.isCollapsed || !sel.rangeCount) { if (subPend && subPend.tipo === "add" && !SUB_TACTIL) subOcultar(); return; }
       const rg = sel.getRangeAt(0);
       const cont = n => (n.nodeType === 3 ? n.parentElement : n).closest(".subw");
       const el = cont(rg.startContainer);
@@ -9321,16 +9330,22 @@
     }
     let subT = null;
     document.addEventListener("selectionchange", () => { clearTimeout(subT); subT = setTimeout(subRevisar, 220); });
-    subBtn.addEventListener("mousedown", e => e.preventDefault());
-    subBtn.addEventListener("click", e => {
+    let subHecho = 0;
+    function subAccion(e) {
       e.preventDefault(); e.stopPropagation();
+      if (Date.now() - subHecho < 600) return;        // pointerdown y click del mismo toque
       const p = subPend; if (!p) return;
+      subHecho = Date.now();
       const clave = p.el.dataset.sub;
       if (p.tipo === "add") { subAgregar(clave, p.s, p.e); const sel = window.getSelection(); if (sel) sel.removeAllRanges(); }
       else subQuitar(clave, p.i);
       subTodos(clave);
-      subOcultar();
-    });
+      subPend = null;
+      setTimeout(() => { subBtn.hidden = true; }, 450);   // que el resto del toque caiga en el botón y no cierre el panel
+    }
+    subBtn.addEventListener("pointerdown", subAccion);   // actúa antes de que el toque borre la selección
+    subBtn.addEventListener("mousedown", e => e.preventDefault());
+    subBtn.addEventListener("click", subAccion);
     document.addEventListener("click", e => {
       if (e.target === subBtn) return;
       const m = e.target.closest && e.target.closest("mark.sub");
@@ -9342,7 +9357,8 @@
       }
       if (subPend && subPend.tipo === "del") subOcultar();
     }, true);
-    window.addEventListener("scroll", () => { if (!subBtn.hidden) subOcultar(); }, true);
+    window.addEventListener("scroll", () => { if (!subBtn.hidden && !SUB_TACTIL) subOcultar(); }, true);
+    document.addEventListener("pointerdown", e => { if (SUB_TACTIL && e.target !== subBtn && !(e.target.closest && e.target.closest(".subw")) && subPend) subOcultar(); }, true);
 
     /* aplicar a todo contenedor nuevo, venga de donde venga (leyes, diálogo, Agentes) */
     new MutationObserver(ms => {
