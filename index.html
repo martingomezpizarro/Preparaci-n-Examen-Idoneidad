@@ -45,7 +45,12 @@
     box-shadow: 0 6px 20px rgba(0,0,0,.22); cursor: pointer; max-width: calc(100vw - 32px); }
   #uvolverses[hidden] { display: none; }
   body:has(.subbtn:not([hidden])) #uvolverses, body:has(dialog[open]) #uvolverses { display: none; }
-  mark.sub.connota::after { content: "✎"; font-size: .72em; margin-left: 2px; vertical-align: super; color: var(--accent); }
+  mark.sub.subfin::after { content: "✎"; display: inline-block; font: 600 11px/1 var(--f-body); margin-left: 3px; padding: 3px 5px; border-radius: 999px 999px 999px 3px;
+    border: 1px solid #D9A400; background: var(--surface); color: #9A7400; vertical-align: .15em; cursor: pointer; }
+  mark.sub.subfin.connota::after { content: "✎ nota"; background: #D9A400; color: #141A22; border-color: #D9A400; }
+  @media (pointer: coarse) { mark.sub.subfin::after { padding: 5px 8px; font-size: 12px; } }
+  .tiene-sub::after { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #E8B400; box-shadow: 0 0 0 2px rgba(232, 180, 0, .25); margin-left: 6px; vertical-align: middle; }
+  li.art .an.tiene-sub::after { display: block; margin: 6px auto 0; }
   #notadlg { width: min(560px, calc(100vw - 32px)); padding: 0; border: 1px solid var(--line, #ccc); border-radius: 14px; background: var(--surface); color: var(--ink); }
   #notadlg::backdrop { background: rgba(10, 14, 20, .45); }
   #notadlg .sd-b { padding: 14px 18px; }
@@ -7505,7 +7510,7 @@
           `<span class="vinc"><a class="lk src" href="${ley.infoleg}" target="_blank" rel="noopener">InfoLeg ↗</a></span>`;
         pie =
           `<div class="artfoot">` +
-          `<button class="showtxt" aria-expanded="false" aria-controls="t-${ley.id}-${key}">Texto completo</button>` +
+          `<button class="showtxt" aria-expanded="false" aria-controls="t-${ley.id}-${key}" data-subk="L:${ley.id}:${key}">Texto completo</button>` +
           grupos +
           `</div>` +
           `<div class="literal" id="t-${ley.id}-${key}" hidden>${subW("L:" + ley.id + ":" + key, esc(lit))}` +
@@ -7514,10 +7519,10 @@
       }
 
       return `<li class="art${cited}${dg}" id="a-${ley.id}-${key}" data-mods="${mods || ""}">` +
-        `<span class="an">${artNum(n)}</span>` +
+        `<span class="an" data-subk="L:${ley.id}:${key} R:${ley.id}:${key}">${artNum(n)}</span>` +
         `<div class="ab">` +
         `<span class="ep">${esc(ep)}${tags ? `<span class="tags">${tags}</span>` : ""}</span>` +
-        (res ? `<div class="res">${esc(res)}</div>` : "") +
+        (res ? `<div class="res">${subW("R:" + ley.id + ":" + key, esc(res), `Ley ${ley.num} · art. ${n} · resumen`)}</div>` : "") +
         pie +
         `</div>` +
         `</li>`;
@@ -7525,7 +7530,7 @@
 
     function capHTML(c, ley) {
       const head = c.c || c.n
-        ? `<div class="ch">${c.c ? `<span class="cnum">${esc(c.c)}</span>` : ""}${c.n ? `<span class="cname">${esc(c.n)}</span>` : ""}${c.r ? `<span class="crange">art. ${esc(c.r)}</span>` : ""}${c.d ? `<p class="cdesc">${esc(c.d)}</p>` : ""}</div>`
+        ? `<div class="ch">${c.c ? `<span class="cnum">${esc(c.c)}</span>` : ""}${c.n ? `<span class="cname">${esc(c.n)}</span>` : ""}${c.r ? `<span class="crange">art. ${esc(c.r)}</span>` : ""}${c.d ? `<p class="cdesc">${subW("RC:" + ley.id + ":" + (c.c || c.n), esc(c.d), `Ley ${ley.num} · ${c.c || ""} ${c.n || ""}`.trim())}</p>` : ""}</div>`
         : "";
       const arts = (c.a && c.a.length) ? `<ul class="arts">${c.a.map(a => artHTML(a, ley)).join("")}</ul>` : "";
       return `<div class="cap"${c.r ? ` data-r="${esc(c.r)}"` : ""}>${head}${arts}</div>`;
@@ -7664,7 +7669,7 @@
         const color = l ? l.color : "#2E5EAA";
         return `<article class="gitem${nota ? " nota" : ""}" data-l="${inicial(g.t)}" data-ley="${g.l}" style="--gc:${color}">
       <h4>${esc(g.t)}</h4>
-      <p>${esc(g.d)}</p>
+      <p>${subW("G:" + g.l + ":" + g.t, esc(g.d), "Glosario · " + g.t)}</p>
       <div class="gfoot">
         <button class="gsrc" ${g.l === "RG1097" ? `data-ntit="I"` : `data-go="${g.l}:${artKey(g.a)}"`}><span class="gdot"></span>${esc(citaGlos(g))}</button>
         ${nota ? `<span class="gnota">Nota, no definición vigente</span>` : ""}
@@ -9252,7 +9257,7 @@
       try { localStorage.setItem(LSSUB, JSON.stringify(SUB)); } catch (e) { }
       if (typeof nubeProgramar === "function") { try { nubeProgramar(); } catch (e) { } }
     }
-    const subW = (clave, html) => `<span class="subw" data-sub="${esc(clave)}">${html}</span>`;
+    const subW = (clave, html, et) => `<span class="subw" data-sub="${esc(clave)}"${et ? ` data-subet="${esc(et)}"` : ""}>${html}</span>`;
     function subNodos(el) {
       const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
         acceptNode: n => n.parentElement && n.parentElement.closest(".lsrc") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
@@ -9282,7 +9287,8 @@
           m.title = r2nota(reg.r[i]) ? "Tu nota: " + r2nota(reg.r[i]) : "Tu subrayado · tocalo para agregarle una nota o quitarlo";
           t.parentNode.insertBefore(m, t); m.appendChild(t);
         });
-        if (r2nota(reg.r[i])) { const ms = el.querySelectorAll(`mark.sub[data-i="${i}"]`); if (ms.length) ms[ms.length - 1].classList.add("connota"); }
+        const ms = el.querySelectorAll(`mark.sub[data-i="${i}"]`);
+        if (ms.length) { const u = ms[ms.length - 1]; u.classList.add("subfin"); if (r2nota(reg.r[i])) u.classList.add("connota"); }
       });
     }
     function subOffset(el, nodo, off) {
@@ -9308,6 +9314,11 @@
         } else fus.push(r.slice());
       });
       SUB[clave] = { r: fus, t: Date.now() };
+      if (!/^[LNV]:/.test(clave)) {             // textos escritos por la página: se guarda una copia para la lista
+        const el = [...document.querySelectorAll(".subw")].find(x => x.dataset.sub === clave);
+        if (el) { SUB[clave].x = subNodos(el).map(o => o.n.data).join(""); SUB[clave].et = el.dataset.subet || ""; }
+        else if (reg.x) { SUB[clave].x = reg.x; SUB[clave].et = reg.et; }
+      }
       subGuardar();
     }
     function subQuitar(clave, i) {
@@ -9315,12 +9326,24 @@
       reg.r.splice(i, 1); reg.t = Date.now();
       subGuardar();
     }
-    function subTodos(clave) { document.querySelectorAll(".subw").forEach(el => { if (el.dataset.sub === clave) subAplicar(el); }); }
+    function subHay(k) { const g = SUB[k]; return !!(g && g.r && g.r.length); }
+    function subPuntos(raiz) {
+      const ks = Object.keys(SUB).filter(subHay);
+      (raiz || document).querySelectorAll("[data-subk]").forEach(el => {
+        const si = el.dataset.subk.split(" ").some(tk => tk.endsWith("*") ? ks.some(k => k.startsWith(tk.slice(0, -1))) : subHay(tk));
+        el.classList.toggle("tiene-sub", si);
+      });
+    }
+    let subPuntosT = 0;
+    function subPuntosLuego() { cancelAnimationFrame(subPuntosT); subPuntosT = requestAnimationFrame(() => subPuntos()); }
+    function subTodos(clave) {
+      subPuntosLuego(); document.querySelectorAll(".subw").forEach(el => { if (el.dataset.sub === clave) subAplicar(el); }); }
     function subFundir(d) {
       if (!d || typeof d !== "object") return;
       Object.entries(d).forEach(([k, r]) => { if (!SUB[k] || (r.t || 0) > (SUB[k].t || 0)) SUB[k] = r; });
       try { localStorage.setItem(LSSUB, JSON.stringify(SUB)); } catch (e) { }
       document.querySelectorAll(".subw").forEach(subAplicar);
+      subPuntosLuego();
     }
 
     /* ---------------- Notas en los subrayados ----------------
@@ -9329,7 +9352,7 @@
        junto con los subrayados, y se listan todas en «Mi perfil → Mis subrayados y notas». */
     const r2nota = r => (r && typeof r[2] === "string") ? r[2] : "";
     function subTextoDe(clave) {
-      const t = clave.slice(0, 1);
+      const t = clave.split(":")[0];
       if (t === "L") {
         const ley = clave.split(":")[1], art = clave.split(":").slice(2).join(":");
         const T = TEXTOS[ley] || {};
@@ -9340,6 +9363,12 @@
       if (t === "N") {
         const k = clave.slice(2), n = NORMTXT[k];
         return n ? { txt: n.t, et: `Normas CNV · ${n.loc}`, orden: "2|" + k, pag: n.p } : null;
+      }
+      if (!/^[LNV]$/.test(t)) {
+        const reg = SUB[clave] || {};
+        if (!reg.x) return null;
+        const m = clave.match(/^RC?:([^:]+):(.+)$/);
+        return { txt: reg.x, et: reg.et || clave, orden: "4|" + (reg.et || clave), go: m && clave[1] === ":" ? `${m[1]}:${m[2]}` : "", pag: "" };
       }
       if (t === "V") {
         const partes = clave.slice(2).split(":"), cap = partes[0], art = partes.slice(1).join(":");
@@ -9397,7 +9426,7 @@
       const src = subTextoDe(clave); if (!src) return;
       const dlg = document.getElementById("srcdlg");
       document.getElementById("sdtit").textContent = src.et;
-      document.getElementById("sdmeta").textContent = clave[0] === "L" ? "Texto actualizado de InfoLeg" : clave[0] === "N" ? `Normas CNV (N.T. 2013 y mod.) · edición 2018 · pág. ${src.pag || "—"}` : "Texto vigente de las Normas CNV";
+      document.getElementById("sdmeta").textContent = /^L:/.test(clave) ? "Texto actualizado de InfoLeg" : /^N:/.test(clave) ? `Normas CNV (N.T. 2013 y mod.) · edición 2018 · pág. ${src.pag || "—"}` : /^V:/.test(clave) ? "Texto vigente de las Normas CNV" : "Texto de esta página (resumen)";
       document.getElementById("sdbody").innerHTML = subW(clave, esc(src.txt));
       document.getElementById("sdfoot").innerHTML = src.go ? `<button class="lk" data-go="${esc(src.go)}" data-cerrar="1">Ver en el mapa de la ley</button>` : "";
       if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
@@ -9531,9 +9560,11 @@
         if (n.nodeType !== 1) continue;
         if (n.matches && n.matches(".subw:not([data-subok])")) subAplicar(n);
         if (n.querySelectorAll) n.querySelectorAll(".subw:not([data-subok])").forEach(subAplicar);
+        if ((n.matches && n.matches("[data-subk]")) || (n.querySelector && n.querySelector("[data-subk]"))) subPuntosLuego();
       }
     }).observe(document.body, { childList: true, subtree: true });
     document.querySelectorAll(".subw").forEach(subAplicar);
+    subPuntos();
 
     /* ---- pool de práctica y repaso ---- */
     function pool() {
@@ -10998,7 +11029,7 @@
     function estHTML(e) { return e ? `<span class="est ${e}">${esc(EST_NOM[e] || e)}</span>` : ""; }
     function prioHTML(p) { return `<span class="prio" title="Peso para el examen">${"<b>★</b>".repeat(p)}${"☆".repeat(3 - p)}</span>`; }
     function refsHTML(arr) { return (arr || []).map(f => fuenteHTML(f)).join(" "); }
-    function hoyHTML(t) { return t ? `<div class="hoybox"><b class="hl">Hoy</b>${esc(t)}</div>` : ""; }
+    function hoyHTML(t, k, et) { return t ? `<div class="hoybox"><b class="hl">Hoy</b>${k ? subW(k, esc(t), et) : esc(t)}</div>` : ""; }
 
     function normaTexto(n) {
       return [n.id, n.n, n.que, n.hoy, ...(n.caps || []).flatMap(c => [c.c, c.n, c.hoy || "", ...(c.pts || [])]),
@@ -11015,15 +11046,15 @@
         const open = !!(nOpen[n.id] || (q && lista.length <= 6));
         const nf = flashDe(n.id).length;
         const body = !open ? "" : `<div class="nbody">
-      <p class="nque">${esc(n.que)}</p>
+      <p class="nque">${subW("NQ:" + n.id, esc(n.que), `Normas · Tít. ${n.id} · ${n.n}`)}</p>
       ${(n.leyes && n.leyes.length) ? `<div class="nleyes"><span class="nlab">Se apoya en</span>${refsHTML(n.leyes)}</div>` : ""}
-      ${(n.caps && n.caps.length) ? `<div class="ncaps">${n.caps.map(c => `<section class="ncap">
+      ${(n.caps && n.caps.length) ? `<div class="ncaps">${n.caps.map((c, ci) => `<section class="ncap">
         <h4><span class="nc">${esc(c.c)}</span>${esc(c.n)} ${c.est ? estHTML(c.est) : ""}</h4>
-        <ul>${(c.pts || []).map(p => `<li>${esc(p)}</li>`).join("")}</ul>
-        ${hoyHTML(c.hoy)}
+        <ul>${(c.pts || []).map((p, pi) => `<li>${subW(`NP:${n.id}:${ci}:${pi}`, esc(p), `Normas · Tít. ${n.id} · ${c.c} ${c.n}`)}</li>`).join("")}</ul>
+        ${hoyHTML(c.hoy, `NH:${n.id}:${ci}`, `Normas · Tít. ${n.id} · ${c.c} · hoy`)}
         ${(c.f && c.f.length) ? `<div class="nleyes"><span class="nlab">Ley</span>${refsHTML(c.f)}</div>` : ""}
       </section>`).join("")}</div>` : ""}
-      ${hoyHTML(n.hoy)}
+      ${hoyHTML(n.hoy, `NH:${n.id}`, `Normas · Tít. ${n.id} · hoy`)}
       ${(n.num && n.num.length) ? `<div class="nnums"><table><thead><tr><th>Dato de examen</th><th>Valor</th><th>Dónde</th></tr></thead><tbody>
         ${n.num.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("")}</tbody></table></div>` : ""}
       <div class="nacc">
@@ -11033,7 +11064,7 @@
     </div>`;
         return `<article class="ntit p${n.prio}" id="nt-${n.id}" data-open="${open ? 1 : 0}">
       <button class="nhead" data-nt-tog="${n.id}" aria-expanded="${open}">
-        <span class="nnum">Tít. ${n.id}</span>
+        <span class="nnum" data-subk="N:${n.id}|* NQ:${n.id} NP:${n.id}:* NH:${n.id}*">Tít. ${n.id}</span>
         <span><span class="nname">${esc(n.n)}</span>
           <span class="nsubl">${estHTML(n.est)} ${prioHTML(n.prio)} <span class="np">págs. ${esc(n.pags)} · ${(n.caps || []).length} cap.</span></span></span>
         <span class="nflecha">›</span>
