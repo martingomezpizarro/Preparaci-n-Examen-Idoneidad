@@ -45,6 +45,19 @@
     box-shadow: 0 6px 20px rgba(0,0,0,.22); cursor: pointer; max-width: calc(100vw - 32px); }
   #uvolverses[hidden] { display: none; }
   body:has(.subbtn:not([hidden])) #uvolverses, body:has(dialog[open]) #uvolverses { display: none; }
+  mark.sub.connota::after { content: "✎"; font-size: .72em; margin-left: 2px; vertical-align: super; color: var(--accent); }
+  #notadlg { width: min(560px, calc(100vw - 32px)); padding: 0; border: 1px solid var(--line, #ccc); border-radius: 14px; background: var(--surface); color: var(--ink); }
+  #notadlg::backdrop { background: rgba(10, 14, 20, .45); }
+  #notadlg .sd-b { padding: 14px 18px; }
+  #notadlg .sd-f { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .ndcita { margin: 0 0 12px; padding: 8px 12px; border-left: 3px solid #D9A400; background: rgba(255, 200, 40, .14); font-size: 14.5px; line-height: 1.5; max-height: 30vh; overflow: auto; }
+  .ndlab { display: block; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+  #ndtxt { width: 100%; box-sizing: border-box; font: 15px/1.45 var(--f-body); padding: 10px 12px; border: 1px solid var(--line, #ccc); border-radius: 10px; background: var(--bg, transparent); color: var(--ink); resize: vertical; }
+  .pnotas .pnot-g { font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin: 16px 0 6px; font-weight: 600; }
+  .pnot { padding: 8px 0 10px; border-bottom: 1px solid var(--line, rgba(0,0,0,.08)); }
+  .pnot blockquote { margin: 0; padding: 2px 10px; border-left: 3px solid #D9A400; font-size: 14px; line-height: 1.5; }
+  .pnot-n { margin: 8px 0 0; padding: 8px 10px; border-radius: 8px; background: var(--accent-soft); font-size: 14.5px; white-space: pre-wrap; }
+  .pnot-acc { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
 </style>
 </head>
 
@@ -9265,9 +9278,11 @@
           if (x > a) t = t.splitText(x - a);
           if (y < b) t.splitText(y - x);
           const m = document.createElement("mark");
-          m.className = "sub"; m.dataset.i = i; m.title = "Tu subrayado · tocalo para quitarlo";
+          m.className = "sub"; m.dataset.i = i;
+          m.title = r2nota(reg.r[i]) ? "Tu nota: " + r2nota(reg.r[i]) : "Tu subrayado · tocalo para agregarle una nota o quitarlo";
           t.parentNode.insertBefore(m, t); m.appendChild(t);
         });
+        if (r2nota(reg.r[i])) { const ms = el.querySelectorAll(`mark.sub[data-i="${i}"]`); if (ms.length) ms[ms.length - 1].classList.add("connota"); }
       });
     }
     function subOffset(el, nodo, off) {
@@ -9284,7 +9299,14 @@
       const reg = SUB[clave] || { r: [] };
       let rs = reg.r.concat([[s, e]]).sort((p, q) => p[0] - q[0]);
       const fus = [];
-      rs.forEach(r => { const u = fus[fus.length - 1]; if (u && r[0] <= u[1]) u[1] = Math.max(u[1], r[1]); else fus.push(r.slice()); });
+      rs.forEach(r => {
+        const u = fus[fus.length - 1];
+        if (u && r[0] <= u[1]) {
+          u[1] = Math.max(u[1], r[1]);
+          const ns = [u[2], r[2]].filter(Boolean);           // si los dos tenían nota, quedan las dos
+          if (ns.length) u[2] = ns.join("\n\n"); 
+        } else fus.push(r.slice());
+      });
       SUB[clave] = { r: fus, t: Date.now() };
       subGuardar();
     }
@@ -9300,6 +9322,128 @@
       try { localStorage.setItem(LSSUB, JSON.stringify(SUB)); } catch (e) { }
       document.querySelectorAll(".subw").forEach(subAplicar);
     }
+
+    /* ---------------- Notas en los subrayados ----------------
+       Cada subrayado es [inicio, fin] o [inicio, fin, nota]. Tocar un subrayado abre un
+       panel para escribir la nota o quitar el subrayado. Las notas viajan con la cuenta
+       junto con los subrayados, y se listan todas en «Mi perfil → Mis subrayados y notas». */
+    const r2nota = r => (r && typeof r[2] === "string") ? r[2] : "";
+    function subTextoDe(clave) {
+      const t = clave.slice(0, 1);
+      if (t === "L") {
+        const ley = clave.split(":")[1], art = clave.split(":").slice(2).join(":");
+        const T = TEXTOS[ley] || {};
+        const k = T[art] !== undefined ? art : Object.keys(T).find(x => artKey(x) === artKey(art));
+        const l = leyPorId(ley);
+        return k ? { txt: T[k], et: `Ley ${l ? l.num : ley} · art. ${k}`, orden: `1|${l ? l.num : ley}|${String(parseInt(k) || 0).padStart(4, "0")}`, go: `${ley}:${art}` } : null;
+      }
+      if (t === "N") {
+        const k = clave.slice(2), n = NORMTXT[k];
+        return n ? { txt: n.t, et: `Normas CNV · ${n.loc}`, orden: "2|" + k, pag: n.p } : null;
+      }
+      if (t === "V") {
+        const partes = clave.slice(2).split(":"), cap = partes[0], art = partes.slice(1).join(":");
+        let hv = null;
+        (function buscar(o) { if (hv || !o || typeof o !== "object") return; if (o.hv && o.hv.cap === cap && String(o.hv.art) === art && o.hv.t) { hv = o.hv; return; } Object.values(o).forEach(buscar); })(AGX);
+        return hv ? { txt: hv.t, et: `Normas CNV vigentes · ${agxCapEt(cap)}, art. ${art}`, orden: "3|" + clave } : null;
+      }
+      return null;
+    }
+    const notaDlg = document.createElement("dialog");
+    notaDlg.id = "notadlg"; notaDlg.setAttribute("aria-labelledby", "ndtit");
+    notaDlg.innerHTML = `<div class="sd-h"><div><h3 id="ndtit">Tu subrayado</h3><div class="sd-meta" id="ndmeta"></div></div><button class="sd-x" data-ndx="1" aria-label="Cerrar">✕</button></div>
+      <div class="sd-b"><blockquote class="ndcita" id="ndcita"></blockquote>
+        <label class="ndlab" for="ndtxt">Tu nota</label>
+        <textarea id="ndtxt" rows="4" maxlength="2000" placeholder="Qué te importa de esto, con qué lo relacionás, una duda para repasar…"></textarea></div>
+      <div class="sd-f"><button class="nbtn" data-ndok="1">Guardar nota</button><button class="hbtn" data-ndir="1" hidden>Abrir el texto</button><span style="flex:1"></span><button class="hbtn peligro" data-ndquitar="1">Quitar subrayado</button></div>`;
+    document.body.appendChild(notaDlg);
+    let notaSel = null;
+    function notaAbrir(clave, i, desdeLista) {
+      const reg = SUB[clave]; if (!reg || !reg.r[i]) return;
+      notaSel = { clave, i };
+      const src = subTextoDe(clave), r = reg.r[i];
+      document.getElementById("ndmeta").textContent = src ? src.et : clave;
+      document.getElementById("ndcita").textContent = src ? "«" + src.txt.slice(r[0], r[1]) + "»" : "";
+      document.getElementById("ndtxt").value = r2nota(r);
+      const q = notaDlg.querySelector("[data-ndquitar]"); q.textContent = "Quitar subrayado"; delete q.dataset.conf;
+      notaDlg.querySelector("[data-ndir]").hidden = !desdeLista || !src;
+      if (notaDlg.showModal) notaDlg.showModal(); else notaDlg.setAttribute("open", "");
+      if (!SUB_TACTIL) document.getElementById("ndtxt").focus();
+    }
+    function notaCerrar() { if (notaDlg.open) notaDlg.close(); notaSel = null; }
+    function notaCambio(clave) {
+      subTodos(clave);
+      if (typeof vista !== "undefined" && vista === "perfil" && typeof pintarPerfil === "function") pintarPerfil();
+    }
+    notaDlg.addEventListener("click", e => {
+      if (e.target === notaDlg || e.target.closest("[data-ndx]")) { notaCerrar(); return; }
+      if (!notaSel) return;
+      const { clave, i } = notaSel, reg = SUB[clave];
+      if (e.target.closest("[data-ndok]")) {
+        const v = document.getElementById("ndtxt").value.trim();
+        const r = reg.r[i].slice(0, 2); if (v) r.push(v);
+        reg.r[i] = r; reg.t = Date.now(); subGuardar(); notaCerrar(); notaCambio(clave); return;
+      }
+      if (e.target.closest("[data-ndir]")) { notaCerrar(); subAbrirTexto(clave, i); return; }
+      const q = e.target.closest("[data-ndquitar]");
+      if (q) {
+        if (r2nota(reg.r[i]) && q.dataset.conf !== "1") { q.dataset.conf = "1"; q.textContent = "Se borra también la nota · tocá otra vez"; return; }
+        subQuitar(clave, i); notaCerrar(); notaCambio(clave); return;
+      }
+    });
+    notaDlg.addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) notaDlg.querySelector("[data-ndok]").click(); });
+    /* abre el texto completo de un subrayado (desde la lista) y lleva la vista hasta él */
+    function subAbrirTexto(clave, i) {
+      const src = subTextoDe(clave); if (!src) return;
+      const dlg = document.getElementById("srcdlg");
+      document.getElementById("sdtit").textContent = src.et;
+      document.getElementById("sdmeta").textContent = clave[0] === "L" ? "Texto actualizado de InfoLeg" : clave[0] === "N" ? `Normas CNV (N.T. 2013 y mod.) · edición 2018 · pág. ${src.pag || "—"}` : "Texto vigente de las Normas CNV";
+      document.getElementById("sdbody").innerHTML = subW(clave, esc(src.txt));
+      document.getElementById("sdfoot").innerHTML = src.go ? `<button class="lk" data-go="${esc(src.go)}" data-cerrar="1">Ver en el mapa de la ley</button>` : "";
+      if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+      setTimeout(() => { const mk = dlg.querySelector(`mark.sub[data-i="${i}"]`); if (mk) mk.scrollIntoView({ block: "center" }); }, 60);
+    }
+    /* lista para «Mi perfil» */
+    let notasFiltro = "todas";
+    function subLista() {
+      const out = [];
+      Object.entries(SUB).forEach(([k, reg]) => {
+        if (!reg || !reg.r) return;
+        const src = subTextoDe(k);
+        reg.r.forEach((r, i) => out.push({ k, i, r, src, t: reg.t || 0, nota: r2nota(r) }));
+      });
+      return out.sort((a, b) => ((a.src && a.src.orden) || a.k).localeCompare((b.src && b.src.orden) || b.k, "es", { numeric: true }) || a.r[0] - b.r[0]);
+    }
+    function notasHTMLPerfil() {
+      const xs = subLista(), conNota = xs.filter(x => x.nota).length;
+      const vis = notasFiltro === "notas" ? xs.filter(x => x.nota) : xs;
+      const corta = t => t.length > 320 ? t.slice(0, 300).replace(/\s\S*$/, "") + "…" : t;
+      let grupo = "";
+      const items = vis.map(x => {
+        const et = x.src ? x.src.et : x.k;
+        const cab = et !== grupo ? `<h4 class="pnot-g">${esc(et)}</h4>` : ""; grupo = et;
+        const cita = x.src ? corta(x.src.txt.slice(x.r[0], x.r[1])) : "";
+        return cab + `<div class="pnot${x.nota ? " connota" : ""}">
+          <blockquote>«${esc(cita)}»</blockquote>
+          ${x.nota ? `<p class="pnot-n">${esc(x.nota)}</p>` : ""}
+          <div class="pnot-acc"><button class="lk" data-pnota="${esc(x.k)}|${x.i}">${x.nota ? "Editar nota" : "Agregar nota"}</button>${x.src ? `<button class="lk" data-pabrir="${esc(x.k)}|${x.i}">Ver en el texto</button>` : ""}</div>
+        </div>`;
+      }).join("");
+      return `<section class="ucard pnotas" id="pnotas"><h3>Mis subrayados y notas</h3>
+        ${xs.length ? `<div class="nfil"><button class="schip" data-pnf="todas" aria-pressed="${notasFiltro === "todas"}">Todos · ${xs.length}</button><button class="schip" data-pnf="notas" aria-pressed="${notasFiltro === "notas"}">Con nota · ${conNota}</button></div>
+        ${items || `<p class="uaviso">Todavía no le agregaste notas a tus subrayados.</p>`}`
+          : `<p class="uaviso">Todavía no subrayaste nada. En cualquier texto de una ley o de las Normas, seleccioná una parte y tocá «Subrayar». Después tocás el subrayado para agregarle una nota.</p>`}
+        <p class="uaviso">${NUBE && NUBE.user ? "Se guardan en tu cuenta y los ves en todos tus dispositivos." : "Por ahora quedan en este dispositivo. Entrando con tu cuenta los tenés también en el celular y en la compu."}</p>
+      </section>`;
+    }
+    document.addEventListener("click", e => {
+      const f = e.target.closest("[data-pnf]");
+      if (f) { notasFiltro = f.dataset.pnf; pintarPerfil(); return; }
+      const n = e.target.closest("[data-pnota]");
+      if (n) { const [k, i] = n.dataset.pnota.split(/\|(?=\d+$)/); notaAbrir(k, +i, true); return; }
+      const a = e.target.closest("[data-pabrir]");
+      if (a) { const [k, i] = a.dataset.pabrir.split(/\|(?=\d+$)/); subAbrirTexto(k, +i); return; }
+    });
 
     /* botón flotante */
     const subBtn = document.createElement("button");
@@ -9367,7 +9511,9 @@
       const sel = window.getSelection();
       if (m && (!sel || sel.isCollapsed)) {
         const el = m.closest(".subw");
-        subMostrar(m.getBoundingClientRect(), "Quitar subrayado", { tipo: "del", el, i: +m.dataset.i });
+        e.preventDefault(); e.stopPropagation();
+        subOcultar();
+        notaAbrir(el.dataset.sub, +m.dataset.i);
         return;
       }
       if (subPend && subPend.tipo === "del") subOcultar();
@@ -11586,6 +11732,7 @@
       if (h === "micro") setVista("micro");
       else if (h === "normas") { msub = "normas"; setVista("mercado"); }
       else if (h === "hoy") { msub = "hoy"; setVista("mercado"); }
+      else if (h === "notas") { setVista("perfil"); try { pintarPerfil(); } catch (e) { } setTimeout(() => document.getElementById("pnotas")?.scrollIntoView({ block: "start" }), 80); }
     }
     sesRestaurar();
     window.addEventListener("hashchange", abrirPorHash);
@@ -11698,7 +11845,8 @@
         U.dias[f] = a ? { n: Math.max(a.n || 0, r.n || 0), bien: Math.max(a.bien || 0, r.bien || 0) } : r;
       });
       if (d.cfg && (localVacio || (d.cfgT || 0) > (U.cfgT || 0))) { U.cfg = Object.assign(U.cfg, d.cfg); U.cfgT = d.cfgT || 0; }
-      if (d.sub) subFundir(d.sub);
+      if (d.subJ) { try { subFundir(JSON.parse(d.subJ)); } catch (e) { } }
+      else if (d.sub) subFundir(d.sub);
     }
 
     async function nubeTraer() {
@@ -11743,7 +11891,7 @@
         await Promise.all([
           refUsuario().set({ perfil, resumen: Object.assign(resumen(), { actualizado: ahora }) }, { merge: true }),
           refDato("quiz").set({ respuestas: quiz.respuestas, hist: quiz.hist.slice(-200), cfg: quiz.cfg, t: ahora }),
-          refDato("micro").set({ c: U.c, dias: U.dias, cfg: U.cfg, cfgT: U.cfgT || 0, sub: SUB, t: ahora })
+          refDato("micro").set({ c: U.c, dias: U.dias, cfg: U.cfg, cfgT: U.cfgT || 0, subJ: JSON.stringify(SUB), t: ahora })
         ]);
         NUBE.ultimo = ahora; NUBE.estado = "ok"; NUBE.error = "";
       } catch (e) { NUBE.estado = "error"; NUBE.error = errorTxt(e); }
@@ -11847,6 +11995,7 @@
       }
       pzona.innerHTML = `<div class="ugrid">
     ${cuentaHTML}
+    ${notasHTMLPerfil()}
     <section class="ucard"><h3>Resumen</h3>
       <div class="ustats">
         <div class="ustat"><b>${r.preguntasVistas}</b><span>preguntas vistas de ${PREGUNTAS.length}</span></div>
