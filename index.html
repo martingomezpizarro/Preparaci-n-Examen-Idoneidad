@@ -9669,8 +9669,8 @@
         document.getElementById("sdbody").innerHTML = body;
         document.getElementById("sdfoot").innerHTML = `<button class="lk" data-nvgo="${esc(r.nv)}">Ver el artículo en su título</button>` +
           (cap.url ? `<a class="lk ext2" href="${esc(cap.url)}" target="_blank" rel="noopener">Texto oficial (InfoLeg) ↗</a>` : "");
-        const mk = dlg.querySelector("#sdbody > .subw mark");
-        if (mk) mk.scrollIntoView({ block: "center" });
+        const mk = dlg.querySelector("#sdbody > .subw mark"), bd = document.getElementById("sdbody");
+        if (mk && bd) bd.scrollTop += mk.getBoundingClientRect().top - bd.getBoundingClientRect().top - bd.clientHeight / 2;
       }).catch(() => abrirRef(Object.assign({}, r, { nv: null })));
     }
     function abrirRef(r) {
