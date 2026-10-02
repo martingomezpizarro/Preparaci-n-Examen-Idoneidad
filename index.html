@@ -14909,12 +14909,7 @@
       const pr = e.target.closest("[data-nvpreg]");
       if (pr) {
         const k = pr.dataset.nvpreg, [t, c, a] = k.split("|");
-        quiz.filtro = { nv: k, et: `Normas Tít. ${t}${c === "U" ? "" : c === "P" ? " Cap. preliminar" : " Cap. " + c} art. ${a}` };
-        quiz.soloFallos = false; quiz.modo = "practica";
-        ["mPractica", "mSimulacro", "mRepaso"].forEach(x =>
-          document.getElementById(x).setAttribute("aria-selected", x === "mPractica" ? "true" : "false"));
-        qEl.value = "";
-        setVista("cuestionario");
+        irAPreguntas({ nv: k, et: `Normas Tít. ${t}${c === "U" ? "" : c === "P" ? " Cap. preliminar" : " Cap. " + c} art. ${a}` });
       }
     });
     /* con «Textos completos» también se abren los capítulos y las secciones */
@@ -15079,8 +15074,20 @@
       return `Ir a Ley ${ley ? ley.num : l}, art. ${a.replace(/(\d)(bis|ter)/, "$1 $2")}`;
     }
 
-    function XREF(texto, ctx) {
-      if (!texto || typeof NVKEYS === "undefined") return esc(texto || "");
+    /* rango [ini, fin] del extracto citado dentro del texto (mismo criterio que marcar) */
+    function xrRangoMarca(txt, ex) {
+      if (!ex || !txt) return null;
+      const e = String(ex).replace(/^[«"]|[»"…]+$/g, "");
+      const k = txt.indexOf(e.slice(0, 60));
+      if (k < 0) return null;
+      const fin = txt.indexOf(e.slice(-40), k);
+      return [k, fin > k ? fin + e.slice(-40).length : k + e.length];
+    }
+    /* texto con enlaces y, si se pasa ex, el extracto resaltado (para el diálogo de las citas) */
+    function marcarX(txt, ex, ctx) { return XREF(txt || "", ctx, xrRangoMarca(txt || "", ex)); }
+
+    function XREF(texto, ctx, marca) {
+      if (!texto || typeof NVKEYS === "undefined" || !ctx) return esc(texto || "");
       const piezas = [];   // [inicio, fin, data-x]
       const selfLeyEn = ctx.k === "L" ? xrLeySelf(texto, ctx) : () => null;
       const consumido = [];
@@ -15145,19 +15152,31 @@
           if (xrNvCaps(t).length && t !== ctx.t && !tapado(m.index, m.index + m[1].length)) piezas.push([m.index, m.index + m[1].length, `T:${t}`]);
         }
       }
-      if (!piezas.length) return esc(texto);
+      if (!piezas.length && !marca) return esc(texto);
       piezas.sort((p, q) => p[0] - q[0]);
-      let out = "", pos = 0;
-      piezas.forEach(([a, b, x]) => {
-        if (a < pos) return;
-        out += esc(texto.slice(pos, a)) + `<a class="xref" role="link" tabindex="0" data-x="${esc(x)}" title="${esc(xrTitulo(x))}">${esc(texto.slice(a, b))}</a>`;
-        pos = b;
-      });
-      return out + esc(texto.slice(pos));
+      const ps = []; let ult = 0;
+      piezas.forEach(p => { if (p[0] >= ult) { ps.push(p); ult = p[1]; } });
+      // cortes: bordes de enlaces y de la marca
+      const cortes = new Set([0, texto.length]);
+      ps.forEach(([a, b]) => { cortes.add(a); cortes.add(b); });
+      if (marca) { cortes.add(Math.max(0, marca[0])); cortes.add(Math.min(texto.length, marca[1])); }
+      const cs = [...cortes].sort((a, b) => a - b);
+      let out = "";
+      for (let i = 0; i < cs.length - 1; i++) {
+        const a = cs[i], b = cs[i + 1];
+        if (b <= a) continue;
+        let h = esc(texto.slice(a, b));
+        const lk = ps.find(p => a >= p[0] && b <= p[1]);
+        if (lk) h = `<a class="xref" role="link" tabindex="0" data-x="${esc(lk[2])}" title="${esc(xrTitulo(lk[2]))}">${h}</a>`;
+        if (marca && a >= marca[0] && b <= marca[1]) h = `<mark>${h}</mark>`;
+        out += h;
+      }
+      return out;
     }
 
     /* ---- navegación: tocar un enlace lleva al artículo; el botón flotante vuelve ---- */
     const XPILA = [];
+    let XR_DLG = null;     // reabre el diálogo de cita desde el que se tocó un enlace
     function xrEtiqueta(li) {
       if (li.classList.contains("nart")) {
         const [t, c, a] = (li.dataset.k || "").split("|");
@@ -15199,6 +15218,13 @@
       const o = XPILA.pop();
       if (!o) { xrBoton(); return; }
       if (vista !== o.vista) setVista(o.vista);
+      if (o.dlg || !o.id) {
+        if (o.vista === "leyes" && current !== o.current) show(o.current);
+        window.scrollTo({ top: o.y || 0 });
+        if (o.dlg) try { o.dlg(); } catch (e) { }
+        xrBoton();
+        return;
+      }
       if (current !== o.current) show(o.current);
       qEl.value = ""; filter();
       const li = document.getElementById(o.id);
@@ -15211,7 +15237,7 @@
     }
     /* incisos del mismo artículo: se busca la línea o el párrafo que empieza con "d)" */
     function xrInciso(a, letras) {
-      const caja = a.closest(".literal") || a.closest(".ab");
+      const caja = a.closest(".literal") || a.closest(".ab") || a.closest("#sdbody");
       if (!caja) return;
       const w = document.createTreeWalker(caja, NodeFilter.SHOW_TEXT);
       let n, hecho = false;
@@ -15236,12 +15262,17 @@
     function xrIr(a) {
       const x = a.dataset.x || "", [tipo, ...r] = x.split(":"), v = r.join(":");
       if (tipo === "I") { xrInciso(a, v.split(",")); return; }
+      const dlg = a.closest("dialog");
       const li = a.closest("li.art, li.nart");
-      if (li && li.id) {
+      if (dlg) {
+        const et = vista === "cuestionario" ? "la pregunta" : vista === "micro" ? "la tarjeta" : "la cita";
+        XPILA.push({ vista, current, y: window.scrollY, dlg: XR_DLG, et });
+        if (dlg.open) dlg.close();
+      } else if (li && li.id) {
         const refs = [...li.querySelectorAll("a.xref")];
         XPILA.push({ vista, current, id: li.id, et: xrEtiqueta(li), ref: refs.indexOf(a) + 1 });
-        if (XPILA.length > 30) XPILA.shift();
       }
+      if (XPILA.length > 30) XPILA.shift();
       if (tipo === "N") {
         goNorma(v);
         const [t, c, art] = v.split("|");
@@ -15539,7 +15570,7 @@
       if (lit) {
         const chips = vinculos(ley.id, lit);
         const mods2 = reformas(ley.id, lit);
-        const nPreg = PREGUNTAS.filter(q => q.ley === ley.id && q.art === key).length;
+        const nPreg = PREGUNTAS.filter(q => preguntaCitaLey(q, ley.id, key)).length;
         const grupos =
           (nPreg ? `<span class="vinc"><button class="lk preg" data-preg="${ley.id}:${key}">${nPreg} ${nPreg === 1 ? "pregunta" : "preguntas"}</button></span>` : "") +
           (chips.length ? `<span class="vinc"><span class="vlabel">Vínculos</span>${chips.join("")}</span>` : "") +
@@ -16102,6 +16133,7 @@
 
     /* Muestra un dato con su cita. Si la cita es al texto vigente, lo baja del título en «Las leyes». */
     function agxMostrar(a, titulo, m, valor, hoy) {
+      XR_DLG = () => agxMostrar(a, titulo, m, valor, hoy);
       const x = agxCita(m.c);
       const vig = !!(x && x.nv);
       const uvaEt = `con la UVA a $${AGX.uva.v.toLocaleString("es-AR")} (${esc(AGX.uva.f)}, ${esc(AGX.uva.fuente)})`;
@@ -16115,7 +16147,9 @@
       document.getElementById("sdtit").textContent = titulo;
       document.getElementById("sdmeta").textContent = x ? `${x.et} · ${x.meta}` : `${a.tit} · sin un artículo que lo diga en forma literal`;
       const cuerpo = !x ? "" : vig ? `<p class="agx-cargando">Cargando el texto vigente…</p>`
-        : subW(m.c.slice(0, 2) === "L:" ? m.c : "N:" + m.c, marcar(x.txt, m.ex));
+        : subW(m.c.slice(0, 2) === "L:" ? m.c : "N:" + m.c, m.c.slice(0, 2) === "L:"
+          ? marcarX(x.txt, m.ex, { k: "L", l: m.c.split(":")[1], a: artKey(m.c.split(":")[2] || "") })
+          : marcar(x.txt, m.ex));
       document.getElementById("sdbody").innerHTML = `<div class="agx-dhead">${head}</div>` + cuerpo;
       let foot = "";
       if (!(msub === "fichas" && agxEst.fic === a.id)) foot += `<button class="lk" data-agx-verficha="${a.id}">Ficha de ${esc(a.sig)}</button>`;
@@ -16134,7 +16168,7 @@
           const art = z.art;
           document.getElementById("sdmeta").textContent = `${x.et} · según ${(art.rg || []).join(", ") || "el texto vigente"} · al día hasta la ${z.tit.al}`;
           let b = art.ep ? `<p class="nvep"><b>${esc(art.ep)}</b></p>` : "";
-          if (art.p && art.p.length) b += subW("NV:" + x.nv, art.p.map(pp => `<p>${marcar(pp, m.ex)}</p>`).join(""), `${x.et}${art.ep ? " — " + art.ep : ""}`);
+          if (art.p && art.p.length) b += subW("NV:" + x.nv, art.p.map(pp => `<p>${marcarX(pp, m.ex, { k: "N", t: x.nv.split("|")[0], c: x.nv.split("|")[1], a: x.nv.split("|")[2] })}</p>`).join(""), `${x.et}${art.ep ? " — " + art.ep : ""}`);
           else b += (art.notas || []).map(nn => `<div class="nvpend">${esc(nn)}</div>`).join("") || `<p>Sin texto.</p>`;
           box.outerHTML = b;
           const mk = dlg.querySelector("#sdbody mark");
@@ -16306,11 +16340,7 @@
       if (pq) {
         e.stopPropagation();
         const id = pq.dataset.afxPreg, F = AGXF[id] || {};
-        quiz.filtro = { nvps: F.nv || [], lq: F.lq || [], et: `Ficha · ${agxAg(id).sig}` };
-        quiz.soloFallos = false; quiz.dificiles = false; quiz.mod = 0; quiz.modo = "practica";
-        ["mPractica", "mSimulacro", "mRepaso"].forEach(x => document.getElementById(x)?.setAttribute("aria-selected", x === "mPractica" ? "true" : "false"));
-        qEl.value = "";
-        setVista("cuestionario");
+        irAPreguntas({ nvps: F.nv || [], lq: F.lq || [], et: `Ficha · ${agxAg(id).sig}` });
         return;
       }
     });
@@ -17639,7 +17669,7 @@
         if (art.d18) body += `<div class="nv18"><b>Qué cambió:</b> ${esc(art.d18)}</div>`;
         body += subW("NV:" + r.nv, art.p.map(p => {
           const inc = /^(?:[a-zñ]{1,2}|[ivxl]{1,6}|\d{1,2})[\)\.]\s/i.test(p) && !/^\d{1,2}\.\d/.test(p);
-          return `<p${inc ? ` class="inc"` : ""}>${marcar(p, ex)}</p>`;
+          return `<p${inc ? ` class="inc"` : ""}>${marcarX(p, ex, { k: "N", t, c, a })}</p>`;
         }).join(""), `${nvEt(t, c, a)}${art.ep ? " — " + art.ep : ""}`);
         if (art.fut) body += `<details class="nvfut"><summary>Texto que va a regir con la RG 1163/2026</summary>${art.fut.map(p => `<p>${esc(p)}</p>`).join("")}</details>`;
         if (art.cnv) body += `<p class="nvfuente">${esc(art.cnv)}</p>`;
@@ -17653,6 +17683,7 @@
     }
     let abrirTok = 0;
     function abrirRef(r) {
+      XR_DLG = () => abrirRef(r);
       abrirTok++;
       if (!navDesdeFuente) NAVREF = null;
       navDesdeFuente = false;
@@ -17670,7 +17701,7 @@
         const l = leyPorId(r.ley);
         const txt = (TEXTOS[r.ley] || {})[r.art] || r.ex || "";
         meta = `Texto actualizado de InfoLeg${l && l.infoleg ? "" : ""}`;
-        body = (TEXTOS[r.ley] || {})[r.art] ? subW("L:" + r.ley + ":" + artKey(r.art), marcar(txt, r.ex)) : marcar(txt, r.ex);
+        body = (TEXTOS[r.ley] || {})[r.art] ? subW("L:" + r.ley + ":" + artKey(r.art), marcarX(txt, r.ex, { k: "L", l: r.ley, a: artKey(r.art) })) : marcar(txt, r.ex);
         foot += `<button class="lk" data-go="${esc(r.ley)}:${esc(r.art)}" data-cerrar="1">Ver en el mapa de la ley</button>`;
         if (l && l.infoleg) foot += `<a class="lk ext2" href="${esc(l.infoleg)}" target="_blank" rel="noopener">InfoLeg ↗</a>`;
       } else if (r.t === "D") {
@@ -18029,6 +18060,21 @@
     subPuntos();
 
     /* ---- pool de práctica y repaso ---- */
+    /* Ir al cuestionario con un filtro: se limpian los otros filtros y se rearma la cola,
+       para que se vean exactamente las preguntas del artículo, título o ficha elegidos. */
+    function irAPreguntas(filtro) {
+      if (quiz.simul && quiz.simul.activo && !confirm("Tenés un simulacro en curso. ¿Lo dejás para practicar estas preguntas?")) return;
+      if (quiz.simul && quiz.simul.activo) { quiz.simul.activo = false; try { pararReloj(); } catch (e) { } }
+      quiz.filtro = filtro;
+      quiz.mod = 0; quiz.origen = "todas"; quiz.soloFallos = false; quiz.dificiles = false;
+      marcarModo("practica");
+      qEl.value = ""; quiz.qBusca = "";
+      nuevaCola();
+      setVista("cuestionario");
+      try { pintarCuestionario(); } catch (e) { }
+      window.scrollTo({ top: 0 });
+    }
+
     function pool() {
       let xs = PREGUNTAS.slice();
       if (quiz.mod) xs = xs.filter(q => q.mod === quiz.mod);
@@ -18039,7 +18085,7 @@
         ? xs.filter(q => (q.refs || []).some(r => r.nv && r.nv.startsWith(quiz.filtro.nvp)))
         : quiz.filtro.nv
         ? xs.filter(q => (q.refs || []).some(r => r.nv === quiz.filtro.nv))
-        : xs.filter(q => q.ley === quiz.filtro.ley && q.art === quiz.filtro.art);
+        : xs.filter(q => preguntaCitaLey(q, quiz.filtro.ley, quiz.filtro.art));
       if (quiz.origen === "verif") xs = xs.filter(q => !esIcnv(q));
       else if (quiz.origen === "icnv") xs = xs.filter(esIcnv);
       if (quiz.soloFallos) xs = xs.filter(q => quiz.respuestas[q.id] && !quiz.respuestas[q.id].bien);
@@ -18047,6 +18093,10 @@
       const q = qEl.value.trim().toLowerCase();
       if (q) xs = xs.filter(x => (x.q + " " + x.op.join(" ") + " " + (x.porque || "")).toLowerCase().includes(q));
       return xs;
+    }
+
+    function preguntaCitaLey(q, ley, art) {
+      return (q.ley === ley && q.art === art) || (q.refs || []).some(r => r.t === "L" && r.ley === ley && String(r.art) === String(art));
     }
 
     function mezclar(xs) {
@@ -18881,13 +18931,7 @@
       const pr = e.target.closest("button.lk.preg[data-preg]");
       if (pr) {
         const [leyId, key] = pr.dataset.preg.split(":");
-        quiz.filtro = { ley: leyId, art: key };
-        quiz.soloFallos = false;
-        quiz.modo = "practica";
-        ["mPractica", "mSimulacro", "mRepaso"].forEach(x =>
-          document.getElementById(x).setAttribute("aria-selected", x === "mPractica" ? "true" : "false"));
-        qEl.value = "";
-        setVista("cuestionario");
+        irAPreguntas({ ley: leyId, art: key });
         return;
       }
       const lk = e.target.closest("button.lk[data-go]");
@@ -19657,11 +19701,7 @@
       const pq = e.target.closest("[data-npreg]");
       if (pq) {
         const t = pq.dataset.npreg;
-        quiz.filtro = { nvp: t + "|", et: `Normas Tít. ${t}` };
-        quiz.soloFallos = false; quiz.modo = "practica";
-        ["mPractica", "mSimulacro", "mRepaso"].forEach(x => document.getElementById(x)?.setAttribute("aria-selected", x === "mPractica" ? "true" : "false"));
-        qEl.value = "";
-        setVista("cuestionario");
+        irAPreguntas({ nvp: t + "|", et: `Normas Tít. ${t}` });
         return;
       }
     });
