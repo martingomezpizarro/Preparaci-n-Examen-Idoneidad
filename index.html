@@ -5473,7 +5473,24 @@
       li.art .literal { margin-left: -38px; padding: 12px 14px; }
       .ficha, section.titulo { padding-inline: 12px; }
     }
-  </style>
+  
+  /* ===== Hipervínculos entre artículos ===== */
+  a.xref { color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px;
+    text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent); cursor: pointer; border-radius: 2px; }
+  a.xref:hover { text-decoration-thickness: 2px; text-decoration-color: var(--accent); }
+  a.xref:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  mark.xinc { background: color-mix(in srgb, var(--accent) 22%, transparent); color: inherit; border-radius: 3px; padding: 0 2px; }
+  #xvolver { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); z-index: 61;
+    background: var(--accent); color: var(--surface); border: 0; border-radius: 999px; padding: 11px 18px; font: 600 14px/1.2 var(--f-body);
+    box-shadow: 0 6px 20px rgba(0,0,0,.22); cursor: pointer; max-width: calc(100vw - 32px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #xvolver[hidden] { display: none; }
+  body:has(#uvolverses:not([hidden])) #xvolver { bottom: calc(env(safe-area-inset-bottom, 0px) + 70px); }
+  body:has(.subbtn:not([hidden])) #xvolver, body:has(dialog[open]) #xvolver { display: none; }
+  @media (max-width: 999px) {
+    #xvolver { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+    body:has(#uvolverses:not([hidden])) #xvolver { bottom: calc(130px + env(safe-area-inset-bottom, 0px)); }
+  }
+</style>
 
   <aside class="sb" id="sidebar" aria-label="Secciones">
     <div class="sb-marca" role="button" tabindex="0"><b>Mapa del idóneo</b><span>Examen de idoneidad CNV</span></div>
@@ -14719,6 +14736,8 @@
     /* sección y epígrafe de cada artículo vigente citado por preguntas y tarjetas: «T|C|art» → [secc, nombre secc, epígrafe]. Regenerar junto con NVIDX. */
     const NVUB = {"IV|I|1":["I","Disposiciones generales",""],"IV|I|2":["I","Disposiciones generales","Entidades financieras y compañías de seguro"],"IV|I|3":["I","Disposiciones generales","Cooperativas y asociaciones mutuales"],"IV|I|6":["I","Disposiciones generales","Informe de auditoría"],"IV|III|1":["","","Entidades que presentan sus EEFF de acuerdo con la rt nº 26 de la facpce que adopta las NIIF"],"IV|III|2":["","","Entidades que no presentan sus estados financieros de acuerdo con la rt nº 26 de la facpce"],"IV|III|4":["","","Reseña informativa"],"IV|III|11":["","","Orden de absorción de pérdidas acumuladas"],"XX|I|4":["I","Puerto seguro para la oferta privada de valores negociables (“oferta privada”)","Cantidad máxima de inversores. Cantidad máxima de potenciales inversores contactados. Agregación"],"XX|I|9":["I","Puerto seguro para la oferta privada de valores negociables (“oferta privada”)","Confidencialidad"],"XX|I|10":["I","Puerto seguro para la oferta privada de valores negociables (“oferta privada”)","Restricciones a la reventa de los valores negociables"],"XX|I|19":["III","Puerto seguro para la oferta de valores negociables sin contacto suficiente con la república argentina (“oferta de valores negociables sin contacto suficiente con la república argentina”)","Definición"],"XII|I|1":["I","Ámbito de aplicación. Transparencia",""],"XII|I|2":["II","Hechos relevantes","Conceptualización. Sujetos alcanzados"],"XII|I|3":["II","Hechos relevantes","Enumeración de supuestos"],"XII|I|6":["V","Inversiones de clientes residentes y no residentes","Información de inversiones"],"XII|I|8":["VI","Régimen informativo de tenencias","Tenencias accionarias"],"XII|I|10":["VI","Régimen informativo de tenencias","Nóminas de autoridades emisoras"],"XII|I|13":["VI","Régimen informativo de tenencias","Deber informativo de participaciones accionarias"],"XII|I|14":["VI","Régimen informativo de tenencias","Régimen especial accionistas de mercados"],"XII|II|1":["I","Deber de guardar reserva","Sujetos alcanzados"],"XII|II|4":["II","Deber de lealtad y diligencia","Obligaciones de emisoras, cámaras compensadoras y otras categorías de agentes"],"XII|II|6":["III","Código de protección al inversor o código de conducta","Código de protección al inversor o código de conducta"],"XII|II|7":["IV","Publicidad y propaganda","Publicidad no engañosa"],"XII|II|8":["IV","Publicidad y propaganda","Sanciones"],"XII|III|1":["I","Abuso de información privilegiada","Prohibiciones generales"],"XII|III|2":["II","Manipulación y engaño en el mercado","Obligaciones"],"XII|III|3":["III","Prohibición de intervenir u ofrecer en la oferta pública en forma no autorizada","Obligaciones"],"XII|IV|1":["","","Incumplimientos"],"XII|V|1":["I","Examen de idoneidad",""],"XII|V|2":["I","Examen de idoneidad","Incompatibilidades"],"XII|V|5":["I","Examen de idoneidad","Eximición parcial del examen de idoneidad"],"XII|V|14":["I","Examen de idoneidad",""],"XII|V|15":["II","Registro de idóneos","Sujetos alcanzados"],"XII|V|16":["II","Registro de idóneos","Requisitos para ser idóneo del mercado de capitales"],"XII|V|17":["II","Registro de idóneos","Acreditación de idoneidad por trayectoria profesional"],"XII|V|20":["II","Registro de idóneos","Vigencia de la condición de idóneo"],"XII|V|22":["II","Registro de idóneos","Normas de conducta"],"XII|V|23":["II","Registro de idóneos","Incumplimiento"],"XII|VI|1":["","","Información y publicación"],"III|I|5":["II","Retiro","Retiro voluntario del régimen de oferta pública de valores negociables"],"III|I|6":["II","Retiro",""],"III|II|3":["I","Definiciones","OPA obligatoria"],"III|II|8":["II","Disposiciones generales","Anuncio"],"III|II|12":["II","Disposiciones generales","Publicación de la oferta. Plazos"],"III|II|13":["II","Disposiciones generales",""],"III|II|21":["V","Garantías","Garantía de la oferta"],"III|II|22":["VI","Obligaciones de los órganos societarios de la sociedad afectada por la oferta","Deber de emitir opinión"],"III|II|25":["VI","Obligaciones de los órganos societarios de la sociedad afectada por la oferta","Neutralidad"],"III|II|27":["VII","Facultades de la comisión","Plazo de resolución"],"III|II|28":["VII","Facultades de la comisión","Objeción del precio"],"III|II|32":["VIII","Innecesariedad de la OPA","Supuestos"],"III|II|33":["IX","Incumplimiento","Consecuencias del incumplimiento de formular OPA"],"III|II|42":["XII","Modificación, desistimiento y cesación de los efectos de la oferta","Irrevocabilidad de la oferta"],"III|II|47":["XII","Modificación, desistimiento y cesación de los efectos de la oferta","Desistimiento y cese de los efectos de la OPA"],"III|II|Anexo I":["ANEXOS","Anexos",""],"III|III|2":["","","Aportes irrevocables a cuenta de futuras emisiones de acciones"],"III|III|3":["","","Tratamiento en asamblea del aporte irrevocable"],"XI|U|1":["I","Normativa aplicable y sujetos alcanzados",""],"XI|U|3":["II","Modalidades de pago y procedimientos de control para la recepción y entrega de fondos de y hacia clientes",""],"XI|U|4":["II","Modalidades de pago y procedimientos de control para la recepción y entrega de fondos de y hacia clientes",""],"XIV|I|1":["I","Disposiciones generales","Definición"],"XIV|I|45":["XIII","Emprendedores y proyectos de financiamiento colectivo","Monto máximo de emisión"],"XIV|I|46":["XIII","Emprendedores y proyectos de financiamiento colectivo","Período de suscripción · Inversión de aportes suscriptos"],"XIV|I|55":["XV","Inversores","Límites de inversión en el sistema de financiamiento colectivo"],"XIV|I|56":["XV","Inversores",""],"XIV|III|1":["","","Registro"],"XIV|III|4":["","","Exclusiones"],"XIV|III|6":["","","Requisitos para la solicitud de inscripción en carácter de proveedores de servicios de activos virtuales (PSAV). Documentación a presentar"],"XIV|III|8":["","","PSAV. Categorías"],"XIV|III|9":["","","Patrimonio neto mínimo"],"XIV|III|36":["","","Divulgación de riesgos de los activos virtuales"],"I|II|1":["I","Referencias normativas",""],"I|II|2":["II","Términos definidos",""],"IX|I|3":["I","Disposiciones generales","Objeto de calificación"],"IX|I|10":["IV","Prohibiciones y limitaciones a la actividad de los ACR y ACR-UP","Prohibición de auditorías, consultorías o asesoramientos"],"IX|I|13":["V","Actividades afines y complementarias",""],"IX|I|35":["X","Emisión del informe de calificación de riesgos","Contenido de los informes"],"IX|I|41":["XI","Consejo de calificación","Funciones"],"IX|I|47":["XII","Reuniones del consejo","Funcionamiento. Quórum"],"IX|I|51":["XIII","Actas de reuniones del consejo de calificación. Libro de actas del consejo de calificación","Contenido mínimo"],"IX|III|1":["I","Disposiciones específicas aplicables al ACR-UP","Universidades públicas"],"VII|I|2":["","","Actuación de los AN"],"VII|I|4":["","","Gestión del agente de negociación respecto de fondos líquidos de clientes disponibles en el ALyC-INTEGRAL"],"VII|I|6":["","","Limitaciones en la actuación"],"VII|I|7":["","","Convenio con ALyC-INTEGRAL"],"VII|I|9":["","","Monto patrimonio neto mínimo"],"VII|I|12":["","","Normas de conducta. Obligaciones de los AN con clientes"],"VII|I|16":["","","Registro de órdenes"],"VII|II|2":["","","Actuación del ALyC"],"VII|II|4":["","","Tratamiento de los fondos líquidos disponibles de clientes – requisitos de inversión"],"VII|II|5":["","","Inscripción en subcategorías de ALyC"],"VII|II|11":["","","Prohibición de financiamiento a clientes"],"VII|II|12":["","","Requisitos generales para inscripción en el registro de ALyC"],"VII|II|13":["","","Monto patrimonio neto mínimo"],"VII|II|15":["","","Contrapartida líquida"],"VII|II|16":["","","Normas de conducta. Obligaciones del ALyC"],"VII|II|19":["","","Contenido mínimo de convenio de apertura de cuenta"],"VII|III|1":["I","Disposiciones generales","Obligación de aportar al fondo"],"VII|III|6":["I","Disposiciones generales","Obligaciones de los mercados"],"VII|IV|2":["","","Actuación de los AAGI"],"VII|IV|3":["","","Limitaciones en la actuación"],"VII|IV|4":["","","Normas de conducta"],"VII|IV|5":["","","Rotación excesiva de cartera"],"VII|V|2":["","","Actuación de los AP"],"VII|V|3":["","","Contratos con agentes"],"VII|V|4":["","","Limitaciones a los AP"],"VII|V|5":["","","Normas de conducta"],"VII|VI|2":["","","Actuación de los ACVN"],"VII|VI|9":["","","Prohibiciones"],"VII|VII|2":["","","Requisito de idoneidad"],"VII|VII|4":["","","Incompatibilidades"],"VII|VII|9":["","","Conservación de documentación"],"VII|VII|17":["","","Función relaciones con el público"],"VII|VII|19":["","","Disposiciones comunes AN, ALyC y AAGI. Instrucciones específicas. Administración discrecional de carteras. Concepto"],"VII|VII|21":["","","Modalidades de captación de órdenes"],"XIII|I|1":["I","Recepción y tratamiento de denuncias",""],"XIII|I|3":["I","Recepción y tratamiento de denuncias","Denuncia anónima"],"XIII|I|4":["I","Recepción y tratamiento de denuncias","Reglas generales aplicables a los trámites"],"XIII|I|6":["I","Recepción y tratamiento de denuncias",""],"XIII|I|9":["I","Recepción y tratamiento de denuncias","Actuación de oficio"],"XIII|I|10":["I","Recepción y tratamiento de denuncias",""],"XIII|I|11":["I","Recepción y tratamiento de denuncias",""],"XIII|I|13":["II","Investigaciones",""],"XIII|I|15":["III","",""],"XIII|II|2":["I","Procedimiento abreviado","Procedencia y alcance"],"XIII|II|5":["I","Procedimiento abreviado","Reconocimiento de los hechos"],"XIII|II|8":["I","Procedimiento abreviado","Sanciones y criterios de graduación"],"XIII|II|10":["II","Sumarios","Apertura del sumario"],"XIII|II|17":["II","Sumarios","Derechos del sumariado"],"XIII|II|21":["II","Sumarios","Incumplimientos. Ampliación de cargos"],"V|I|1":["I","Disposiciones comunes","Inscripción. Documentación a presentar"],"V|I|5":["II","Sociedades gerentes","Requisito patrimonial"],"V|I|6":["II","Sociedades gerentes","Funciones de la gerente"],"V|I|12":["III","Sociedades depositarias",""],"V|I|13":["III","Sociedades depositarias","Funciones de la depositaria"],"V|I|14":["III","Sociedades depositarias","Custodia de los valores"],"V|I|17":["IV","Libros y documentación contable","Plan y manual de cuentas"],"V|I|25":["VII","Régimen informativo","Documentación periódica a presentar ante la CNV por la sociedad gerente y la sociedad depositaria"],"V|I|31":["VII","Régimen informativo","Publicidad e información voluntaria promocional"],"V|I|32":["VIII","Colocación de fondos comunes de inversión","Modalidades de colocación de cuotapartes"],"V|II|1":["I","Autorización automática de oferta pública de fondos comunes de inversión abiertos","Alta nuevo FCIA. Número de registro"],"V|II|2":["I","Autorización automática de oferta pública de fondos comunes de inversión abiertos","Denominación de los fondos comunes de inversión"],"V|II|3":["I","Autorización automática de oferta pública de fondos comunes de inversión abiertos","Fondos comunes de inversión especializados"],"V|II|4 bis":["I","Autorización automática de oferta pública de fondos comunes de inversión abiertos",""],"V|II|7":["II","Pautas de inversión","Diversificación mínima"],"V|II|8":["II","Pautas de inversión","Inversiones en la sociedad gerente y en la sociedad depositaria"],"V|II|9":["II","Pautas de inversión","Inversiones en controlantes de la sociedad gerente"],"V|II|13":["II","Pautas de inversión","Inversiones en títulos públicos"],"V|II|14":["II","Pautas de inversión","Inversiones en fondos comunes de inversión abiertos"],"V|II|15":["II","Pautas de inversión","Constitución de márgenes de liquidez y disponibilidades"],"V|II|17":["II","Pautas de inversión","Gestión de pruebas de resistencia"],"V|II|18":["II","Pautas de inversión","Inversiones en el extranjero"],"V|II|19":["II","Pautas de inversión","Inversión en divisas"],"V|II|21":["II","Pautas de inversión","Inversiones en fondos comunes de inversión cerrados"],"V|II|23":["II","Pautas de inversión","Operaciones con derivados"],"V|II|25":["III","Reglas de funcionamiento del FCI","Moneda del FCI"],"V|II|35":["III","Reglas de funcionamiento del FCI","Forma de pago del rescate"],"V|II|39":["III","Reglas de funcionamiento del FCI","Honorarios, comisiones y gastos. Honorarios de la sociedad gerente"],"V|II|40":["III","Reglas de funcionamiento del FCI","Compensación por gastos"],"V|II|42":["III","Reglas de funcionamiento del FCI","Honorarios de la sociedad depositaria"],"V|II|43":["III","Reglas de funcionamiento del FCI","Gastos inherentes a la colocación y distribución de cuotapartes"],"V|II|44":["III","Reglas de funcionamiento del FCI","Tope anual"],"V|II|53":["IV","Criterios de valuación",""],"V|II|55":["IV","Criterios de valuación","Expresión del valor de la cuotaparte"],"V|II|64":["V","Liquidación, fusión y cancelación de fondos comunes de inversión",""],"V|II|90":["IX","Fondos comunes de inversión destinados a menores de edad adolescentes","Transparencia"],"V|II|94":["XI","Régimen especial para la constitución de fondos comunes de inversión abiertos destinados exclusivamente a inversores calificados (art. 7 bis ley de fondos comunes de inversión)","Aspectos generales. Reglamento de gestión"],"V|III|2":["I","Régimen general","Documentación a presentar"],"V|III|6":["I","Régimen general","Oferta pública. Prospecto preliminar"],"V|III|8":["I","Régimen general","Clases de cuotapartes"],"V|IV|1":["I","Fideicomisos financieros",""],"V|IV|2":["II","Prohibición de constitución de fideicomiso unilateral. Reunión de la condición de fiduciario y beneficiario",""],"V|IV|3":["II","Prohibición de constitución de fideicomiso unilateral. Reunión de la condición de fiduciario y beneficiario",""],"V|IV|4":["II","Prohibición de constitución de fideicomiso unilateral. Reunión de la condición de fiduciario y beneficiario",""],"V|IV|5":["III","Agentes de administración de productos de inversión colectiva. Fiduciarios",""],"V|IV|6":["IV","Requisitos para la solicitud de inscripción en carácter de agentes de administración de productos de inversión colectiva. Registro de fiduciarios",""],"V|IV|7":["V","Régimen informativo contable",""],"V|IV|11":["IX","Fideicomiso financiero. Procedimientos de autorización",""],"V|IV|12":["IX","Fideicomiso financiero. Procedimientos de autorización",""],"V|IV|21":["X","Contenido del prospecto y de los suplementos de prospecto","Prospecto o suplemento de prospecto para la emisión de un fideicomiso financiero"],"V|IV|22":["XI","Contenido del contrato de fideicomiso",""],"V|IV|24":["XII","Administración. Delegación de la ejecución de las funciones de administración. Agente de control y revisión",""],"V|IV|25":["XII","Administración. Delegación de la ejecución de las funciones de administración. Agente de control y revisión",""],"V|IV|27":["XII","Administración. Delegación de la ejecución de las funciones de administración. Agente de control y revisión","Función de control y revisión"],"V|IV|29":["XII","Administración. Delegación de la ejecución de las funciones de administración. Agente de control y revisión",""],"V|IV|33":["XIV","Fideicomisos financieros. Régimen informativo",""],"V|IV|35":["XV","Fideicomisos financieros. Fondos de inversión directa",""],"V|IV|36":["XV","Fideicomisos financieros. Fondos de inversión directa",""],"V|IV|37":["XVI","Fideicomisos financieros destinados al financiamiento de PyMEs",""],"V|IV|44":["XVII","Decisiones colectivas de los beneficiarios","Cambio en las condiciones esenciales"],"V|IV|69":["XXII","Régimen de oferta pública de fideicomisos financieros con autorización automática de emisiones frecuentes","Alcance. Definición"],"V|V|18":["III","Productos de inversión colectiva para el desarrollo de infraestructura","Objeto – activo subyacente"],"V|V|21":["III","Productos de inversión colectiva para el desarrollo de infraestructura","Inversores calificados"],"V|V|22":["IV","Productos de inversión colectiva de capital emprendedor","Objeto – activo subyacente"],"V|V|26":["IV","Productos de inversión colectiva de capital emprendedor","Gestor profesional"],"V|V|35":["V","Productos de inversión colectiva para el fomento del desarrollo productivo y de las economias regionales","Objeto – activo subyacente"],"V|VII|2":["II","Régimen especial para la constitución de fondos comunes de inversión abiertos ASG","Objeto. Activos elegibles"],"V|VII|3":["II","Régimen especial para la constitución de fondos comunes de inversión abiertos ASG","Reglamento de gestión"],"V|VII|4":["III","Régimen especial para la constitución de fondos comunes de inversión PyMEs",""],"V|VII|5":["IV","Régimen especial para la constitución de fondos comunes de inversión abiertos para el financiamiento de la infraestructura y la economía real",""],"V|VIII|6":["I","Disposiciones generales","Reapertura del período de colocación"],"XXII|I|1":["I","Representacion digital de valores negociables",""],"VI|I|5":["I","Disposiciones generales","Oferta pública. Capital"],"VI|I|6":["I","Disposiciones generales","Gobierno societario"],"VI|I|7":["I","Disposiciones generales","Tenencias máximas por accionista"],"VI|I|8":["I","Disposiciones generales","Régimen informativo tenencias"],"VI|I|12":["III","Patrimonio neto mínimo","Monto patrimonio neto mínimo"],"VI|I|15":["IV","Fondo de garantía obligatorio para atender compromisos no cumplidos por agentes en operaciones garantizadas (artículo 45 ley n° 26.831)","Constitución de fondos con recursos del mercado con función de cámara compensadora. Fondo de garantía III"],"VI|I|29":["IX","Listado de valores negociables en mercados","Reglamentaciones, análisis y procedimientos para la autorización, suspensión y cancelación del listado y/o negociación de valores negociables. Información pública"],"VI|I|59":["XXV","Información de operaciones y conectividad entre mercados","Difusión, distribución y/o redistribución de información de mercado a otros participantes"],"VI|I|63":["XXVIII","Auditoria externa anual de sistemas","Contenido mínimo"],"VI|II|7":["III","Patrimonio neto mínimo","Monto patrimonio neto mínimo"],"VI|III|1":["I","Registración, compensación y liquidación","Reglas y requisitos generales"],"VI|IV|1":["I","Disposiciones generales","Procedimientos de colocación primaria. Formación de libro (book building), subasta o licitación pública. Ámbito de aplicación y mecanismos"],"VI|IV|8":["II","Ingreso de ofertas o manifestaciones de interes en la colocación primaria","Pautas mínimas que se deberán cumplir en la colocación primaria"],"VI|IV|11":["III","Disposiciones particulares","Plazo de difusión"],"VI|IV|12":["IV","Operaciones de estabilización de mercado",""],"VI|V|2":["II","Operaciones garantizadas. Regla general","Regla general"],"VI|V|3":["II","Operaciones garantizadas. Regla general","Excepción"],"VI|V|6":["III","Cartera propia","Definición"],"VI|V|14":["VII","Operaciones de contado","Operaciones al contado"],"VI|V|15":["VIII","Operaciones a plazo","Operaciones a plazo del tipo plazo firme"],"VI|V|16":["VIII","Operaciones a plazo","Operaciones a plazo del tipo pase"],"VI|V|17":["VIII","Operaciones a plazo","Operaciones a plazo del tipo caución de valores negociables"],"VI|V|18":["VIII","Operaciones a plazo","Operaciones de préstamo de valores negociables"],"VI|V|19":["IX","Operaciones a plazo del tipo contratos de opciones y contratos de futuros","Operaciones a plazo del tipo contratos de opciones"],"VI|V|32":["XI","Hacedor de mercado","Definición"],"VI|V|33":["XI","Hacedor de mercado","Regla general. Actuación. Operaciones de clientes para proveer liquidez"],"VI|V|34":["XI","Hacedor de mercado","Pautas mínimas"],"VI|VI|1":["I","Disposiciones comunes aplicables a la negociación secundaria de los valores negociables de emision individual","Oferta pública"],"VI|VI|3":["I","Disposiciones comunes aplicables a la negociación secundaria de los valores negociables de emision individual","Depósito. ACRyP"],"VI|VI|10":["IV","Negociacion y liquidacion",""],"VI|VI|11":["IV","Negociacion y liquidacion",""],"VI|VI|15":["VIII","Disposiciones aplicables a los pagarés",""],"VI|VI|19":["X","Disposiciones aplicables a los agentes en relacion a los valores negociables de emision individual",""],"VI|VI|20":["XI","Disposiciones aplicables a las facturas de crédito electrónicas mipymes",""],"XVII|I|3":["","","Tasa de fiscalización y control"],"XVII|I|11":["","","Exenciones"],"VIII|I|1":["I","Disposiciones generales","Ambito de aplicación. Marco de actuación del ADCVN"],"VIII|I|10":["IV","Patrimonio neto mínimo y contrapartida","Monto patrimonio neto mínimo"],"VIII|I|22":["VIII","Protección al inversor","Acceso por internet en tiempo real a saldos, movimientos y acreencias"],"VIII|I|23":["VIII","Protección al inversor","Acceso por internet a subcuentas comitentes"],"VIII|I|24":["VIII","Protección al inversor","Leyendas obligatorias"],"VIII|I|32":["IX","Subcuentas comitentes","Apertura de subcuentas. Datos a suministrar"],"VIII|I|34":["XI","Bloqueo de las subcuentas comitentes","Causales del bloqueo"],"VIII|I|35":["XI","Bloqueo de las subcuentas comitentes","Consecuencias del bloqueo"],"VIII|I|41":["XII","Depositantes","Publicidad de costos percibidos por los depositantes"],"VIII|II|1":["I","Disposiciones generales","Ambito de aplicación. Marco de actuación del ACRyP"],"VIII|II|2":["I","Disposiciones generales",""],"VIII|II|3":["I","Disposiciones generales",""],"XV|I|1":["I","Disposiciones generales","Régimen informativo electrónico"],"XV|I|3":["II","Solicitudes de clave de acceso para operadores y credenciales de firmantes","Clave de acceso de operadores"],"XV|I|5":["II","Solicitudes de clave de acceso para operadores y credenciales de firmantes","Solicitud de credencial de firmante"],"II|I|1":["I","Caracterización","Igualdad de derechos"],"II|I|6":["II","Cambio de denominación social. Características de los valores negociables","Adquisición de acciones propias"],"II|I|8":["II","Cambio de denominación social. Características de los valores negociables","Requisitos para el supuesto de adquisiciones de acciones propias"],"II|I|9":["II","Cambio de denominación social. Características de los valores negociables",""],"II|II|1":["I","Asambleas y modificaciones estatutarias","Orden del día de las asambleas que resuelven la emisión de los valores negociables"],"II|II|3":["I","Asambleas y modificaciones estatutarias","Reunión de la asamblea ordinaria"],"II|II|21":["I","Asambleas y modificaciones estatutarias","Misión del funcionario de la comisión que concurra a las asambleas y reuniones de otros órganos sociales. Funciones"],"II|II|29":["II","Asambleas a distancia. Ámbito de aplicación. Previsión estatutaria",""],"II|II|30":["II","Asambleas a distancia. Ámbito de aplicación. Previsión estatutaria","Procedimiento"],"II|II|33":["II","Asambleas a distancia. Ámbito de aplicación. Previsión estatutaria","Acceso a la reunión y registración"],"II|II|34":["II","Asambleas a distancia. Ámbito de aplicación. Previsión estatutaria","Depósito de acciones y registro de asistencia a asambleas"],"II|III|4":["I","Retribuciones al directorio y consejo de vigilancia","Cálculo de las retribuciones de acuerdo con el artículo 261 de la ley general de sociedades"],"II|III|9":["II","Designación y reemplazo de miembros integrantes de los órganos de administración y fiscalización y gerentes","Datos sobre los integrantes de los órganos de administración y fiscalización y gerentes. Constitución de domicilio especial"],"II|III|11":["III","Criterios de independencia","Criterio de independencia de los directores"],"II|III|15":["V","Comité de auditoría. Designación",""],"II|III|16":["V","Comité de auditoría. Designación","Independencia"],"II|III|18":["V","Comité de auditoría. Designación","Otras atribuciones y obligaciones del comité"],"II|III|19":["VI","Auditores externos","Designación. Remoción y reemplazo"],"II|III|21":["VI","Auditores externos","Presentación de ddjj de los auditores externos"],"II|III|24":["VI","Auditores externos","Designación de auditor externo propuesto por accionistas minoritarios"],"II|III|30":["VI","Auditores externos","Registro de auditores externos. Inscripción y permanencia"],"II|III|32":["VII","Registro de asociaciones de profesionales auditores",""],"II|III|34":["IX","Causales de exclusión y cancelación en los registros","Causales de exclusión"],"II|III|35":["IX","Causales de exclusión y cancelación en los registros","Cancelación de la inscripción"],"II|III|36":["X","Dividendos","Dividendos de ejercicio"],"II|IV|1":["I","Disposiciones comunes para todas las sociedades comprendidas en la ley nº 22.169, excluidas las sociedades que son PyME CNV garantizada","Trámites de inscripción"],"II|IV|17":["III","Aumentos de capital","Inscripción del aumento de capital y nuevas emisiones"],"II|IV|25":["V","Inscripciones","Designación de administradores"],"II|V|11":["II","Oferta pública de acciones a colocar por suscripción","Oferta pública por capitalización de utilidades, ajustes, reservas y otros conceptos similares"],"II|V|20":["IV","Procedimiento de autorización de los programas","Características de los valores negociables. Plazo"],"II|V|25":["IV","Procedimiento de autorización de los programas","Fecha de emisión"],"II|V|26":["IV","Procedimiento de autorización de los programas","Procedimiento de autorización de los programas"],"II|V|27":["IV","Procedimiento de autorización de los programas","Suplemento de prospecto"],"II|V|28":["IV","Procedimiento de autorización de los programas",""],"II|V|30":["IV","Procedimiento de autorización de los programas","Emisión de series o clases. Documentación adicional"],"II|V|33":["VI","Emisores frecuentes","Requisitos"],"II|V|41":["VI","Emisores frecuentes","Actualización del prospecto y mantenimiento de la condición ef"],"II|V|64":["IX","Oferta pública con autorización automática de obligaciones negociables por su bajo impacto (“oferta pública de ON con autorización automática por su bajo impacto”). Régimen obligaciones negociables PyME CNV garantizadas","Definición"],"II|V|67":["IX","Oferta pública con autorización automática de obligaciones negociables por su bajo impacto (“oferta pública de ON con autorización automática por su bajo impacto”). Régimen obligaciones negociables PyME CNV garantizadas","Autorización automática"],"II|V|68":["IX","Oferta pública con autorización automática de obligaciones negociables por su bajo impacto (“oferta pública de ON con autorización automática por su bajo impacto”). Régimen obligaciones negociables PyME CNV garantizadas","Ingreso al régimen de oferta pública. Prospectos. Aprobaciones. Régimen informativo. Obligaciones del título xv. Fiscalización societaria"],"II|V|71":["IX","Oferta pública con autorización automática de obligaciones negociables por su bajo impacto (“oferta pública de ON con autorización automática por su bajo impacto”). Régimen obligaciones negociables PyME CNV garantizadas","Obligación de listado. Negociación secundaria de los valores negociables"],"II|V|74":["IX","Oferta pública con autorización automática de obligaciones negociables por su bajo impacto (“oferta pública de ON con autorización automática por su bajo impacto”). Régimen obligaciones negociables PyME CNV garantizadas","Régimen de emisiones PyME CNV garantizada y otras emisiones garantizadas por entidades de garantía"],"II|V|77":["X","Otras ofertas públicas con autorización automática (“otras ofertas públicas con autorización automática”)","Remate de valores negociables"],"II|V|101":["XII","Oferta pública de acciones con autorización automática por su bajo impacto. (“oferta pública de acciones con autorización automática por su bajo impacto”)","Monto. Límite"],"II|V|114":["XIII","Oferta pública de acciones con autorización automática por su mediano impacto (“oferta pública de acciones con autorización automática por su mediano impacto”)","Período de cálculo de los montos máximos. Agregación"],"II|VI|1":["I","Definición",""],"II|VI|2":["I","Definición","Restricciones"],"II|VI|4":["I","Definición","Monto de emisión"],"II|VI|6":["I","Definición","PyME CNV por acciones. Comité de auditoría. Exención"],"II|VI|11":["I","Definición","Inversores calificados"],"II|VI|12":["I","Definición","Tasas y aranceles"],"II|VI|13":["II","Régimen PyME CNV",""],"II|VI|20":["III","Programas globales de emisión de obligaciones negociables dentro del régimen PyME CNV",""],"II|VIII|1":["I","Oferta pública de valores negociables de emisores extranjeros","Régimen general"],"II|VIII|3":["I","Oferta pública de valores negociables de emisores extranjeros","Régimen especial de doble listado de empresas extranjeras"],"II|VIII|24":["III","Disposiciones específicas para CEDEAR","Régimen patrocinado y no patrocinado"],"II|IX|1":["I","Régimen general",""],"II|IX|7":["I","Régimen general","Inserción obligatoria en el prospecto o suplemento de prospecto"],"II|IX|Anexo I":["ANEXOS","Anexos",""],"II|X|1":["I","Fusión. Sociedades intervinientes","Fiscalización exclusiva de la comisión. Prospecto"],"X|U|11":["I","Disposiciones generales",""],"X|U|20":["VI","De la suspensión de la inscripción en los registros",""],"X|U|21":["VII","De la caducidad de la inscripción en los registros",""],"X|U|22":["VIII","De la cancelación de la inscripción en el registro",""]};
     const NVIDX = {"I":{"n":"Disposiciones preliminares y definiciones","caps":[["I","Comisión Nacional de Valores. Ámbito de aplicación",0,0,0],["II","Definiciones generales e interpretación",3,0,0]]},"II":{"n":"Emisoras","caps":[["I","Acciones y otros valores negociables",9,0,0],["II","Asambleas y reuniones de otros órganos sociales. Modificaciones estatutarias o de condiciones de emisión. Asambleas a distancia",36,1,0],["III","Órganos de administración y fiscalización. Auditoría externa",49,3,0],["IV","Fiscalización societaria",48,0,0],["V","Oferta pública primaria",163,1,0],["VI","Pequeñas y medianas empresas",41,3,0],["VII","Entidades de garantía",3,0,0],["VIII","Emisoras extranjeras. Certificados de depósito y de valores (CEDEARs y CEVA). Certificados de depósito en custodia",52,0,0],["IX","Prospecto",20,0,0],["X","Reorganización societaria",33,0,0]]},"III":{"n":"Retiro de la oferta pública, OPA y aportes irrevocables","caps":[["I","Retiro y cancelación del régimen de oferta pública",15,0,0],["II","Ofertas públicas de adquisición o canje",61,3,0],["III","Aportes irrevocables a cuenta de futuras emisiones y capitalización de deudas de la emisora",8,1,0]]},"IV":{"n":"Régimen informativo periódico","caps":[["I","Régimen informativo",11,0,0],["II","Otra información periódica que deben presentar las emisoras",1,0,0],["III","Normas relativas a la forma de presentacion y criterios de valuación de los estados financieros",13,0,0]]},"V":{"n":"Productos de inversión colectiva","caps":[["I","Agentes de productos de inversión colectiva – fondos comunes de inversión",39,1,0],["II","Fondos comunes de inversión abiertos",90,3,0],["III","Fondos comunes de inversión cerrados",42,0,0],["IV","Fideicomisos financieros",87,2,0],["V","Disposiciones comunes aplicables a los regimenes especiales de productos de inversión colectiva",45,0,0],["VI","Disposiciones propias aplicables a regímenes especiales de fondos comunes de inversión cerrados",10,0,0],["VII","Regímenes especiales de fondos comunes de inversión abiertos",32,0,0],["VIII","Disposiciones propias aplicables a regímenes especiales de fideicomisos financieros",34,0,0],["IX","Productos de inversión colectiva. Tratamiento impositivo de regímenes especiales",5,0,0],["X","Productos de inversión colectiva de fondos de asistencia laboral",38,0,0],["XI","Capítulo derogado",0,0,1]]},"VI":{"n":"Mercados y cámaras compensadoras","caps":[["I","Mercados",81,1,0],["II","Cámaras compensadoras",49,1,0],["III","Liquidación y compensación de operaciones",27,0,0],["IV","Colocación primaria",18,2,0],["V","Negociación secundaria. Operaciones",35,2,0],["VI","Negociación secundaria de valores negociables de emision individual que gozan de oferta pública",21,2,0]]},"VII":{"n":"Agentes","caps":[["I","Agente de negociación",27,2,0],["II","Agente de liquidación y compensación",43,3,0],["III","Fondo de garantía para reclamos de clientes",11,0,1],["IV","Agente asesor global de inversión",22,1,0],["V","Agente productor",8,2,0],["VI","Agente de corretaje de valores negociables",18,1,0],["VII","Disposiciones comunes AN, ALyC, AAGI, AP y ACVN",34,3,0]]},"VIII":{"n":"Agente Depositario Central de Valores Negociables y Agentes de Custodia, Registro y Pago","caps":[["P","Definiciones",1,0,0],["I","Agente depositario central de valores negociables",79,1,0],["II","Agente de custodia, registro y pago",76,0,0]]},"IX":{"n":"Agentes de Calificación de Riesgos","caps":[["I","Disposiciones comunes a los ACR sociedades anónimas y universidades públicas",72,1,0],["II","Disposiciones específicas aplicables a los ACR sociedades anónimas",5,0,0],["III","Disposiciones específicas aplicables a los ACR-UP",4,0,0]]},"X":{"n":"Del registro de mercados, cámaras compensadoras y agentes","caps":[["U","",22,4,0]]},"XI":{"n":"Prevención del lavado de activos y del financiamiento del terrorismo","caps":[["U","",21,2,0]]},"XII":{"n":"Transparencia en el ámbito de la oferta pública","caps":[["I","Disposiciones generales",16,2,0],["II","Obligaciones de los participantes en el ámbito de la oferta pública",8,0,0],["III","Conductas contrarias a la transparencia en el ámbito de la oferta pública",3,0,0],["IV","Procedimiento aplicable ante incumplimientos",2,0,0],["V","Registro de idóneos",23,4,0],["VI","Derechos, aranceles y comisiones",6,0,0]]},"XIII":{"n":"Procedimiento de investigaciones, sumarial y publicidad","caps":[["I","De las denuncias y otras investigaciones",16,5,0],["II","Procedimiento sumarial",23,7,0],["III","Publicidad resoluciones disciplinarias",4,0,0]]},"XIV":{"n":"Plataforma de financiamiento colectivo y proveedores de servicios de activos virtuales","caps":[["I","Plataforma de financiamiento colectivo",56,8,0],["II","Hub de innovación e inclusión financiera",0,0,1],["III","Proveedores de servicios de activos virtuales (PSAV)",42,0,0]]},"XV":{"n":"Autopista de la Información Financiera (AIF)","caps":[["I","Remisión de información de las entidades fiscalizadas por la CNV",11,0,0],["II","Agentes de administración de productos de inversión colectiva – fiduciarios financieros",3,0,0],["III","Emisoras. Obligaciones negociables",6,0,0]]},"XVI":{"n":"Disposiciones generales","caps":[["I","Notificaciones. Otras disposiciones",11,0,0],["II","Delegación de facultades en gerencias y subgerencias",18,0,0]]},"XVII":{"n":"Tasas de fiscalización y control y aranceles","caps":[["I","Tasas y aranceles ley nº 26.831, artículo 14 inciso b), resolución 153-e/2017 del ministerio de finanzas y modificatorias",14,0,0]]},"XVIII":{"n":"Disposiciones transitorias","caps":[["I","Emisoras",6,0,0],["II","Productos de inversión colectiva. Fideicomisos financieros",4,0,0],["III","Productos de inversión colectiva. Fondos comunes de inversión",29,0,0],["IV","Mercados y cámaras compensadoras",16,0,0],["V","Agentes de liquidación y compensación, agentes de negociación, agentes asesores globales de inversión y agente de corretaje de valores negociables",34,0,0],["VI","Agente depositario central de valores negociables",10,0,0],["VII","Agentes de calificación de riesgos (ACR)",1,0,0],["VIII","Bolsas de comercio con y sin mercado de valores adherido",1,0,0],["IX","De las denuncias penales y querellas",1,0,0],["X","Prevención del lavado de activos y financiamiento del terrorismo y de la proliferación de armas de destrucción masiva",4,0,0],["XI","Agente de custodia, registro y pago",7,0,0],["XII","Medidas en el marco del aislamiento social, preventivo y obligatorio covid-19",8,0,0],["XIII","Auditores externos",3,0,0],["XIV","Proveedores de servicios de activos virtuales (PSAV)",4,0,0],["XV","Disposición transitoria. Suspensión percepción y pago tasas de fiscalización y control",10,0,0],["XVI","Régimen de incentivo a la construcción federal argentina y acceso a la vivienda. Ley n° 27.613",6,0,0],["XVII","Régimen de regularización de activos. Ley n° 27.743 – medidas fiscales paliativas y relevantes",13,0,0]]},"XX":{"n":"Ofertas privadas de valores negociables","caps":[["I","Puertos seguros para ofertas privadas de valores negociables",24,0,0],["II","Disposiciones comunes",2,0,0]]},"XXI":{"n":"Reglamentación de otras leyes y decretos","caps":[["I","Reglamentación decreto n° 1017/24",2,0,0]]},"XXII":{"n":"Tokenización","caps":[["I","Representacion digital de valores negociables. Ámbito de aplicación",40,0,0]]}};
+    /* artículos de cada capítulo vigente (para resolver los hipervínculos sin bajar los títulos); regenerar junto con NVIDX */
+    const NVKEYS = {"I|I":"","I|II":"1,2,3","II|I":"1,2,3,4,5,6,7,8,9","II|II":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36","II|III":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44","II|IV":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48","II|V":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159","II|VI":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36","II|VII":"1,2,3","II|VIII":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51","II|IX":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15","II|X":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33","III|I":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15","III|II":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60","III|III":"1,2,3,4,5,6,7,8","IV|I":"1,2,3,4,5,6,7,8,9,10,11","IV|II":"1","IV|III":"1,2,3,4,5,6,7,8,9,10,11,12","IX|I":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72","IX|II":"1,2,3,4,5","IX|III":"1,2,3,4","V|I":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,31 bis,32,33,34,35,36,37,38","V|II":"1,2,3,4,4 bis,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,75 bis,76,86,87,88,89,90,91,92,93,94,95,96","V|III":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39","V|IV":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,19 bis,20,21,21 bis,21 ter,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82","V|V":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45","V|VI":"1,2,3,4,5,6,7,8,9,10","V|VII":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,27 bis,27 ter,27 quater,28,29","V|VIII":"1,2,3,4,5,6,7,8,8 bis,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33","V|IX":"1,2,3,4","V|X":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38","V|XI":"","VI|I":"1,2,3,4,5,6,7,8,9,9 bis,9 ter,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,29 bis,30,30 bis,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,54 bis,55,56,56 bis,56 ter,57,58,59,60,61,62,63,64,65,66,67,68,69,70,72","VI|II":"1,2,3,4,5,5 bis,6,7,8,9,10,11,11 bis,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47","VI|III":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26","VI|IV":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17","VI|V":"1,2,3,4,5,6,7,8,9,10,10 bis,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34","VI|VI":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21","VII|I":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26","VII|II":"1,2,3,4,5,6,7,8,9,9 bis,10,11,12,13,14,15,15 bis,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41","VII|III":"1,2,3,4,5,6,7,8,9,10,11","VII|IV":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,19 bis,20,21","VII|V":"1,2,3,4,5,6,7,8","VII|VI":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18","VII|VII":"1,2,3,4,5,6,7,7 bis,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,26 bis,27,27 bis,28,29,30,31","VIII|P":"1","VIII|I":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77","VIII|II":"1,2,3,4,5,5 bis,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74","X|U":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22","XI|U":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20","XII|I":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16","XII|II":"1,2,3,4,5,6,7,8","XII|III":"1,2,3","XII|IV":"1,2","XII|V":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23","XII|VI":"1","XIII|I":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16","XIII|II":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22","XIII|III":"1,2,3,4","XIV|I":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56","XIV|II":"","XIV|III":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42","XV|I":"1,2,3,4,5,6,7,8,9,10,11","XV|II":"1,2,3","XV|III":"1,2,3,4","XVI|I":"1,2,3,4,5,6,7,8,9","XVI|II":"1,2,3,4,5,6,7,8,9,10,11","XVII|I":"1,2,3,4,5,6,7,8,9,10,11,12,13","XVIII|I":"1,2,3,4,5,6","XVIII|II":"1,2,3,4","XVIII|III":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29","XVIII|IV":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16","XVIII|V":"1,2,2 bis,3,4,5,5 bis,6,6 bis,6 ter,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30","XVIII|VI":"1,2,3,4,5,6,7,8,9,10","XVIII|VII":"1","XVIII|VIII":"1","XVIII|IX":"1","XVIII|X":"1,2,3,4","XVIII|XI":"1,2,3,4,5,6,7","XVIII|XII":"1,2,3,4,5,6,7,8","XVIII|XIII":"1,2,3","XVIII|XIV":"1,2,3,4","XVIII|XV":"1,2,3,4,5,6,7,8,9,10","XVIII|XVI":"1,2,3,4,5,6","XVIII|XVII":"1,2,3,4,5,6,7,8,9,10,11,12,13","XX|I":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24","XX|II":"1,2","XXI|I":"1,2","XXII|I":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40"};
     const NVVER = "2026-09-30e";
     const NV = {};                 // títulos ya cargados
     const NVART = {};              // clave → { art, cap, sec, tit }
@@ -14761,10 +14780,11 @@
     })();
     const nvEt = (t, c, a) => `Normas CNV · Tít. ${t}${c && c !== "U" ? (c === "P" ? ", Cap. preliminar" : `, Cap. ${c}`) : ""}${a ? `, art. ${a}` : ""}`;
 
-    function nvParrafos(a) {
+    function nvParrafos(a, t, c) {
+      const ctx = { k: "N", t, c, a: a.a };
       return a.p.map(x => {
         const inc = /^(?:[a-zñ]{1,2}|[ivxl]{1,6}|\d{1,2})[\)\.]\s/i.test(x) && !/^\d{1,2}\.\d/.test(x);
-        return `<p${inc ? ` class="inc"` : ""}>${esc(x)}</p>`;
+        return `<p${inc ? ` class="inc"` : ""}>${t ? XREF(x, ctx) : esc(x)}</p>`;
       }).join("");
     }
 
@@ -14788,8 +14808,8 @@
         (a.d18 ? `<div class="nv18"><b>Qué cambió:</b> ${esc(a.d18)}</div>` : "") +
         `<div class="artfoot"><button class="showtxt" aria-expanded="false" aria-controls="t-${id}">Texto completo</button>${chips ? `<span class="vinc">${chips}</span>` : ""}</div>` +
         `<div class="literal nvlit" id="t-${id}" hidden>` +
-        subW(clave, nvParrafos(a), `${nvEt(t, c.c, a.a)}${a.ep ? " — " + a.ep : ""}`) +
-        (a.fut ? `<details class="nvfut"><summary>Texto que va a regir con la RG 1163/2026</summary><p class="nvaviso">${esc(a.futNota || "")}</p>${a.fut.map(x => `<p>${esc(x)}</p>`).join("")}</details>` : "") +
+        subW(clave, nvParrafos(a, t, c.c), `${nvEt(t, c.c, a.a)}${a.ep ? " — " + a.ep : ""}`) +
+        (a.fut ? `<details class="nvfut"><summary>Texto que va a regir con la RG 1163/2026</summary><p class="nvaviso">${esc(a.futNota || "")}</p>${a.fut.map(x => `<p>${XREF(x, { k: "N", t, c: c.c, a: a.a })}</p>`).join("")}</details>` : "") +
         (a.cnv ? `<p class="nvfuente">${esc(a.cnv)}</p>` : "") +
         ((a.notas || []).length ? `<div class="nvnotas">${a.notas.map(x => `<span>${esc(x)}</span>`).join("")}</div>` : "") +
         (n18 ? `<details class="nvcmp"><summary>Cómo decía el PDF de 2018 (${esc(n18.loc)}, pág. ${esc(n18.p)})</summary><p>${esc(n18.t)}</p></details>` : "") +
@@ -14920,6 +14940,339 @@
       goNorma(g.dataset.nvgo);
     }, true);
     /* ================= FIN Normas vigentes ================= */
+
+    /* ================= Hipervínculos entre artículos =================
+       Las menciones a otros artículos dentro del texto legal se vuelven enlaces.
+       XREF(texto, ctx) devuelve el HTML escapado con <a class="xref" data-x="…">.
+       ctx: { k: "N", t, c, a } (Normas) · { k: "L", l: id de ley, a: clave } (leyes).
+       data-x: "N:T|C|A" artículo de las Normas · "N:T|C|" capítulo · "T:T" título ·
+               "L:ley:art" artículo de una ley · "I:d,e" incisos del mismo artículo. */
+    const XR_LEYNOMBRE = [
+      [/general\s+de\s+sociedades|sociedades\s+comerciales/i, "19550"],
+      [/mercado\s+de\s+capitales/i, "26831"],
+      [/obligaciones\s+negociables/i, "23576"],
+      [/fondos\s+comunes\s+de\s+inversi[óo]n/i, "24083"],
+      [/financiamiento\s+productivo/i, "27440"],
+      [/financiamiento\s+de\s+la\s+vivienda/i, "24441"],
+      [/pymes?\b|peque[ñn]a\s+y\s+mediana\s+empresa/i, "24467"]
+    ];
+    const XR_NUM = String.raw`(\d{1,4})(?:\s?[°º]|\.?º)?(?:\s*(bis|ter|qu[aá]ter)\b)?`;
+    const XR_INCIT = String.raw`(?:[a-zñ]{1,2}\)|\d{1,2}(?:\s?[°º]|\))|[ivx]{1,5}\))`;
+    const XR_INC1 = String.raw`(?:inciso|inc\.)\s+[a-zñ0-9°º]{1,3}[\).]?(?:\s+(?:o|y)\s+[a-zñ0-9°º]{1,3}[\).])?|incisos\s+` + XR_INCIT + String.raw`(?:\s*(?:,|y|al?)\s*` + XR_INCIT + `)*`;
+    const XR_INCL = String.raw`(?:,?\s+(?:` + XR_INC1 + `))?`;
+    const XR_HEAD = new RegExp(String.raw`\b(art[íi]culos?|arts?\.)\s+(` + XR_NUM + XR_INCL +
+      String.raw`(?:\s*(?:,\s*)?(?:,|y|e|o|a|al|hasta)\s+(?:el\s+|los\s+)?` + XR_NUM.replace(/\((?!\?)/g, "(?:") + XR_INCL + `)*)`, "gi");
+    const XR_NUM1 = new RegExp(XR_NUM, "gi");
+    const XR_ADY = /\b(art[íi]culo)\s+(anterior|precedente|siguiente)\b/gi;
+    const XR_INC = /\b(incisos?\s+(?:[a-zñ]{1,2}|\d{1,2}|[ivx]{1,5})\)(?:\s*(?:,|y|e)\s*(?:[a-zñ]{1,2}|\d{1,2}|[ivx]{1,5})\))*)\s+del\s+(?:presente|este|mismo)\s+art[íi]culo\b/gi;
+    const XR_CAP = /\b(Cap[íi]tulo\s+([IVXL]+)\s+(?:del\s+(?:presente|este)\s+T[íi]tulo|de\s+este\s+T[íi]tulo|del\s+T[íi]tulo\s+([IVXL]+)))\b/g;
+    const XR_TIT = /\b(T[íi]tulo\s+([IVXL]+))\s+de\s+(?:estas|las(?:\s+presentes)?)\s+Normas\b/g;
+    const XR_ROM = "[IVXL]+";
+
+    function xrNvKeys(t, c) {
+      const s = NVKEYS[t + "|" + c];
+      return s ? s.split(",") : null;
+    }
+    function xrNvTiene(t, c, a) { const ks = xrNvKeys(t, c); return !!ks && ks.includes(a); }
+    function xrNvCaps(t) { return Object.keys(NVKEYS).filter(k => k.startsWith(t + "|")).map(k => k.split("|")[1]); }
+    function xrLeyTiene(l, a) { return !!(TEXTOS[l] || {})[a]; }
+    function xrLeyPorNum(n) {
+      const m = String(n).match(/^(\d{2})\.?(\d{3})$/);
+      return m ? IDPORNUM[m[1] + "." + m[2]] || null : null;
+    }
+
+    /* Lee lo que sigue a la lista de números ("del presente Capítulo", "de la Ley N° 19.550"…)
+       y devuelve { tipo, ley?, t?, c?, fin } donde fin es cuánto texto se consumió. */
+    function xrCalif(s) {
+      let i = 0, m;
+      const resto = () => s.slice(i);
+      const salto = /^\s*,?\s*(?:(?:incisos?|inc\.|apartados?|ap\.|p[áa]rrafos?|puntos?|[íi]tems?|subincisos?)\s+(?:[ivxl]{1,5}|[a-zñ]{1,2}|\d{1,3})[°º]?\)?\.?(?![a-zñ])(?:\s*(?:,|y|e|o|al?)\s*(?:[ivxl]{1,5}|[a-zñ]{1,2}|\d{1,3})[°º]?\)?\.?(?![a-zñ]))*(?:\s+inclusive)?\s*,?|(?:[úu]ltimo|primer|segundo|tercer|cuarto|quinto|pen[úu]ltimo)\s+p[áa]rrafo\s*,?|(?:primera|segunda|tercera|[úu]ltima)\s+parte\s*,?|y\s+(?:concordantes|siguientes|ss\.|ccs?\.?)\s*,?|in\s+fine\s*,?|inclusive\s*,?|todos\s+|ambos\s+|respectivamente\s*,?)/i;
+      for (let k = 0; k < 5 && (m = resto().match(salto)); k++) i += m[0].length;
+      const r = resto();
+      if ((m = r.match(/^\s*,?\s*de\s+(?:la\s+)?(?:presente|esta)\s+ley\b/i))) return { tipo: "self", fin: i + m[0].length };
+      if ((m = r.match(/^\s*,?\s*de\s+(?:la\s+)?(citada|dicha|mencionada|referida)\s+ley\b/i))) return { tipo: "ext", fin: i + m[0].length };
+      if ((m = r.match(/^\s*,?\s*(?:de\s+)?(?:la\s+)?ley\b/i))) {
+        const tras = r.slice(m[0].length, m[0].length + 90);
+        const nm = tras.match(/^\s*(?:N\s*[°º.]?\s*|n[úu]mero\s+)?(\d{2}\.?\d{3})\b/i) ||
+          tras.match(/^[^;:()]{0,60}?(?:N\s*[°º.]?\s*)?\b(\d{2}\.\d{3})\b/);
+        let ley = null, fin = m[0].length;
+        if (nm) { ley = xrLeyPorNum(nm[1]); fin += nm.index + nm[0].length; }
+        else {
+          const hit = XR_LEYNOMBRE.find(([re]) => re.test(tras.slice(0, 50)));
+          if (hit) { ley = hit[1]; const mm = tras.match(hit[0]); fin += mm.index + mm[0].length; }
+        }
+        return ley ? { tipo: "ley", ley, fin: i + fin } : { tipo: "ext", fin: i + fin };
+      }
+      if ((m = r.match(/^\s*,?\s*(?:del?|de\s+la|de\s+los|de\s+las)\s+(?:C[óo]digo|Decreto|Resoluci[óo]n|Reglamento|Anexo|Estatuto|Convenio|R\.?\s?G\.?\b|Texto|Comunicaci|Normas?\s+(?:de|del|t[ée]cnicas?|internacionales)|R[ée]gimen|Acuerdo|Constituci|Disposici|Criterio|Manual|Ley\b)/i))) return { tipo: "ext", fin: i + m[0].length };
+      // estructura de las Normas
+      let sec = false, cap = null, capPres = false, tit = null, titPres = false, normas = false, j = 0, piezas = 0;
+      const prueba = [
+        [new RegExp(String.raw`^\s*,?\s*(?:de\s+(?:la|esta)\s+(?:presente\s+|misma\s+)?|de\s+)?secci[óo]n(?:\s+(` + XR_ROM + String.raw`))?\b`, "i"), () => { sec = true; }],
+        [/^\s*,?\s*del?\s+(?:presente|este|mismo|citado)\s+cap[íi]tulo\b/i, () => { capPres = true; }],
+        [new RegExp(String.raw`^\s*,?\s*(?:del?\s+)?(?:(?:referido|citado|mencionado)\s+)?cap[íi]tulo\s+(` + XR_ROM + String.raw`|[úu]nico|preliminar)\b`, "i"), mm => { cap = mm[1]; }],
+        [/^\s*,?\s*del?\s+(?:presente|este|mismo)\s+t[íi]tulo\b/i, () => { titPres = true; }],
+        [new RegExp(String.raw`^\s*,?\s*(?:del?\s+)?(?:(?:referido|citado|mencionado)\s+)?t[íi]tulo\s+(` + XR_ROM + String.raw`)\b`, "i"), mm => { tit = mm[1]; }],
+        [/^\s*,?\s*de\s+(?:estas|las(?:\s+presentes)?)\s+normas(?:\s*\(N\.\s?T\.\s*2013\s+y\s+mod\.\))?/i, () => { normas = true; }]
+      ];
+      for (let vuelta = 0; vuelta < 6; vuelta++) {
+        const rr = r.slice(j);
+        const hit = prueba.find(([re]) => re.test(rr));
+        if (!hit) break;
+        const mm = rr.match(hit[0]); hit[1](mm); j += mm[0].length; piezas++;
+      }
+      if (!piezas) {
+        // "de la Ordenanza…", "del Reglamento…": cualquier otra norma que no reconocemos
+        if (/^\s*,?\s*(?:de|del)\s+(?!(?:la\s+|el\s+)?(?:presente|esta|este|mismo|misma)\b)/i.test(r)) return { tipo: "ext", fin: i };
+        return { tipo: "bare", fin: i };
+      }
+      if (/^\s*,?\s*de\s+la\s+ley\b/i.test(r.slice(j))) return { tipo: "ext", fin: i + j };
+      return { tipo: "nv", sec, cap: cap ? cap.toUpperCase().replace(/^[ÚU]NICO$/, "U").replace(/^PRELIMINAR$/, "P") : null, capPres, tit: tit ? tit.toUpperCase() : null, titPres, normas, fin: i + j };
+    }
+
+    /* A qué ley apunta "la presente ley" en este punto del texto: dentro de un artículo
+       que sustituye o incorpora texto a otra ley, el texto citado habla de esa otra ley. */
+    function xrLeySelf(texto, ctx) {
+      const m = texto.match(/(?:sustit[úu]y(?:e|a)se|modif[íi]c(?:a|á)se|incorp[óo]r(?:a|á)se|reempl[aá]z(?:a|á)se)\b[\s\S]{0,260}?\bley\s*(?:N\s*[°º.]?\s*)?(\d{2}\.\d{3})[\s\S]{0,260}?(?:redactad[oa]s?|siguientes?\s+(?:texto|forma|t[ée]rminos)|el\s+siguiente|lo\s+siguiente)[^:]{0,40}:?/i);
+      if (!m) return () => ctx.l;
+      const desde = m.index + m[0].length, otra = xrLeyPorNum(m[1]);
+      return pos => pos >= desde ? otra : ctx.l;
+    }
+
+    function xrResolver(n, sufijo, q, ctx, selfLey, todos) {
+      const num = String(+n);
+      const suf = sufijo ? sufijo.toLowerCase().replace("á", "a") : "";
+      if (q.tipo === "ext") return null;
+      let ley = null;
+      if (q.tipo === "ley") ley = q.ley;
+      else if (ctx.k === "L" && (q.tipo === "self" || q.tipo === "bare")) ley = selfLey;
+      if (ley) {
+        const a = num + suf;
+        return xrLeyTiene(ley, a) && !(ley === ctx.l && a === ctx.a) ? `L:${ley}:${a}` : null;
+      }
+      if (ctx.k !== "N") return null;
+      if (q.tipo === "self") return null;
+      const a = suf ? `${num} ${suf}` : num;
+      let t = ctx.t, c = ctx.c;
+      if (q.tipo === "nv") {
+        if (q.tit) t = q.tit;
+        if (q.cap) c = q.cap;
+        else if (q.tit && q.tit !== ctx.t || (q.titPres || q.normas) && !q.capPres && !q.sec) {
+          const caps = xrNvCaps(t);
+          if (caps.length === 1) c = caps[0];
+          else {
+            const con = caps.filter(cc => (todos || [a]).every(x => xrNvTiene(t, cc, x)));
+            if (con.length === 1) c = con[0]; else return null;
+          }
+        }
+      }
+      if (!xrNvTiene(t, c, a)) return null;
+      if (t === ctx.t && c === ctx.c && a === ctx.a) return null;
+      return `N:${t}|${c}|${a}`;
+    }
+
+    function xrTitulo(x) {
+      const [tipo, ...r] = x.split(":"), v = r.join(":");
+      if (tipo === "I") return `Ir al inciso ${v.split(",").join(") y ")}) de este artículo`;
+      if (tipo === "T") return `Ir a Normas CNV · Título ${v}`;
+      if (tipo === "N") { const [t, c, a] = v.split("|"); return "Ir a " + (typeof nvEt === "function" ? nvEt(t, c, a) : v); }
+      const [l, a] = v.split(":"), ley = typeof leyPorId === "function" ? leyPorId(l) : null;
+      return `Ir a Ley ${ley ? ley.num : l}, art. ${a.replace(/(\d)(bis|ter)/, "$1 $2")}`;
+    }
+
+    function XREF(texto, ctx) {
+      if (!texto || typeof NVKEYS === "undefined") return esc(texto || "");
+      const piezas = [];   // [inicio, fin, data-x]
+      const selfLeyEn = ctx.k === "L" ? xrLeySelf(texto, ctx) : () => null;
+      const consumido = [];
+      const ocupado = (a, b) => piezas.some(p => a < p[1] && b > p[0]);
+      const tapado = (a, b) => ocupado(a, b) || consumido.some(p => a < p[1] && b > p[0]);
+      let m;
+      // incisos del mismo artículo
+      XR_INC.lastIndex = 0;
+      while ((m = XR_INC.exec(texto))) {
+        const letras = [...m[1].matchAll(/([a-zñ]{1,2}|\d{1,2}|[ivx]{1,5})\)/gi)].map(x => x[1].toLowerCase());
+        piezas.push([m.index, m.index + m[1].length, "I:" + letras.join(",")]);
+      }
+      // artículo anterior / siguiente
+      XR_ADY.lastIndex = 0;
+      while ((m = XR_ADY.exec(texto))) {
+        const sig = /siguiente/i.test(m[2]);
+        let x = null;
+        if (ctx.k === "N") {
+          const ks = xrNvKeys(ctx.t, ctx.c) || [], i = ks.indexOf(ctx.a), o = ks[i + (sig ? 1 : -1)];
+          if (i >= 0 && o) x = `N:${ctx.t}|${ctx.c}|${o}`;
+        } else if (ctx.k === "L" && selfLeyEn(m.index) === ctx.l) {
+          const mm = String(ctx.a).match(/^(\d+)(.*)$/);
+          if (mm) {
+            const o = sig ? [String(+mm[1] + 1)] : (mm[2] ? [mm[1]] : [String(+mm[1] - 1) + "ter", String(+mm[1] - 1) + "bis", String(+mm[1] - 1)]);
+            const hit = o.find(k => xrLeyTiene(ctx.l, k));
+            if (hit) x = `L:${ctx.l}:${hit}`;
+          }
+        }
+        if (x) piezas.push([m.index, m.index + m[0].length, x]);
+      }
+      // artículo(s) N…
+      XR_HEAD.lastIndex = 0;
+      while ((m = XR_HEAD.exec(texto))) {
+        const ini = m.index, finLista = m.index + m[0].length;
+        const inicioLinea = ini === 0 || /[\n"“«]\s*$/.test(texto.slice(Math.max(0, ini - 3), ini));
+        if (inicioLinea && /^(?:\s*[—–-]|\.\s*[—–-]|\.-|[.:]\s|[.:]?\s*$|\s*\n)/.test(texto.slice(finLista, finLista + 6))) continue;
+        const q = xrCalif(texto.slice(finLista, finLista + 200).split(/\n/)[0]);
+        const selfLey = selfLeyEn(ini);
+        const nums = [];
+        XR_NUM1.lastIndex = 0;
+        let nm; const lista = m[2].replace(new RegExp(XR_INC1, "gi"), x => " ".repeat(x.length)), base = ini + m[0].indexOf(m[2], m[1].length);
+        while ((nm = XR_NUM1.exec(lista))) nums.push([base + nm.index, base + nm.index + nm[0].length, nm[1], nm[2]]);
+        const todos = nums.map(([, , n, suf]) => suf ? `${+n} ${suf.toLowerCase().replace("á", "a")}` : String(+n));
+        consumido.push([finLista, finLista + Math.max(0, q.fin)]);
+        nums.forEach(([a, b, n, suf], k) => {
+          const x = xrResolver(n, suf, q, ctx, selfLey, todos);
+          if (!x) return;
+          const desde = k === 0 && nums.length === 1 ? ini : a;
+          if (!ocupado(desde, b)) piezas.push([desde, b, x]);
+        });
+        XR_HEAD.lastIndex = finLista + Math.max(0, q.fin);
+      }
+      if (ctx.k === "N") {
+        XR_CAP.lastIndex = 0;
+        while ((m = XR_CAP.exec(texto))) {
+          const t = m[3] || ctx.t, c = m[2];
+          if (xrNvKeys(t, c) && !tapado(m.index, m.index + m[1].length)) piezas.push([m.index, m.index + m[1].length, `N:${t}|${c}|`]);
+        }
+        XR_TIT.lastIndex = 0;
+        while ((m = XR_TIT.exec(texto))) {
+          const t = m[2];
+          if (xrNvCaps(t).length && t !== ctx.t && !tapado(m.index, m.index + m[1].length)) piezas.push([m.index, m.index + m[1].length, `T:${t}`]);
+        }
+      }
+      if (!piezas.length) return esc(texto);
+      piezas.sort((p, q) => p[0] - q[0]);
+      let out = "", pos = 0;
+      piezas.forEach(([a, b, x]) => {
+        if (a < pos) return;
+        out += esc(texto.slice(pos, a)) + `<a class="xref" role="link" tabindex="0" data-x="${esc(x)}" title="${esc(xrTitulo(x))}">${esc(texto.slice(a, b))}</a>`;
+        pos = b;
+      });
+      return out + esc(texto.slice(pos));
+    }
+
+    /* ---- navegación: tocar un enlace lleva al artículo; el botón flotante vuelve ---- */
+    const XPILA = [];
+    function xrEtiqueta(li) {
+      if (li.classList.contains("nart")) {
+        const [t, c, a] = (li.dataset.k || "").split("|");
+        return nvEt(t, c, a).replace("Normas CNV · ", "");
+      }
+      const m = li.id.match(/^a-([^-]+)-(.+)$/);
+      const ley = m && leyPorId(m[1]);
+      return ley ? `Ley ${ley.num}, art. ${m[2].replace(/(\d)(bis|ter)/, "$1 $2")}` : "el artículo";
+    }
+    function xrAbrirTexto(li) {
+      if (!li) return;
+      for (let p = li.parentElement; p && p !== document.body; p = p.parentElement) if (p.tagName === "DETAILS") p.open = true;
+      const b = li.querySelector(".showtxt"), box = b && document.getElementById(b.getAttribute("aria-controls"));
+      if (b && box && box.hidden) { box.hidden = false; b.setAttribute("aria-expanded", "true"); b.textContent = "Ocultar texto"; }
+    }
+    /* un artículo largo se muestra desde su comienzo; uno corto, centrado */
+    function xrEncuadrar(li, el) {
+      if (!li) return;
+      setTimeout(() => {
+        const largo = li.offsetHeight > window.innerHeight * 0.55;
+        (el && !largo ? el : li).scrollIntoView({ block: largo && !el ? "start" : "center", behavior: "smooth" });
+      }, 90);
+    }
+    function xrBoton() {
+      let b = document.getElementById("xvolver");
+      const o = XPILA[XPILA.length - 1];
+      if (!o || vista !== "leyes") { if (b) b.hidden = true; return; }
+      if (!b) {
+        b = document.createElement("button");
+        b.id = "xvolver"; b.type = "button";
+        b.addEventListener("click", xrVolver);
+        document.body.appendChild(b);
+      }
+      b.textContent = `← Volver a ${o.et}` + (XPILA.length > 1 ? ` · ${XPILA.length}` : "");
+      b.title = XPILA.length > 1 ? `Hay ${XPILA.length} pasos para volver` : "";
+      b.hidden = false;
+    }
+    function xrVolver() {
+      const o = XPILA.pop();
+      if (!o) { xrBoton(); return; }
+      if (vista !== o.vista) setVista(o.vista);
+      if (current !== o.current) show(o.current);
+      qEl.value = ""; filter();
+      const li = document.getElementById(o.id);
+      if (li) {
+        xrAbrirTexto(li);
+        const ref = o.ref && [...li.querySelectorAll("a.xref")][o.ref - 1];
+        setTimeout(() => { (ref || li).scrollIntoView({ block: "center", behavior: "smooth" }); destacar(ref || li); }, 40);
+      }
+      xrBoton();
+    }
+    /* incisos del mismo artículo: se busca la línea o el párrafo que empieza con "d)" */
+    function xrInciso(a, letras) {
+      const caja = a.closest(".literal") || a.closest(".ab");
+      if (!caja) return;
+      const w = document.createTreeWalker(caja, NodeFilter.SHOW_TEXT);
+      let n, hecho = false;
+      const re = new RegExp(`(^|\\n)\\s*(${letras[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})\\)`, "i");
+      while (!hecho && (n = w.nextNode())) {
+        const p = n.parentElement.closest("p");
+        const esInicio = p && p.firstChild === n || !p;
+        const mm = n.data.match(re);
+        if (!mm || (mm[1] === "" && !esInicio)) continue;
+        const ini = mm.index + mm[0].length - mm[2].length - 1;
+        const r = document.createRange();
+        r.setStart(n, ini); r.setEnd(n, ini + mm[2].length + 1);
+        const mk = document.createElement("mark");
+        mk.className = "xinc";
+        try { r.surroundContents(mk); } catch (e) { continue; }
+        (p || mk).scrollIntoView({ block: "center", behavior: "smooth" });
+        if (p) destacar(p);
+        setTimeout(() => { const par = mk.parentNode; if (!par) return; while (mk.firstChild) par.insertBefore(mk.firstChild, mk); par.removeChild(mk); par.normalize(); }, 2400);
+        hecho = true;
+      }
+    }
+    function xrIr(a) {
+      const x = a.dataset.x || "", [tipo, ...r] = x.split(":"), v = r.join(":");
+      if (tipo === "I") { xrInciso(a, v.split(",")); return; }
+      const li = a.closest("li.art, li.nart");
+      if (li && li.id) {
+        const refs = [...li.querySelectorAll("a.xref")];
+        XPILA.push({ vista, current, id: li.id, et: xrEtiqueta(li), ref: refs.indexOf(a) + 1 });
+        if (XPILA.length > 30) XPILA.shift();
+      }
+      if (tipo === "N") {
+        goNorma(v);
+        const [t, c, art] = v.split("|");
+        if (art) nvCargar(t).then(() => xrEncuadrar(document.getElementById(`nv-${t}-${c}-${art.replace(/\s+/g, "")}`))).catch(() => { });
+      }
+      else if (tipo === "T") {
+        setVista("leyes");
+        nvCargar(v).then(() => { show("N:" + v); qEl.value = ""; filter(); document.querySelector(".ficha")?.scrollIntoView({ block: "start", behavior: "smooth" }); }).catch(() => { });
+      } else if (tipo === "L") {
+        const [l, art] = v.split(":");
+        goTo(l, art);
+        const dest = document.getElementById(`a-${l}-${art.toLowerCase()}`);
+        xrAbrirTexto(dest);
+        xrEncuadrar(dest);
+      }
+      xrBoton();
+    }
+    window.addEventListener("click", e => {
+      const a = e.target.closest && e.target.closest("a.xref");
+      if (!a) return;
+      const sel = window.getSelection();
+      if (sel && !sel.isCollapsed && a.contains(sel.anchorNode)) return;   // está subrayando
+      e.preventDefault(); e.stopPropagation();
+      xrIr(a);
+    }, true);
+    window.addEventListener("keydown", e => {
+      if (e.key !== "Enter" || !e.target.matches || !e.target.matches("a.xref")) return;
+      e.preventDefault(); xrIr(e.target);
+    }, true);
+    /* ================= FIN hipervínculos ================= */
+
 
     function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
     function artNum(n) { return String(n); }
@@ -15197,7 +15550,7 @@
           `<button class="showtxt" aria-expanded="false" aria-controls="t-${ley.id}-${key}" data-subk="L:${ley.id}:${key}">Texto completo</button>` +
           grupos +
           `</div>` +
-          `<div class="literal" id="t-${ley.id}-${key}" hidden>${subW("L:" + ley.id + ":" + key, esc(lit))}` +
+          `<div class="literal" id="t-${ley.id}-${key}" hidden>${subW("L:" + ley.id + ":" + key, XREF(lit, { k: "L", l: ley.id, a: key }))}` +
           `<span class="lsrc">Ley ${esc(ley.num)} — ${esc(ley.fuente || "texto actualizado, InfoLeg")}</span>` +
           `</div>`;
       }
@@ -15407,6 +15760,7 @@
             : "Buscar entre las preguntas: OPA, secreto, prospecto…";
       filter();
       try { actualizarVolverSes(); } catch (e) { }
+      try { xrBoton(); } catch (e) { }
     }
 
     vLeyesBtn.addEventListener("click", () => setVista("leyes"));
