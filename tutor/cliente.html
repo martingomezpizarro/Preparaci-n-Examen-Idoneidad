@@ -1,0 +1,620 @@
+<!-- =================== Tutor del idóneo: consultas en lenguaje natural =================== -->
+<style>
+  #tutfab { position: fixed; right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); z-index: 62; display: inline-flex; align-items: center; gap: 8px;
+    border: 0; border-radius: 999px; padding: 12px 18px 12px 14px; background: var(--accent); color: var(--surface); font: 600 14.5px/1 var(--f-body);
+    box-shadow: 0 8px 24px -6px rgba(20, 26, 34, .45); cursor: pointer; }
+  #tutfab svg { width: 20px; height: 20px; flex: none; }
+  @media (max-width: 999px) { #tutfab { bottom: calc(env(safe-area-inset-bottom, 0px) + 74px); padding: 12px; } #tutfab span { display: none; } }
+  body:has(#tutor:not([hidden])) #tutfab, body:has(dialog[open]) #tutfab, body:has(.subbtn:not([hidden])) #tutfab { display: none; }
+  #tutor { position: fixed; z-index: 70; top: 0; right: 0; bottom: 0; width: min(460px, 100vw); display: flex; flex-direction: column;
+    background: var(--surface); color: var(--ink); border-left: 1px solid var(--line); box-shadow: -18px 0 40px -24px rgba(20, 26, 34, .5);
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  @media (max-width: 999px) { #tutor { width: 100vw; border-left: 0; } }
+  .tut-h { display: flex; align-items: center; gap: 10px; padding: 12px 14px 12px 18px; border-bottom: 1px solid var(--line); }
+  .tut-h b { font: 600 19px/1.15 var(--f-display); display: block; }
+  .tut-h small { display: block; font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
+  .tut-h .tut-tt { flex: 1; min-width: 0; }
+  .tut-ib { border: 1px solid var(--line); background: var(--surface-2); color: var(--ink-2); border-radius: 10px; min-width: 38px; height: 38px; padding: 0 10px;
+    font: 500 13px/1 var(--f-body); cursor: pointer; }
+  .tut-ib:hover { color: var(--ink); border-color: var(--line-strong); }
+  #tutlog { flex: 1; overflow-y: auto; padding: 16px 18px 8px; scroll-behavior: smooth; overscroll-behavior: contain; }
+  .tut-vacio p { text-align: left; color: var(--ink-2); font-size: 14.5px; line-height: 1.5; margin: 0 0 12px; }
+  .tut-sug { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .tut-sug button { text-align: left; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); border-radius: 12px; padding: 10px 12px;
+    font: 14px/1.35 var(--f-body); cursor: pointer; }
+  .tut-sug button:hover { border-color: var(--accent); }
+  .tut-m { margin: 0 0 16px; }
+  .tut-m.yo { display: flex; justify-content: flex-end; }
+  .tut-m.yo > div { max-width: 86%; background: var(--accent); color: var(--surface); border-radius: 16px 16px 4px 16px; padding: 9px 13px; font-size: 15px; line-height: 1.45; white-space: pre-wrap; }
+  .tut-m.el > .tut-txt { font-size: 15.5px; line-height: 1.6; }
+  .tut-txt p, .tut-txt li, .tut-quiz, .tut-m.yo > div { text-align: left; hyphens: auto; }
+  .tut-txt p { margin: 0 0 10px; }
+  .tut-txt ul, .tut-txt ol { margin: 0 0 10px; padding-left: 20px; }
+  .tut-txt li { margin: 3px 0; }
+  .tut-txt .tut-ex { margin: 10px 0; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; }
+  .tut-txt .tut-ojo { margin: 10px 0; padding: 8px 12px; border-left: 3px solid #D9A400; background: rgba(255, 200, 40, .14); border-radius: 0 8px 8px 0; }
+  .tut-cita { display: inline; border: 1px solid var(--line-strong); background: var(--surface-2); color: var(--accent); border-radius: 6px; padding: 1px 6px; margin: 0 1px;
+    font: 600 11.5px/1.6 var(--f-mono); cursor: pointer; white-space: nowrap; vertical-align: .05em; }
+  .tut-cita:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .tut-nover { font: 11.5px var(--f-mono); color: var(--ink-3); }
+  .tut-pie { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .tut-pie .tut-ib { height: 32px; font-size: 12.5px; }
+  .tut-web { margin-top: 10px; font-size: 12.5px; color: var(--ink-2); }
+  .tut-web a { color: var(--accent); text-decoration: none; display: inline-block; margin: 2px 8px 2px 0; }
+  .tut-web a .of { font: 600 10px var(--f-mono); color: #1b8a5a; border: 1px solid currentColor; border-radius: 4px; padding: 0 3px; margin-left: 3px; }
+  .tut-gsug { margin-top: 6px; max-width: 100%; overflow-x: auto; }
+  .tut-err { color: #B3261E; font-size: 14px; }
+  .tut-err button { margin-top: 8px; }
+  .tut-pensando { color: var(--ink-2); font-size: 14px; display: flex; align-items: center; gap: 8px; }
+  .tut-pensando i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: tutp 1s infinite ease-in-out; }
+  .tut-pensando i:nth-child(2) { animation-delay: .15s; } .tut-pensando i:nth-child(3) { animation-delay: .3s; }
+  @keyframes tutp { 0%, 80%, 100% { opacity: .25; transform: scale(.8); } 40% { opacity: 1; transform: scale(1); } }
+  .tut-quiz { margin-top: 12px; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--surface-2); }
+  .tut-quiz .tq-n { font: 600 10.5px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+  .tut-quiz .tq-q { font-weight: 600; margin: 8px 0 10px; line-height: 1.45; }
+  .tut-quiz button.tq-o { display: block; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    border-radius: 10px; padding: 9px 11px; margin: 6px 0; font: 14px/1.4 var(--f-body); cursor: pointer; }
+  .tut-quiz button.tq-o.bien { border-color: #1b8a5a; background: rgba(27, 138, 90, .12); }
+  .tut-quiz button.tq-o.mal { border-color: #B3261E; background: rgba(179, 38, 30, .1); }
+  .tut-quiz .tq-p { font-size: 14px; line-height: 1.5; margin-top: 8px; }
+  .tut-f { border-top: 1px solid var(--line); padding: 10px 12px 12px; background: var(--surface); }
+  .tut-f form { display: flex; gap: 8px; align-items: flex-end; }
+  #tutin { flex: 1; resize: none; max-height: 140px; min-height: 44px; border: 1px solid var(--line-strong); border-radius: 14px; padding: 11px 13px;
+    font: 15.5px/1.4 var(--f-body); background: var(--bg); color: var(--ink); }
+  #tutin:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .tut-f .tut-ib { height: 44px; min-width: 44px; border-radius: 14px; display: inline-grid; place-items: center; }
+  .tut-f .tut-ib svg { width: 20px; height: 20px; }
+  #tutenviar { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+  #tutmic.grabando { background: #B3261E; border-color: #B3261E; color: #fff; }
+  .tut-nota { font-size: 11.5px; color: var(--ink-3); margin: 6px 4px 0; display: flex; justify-content: space-between; gap: 8px; }
+  .tut-login { margin: 8px 0; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); font-size: 14.5px; line-height: 1.5; }
+  .tut-login button { margin-top: 10px; }
+</style>
+
+<button id="tutfab" aria-label="Preguntale al tutor" title="Preguntale al tutor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6"/><path d="M12 16.5h.01"/></svg><span>Preguntale al tutor</span></button>
+
+<section id="tutor" hidden aria-label="Tutor del idóneo" role="dialog">
+  <div class="tut-h">
+    <div class="tut-tt"><b>Tutor del idóneo</b><small>Responde con las leyes, las Normas vigentes y fuentes oficiales</small></div>
+    <button class="tut-ib" id="tutnueva" title="Empezar una conversación nueva">Nueva</button>
+    <button class="tut-ib" id="tutx" aria-label="Cerrar el tutor">✕</button>
+  </div>
+  <div id="tutlog" aria-live="polite"></div>
+  <div class="tut-f">
+    <form id="tutform">
+      <textarea id="tutin" rows="1" placeholder="Escribí tu pregunta…" aria-label="Tu pregunta"></textarea>
+      <button type="button" class="tut-ib" id="tutmic" aria-label="Preguntar con la voz" title="Preguntar con la voz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
+      <button type="submit" class="tut-ib" id="tutenviar" aria-label="Enviar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></button>
+    </form>
+    <div class="tut-nota"><span id="tutestado">Revisá siempre la cita: el tutor puede equivocarse.</span><span id="tutcupo"></span></div>
+  </div>
+</section>
+
+<script>
+  /* El tutor busca acá, en el navegador, los artículos que vienen al caso (leyes, Normas vigentes,
+     glosario y notas de la página), se los pasa al cerebro (Cloudflare Worker → Gemini) y pinta la
+     respuesta con cada cita como botón que abre el artículo, igual que en las tarjetas. */
+  (() => {
+    const TUTOR_URL_DEF = "https://idoneo-tutor.gomezpizarromartin.workers.dev";
+    const LST = "mapa-idoneo-tutor-v1";
+    const tutorURL = () => { let u = ""; try { u = localStorage.getItem("mapa-idoneo-tutor-url") || ""; } catch (e) { } return (u || TUTOR_URL_DEF).replace(/\/+$/, ""); };
+    const $ = id => document.getElementById(id);
+    const panel = $("tutor"), log = $("tutlog"), inp = $("tutin"), fab = $("tutfab");
+
+    /* ---------------------------------------------------------- índice de búsqueda */
+    const STOP = new Set(("a al algo algun alguna algunas alguno algunos ante antes asi aun bajo cada cual cuales cuando como con contra cual de del desde donde " +
+      "durante e el ella ellas ello ellos en entre era es esa esas ese eso esos esta estas este esto estos fue fueron ha hace han hasta hay la las le les lo los " +
+      "mas me mi mis muy ni no nos o otra otras otro otros para pero poco por porque que quien quienes se sea segun ser si sin sino sobre solo su sus tal tambien " +
+      "tan tanto te tiene tienen todo todos tu un una unas uno unos y ya dicho dicha dichos dichas presente presentes cuyo cuya mismo misma mismos mismas " +
+      "articulo articulos inciso incisos caso casos forma deberan debera podran podra explicame explicar decime dime puede pueden hacer hace sirve diferencia " +
+      "entonces bien quiero saber tengo pregunta favor hola gracias").split(" "));
+    const SIGLAS = {
+      alyc: "agente liquidacion compensacion", an: "agente negociacion", ap: "agente productor", aagi: "agente asesor global inversion",
+      aa: "agente asesor", aamc: "agente asesor mercado capitales", acvn: "agente corretaje valores negociables", acyd: "agente colocacion distribucion",
+      fci: "fondo comun inversion", fcis: "fondo comun inversion", on: "obligacion negociable", ons: "obligacion negociable", opa: "oferta publica adquisicion",
+      cnv: "comision nacional valores", uif: "unidad informacion financiera", ros: "reporte operacion sospechosa", pep: "persona expuesta politicamente",
+      sgr: "sociedad garantia reciproca", plaft: "lavado activos financiamiento terrorismo", adc: "agente deposito colectivo", acryp: "agente custodia registro pago",
+      acr: "agente calificacion riesgo", vcp: "valor corto plazo", cedear: "certificado deposito argentino", cedears: "certificado deposito argentino",
+      pfc: "plataforma financiamiento colectivo", psav: "proveedor servicio activo virtual", ff: "fideicomiso financiero", aif: "autopista informacion financiera",
+      lgs: "ley general sociedades", pyme: "pequena mediana empresa", byma: "bolsas mercados argentinos", t1: "plazo liquidacion", idoneo: "idoneo registro idoneos"
+    };
+    const plano = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+    function raiz(w) {
+      if (w.length > 4 && w.endsWith("es")) w = w.slice(0, -2);
+      else if (w.length > 3 && w.endsWith("s")) w = w.slice(0, -1);
+      return w.length > 7 ? w.slice(0, 7) : w;
+    }
+    function tokens(s, expandir) {
+      const out = [];
+      for (const w of plano(s).replace(/t\s*\+\s*1/g, " t1 ").split(/[^a-z0-9ñ]+/)) {
+        if (!w || STOP.has(w) || (w.length < 2 && !/\d/.test(w))) continue;
+        if (expandir && SIGLAS[w]) { out.push(w); SIGLAS[w].split(" ").forEach(x => out.push(raiz(x))); continue; }
+        out.push(/^\d+$/.test(w) ? w : raiz(w));
+      }
+      // pares de palabras seguidas («agente productor», «operación sospechosa»): pesan mucho más que cada una suelta
+      const n = out.length;
+      for (let i = 0; i + 1 < n; i++) if (!/^\d+$/.test(out[i]) && !/^\d+$/.test(out[i + 1])) out.push(out[i] + "_" + out[i + 1]);
+      return out;
+    }
+
+    let IDX = null, IDXP = null;
+    function trozos(txt, max) {           // parte un texto largo en ventanas por párrafo
+      const ps = String(txt || "").split(/\n+/), out = [];
+      let cur = "";
+      for (const p of ps) {
+        if (cur && cur.length + p.length > max) { out.push(cur); cur = ""; }
+        cur += (cur ? "\n" : "") + p;
+      }
+      if (cur) out.push(cur);
+      return out.length ? out : [""];
+    }
+    function epigrafes() {
+      const m = {};
+      LEYES.forEach(l => (l.titulos || []).forEach(t => (t.caps || []).forEach(c => (c.a || []).forEach(a => {
+        (m[l.id] = m[l.id] || {})[artKey(a[0]).toLowerCase()] = { ep: a[1] || "", cap: c.n || c.name || "", tit: t.n || t.name || "" };
+      }))));
+      return m;
+    }
+    async function construir(estado) {
+      if (IDX) return IDX;
+      estado("Preparando las Normas vigentes…");
+      await Promise.all(Object.keys(NVIDX).map(t => nvCargar(t).catch(() => null)));
+      const docs = [];
+      const EP = epigrafes();
+      // Leyes
+      for (const ley of Object.keys(TEXTOS)) {
+        const l = leyPorId(ley);
+        for (const art of Object.keys(TEXTOS[ley])) {
+          const e = (EP[ley] || {})[art.toLowerCase()] || {};
+          const et = `Ley ${l ? l.num : ley}${l ? " (" + l.corto + ")" : ""}, art. ${art}${e.ep ? " — " + e.ep : ""}`;
+          for (const w of trozos(TEXTOS[ley][art], 1600)) docs.push({ id: `L:${ley}:${art}`, et, txt: w, extra: `${e.ep} ${e.ep} ${l ? l.corto : ""}`, peso: 1 });
+        }
+      }
+      // Normas CNV vigentes
+      for (const k of Object.keys(NVART)) {
+        const x = NVART[k], a = x.art;
+        if (!a || !a.p) continue;
+        const [t, c] = k.split("|");
+        const et = `${nvEt(t, c, a.a)}${a.ep ? " — " + a.ep : ""}`;
+        const extra = `${a.ep || ""} ${a.ep || ""} ${x.cap.n || ""} ${x.sec && x.sec.n ? x.sec.n : ""} ${x.tit.n || ""}`;
+        const cuerpo = (a.derog ? "[Derogado] " : "") + a.p.join("\n") + (a.d18 ? "\nQué cambió respecto de 2018: " + a.d18 : "");
+        for (const w of trozos(cuerpo, 1600)) docs.push({ id: `N:${k}`, et, txt: w, extra, peso: a.derog ? .5 : 1 });
+      }
+      // Glosario: cada definición apunta al artículo que la contiene
+      for (const g of GLOSARIO) {
+        const id = g.l === "RG1097" ? `N:I|II|${artKey(g.a)}` : `L:${g.l}:${artKey(g.a)}`;
+        docs.push({ id, et: `Glosario — ${g.t}`, txt: `${g.t}: ${g.d}`, extra: `${g.t} ${g.t} ${g.t}`, peso: 1.25 });
+      }
+      // Notas de la página sobre el mercado de hoy (no son norma)
+      for (const h of HOY_ACTORES) docs.push({ id: `P:hoy:${h.sig}`, et: `Quién es quién hoy — ${h.sig}`, txt: `${h.cat}. ${h.sig}: ${h.que} Hoy: ${h.nombres || ""}`, extra: h.sig, peso: .9 });
+      for (const [id, f] of Object.entries(AGXF)) {
+        const ag = (AGX.ags || []).find(a => a.id === id);
+        const lista = k => (f[k] || []).map(x => x.t || x).filter(x => typeof x === "string").join("; ");
+        docs.push({ id: `P:ficha:${id}`, et: `Ficha del agente ${ag ? ag.sig : id}`, txt: `${ag ? ag.n + " (" + ag.sig + ")" : id}. ${f.que || ""} ${f.rol || ""} Puede: ${lista("func")}. No puede: ${lista("proh")}.`, extra: ag ? `${ag.sig} ${ag.n}` : id, peso: .9 });
+      }
+      for (const n of NORMAS) docs.push({ id: `P:titulo:${n.id}`, et: `Guía del Título ${n.id} de las Normas — ${n.n}`, txt: `${n.que || ""} ${n.hoy || ""}`, extra: n.n, peso: .8 });
+
+      estado("Armando el índice…");
+      const post = new Map(), largos = [];
+      docs.forEach((d, i) => {
+        const tk = tokens(d.et + " " + d.extra + " " + d.txt, false);
+        largos.push(tk.length);
+        const tf = new Map();
+        tk.forEach(w => tf.set(w, (tf.get(w) || 0) + 1));
+        tf.forEach((n, w) => { let p = post.get(w); if (!p) post.set(w, p = []); p.push(i, n); });
+      });
+      const prom = largos.reduce((a, b) => a + b, 0) / docs.length;
+      IDX = { docs, post, largos, prom, N: docs.length };
+      estado("");
+      return IDX;
+    }
+    function puntuar(ix, q, peso, acum) {
+      const k1 = 1.2, b = .75, vistos = new Set();
+      for (const w of tokens(q, true)) {
+        if (vistos.has(w)) continue; vistos.add(w);
+        const p = ix.post.get(w); if (!p) continue;
+        const df = p.length / 2, idf = Math.log(1 + (ix.N - df + .5) / (df + .5));
+        for (let j = 0; j < p.length; j += 2) {
+          const i = p[j], tf = p[j + 1], d = ix.docs[i];
+          const s = idf * tf * (k1 + 1) / (tf + k1 * (1 - b + b * ix.largos[i] / ix.prom));
+          acum.set(i, (acum.get(i) || 0) + s * peso * (d.peso || 1));
+        }
+      }
+    }
+    /* «art. 47 de la 26.831», «Título VII Capítulo I artículo 3» → el artículo exacto, primero */
+    function directos(q) {
+      const out = [], t = plano(q);
+      const num = t.match(/\b(2[2-7])\.?(\d{3})\b/);
+      const art = t.match(/\bart(?:iculo|\.)?s?\s*(\d{1,3})\s*(bis|ter)?\b/);
+      const num2 = num || (/(mercado de capitales)/.test(t) ? [0, "26", "831"] : null);
+      if (num2 && art) {
+        const ley = num2[1] + num2[2], a = art[1] + (art[2] || "");
+        if (TEXTOS[ley] && TEXTOS[ley][a]) out.push(`L:${ley}:${a}`);
+      }
+      const tit = t.match(/\btit(?:ulo|\.)?\s+([ivxl]+)\b/), cap = t.match(/\bcap(?:itulo|\.)?\s+([ivxl]+|preliminar|unico)\b/);
+      if (tit && art) {
+        const T = tit[1].toUpperCase(), C = cap ? (cap[1] === "preliminar" ? "P" : cap[1] === "unico" ? "U" : cap[1].toUpperCase()) : null;
+        const k = Object.keys(NVART).find(x => { const [a1, b1, c1] = x.split("|"); return a1 === T && (!C || b1 === C) && c1 === art[1]; });
+        if (k) out.push(`N:${k}`);
+      }
+      return out;
+    }
+    function contexto(ix, q, previa) {
+      const acum = new Map();
+      puntuar(ix, q, 1, acum);
+      if (previa) puntuar(ix, previa, .35, acum);
+      const orden = [...acum.entries()].sort((a, b) => b[1] - a[1]).slice(0, 40);
+      const porId = new Map();
+      for (const id of directos(q)) {
+        ix.docs.forEach(d => { if (d.id === id) { const g = porId.get(id) || { id, et: d.et, partes: [], s: 1e9 }; if (!g.partes.includes(d.txt)) g.partes.push(d.txt); porId.set(id, g); } });
+      }
+      // si la pregunta compara siglas («AN y ALyC»), cada una se asegura sus dos mejores artículos
+      const siglas = [...new Set(plano(q).split(/[^a-z0-9]+/).filter(w => SIGLAS[w] && w !== "cnv"))];
+      if (siglas.length > 1) {
+        const resto = plano(q).split(/[^a-z0-9ñ]+/).filter(w => !SIGLAS[w]).join(" ");
+        for (const sg of siglas) {
+          const a2 = new Map(); puntuar(ix, sg + " " + SIGLAS[sg] + " " + SIGLAS[sg] + " " + resto, 1, a2);
+          let n = 0;
+          for (const [i, s] of [...a2.entries()].sort((a, b) => b[1] - a[1])) {
+            const d = ix.docs[i];
+            if (porId.has(d.id) || d.et.startsWith("Glosario")) continue;
+            porId.set(d.id, { id: d.id, et: d.et, partes: [d.txt], s });
+            if (++n >= 2) break;
+          }
+        }
+      }
+      for (const [i, s] of orden) {
+        const d = ix.docs[i];
+        let g = porId.get(d.id);
+        if (!g) { if (porId.size >= 10) continue; porId.set(d.id, g = { id: d.id, et: d.et.startsWith("Glosario") ? "" : d.et, partes: [], s }); }
+        if (!g.et && !d.et.startsWith("Glosario")) g.et = d.et;
+        if (g.partes.length < 3 && !g.partes.includes(d.txt)) g.partes.push(d.txt);
+      }
+      let total = 0;
+      const out = [];
+      for (const g of porId.values()) {
+        const et = g.et || etiqueta(g.id);
+        const txt = g.partes.join("\n…\n").slice(0, 3800);
+        if (total + txt.length > 22000) break;
+        total += txt.length;
+        out.push({ id: g.id, et, txt });
+      }
+      return out;
+    }
+
+    /* ---------------------------------------------------------- citas */
+    function etiqueta(id) {
+      const m = id.match(/^L:(\d+):(.+)$/);
+      if (m) { const l = leyPorId(m[1]); return `Ley ${l ? l.num : m[1]}, art. ${m[2]}`; }
+      const n = id.match(/^N:(.+)$/);
+      if (n) { const [t, c, a] = n[1].split("|"); return nvEt(t, c, a); }
+      return id;
+    }
+    function corta(id) {
+      const m = id.match(/^L:(\d+):(.+)$/);
+      if (m) { const l = leyPorId(m[1]); return `${l ? l.num : m[1]} · art. ${m[2]}`; }
+      const n = id.match(/^N:(.+)$/);
+      if (n) { const [t, c, a] = n[1].split("|"); return `NT ${t}${c && c !== "U" ? (c === "P" ? "·Prel." : "·" + c) : ""} · art. ${a}`; }
+      return id;
+    }
+    function valida(id) {
+      const m = id.match(/^L:(\d+):(.+)$/);
+      if (m) return !!(TEXTOS[m[1]] && TEXTOS[m[1]][m[2]]);
+      const n = id.match(/^N:(.+)$/);
+      return !!(n && NVART[n[1]]);
+    }
+    function abrirCita(id, ex) {
+      if (!valida(id)) return;
+      const m = id.match(/^L:(\d+):(.+)$/);
+      if (m) return abrirRef({ t: "L", ley: m[1], art: m[2], et: etiqueta(id), ex: ex || "" });
+      const nv = id.slice(2);
+      abrirRef({ t: "V", nv, et: etiqueta(id), ex: ex || "" });
+    }
+
+    /* ---------------------------------------------------------- respuesta → HTML */
+    function enLinea(s, citas) {
+      s = esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<i>$2</i>");
+      return s.replace(/\[\[\s*([LNP]:[^\]]{1,60}?)\s*\]\]/g, (_, id) => {
+        id = id.replace(/\s+/g, "").replace(/&amp;/g, "&");
+        if (id.startsWith("P:")) return "";
+        if (!valida(id)) return `<span class="tut-nover" title="Esta cita no coincide con ningún artículo de la página">(${esc(id)} · sin verificar)</span>`;
+        citas.add(id);
+        return `<button class="tut-cita" data-tcita="${esc(id)}" title="${esc(etiqueta(id))}">${esc(corta(id))}</button>`;
+      }).replace(/\s+([.,;:])/g, "$1");
+    }
+    function aHTML(texto, citas) {
+      const lineas = String(texto).replace(/\r/g, "").split("\n");
+      let html = "", lista = null;
+      const cerrar = () => { if (lista) { html += `</${lista}>`; lista = null; } };
+      for (let ln of lineas) {
+        const t = ln.trim();
+        if (!t) { cerrar(); continue; }
+        const vin = t.match(/^[-•*]\s+(.*)$/), num = t.match(/^\d+[.)]\s+(.*)$/);
+        if (vin || num) {
+          const tipo = vin ? "ul" : "ol";
+          if (lista !== tipo) { cerrar(); html += `<${tipo}>`; lista = tipo; }
+          html += `<li>${enLinea((vin || num)[1], citas)}</li>`;
+          continue;
+        }
+        cerrar();
+        const limpio = t.replace(/^#+\s*/, "");
+        if (/^\**\s*para el examen\s*:?/i.test(limpio)) html += `<p class="tut-ex">${enLinea(limpio, citas)}</p>`;
+        else if (/^\**\s*ojo\s*:/i.test(limpio)) html += `<p class="tut-ojo">${enLinea(limpio, citas)}</p>`;
+        else html += `<p>${enLinea(limpio, citas)}</p>`;
+      }
+      cerrar();
+      return html;
+    }
+    const OFICIAL = /(\.gob\.ar|infoleg|cnv\.gov|byma\.com\.ar|a3mercados\.com\.ar|cafci\.org\.ar|cajadevalores\.com\.ar|matbarofex|bcra)/i;
+
+    /* ---------------------------------------------------------- estado de la charla */
+    let CH = { m: [] };
+    try { const g = JSON.parse(localStorage.getItem(LST) || "null"); if (g && Array.isArray(g.m)) CH = g; } catch (e) { }
+    const guardar = () => { try { CH.m = CH.m.slice(-40); localStorage.setItem(LST, JSON.stringify(CH)); } catch (e) { } };
+    let ocupado = false, ultimoError = null;
+
+    const SUG = [
+      "¿Qué diferencia hay entre un AN y un ALyC?",
+      "¿Qué puede hacer y qué tiene prohibido un agente productor?",
+      "¿Cuándo es obligatorio lanzar una OPA?",
+      "¿Cuál es hoy el plazo de liquidación de contado en BYMA?",
+      "Explicame el perfil de riesgo del inversor como si fuera mi primer día",
+    ];
+    let quieto = false;
+    function pintar() {
+      const errHTML = ultimoError ? `<div class="tut-m el tut-err">${esc(ultimoError.msg)}${ultimoError.login ? cuentaHTML() : ""}${ultimoError.reintentar ? `<div><button class="tut-ib" data-treint="1">Reintentar</button></div>` : ""}</div>` : "";
+      if (!CH.m.length && !ocupado) {
+        if (errHTML) { log.innerHTML = errHTML; return; }
+        log.innerHTML = `<div class="tut-vacio"><p>Preguntame en tus palabras sobre las leyes, las Normas CNV o cómo funciona el mercado. Te respondo con el artículo que lo respalda (tocalo y se abre) y, si algo cambió, te aviso cómo es hoy.</p>` +
+          (necesitaCuenta() ? cuentaHTML() : "") +
+          `<div class="tut-sug">${SUG.map(s => `<button data-tsug="${esc(s)}">${esc(s)}</button>`).join("")}</div></div>`;
+        return;
+      }
+      log.innerHTML = CH.m.map((m, i) => m.rol === "user"
+        ? `<div class="tut-m yo"><div>${esc(m.txt)}</div></div>`
+        : mensajeHTML(m, i)).join("") +
+        (ocupado ? `<div class="tut-m el"><div class="tut-pensando"><i></i><i></i><i></i><span>${esc(ocupado === true ? "Buscando en las normas…" : ocupado)}</span></div></div>` : "") +
+        errHTML;
+      if (!quieto) requestAnimationFrame(() => { log.scrollTop = log.scrollHeight; });
+    }
+    function mensajeHTML(m, i) {
+      const citas = new Set();
+      let h = `<div class="tut-m el"><div class="tut-txt">${aHTML(m.txt, citas)}</div>`;
+      if (m.web && m.web.length) h += `<div class="tut-web">Fuentes web: ${m.web.map(w => {
+        const nom = (w.titulo || "").replace(/^www\./, "") || "fuente";
+        return `<a href="${esc(w.uri)}" target="_blank" rel="noopener">${esc(nom)}${OFICIAL.test(nom) ? '<span class="of">oficial</span>' : ""} ↗</a>`;
+      }).join("")}</div>`;
+      if (m.sug) h += `<div class="tut-gsug" data-tgs="${i}"></div>`;
+      h += `<div class="tut-pie">`;
+      if (!m.quiz) h += `<button class="tut-ib" data-tquiz="${i}">Tomame 3 preguntas sobre esto</button>`;
+      h += `</div>`;
+      if (m.quiz) h += quizHTML(m, i);
+      return h + `</div>`;
+    }
+    function montarSugerencias() {    // las sugerencias de Google van aisladas en su propia sombra
+      log.querySelectorAll("[data-tgs]").forEach(el => {
+        const m = CH.m[+el.dataset.tgs];
+        if (!m || !m.sug || el.shadowRoot) return;
+        el.attachShadow({ mode: "open" }).innerHTML = m.sug;
+      });
+    }
+    const repintar = () => { pintar(); montarSugerencias(); };
+    const repintarQuieto = () => { const y = log.scrollTop; quieto = true; repintar(); quieto = false; log.scrollTop = y; };
+
+    /* ---------------------------------------------------------- cuenta */
+    const necesitaCuenta = () => !(typeof NUBE !== "undefined" && NUBE.user);
+    const cuentaHTML = () => `<div class="tut-login">El tutor es gratis para quien tiene cuenta en la página (así se reparte el cupo diario). Entrás con tu mail o con Google, en un minuto.<div><button class="tut-ib" data-tlogin="1">Ingresar o crear cuenta</button></div></div>`;
+
+    async function llamar(ruta, cuerpo) {
+      if (necesitaCuenta()) { const e = new Error("Primero ingresá con tu cuenta."); e.login = true; throw e; }
+      const tok = await NUBE.user.getIdToken();
+      let r;
+      try {
+        r = await fetch(tutorURL() + ruta, { method: "POST", headers: { Authorization: "Bearer " + tok, "Content-Type": "application/json" }, body: JSON.stringify(cuerpo) });
+      } catch (e) {
+        const x = new Error(navigator.onLine === false ? "Sin conexión. El tutor necesita internet." : "No pude comunicarme con el tutor. Si recién se publicó, puede que todavía no esté activado.");
+        x.reintentar = true; throw x;
+      }
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) { const e = new Error(j.error || ("El tutor respondió " + r.status)); e.login = !!j.login; e.reintentar = !j.tope && !j.login && r.status >= 500; throw e; }
+      return j;
+    }
+
+    async function preguntar(texto) {
+      texto = String(texto || "").trim();
+      if (!texto || ocupado) return;
+      ultimoError = null;
+      if (necesitaCuenta()) { ultimoError = { msg: "Para usar el tutor ingresá con tu cuenta. Tu pregunta queda escrita abajo.", login: true }; inp.value = texto; ajustar(); repintar(); return; }
+      const previaUser = [...CH.m].reverse().find(m => m.rol === "user");
+      CH.m.push({ rol: "user", txt: texto });
+      guardar();
+      ocupado = true; repintar();
+      try {
+        const ix = await construir(s => { if (s) { ocupado = s; repintar(); } });
+        ocupado = true; repintar();
+        const ctx = contexto(ix, texto, previaUser && previaUser.txt);
+        const historial = CH.m.slice(0, -1).slice(-6).map(m => ({ rol: m.rol, txt: m.txt }));
+        const j = await llamar("/preguntar", { pregunta: texto, contexto: ctx, historial });
+        CH.m.push({ rol: "model", txt: j.texto, web: j.web || [], sug: j.sugerencias || "", ctx: ctx.map(c => c.id) });
+        if (j.quedan != null) $("tutcupo").textContent = j.quedan === 1 ? "Te queda 1 consulta hoy" : `Te quedan ${j.quedan} hoy`;
+      } catch (e) {
+        ultimoError = { msg: e.message || "Algo salió mal.", login: e.login, reintentar: e.reintentar, texto };
+        CH.m.pop();          // la pregunta vuelve al cuadro para no perderla
+        inp.value = texto; ajustar();
+      }
+      ocupado = false; guardar(); repintar();
+    }
+
+    /* ---------------------------------------------------------- «tomame 3 preguntas» */
+    function preguntasPara(m) {
+      const citas = new Set();
+      (m.txt.match(/\[\[\s*([LN]:[^\]]+?)\s*\]\]/g) || []).forEach(x => citas.add(x.replace(/\[\[\s*|\s*\]\]/g, "").replace(/\s+/g, "")));
+      (m.ctx || []).forEach(id => { if (/^[LN]:/.test(id)) citas.add(id); });
+      const idDe = r => r.t === "L" ? `L:${r.ley}:${artKey(r.art)}` : r.nv ? `N:${r.nv}` : null;
+      const puntaje = q => (q.refs || []).reduce((s, r) => s + (citas.has(idDe(r)) ? 1 : 0), 0);
+      let cand = PREGUNTAS.filter(q => q.ok && q.ok.length && puntaje(q) > 0).sort((a, b) => puntaje(b) - puntaje(a));
+      if (cand.length < 3) {
+        if (!IDXP) {
+          const ix = { docs: [], post: new Map(), largos: [], prom: 0, N: 0 };
+          PREGUNTAS.forEach((q, i) => {
+            const tk = tokens(q.q + " " + (q.op || []).join(" ") + " " + (q.porque || ""), false);
+            ix.docs.push({ peso: 1 }); ix.largos.push(tk.length);
+            const tf = new Map(); tk.forEach(w => tf.set(w, (tf.get(w) || 0) + 1));
+            tf.forEach((n, w) => { let p = ix.post.get(w); if (!p) ix.post.set(w, p = []); p.push(i, n); });
+          });
+          ix.N = ix.docs.length; ix.prom = ix.largos.reduce((a, b) => a + b, 0) / ix.N; IDXP = ix;
+        }
+        const ant = CH.m[CH.m.indexOf(m) - 1];
+        const acum = new Map(); puntuar(IDXP, (ant ? ant.txt : "") + " " + m.txt.slice(0, 400), 1, acum);
+        const mas = [...acum.entries()].sort((a, b) => b[1] - a[1]).map(x => PREGUNTAS[x[0]]).filter(q => q.ok && q.ok.length && !cand.includes(q));
+        cand = cand.concat(mas);
+      }
+      const top = cand.slice(0, 9);
+      for (let i = top.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [top[i], top[j]] = [top[j], top[i]]; }
+      return top.slice(0, 3).map(q => q.id);
+    }
+    function quizHTML(m, i) {
+      const z = m.quiz, ids = z.ids;
+      if (!ids.length) return `<div class="tut-quiz">No encontré preguntas del banco sobre este tema.</div>`;
+      if (z.pos >= ids.length) {
+        return `<div class="tut-quiz"><div class="tq-n">Resultado</div><div class="tq-q">${z.bien} de ${ids.length} bien${z.bien === ids.length ? " · ¡impecable!" : ""}</div>` +
+          `<button class="tut-ib" data-tquiz="${i}" data-otra="1">Otras 3</button></div>`;
+      }
+      const q = PREGUNTAS.find(x => x.id === ids[z.pos]);
+      if (!q) return "";
+      const resp = z.resp;
+      const ops = q.op.map((o, k) => {
+        let c = "";
+        if (resp != null) { if (q.ok.includes(k)) c = " bien"; else if (k === resp) c = " mal"; }
+        return `<button class="tq-o${c}" data-tqo="${i}:${k}"${resp != null ? " disabled" : ""}><b>${"abcdefghij"[k]})</b> ${esc(o)}</button>`;
+      }).join("");
+      let pie = "";
+      if (resp != null) {
+        const ref = (q.refs || [])[0];
+        const idr = ref ? (ref.t === "L" ? `L:${ref.ley}:${artKey(ref.art)}` : ref.nv ? `N:${ref.nv}` : null) : null;
+        pie = `<div class="tq-p">${q.ok.includes(resp) ? "<b>Bien.</b> " : "<b>No.</b> "}${esc(q.porque || "")}` +
+          (idr && valida(idr) ? ` <button class="tut-cita" data-tcita="${esc(idr)}" data-tex="${esc((ref.ex || "").slice(0, 300))}">${esc(corta(idr))}</button>` : "") +
+          `</div><div class="tut-pie"><button class="tut-ib" data-tqsig="${i}">${z.pos + 1 < ids.length ? "Siguiente" : "Ver resultado"}</button></div>`;
+      }
+      return `<div class="tut-quiz"><div class="tq-n">Pregunta ${z.pos + 1} de ${ids.length} · ${esc(q.id)}</div><div class="tq-q">${esc(q.q)}</div>${ops}${pie}</div>`;
+    }
+
+    /* ---------------------------------------------------------- voz */
+    let grab = null;
+    async function voz() {
+      const b = $("tutmic");
+      if (grab) { grab.detener(); return; }
+      if (necesitaCuenta()) { ultimoError = { msg: "Para usar el tutor ingresá con tu cuenta.", login: true }; repintar(); return; }
+      if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder)) { $("tutestado").textContent = "Este navegador no deja grabar audio."; return; }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true } });
+        const rec = new MediaRecorder(stream), partes = [];
+        let t0 = Date.now(), reloj;
+        rec.ondataavailable = e => { if (e.data && e.data.size) partes.push(e.data); };
+        rec.onstop = async () => {
+          stream.getTracks().forEach(t => t.stop()); clearInterval(reloj); clearTimeout(tope);
+          grab = null; b.classList.remove("grabando"); $("tutestado").textContent = "Revisá siempre la cita: el tutor puede equivocarse.";
+          if (Date.now() - t0 < 700) return;
+          ocupado = "Escuchando tu pregunta…"; repintar();
+          try {
+            const w = await aWav(new Blob(partes, { type: rec.mimeType || "audio/webm" }));
+            const j = await llamar("/transcribir", { audio: w.b64, segundos: w.segundos });
+            ocupado = false;
+            if (j.texto && j.texto.trim()) preguntar(j.texto); else { $("tutestado").textContent = "No se entendió el audio. Probá de nuevo."; repintar(); }
+          } catch (e) { ocupado = false; ultimoError = { msg: e.message, login: e.login }; repintar(); }
+        };
+        rec.start(); grab = { detener: () => rec.state !== "inactive" && rec.stop() };
+        const tope = setTimeout(() => grab && grab.detener(), 55000);
+        b.classList.add("grabando");
+        reloj = setInterval(() => { $("tutestado").textContent = `Grabando… ${Math.round((Date.now() - t0) / 1000)} s · tocá de nuevo para enviar`; }, 250);
+      } catch (e) { $("tutestado").textContent = "No se pudo usar el micrófono (revisá el permiso)."; }
+    }
+    function aWav(blob) {   // WAV 16 kHz mono, igual que Jarvis: lo entienden todos los teléfonos
+      const AC = window.AudioContext || window.webkitAudioContext, OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      const ctx = new AC();
+      return blob.arrayBuffer().then(ab => new Promise((ok, mal) => ctx.decodeAudioData(ab, ok, mal))).then(audio => {
+        try { ctx.close(); } catch (_) { }
+        const off = new OAC(1, Math.max(1, Math.ceil(audio.duration * 16000)), 16000);
+        const src = off.createBufferSource(); src.buffer = audio; src.connect(off.destination); src.start(0);
+        return off.startRendering();
+      }).then(r => {
+        const pcm = r.getChannelData(0), n = pcm.length, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+        const txt = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+        txt(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); txt(8, "WAVE"); txt(12, "fmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+        v.setUint32(24, 16000, true); v.setUint32(28, 32000, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); txt(36, "data"); v.setUint32(40, n * 2, true);
+        for (let i = 0; i < n; i++) { const x = Math.max(-1, Math.min(1, pcm[i])); v.setInt16(44 + i * 2, x < 0 ? x * 0x8000 : x * 0x7fff, true); }
+        const bytes = new Uint8Array(buf); let s = "";
+        for (let j = 0; j < bytes.length; j += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(j, j + 0x8000));
+        return { b64: btoa(s), segundos: n / 16000 };
+      });
+    }
+
+    /* ---------------------------------------------------------- abrir, cerrar, eventos */
+    const angosto = () => !window.matchMedia("(min-width: 1000px)").matches;
+    function abrir(pregunta) {
+      panel.hidden = false;
+      try { if (typeof nubeIniciar === "function") nubeIniciar(); } catch (e) { }
+      repintar();
+      if (pregunta) preguntar(pregunta);
+      else if (!angosto()) inp.focus();
+      construir(() => { }).catch(() => { });   // el índice se arma mientras escribís
+      if (location.hash !== "#tutor") history.replaceState(null, "", location.pathname + location.search + "#tutor");
+    }
+    function cerrar() {
+      panel.hidden = true;
+      if (grab) grab.detener();
+      if (location.hash === "#tutor") history.replaceState(null, "", location.pathname + location.search);
+    }
+    window.tutorAbrir = abrir;
+    function ajustar() { inp.style.height = "auto"; inp.style.height = Math.min(140, inp.scrollHeight) + "px"; }
+
+    fab.addEventListener("click", () => abrir());
+    $("tutx").addEventListener("click", cerrar);
+    $("tutnueva").addEventListener("click", () => { CH = { m: [] }; ultimoError = null; guardar(); repintar(); inp.focus(); });
+    $("tutmic").addEventListener("click", voz);
+    $("tutform").addEventListener("submit", e => { e.preventDefault(); const t = inp.value; inp.value = ""; ajustar(); preguntar(t); });
+    inp.addEventListener("input", ajustar);
+    inp.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !angosto()) { e.preventDefault(); $("tutform").requestSubmit(); } });
+    document.addEventListener("keydown", e => { if (e.key === "Escape" && !panel.hidden && !document.querySelector("dialog[open]")) cerrar(); });
+    log.addEventListener("click", e => {
+      const c = e.target.closest("[data-tcita]");
+      if (c) { abrirCita(c.dataset.tcita, c.dataset.tex); return; }
+      const s = e.target.closest("[data-tsug]");
+      if (s) { preguntar(s.dataset.tsug); return; }
+      if (e.target.closest("[data-tlogin]")) { cerrar(); setVista("perfil"); return; }
+      if (e.target.closest("[data-treint]")) { const t = ultimoError && ultimoError.texto; ultimoError = null; inp.value = ""; preguntar(t || ""); return; }
+      const qz = e.target.closest("[data-tquiz]");
+      if (qz) { const m = CH.m[+qz.dataset.tquiz]; if (m) { m.quiz = { ids: preguntasPara(m), pos: 0, bien: 0, resp: null }; guardar(); repintarQuieto(); } return; }
+      const o = e.target.closest("[data-tqo]");
+      if (o) {
+        const [i, k] = o.dataset.tqo.split(":").map(Number), m = CH.m[i], z = m && m.quiz;
+        if (!z || z.resp != null) return;
+        const q = PREGUNTAS.find(x => x.id === z.ids[z.pos]);
+        z.resp = k; if (q.ok.includes(k)) z.bien++;
+        guardar(); repintarQuieto(); return;
+      }
+      const sg = e.target.closest("[data-tqsig]");
+      if (sg) { const z = CH.m[+sg.dataset.tqsig].quiz; z.pos++; z.resp = null; guardar(); repintarQuieto(); }
+    });
+    // Desde el diálogo de una cita: «Explicámelo» abre el tutor con ese artículo
+    new MutationObserver(() => {
+      const f = $("sdfoot"); if (!f || f.querySelector("[data-texpl]")) return;
+      const tit = ($("sdtit") || {}).textContent || "";
+      if (!tit.trim()) return;
+      const b = document.createElement("button");
+      b.className = "lk"; b.dataset.texpl = "1"; b.textContent = "Explicámelo (tutor)";
+      f.appendChild(b);
+    }).observe($("sdfoot"), { childList: true });
+    document.addEventListener("click", e => {
+      if (e.target.closest("#srcdlg [data-texpl]")) {
+        const tit = $("sdtit").textContent.trim(), d = $("srcdlg");
+        if (d.open) d.close();
+        abrir(`Explicame en simple qué dice ${tit} y qué suele preguntar el examen sobre esto.`);
+        return;
+      }
+      // en el celular el tutor tapa la pantalla: si desde una cita vas a la ley o al título, se cierra
+      if (!panel.hidden && angosto() && e.target.closest("#srcdlg [data-go], #srcdlg [data-nvgo]")) cerrar();
+    }, true);
+    if (location.hash === "#tutor") setTimeout(() => abrir(), 600);
+  })();
+</script>
