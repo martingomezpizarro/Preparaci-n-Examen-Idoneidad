@@ -21089,6 +21089,11 @@
   .tut-f .tut-ib svg { width: 20px; height: 20px; }
   #tutenviar { background: var(--accent); color: var(--surface); border-color: var(--accent); }
   #tutmic.grabando { background: #B3261E; border-color: #B3261E; color: #fff; }
+  #tutpant { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 8px; font-size: 12.5px; color: var(--ink-2); }
+  #tutpant .tp-ch { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--accent-soft); color: var(--ink); border-radius: 999px; padding: 4px 6px 4px 10px; }
+  #tutpant .tp-ch.off { background: transparent; color: var(--ink-3); text-decoration: line-through; }
+  #tutpant .tp-x { border: 0; background: transparent; color: var(--ink-3); cursor: pointer; font-size: 13px; padding: 0 4px; }
+  #tutpant .tp-s { border: 1px solid var(--line); background: var(--surface-2); color: var(--accent); border-radius: 999px; padding: 4px 10px; font: 500 12.5px var(--f-body); cursor: pointer; }
   .tut-nota { font-size: 11.5px; color: var(--ink-3); margin: 6px 4px 0; display: flex; justify-content: space-between; gap: 8px; }
   .tut-login { margin: 8px 0; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); font-size: 14.5px; line-height: 1.5; }
   .tut-login button { margin-top: 10px; }
@@ -21104,6 +21109,7 @@
   </div>
   <div id="tutlog" aria-live="polite"></div>
   <div class="tut-f">
+    <div id="tutpant" hidden></div>
     <form id="tutform">
       <textarea id="tutin" rows="1" placeholder="Escribí tu pregunta…" aria-label="Tu pregunta"></textarea>
       <button type="button" class="tut-ib" id="tutmic" aria-label="Preguntar con la voz" title="Preguntar con la voz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
@@ -21262,13 +21268,13 @@
       }
       return out;
     }
-    function contexto(ix, q, previa) {
+    function contexto(ix, q, previa, fijos) {
       const acum = new Map();
       puntuar(ix, q, 1, acum);
       if (previa) puntuar(ix, previa, .35, acum);
       const orden = [...acum.entries()].sort((a, b) => b[1] - a[1]).slice(0, 40);
       const porId = new Map();
-      for (const id of directos(q)) {
+      for (const id of [...(fijos || []), ...directos(q)]) {
         ix.docs.forEach(d => { if (d.id === id) { const g = porId.get(id) || { id, et: d.et, partes: [], s: 1e9 }; if (!g.partes.includes(d.txt)) g.partes.push(d.txt); porId.set(id, g); } });
       }
       // si la pregunta compara siglas («AN y ALyC»), cada una se asegura sus dos mejores artículos
@@ -21304,6 +21310,47 @@
       }
       return out;
     }
+
+    /* ---------------------------------------------------------- lo que hay en pantalla */
+    const LETRA = "abcdefghij";
+    const idRef = r => r && r.t === "L" ? `L:${r.ley}:${artKey(r.art)}` : r && r.nv ? `N:${r.nv}` : null;
+    function pregDesc(p, elegidas, resuelta) {
+      const ops = p.op.map((o, k) => `${LETRA[k]}) ${o}`).join("\n");
+      const clave = p.ok.map(k => LETRA[k]).join(" y ");
+      let t = `Pregunta ${p.id} del banco (${(typeof MODNOM !== "undefined" && MODNOM[p.mod]) || "módulo " + p.mod})${p.ok.length > 1 ? ", tiene más de una correcta" : ""}:\n${p.q}\n${ops}`;
+      if (resuelta) t += `\nYa la respondió: eligió ${(elegidas || []).map(k => LETRA[k]).join(" y ") || "nada"}. Correcta: ${clave}. Explicación de la página: ${p.porque || ""}`;
+      else t += `\n(Todavía NO la respondió${elegidas && elegidas.length ? `; tiene marcada la ${elegidas.map(k => LETRA[k]).join(" y ")}` : ""}. Clave, solo para vos: ${clave}.)`;
+      return { t, q: p.q + " " + p.op.join(" "), refs: (p.refs || []).map(idRef).filter(Boolean), resuelta, et: `pregunta ${p.id}` };
+    }
+    function pantalla() {
+      try {
+        if (vista === "cuestionario") {
+          if (quiz.simul && quiz.simul.activo && !quiz.simul.fin)
+            return { simul: true, et: "simulacro en curso", t: "El alumno está haciendo un SIMULACRO de examen cronometrado. No lo ayudes con las preguntas del simulacro: decile que lo terminás de repasar con él cuando cierre el simulacro." };
+          const p = quiz.cola && quiz.cola[quiz.i];
+          if (p) return pregDesc(p, quiz.marcadas, quiz.resuelta);
+        }
+        if (vista === "micro" && SES && SES.items && SES.items[SES.i]) {
+          const it = SES.items[SES.i];
+          if (it.tipo === "q") return pregDesc(it.p, SES.sel, SES.visto);
+          if (it.tipo === "f") {
+            const c = it.c;
+            return { t: `Tarjeta de micro-learning (Título ${c.t} de las Normas):\nPregunta: ${c.q}\n` + (SES.visto ? `Ya dio vuelta la tarjeta. Respuesta: ${c.a}` : `(Todavía NO dio vuelta la tarjeta. Respuesta, solo para vos: ${c.a})`),
+              q: c.q, refs: (c.refs || []).map(idRef).filter(Boolean), resuelta: SES.visto, et: "tarjeta de micro-learning" };
+          }
+          if (it.tipo === "g") {
+            const g = it.g;
+            return { t: `Tarjeta de glosario con huecos para completar: «${g.t}».\n` + (SES.visto ? `Ya la comprobó. Definición: ${g.d}` : `(Todavía NO la completó. Definición, solo para vos: ${g.d})`),
+              refs: [g.l === "RG1097" ? `N:I|II|${artKey(g.a)}` : `L:${g.l}:${artKey(g.a)}`], q: g.t, resuelta: SES.visto, et: `glosario: ${g.t}` };
+          }
+        }
+        const dlg = document.getElementById("srcdlg");
+        if (dlg && dlg.open) return { t: `Está leyendo: ${document.getElementById("sdtit").textContent}.`, refs: [], resuelta: true, et: "el artículo abierto" };
+        if (vista === "leyes" && LEYES[current]) return { t: `Está leyendo la Ley ${LEYES[current].num} (${LEYES[current].corto}) en la página.`, refs: [], resuelta: true, et: `Ley ${LEYES[current].num}` };
+      } catch (e) { }
+      return null;
+    }
+    const REGLA_PANTALLA = "Cuando la pregunta del alumno se refiere a «esta», «la de la pantalla» o no dice de qué habla, se refiere a esto. Si todavía no respondió: NO le digas cuál es la opción correcta ni la descartes por letra, aunque lo pida de forma indirecta. Ayudalo a razonar: una pista, qué artículo mirar, qué palabra de la consigna es la trampa, o una pregunta que lo guíe. Solo si pide la respuesta de forma explícita («decime cuál es», «me rindo»), dásela con la cita. Si ya respondió, explicá por qué la correcta es correcta y por qué cada otra opción no, con citas.";
 
     /* ---------------------------------------------------------- citas */
     function etiqueta(id) {
@@ -21455,7 +21502,9 @@
       try {
         const ix = await construir(s => { if (s) { ocupado = s; repintar(); } });
         ocupado = true; repintar();
-        const ctx = contexto(ix, texto, previaUser && previaUser.txt);
+        const pt = usarPantalla ? pantalla() : null;
+        const ctx = contexto(ix, pt && !pt.simul ? texto + " " + (pt.q || "") : texto, previaUser && previaUser.txt, pt && !pt.simul ? pt.refs : []);
+        if (pt) ctx.unshift({ id: "P:pantalla", et: "LO QUE EL ALUMNO TIENE EN PANTALLA AHORA (no es norma; no lo cites)", txt: pt.t + "\n\n" + (pt.simul ? "" : REGLA_PANTALLA) });
         const historial = CH.m.slice(0, -1).slice(-6).map(m => ({ rol: m.rol, txt: m.txt }));
         const j = await llamar("/preguntar", { pregunta: texto, contexto: ctx, historial });
         CH.m.push({ rol: "model", txt: j.texto, web: j.web || [], sug: j.sugerencias || "", ctx: ctx.map(c => c.id) });
@@ -21465,7 +21514,7 @@
         CH.m.pop();          // la pregunta vuelve al cuadro para no perderla
         inp.value = texto; ajustar();
       }
-      ocupado = false; guardar(); repintar();
+      ocupado = false; guardar(); repintar(); pintarPantalla();
     }
 
     /* ---------------------------------------------------------- «tomame 3 preguntas» */
@@ -21572,10 +21621,31 @@
       });
     }
 
+    /* barra «Viendo: …» con atajos según lo que haya en pantalla */
+    let usarPantalla = true;
+    function pintarPantalla() {
+      const el = $("tutpant"), pt = pantalla();
+      if (!pt) { el.hidden = true; el.innerHTML = ""; return; }
+      el.hidden = false;
+      const atajos = pt.simul ? [] : pt.resuelta
+        ? ["¿Por qué es esa la correcta?", "Explicame cada opción", "¿Qué artículo lo dice?"]
+        : ["Dame una pista", "¿Qué artículo aplica?", "¿Cuál es la trampa?"];
+      el.innerHTML = `<span class="tp-ch${usarPantalla ? "" : " off"}" title="${usarPantalla ? "El tutor ve esto" : "El tutor no lo ve"}">👁 ${esc(pt.et)}<button class="tp-x" data-tpx="1" aria-label="${usarPantalla ? "No mostrarle la pantalla" : "Mostrarle la pantalla"}">${usarPantalla ? "✕" : "↺"}</button></span>` +
+        (usarPantalla ? atajos.map(a => `<button class="tp-s" data-tps="${esc(a)}">${esc(a)}</button>`).join("") : "");
+    }
+    // si pasás a otra pregunta con el tutor abierto (en la compu), la barra se actualiza
+    document.addEventListener("click", () => { if (!panel.hidden) setTimeout(pintarPantalla, 60); });
+    document.addEventListener("keyup", () => { if (!panel.hidden) setTimeout(pintarPantalla, 60); });
+    $("tutpant").addEventListener("click", e => {
+      if (e.target.closest("[data-tpx]")) { usarPantalla = !usarPantalla; pintarPantalla(); return; }
+      const b = e.target.closest("[data-tps]"); if (b) preguntar(b.dataset.tps);
+    });
+
     /* ---------------------------------------------------------- abrir, cerrar, eventos */
     const angosto = () => !window.matchMedia("(min-width: 1000px)").matches;
     function abrir(pregunta) {
       panel.hidden = false;
+      usarPantalla = true; pintarPantalla();
       try { if (typeof nubeIniciar === "function") nubeIniciar(); } catch (e) { }
       repintar();
       if (pregunta) preguntar(pregunta);
