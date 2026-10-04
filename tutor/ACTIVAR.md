@@ -4,7 +4,7 @@ La página ya tiene el tutor: el botón redondo abajo a la derecha. Falta encend
 
 ## 1. Sacar la key de Gemini
 1. Entrá a https://aistudio.google.com/apikey con tu cuenta de Google.
-2. **Create API key** → elegí o creá un proyecto (por ejemplo `idoneo-tutor`). Copiá la key (`AIza…`).
+2. **Create API key** → elegí o creá un proyecto (por ejemplo `idoneo-tutor`). Copiá la key (`AIza…`) y guardala a mano (en un bloc de notas): **no se pega en la página ni en el código**, se carga en el Worker en el paso 4, como secreto `GEMINI_API_KEY`.
 3. Plan gratuito: alcanza para empezar. Si después querés más cupo o que Google no use los datos para entrenar, activás facturación en ese proyecto (Flash-Lite cuesta unos USD 0,002 por consulta; la búsqueda en Google trae 5.000 gratis por mes y después USD 14 cada 1.000).
 
 ## 2. Crear el Worker
@@ -17,7 +17,9 @@ La página ya tiene el tutor: el botón redondo abajo a la derecha. Falta encend
 2. Volvé al Worker → **Settings → Bindings → Add → KV namespace** → nombre de variable **`CUPOS`**, namespace `idoneo-tutor-cupos` → Deploy.
 
 ## 4. Variables
-Worker → **Settings → Variables and Secrets → Add**:
+Entrá a tu Worker `idoneo-tutor` → pestaña **Settings** → sección **Variables and Secrets** → botón **+ Add**. Por cada fila de la tabla: en **Type** elegí lo que dice la tabla, en **Variable name** escribí el nombre y en **Value** pegá el valor. Al terminar, **Deploy**.
+
+La key de Gemini va en la primera fila: Type **Secret**, nombre `GEMINI_API_KEY`, y en Value pegás la key que copiaste en el paso 1.
 
 | Nombre | Tipo | Valor |
 |---|---|---|
