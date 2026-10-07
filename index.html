@@ -63,6 +63,20 @@
   .pnot blockquote { margin: 0; padding: 2px 10px; border-left: 3px solid #D9A400; font-size: 14px; line-height: 1.5; }
   .pnot-n { margin: 8px 0 0; padding: 8px 10px; border-radius: 8px; background: var(--accent-soft); font-size: 14.5px; white-space: pre-wrap; }
   .pnot-acc { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  /* Pestaña «Mis notas» */
+  #notas { max-width: 860px; }
+  #notas .nt-bar { display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: space-between; margin: 4px 0 8px; }
+  #notas .nt-g { font-family: var(--f-mono); font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2, var(--ink-3)); margin: 22px 0 8px; font-weight: 600;
+    padding-bottom: 4px; border-bottom: 1px solid var(--line, rgba(0,0,0,.1)); }
+  #notas .nt { background: var(--surface, #fff); border: 1px solid var(--line, rgba(0,0,0,.08)); border-radius: 12px; padding: 12px 14px; margin: 0 0 10px; }
+  #notas .nt-art { font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 6px; }
+  #notas .nt-cita { margin: 0; padding: 2px 0 2px 12px; border-left: 3px solid #D9A400; font-family: var(--f-serif, inherit); font-size: 15px; line-height: 1.55; }
+  #notas .nt-nota { margin-top: 10px; padding: 8px 11px; border-radius: 8px; background: var(--accent-soft); }
+  #notas .nt-nota b { display: block; font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--accent); margin-bottom: 2px; }
+  #notas .nt-nota p { margin: 0; font-size: 14.5px; white-space: pre-wrap; }
+  #notas .nt-sin { margin: 8px 0 0; font-size: 13px; color: var(--ink-3); font-style: italic; }
+  #notas .nt-acc { display: flex; gap: 4px 14px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+  #notas .nt-f { margin-left: auto; font-size: 12px; color: var(--ink-3); }
 
 
 
@@ -5518,6 +5532,7 @@
         <button class="vbtn" id="vCuest" role="tab" aria-selected="false">Cuestionario<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6"/><path d="M12 17h.01"/></svg><span class="vc" id="qcount"></span></button>
         <button class="vbtn" id="vMercado" role="tab" aria-selected="false">El mercado<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M6 16V9"/><path d="M11 16V5"/><path d="M16 16v-4"/><path d="M20 16V8"/></svg><span class="vc" id="mcount"></span></button>
         <button class="vbtn" id="vMicro" role="tab" aria-selected="false">Micro-learning<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="vc" id="ucount"></span></button>
+        <button class="vbtn" id="vNotas" role="tab" aria-selected="false">Mis notas<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span class="vc" id="ncount"></span></button>
         <button class="vbtn" id="vPerfil" role="tab" aria-selected="false">Mi perfil<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span class="vc" id="pcount"></span></button>
     </nav>
     <div class="sb-cuenta" id="sbCuenta"></div>
@@ -5607,6 +5622,11 @@
     <section id="perfil" hidden>
       <p class="uintro" id="pintro"></p>
       <div id="pzona"></div>
+    </section>
+
+    <section id="notas" hidden>
+      <p class="uintro" id="nintro">Todo lo que subrayaste en las leyes, las Normas, el glosario, las fichas y los diálogos de las citas, con el artículo al que pertenece y la nota que le escribiste. Para subrayar, seleccioná un texto y tocá «Subrayar»; tocá el subrayado para escribirle una nota. El buscador de arriba busca en el texto subrayado, en las notas y en el nombre del artículo.</p>
+      <div id="nzona"></div>
     </section>
 
     <section class="leyenda">
@@ -15804,6 +15824,7 @@
     function filter() {
       if (vista === "micro") { pintarMicro(); return; }
       if (vista === "perfil") { countEl.textContent = ""; pintarPerfil(); return; }
+      if (vista === "notas") { pintarNotas(); return; }
       if (vista === "glosario") { filterGlosario(); return; }
       if (vista === "mercado") {
         if (msub === "estructura") { pintarMercado(); return; }
@@ -15931,6 +15952,8 @@
       document.getElementById("mercado").hidden = v !== "mercado";
       document.getElementById("micro").hidden = v !== "micro";
       document.getElementById("perfil").hidden = v !== "perfil";
+      document.getElementById("notas").hidden = v !== "notas";
+      document.getElementById("vNotas").setAttribute("aria-selected", v === "notas" ? "true" : "false");
       document.getElementById("vPerfil").setAttribute("aria-selected", v === "perfil" ? "true" : "false");
       document.getElementById("vMicro").setAttribute("aria-selected", v === "micro" ? "true" : "false");
       document.querySelector(".controls .search").hidden = v === "micro" || v === "perfil";
@@ -15941,6 +15964,8 @@
       allEl.hidden = v !== "leyes";
       qEl.placeholder = v === "leyes"
         ? "Buscar: prospecto, OPA, sumario, prescripción, auditor…"
+        : v === "notas"
+          ? "Buscar en tus subrayados y notas: plazo, OPA, ALyC…"
         : v === "glosario"
           ? "Buscar un término: cuotaparte, fondo de riesgo, precio equitativo…"
           : v === "mercado"
@@ -17985,6 +18010,7 @@
       try { localStorage.setItem(LSSUB, JSON.stringify(SUB)); } catch (e) { }
       document.querySelectorAll(".subw").forEach(subAplicar);
       subPuntosLuego();
+      try { notasContador(); if (vista === "notas") pintarNotas(); } catch (e) { }
     }
 
     /* ---------------- Notas en los subrayados ----------------
@@ -18044,6 +18070,8 @@
     function notaCambio(clave) {
       subTodos(clave);
       if (typeof vista !== "undefined" && vista === "perfil" && typeof pintarPerfil === "function") pintarPerfil();
+      if (typeof vista !== "undefined" && vista === "notas") pintarNotas();
+      notasContador();
     }
     notaDlg.addEventListener("click", e => {
       if (e.target === notaDlg || e.target.closest("[data-ndx]")) { notaCerrar(); return; }
@@ -18087,24 +18115,9 @@
     }
     function notasHTMLPerfil() {
       const xs = subLista(), conNota = xs.filter(x => x.nota).length;
-      const vis = notasFiltro === "notas" ? xs.filter(x => x.nota) : xs;
-      const corta = t => t.length > 320 ? t.slice(0, 300).replace(/\s\S*$/, "") + "…" : t;
-      let grupo = "";
-      const items = vis.map(x => {
-        const et = x.src ? x.src.et : x.k;
-        const cab = et !== grupo ? `<h4 class="pnot-g">${esc(et)}</h4>` : ""; grupo = et;
-        const cita = x.src ? corta(x.src.txt.slice(x.r[0], x.r[1])) : "";
-        return cab + `<div class="pnot${x.nota ? " connota" : ""}">
-          <blockquote>«${esc(cita)}»</blockquote>
-          ${x.nota ? `<p class="pnot-n">${esc(x.nota)}</p>` : ""}
-          <div class="pnot-acc"><button class="lk" data-pnota="${esc(x.k)}|${x.i}">${x.nota ? "Editar nota" : "Agregar nota"}</button>${x.src ? `<button class="lk" data-pabrir="${esc(x.k)}|${x.i}">Ver en el texto</button>` : ""}</div>
-        </div>`;
-      }).join("");
       return `<section class="ucard pnotas" id="pnotas"><h3>Mis subrayados y notas</h3>
-        ${xs.length ? `<div class="nfil"><button class="schip" data-pnf="todas" aria-pressed="${notasFiltro === "todas"}">Todos · ${xs.length}</button><button class="schip" data-pnf="notas" aria-pressed="${notasFiltro === "notas"}">Con nota · ${conNota}</button></div>
-        ${items || `<p class="uaviso">Todavía no le agregaste notas a tus subrayados.</p>`}`
-          : `<p class="uaviso">Todavía no subrayaste nada. En cualquier texto de una ley o de las Normas, seleccioná una parte y tocá «Subrayar». Después tocás el subrayado para agregarle una nota.</p>`}
-        <p class="uaviso">${NUBE && NUBE.user ? "Se guardan en tu cuenta y los ves en todos tus dispositivos." : "Por ahora quedan en este dispositivo. Entrando con tu cuenta los tenés también en el celular y en la compu."}</p>
+        <p>${xs.length ? `Tenés <b>${xs.length}</b> ${xs.length === 1 ? "subrayado" : "subrayados"}, ${conNota} con nota.` : "Todavía no subrayaste nada."} ${xs.length ? "Están todos" : "Cuando subrayes, van a aparecer"} en la pestaña «Mis notas», con el artículo al que pertenece cada uno y su nota.</p>
+        <div class="nacc"><button class="nbtn" data-pir="notas">Ver mis notas</button></div>
       </section>`;
     }
     document.addEventListener("click", e => {
@@ -18115,6 +18128,98 @@
       const a = e.target.closest("[data-pabrir]");
       if (a) { const [k, i] = a.dataset.pabrir.split(/\|(?=\d+$)/); subAbrirTexto(k, +i); return; }
     });
+
+    /* =================== Pestaña «Mis notas» ===================
+       Lista todos los subrayados (SUB) con el texto subrayado, el artículo al que pertenece y
+       la nota, si tiene. Usa el buscador de la página. Orden: por artículo o más recientes. */
+    let notasVer = "todas", notasOrden = "articulo";
+    function notasEtiqueta(k) {
+      const src = subTextoDe(k);
+      if (src && src.et && src.et !== k) return src.et;
+      const m = k.match(/^NV:([^|]+)\|([^|]*)\|(.+)$/);
+      if (m) return nvEt(m[1], m[2], m[3]);
+      if (/^NQ:/.test(k)) return "Normas · Tít. " + k.slice(3);
+      if (/^G:/.test(k)) return "Glosario · " + k.split(":").slice(2).join(":");
+      if (/^AG:/.test(k)) return "Ficha de agente · " + k.slice(3).replace("|", " · ");
+      return k;
+    }
+    function notasIrDe(k) {               // a dónde lleva «Ir al artículo»
+      let m = k.match(/^[LR]:([^:]+):(.+)$/); if (m) return { tipo: "ley", l: m[1], a: m[2] };
+      m = k.match(/^NV:(.+)$/); if (m) return { tipo: "nv", k: m[1] };
+      m = k.match(/^AG:([^|]+)/); if (m) return { tipo: "ag", a: m[1] };
+      m = k.match(/^G:([^:]+):(.+)$/);
+      if (m && m[1] !== "RG1097") { const g = GLOSARIO.find(x => x.l === m[1] && x.t === m[2]); if (g && g.a) return { tipo: "ley", l: g.l, a: artKey(g.a) }; }
+      if (m && m[1] === "RG1097") return { tipo: "nv", k: "I|II|2" };
+      return null;
+    }
+    function notasContador() {
+      const el = document.getElementById("ncount"); if (!el) return;
+      const n = Object.values(SUB).reduce((t, r) => t + (r && r.r ? r.r.length : 0), 0);
+      el.textContent = n || "";
+    }
+    function pintarNotas() {
+      const zona = document.getElementById("nzona"); if (!zona) return;
+      const todos = subLista().map(x => ({ ...x, et: notasEtiqueta(x.k), cita: x.src ? x.src.txt.slice(x.r[0], x.r[1]) : "" }));
+      const conNota = todos.filter(x => x.nota).length;
+      const q = (qEl.value || "").trim().toLowerCase();
+      let vis = notasVer === "notas" ? todos.filter(x => x.nota) : notasVer === "sin" ? todos.filter(x => !x.nota) : todos;
+      if (q) vis = vis.filter(x => (x.et + " " + x.cita + " " + x.nota).toLowerCase().includes(q));
+      if (notasOrden === "recientes") vis = vis.slice().sort((a, b) => b.t - a.t || a.r[0] - b.r[0]);
+      countEl.textContent = todos.length ? (q || notasVer !== "todas" ? `${vis.length} de ${todos.length} subrayados` : `${todos.length} subrayados · ${conNota} con nota`) : "";
+      notasContador();
+      let conCuenta = false; try { conCuenta = !!(NUBE && NUBE.user); } catch (e) { }
+      const nube = conCuenta ? "Se guardan en tu cuenta y los ves en todos tus dispositivos." : "Por ahora quedan en este dispositivo. Entrando con tu cuenta los tenés también en el celular y en la compu.";
+      if (!todos.length) {
+        zona.innerHTML = `<section class="ucard nt-vacio"><h3>Todavía no subrayaste nada</h3>
+          <p>Abrí cualquier artículo de una ley o de las Normas, seleccioná una parte del texto y tocá «Subrayar». Después tocá el subrayado para escribirle una nota. Todo va a aparecer acá, con el artículo al que pertenece.</p>
+          <div class="nacc"><button class="nbtn" data-nt-leyes="1">Ir a las leyes</button></div>
+          <p class="uaviso">${nube}</p></section>`;
+        return;
+      }
+      const chip = (v, t, n) => `<button class="schip" data-ntv="${v}" aria-pressed="${notasVer === v}">${t} · ${n}</button>`;
+      const och = (v, t) => `<button class="schip" data-nto="${v}" aria-pressed="${notasOrden === v}">${t}</button>`;
+      const fecha = t => t ? new Date(t).toLocaleDateString("es-AR", { day: "numeric", month: "short" }) : "";
+      let grupo = "";
+      const items = vis.map(x => {
+        const porArt = notasOrden === "articulo";
+        const cab = porArt && x.et !== grupo ? `<h4 class="nt-g">${esc(x.et)}</h4>` : ""; if (porArt) grupo = x.et;
+        const ir = notasIrDe(x.k);
+        const larga = x.cita.length > 600;
+        return cab + `<article class="nt${x.nota ? " connota" : ""}">
+          ${porArt ? "" : `<div class="nt-art">${esc(x.et)}</div>`}
+          ${x.cita ? `<blockquote class="nt-cita">${esc(larga ? x.cita.slice(0, 580).replace(/\s\S*$/, "") + "…" : x.cita)}</blockquote>` : `<p class="uaviso">No se pudo recuperar el texto de este subrayado.</p>`}
+          ${x.nota ? `<div class="nt-nota"><b>Tu nota</b><p>${esc(x.nota)}</p></div>` : `<p class="nt-sin">Sin nota</p>`}
+          <div class="nt-acc">
+            <button class="lk" data-ntnota="${esc(x.k)}|${x.i}">${x.nota ? "Editar nota" : "Agregar nota"}</button>
+            ${x.src ? `<button class="lk" data-ntver="${esc(x.k)}|${x.i}">Ver en el texto</button>` : ""}
+            ${ir ? `<button class="lk" data-ntir="${esc(x.k)}">Ir al artículo</button>` : ""}
+            <span class="nt-f">${esc(fecha(x.t))}</span>
+          </div>
+        </article>`;
+      }).join("");
+      zona.innerHTML = `<div class="nt-bar"><div class="nfil">${chip("todas", "Todos", todos.length)}${chip("notas", "Con nota", conNota)}${chip("sin", "Sin nota", todos.length - conNota)}</div>
+        <div class="nfil">${och("articulo", "Por artículo")}${och("recientes", "Más recientes")}</div></div>
+        ${items || `<p class="uaviso">Ninguno coincide con la búsqueda o el filtro.</p>`}
+        <p class="uaviso">${nube}</p>`;
+    }
+    document.getElementById("nzona").addEventListener("click", e => {
+      const v = e.target.closest("[data-ntv]"); if (v) { notasVer = v.dataset.ntv; pintarNotas(); return; }
+      const o = e.target.closest("[data-nto]"); if (o) { notasOrden = o.dataset.nto; pintarNotas(); return; }
+      if (e.target.closest("[data-nt-leyes]")) { setVista("leyes"); return; }
+      const n = e.target.closest("[data-ntnota]");
+      if (n) { const [k, i] = n.dataset.ntnota.split(/\|(?=\d+$)/); notaAbrir(k, +i, true); return; }
+      const a = e.target.closest("[data-ntver]");
+      if (a) { const [k, i] = a.dataset.ntver.split(/\|(?=\d+$)/); subAbrirTexto(k, +i); return; }
+      const g = e.target.closest("[data-ntir]");
+      if (g) {
+        const d = notasIrDe(g.dataset.ntir); if (!d) return;
+        if (d.tipo === "ley") goTo(d.l, d.a);
+        else if (d.tipo === "nv") goNorma(d.k);
+        else if (d.tipo === "ag" && typeof agxIrFicha === "function") agxIrFicha(d.a);
+      }
+    });
+    document.getElementById("vNotas").addEventListener("click", () => setVista("notas"));
+    notasContador();
 
     /* botón flotante */
     const subBtn = document.createElement("button");
@@ -20512,7 +20617,7 @@
       if (h === "micro") setVista("micro");
       else if (h === "normas") { msub = "normas"; setVista("mercado"); }
       else if (h === "hoy") { msub = "hoy"; setVista("mercado"); }
-      else if (h === "notas") { setVista("perfil"); try { pintarPerfil(); } catch (e) { } setTimeout(() => document.getElementById("pnotas")?.scrollIntoView({ block: "start" }), 80); }
+      else if (h === "notas") setVista("notas");
     }
     sesRestaurar();
     window.addEventListener("hashchange", abrirPorHash);
@@ -20566,13 +20671,13 @@
           actualizarBotonPerfil();
           if (u) { await nubeTraer(); }
           else { NUBE.perfil = {}; }
-          if (vista === "perfil") pintarPerfil();
+          if (vista === "perfil") pintarPerfil(); else if (vista === "notas") pintarNotas();
         });
       } catch (e) {
         NUBE.error = "No se pudo conectar con el servicio de cuentas. Revisá la conexión.";
       }
       NUBE.cargando = false;
-      if (vista === "perfil") pintarPerfil();
+      if (vista === "perfil") pintarPerfil(); else if (vista === "notas") pintarNotas();
     }
     async function completarLink(mail) {
       try {
@@ -20675,7 +20780,7 @@
         ]);
         NUBE.ultimo = ahora; NUBE.estado = "ok"; NUBE.error = "";
       } catch (e) { NUBE.estado = "error"; NUBE.error = errorTxt(e); }
-      if (vista === "perfil") pintarPerfil();
+      if (vista === "perfil") pintarPerfil(); else if (vista === "notas") pintarNotas();
       actualizarBotonPerfil();
     }
     function nubeProgramar() {
@@ -20842,7 +20947,7 @@
 
 
     /* =================== Sidebar, Inicio e invitaciones =================== */
-    const VNOM = { inicio: "Inicio", leyes: "Las leyes", glosario: "Glosario", cuestionario: "Cuestionario", mercado: "El mercado", micro: "Micro-learning", perfil: "Mi perfil" };
+    const VNOM = { inicio: "Inicio", leyes: "Las leyes", glosario: "Glosario", cuestionario: "Cuestionario", mercado: "El mercado", micro: "Micro-learning", notas: "Mis notas", perfil: "Mi perfil" };
     const LSSB = "mapa-idoneo-sb";
     const esAncho = () => window.matchMedia("(min-width: 1000px)").matches;
     function sbAbrir(si) {
@@ -20893,7 +20998,7 @@
     }
 
     /* intros de cada pestaña y la leyenda: plegadas detrás de un (i) */
-    document.querySelectorAll(".top .lede, .glosintro, #qintro, #mintro, #uintro, #pintro").forEach(p => {
+    document.querySelectorAll(".top .lede, .glosintro, #qintro, #mintro, #uintro, #pintro, #nintro").forEach(p => {
       const d = document.createElement("details");
       d.className = "iinfo iintro";
       d.innerHTML = `<summary aria-label="Cómo funciona esta sección"><span class="ii">i</span><span>Cómo funciona esta sección</span></summary>`;
@@ -21123,7 +21228,7 @@
         perfil: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'
       };
       const DEST = [["inicio", "Hoy", "inicio"], ["leyes", "Leyes", "leyes"], ["practicar", "Practicar", "micro"], ["mercado", "Mercado", "mercado"], ["perfil", "Perfil", "perfil"]];
-      const GRUPO = { inicio: "inicio", leyes: "leyes", glosario: "leyes", cuestionario: "practicar", micro: "practicar", mercado: "mercado", perfil: "perfil" };
+      const GRUPO = { inicio: "inicio", leyes: "leyes", glosario: "leyes", cuestionario: "practicar", micro: "practicar", mercado: "mercado", notas: "perfil", perfil: "perfil" };
       const nav = document.createElement("nav");
       nav.className = "bnav"; nav.setAttribute("aria-label", "Secciones");
       nav.innerHTML = DEST.map(([k, t]) => `<button data-bn="${k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICO[k]}</svg>${t}</button>`).join("");
