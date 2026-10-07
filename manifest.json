@@ -1,6 +1,6 @@
 {
   "name": "Mapa normativo del idóneo",
-  "short_name": "Idóneo CNV",
+  "short_name": "Idóneo",
   "description": "Leyes, Normas CNV, cuestionario y micro-learning diario para el examen de idoneidad",
   "start_url": "./index.html",
   "scope": "./",
