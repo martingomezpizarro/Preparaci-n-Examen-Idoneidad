@@ -14943,10 +14943,11 @@
       const tg = e.target.closest("#nvSolo18, #nvSoloQ");
       if (tg) { tg.setAttribute("aria-pressed", tg.getAttribute("aria-pressed") === "true" ? "false" : "true"); filterNorma(); return; }
       const nt = e.target.closest("[data-nvtarj]");
-      if (nt) { const k = nt.dataset.nvtarj; microTarjetas(FLASH.filter(x => (x.refs || []).some(r => r.nv === k))); return; }
+      if (nt) { const k = nt.dataset.nvtarj; xrDesde(nt); microTarjetas(FLASH.filter(x => (x.refs || []).some(r => r.nv === k))); return; }
       const pr = e.target.closest("[data-nvpreg]");
       if (pr) {
         const k = pr.dataset.nvpreg, [t, c, a] = k.split("|");
+        xrDesde(pr);
         irAPreguntas({ nv: k, et: `Normas Tít. ${t}${c === "U" ? "" : c === "P" ? " Cap. preliminar" : " Cap. " + c} art. ${a}` });
       }
     });
@@ -15241,7 +15242,7 @@
     function xrBoton() {
       let b = document.getElementById("xvolver");
       const o = XPILA[XPILA.length - 1];
-      if (!o || vista !== "leyes") { if (b) b.hidden = true; return; }
+      if (!o || (vista !== "leyes" && !(o.away && vista !== o.vista))) { if (b) b.hidden = true; return; }
       if (!b) {
         b = document.createElement("button");
         b.id = "xvolver"; b.type = "button";
@@ -15252,6 +15253,13 @@
       b.title = XPILA.length > 1 ? `Hay ${XPILA.length} pasos para volver` : "";
       b.hidden = false;
     }
+    /* al ir a tarjetas o preguntas desde un artículo, la guía o una ficha, queda el botón para volver */
+    function xrDesde(el, et) {
+      const li = el && el.closest("li.art");
+      if (li && li.id && vista === "leyes") XPILA.push({ vista, current, id: li.id, et: xrEtiqueta(li), away: true });
+      else XPILA.push({ vista, current, y: window.scrollY, et: et || "donde estabas", away: true });
+      if (XPILA.length > 30) XPILA.shift();
+    }
     function xrVolver() {
       const o = XPILA.pop();
       if (!o) { xrBoton(); return; }
@@ -15259,6 +15267,7 @@
       if (o.dlg || !o.id) {
         if (o.vista === "leyes" && current !== o.current) show(o.current);
         window.scrollTo({ top: o.y || 0 });
+        if (o.away) setTimeout(() => window.scrollTo({ top: o.y || 0 }), 60);
         if (o.dlg) try { o.dlg(); } catch (e) { }
         xrBoton();
         return;
@@ -16376,11 +16385,12 @@
         agxGuardar(); msub = "agentes"; pintarMercado(); mzona.scrollIntoView({ block: "start" }); return;
       }
       const tj = e.target.closest("[data-afx-tarj]");
-      if (tj) { microTarjetas(agxFlashDe(tj.dataset.afxTarj)); return; }
+      if (tj) { xrDesde(null, "la ficha"); microTarjetas(agxFlashDe(tj.dataset.afxTarj)); return; }
       const pq = e.target.closest("[data-afx-preg]");
       if (pq) {
         e.stopPropagation();
         const id = pq.dataset.afxPreg, F = AGXF[id] || {};
+        xrDesde(null, "la ficha");
         irAPreguntas({ nvps: F.nv || [], lq: F.lq || [], et: `Ficha · ${agxAg(id).sig}` });
         return;
       }
@@ -18970,10 +18980,11 @@
         return;
       }
       const lt = e.target.closest("[data-leytarj]");
-      if (lt) { const [l, a] = lt.dataset.leytarj.split(":"); microTarjetas(flashDeLey(l, a)); return; }
+      if (lt) { const [l, a] = lt.dataset.leytarj.split(":"); xrDesde(lt); microTarjetas(flashDeLey(l, a)); return; }
       const pr = e.target.closest("button.lk.preg[data-preg]");
       if (pr) {
         const [leyId, key] = pr.dataset.preg.split(":");
+        xrDesde(pr);
         irAPreguntas({ ley: leyId, art: key });
         return;
       }
@@ -19736,7 +19747,7 @@
       if (e.target.closest("[data-ntodos]")) { NORMAS.forEach(n => nOpen[n.id] = true); pintarMercado(); return; }
       if (e.target.closest("[data-nninguno]")) { NORMAS.forEach(n => nOpen[n.id] = false); pintarMercado(); return; }
       const mt = e.target.closest("[data-microt]");
-      if (mt) { microTarjetas(flashDe(mt.dataset.microt)); return; }
+      if (mt) { xrDesde(null, "la guía de estudio"); microTarjetas(flashDe(mt.dataset.microt)); return; }
       const gc = e.target.closest("[data-nvgo-cap]");
       if (gc) { goNorma(gc.dataset.nvgoCap + "|"); return; }
       const hc = e.target.closest("[data-nhecho]");
@@ -19744,6 +19755,7 @@
       const pq = e.target.closest("[data-npreg]");
       if (pq) {
         const t = pq.dataset.npreg;
+        xrDesde(null, "la guía de estudio");
         irAPreguntas({ nvp: t + "|", et: `Normas Tít. ${t}` });
         return;
       }
