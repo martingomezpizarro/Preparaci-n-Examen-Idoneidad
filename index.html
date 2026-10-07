@@ -101,7 +101,7 @@
   .nvcmp { margin-top: 10px; font-size: 13.5px; }
   .nvcmp summary { cursor: pointer; color: var(--ink-2); font-weight: 600; }
   .nvcmp p { margin: 6px 0 0; padding: 8px 10px; border-radius: 8px; background: var(--surface-2); color: var(--ink-2); }
-  .lk.nvf { cursor: default; }
+  .lk.nvf { cursor: pointer; }
   @media (max-width: 700px) {
     details.ncap > summary { padding: 11px 12px; }
     details.ncap > summary .cname { font-size: 16px; }
@@ -755,6 +755,12 @@
       line-height: 1.4;
     }
 
+    .artnx { display: none; border: 1px solid var(--line-strong); background: transparent; color: var(--accent, var(--spine)); border-radius: 4px; min-width: 34px; min-height: 26px; font-size: 18px; line-height: 1; cursor: pointer; }
+    .showtxt[aria-expanded="true"] + .artnx { display: inline-flex; align-items: center; justify-content: center; }
+    .artnav { display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; }
+    .artnav-b { border: 1px solid var(--line-strong); background: transparent; color: var(--ink-3); border-radius: 6px; padding: 8px 14px; min-height: 40px; cursor: pointer; font: inherit; font-size: 14px; }
+    .artnav-b.sig { color: var(--accent, var(--spine)); border-color: currentColor; font-weight: 600; }
+    .artnav-b:disabled { opacity: .5; cursor: default; }
     .showtxt:hover {
       border-color: var(--spine);
       color: var(--spine)
@@ -14689,6 +14695,36 @@
     };
 
     const tabsEl = document.getElementById("tabs");
+    /* flechas para pasar de un artículo al siguiente sin cerrar la lectura */
+    var ARTNX_BTN = `<button class="artnx" data-artnx="1" title="Artículo siguiente" aria-label="Artículo siguiente">›</button>`;
+    var ARTNX_ROW = `<div class="artnav"><button class="artnav-b" data-artnx="-1">‹ Anterior</button><button class="artnav-b sig" data-artnx="1">Siguiente ›</button></div>`;
+    function flashDeLey(leyId, key) {
+      return FLASH.filter(c => (c.refs || []).some(r => r.t === "L" && r.ley === leyId && String(r.art) === String(key)));
+    }
+    document.addEventListener("click", e => {
+      const b = e.target.closest("[data-artnx]");
+      if (!b) return;
+      const li = b.closest("li.art");
+      const root = li && li.closest("#panel");
+      if (!root) return;
+      const todos = [...root.querySelectorAll("li.art")].filter(x => !x.classList.contains("hidden") && x.querySelector(".showtxt"));
+      const i = todos.indexOf(li), d = +b.dataset.artnx;
+      const dest = todos[i + d];
+      if (!dest) { b.textContent = d > 0 ? "Es el último" : "Es el primero"; b.disabled = true; return; }
+      const abrir = (x, on) => {
+        const t = x.querySelector(".showtxt"), box = t && document.getElementById(t.getAttribute("aria-controls"));
+        if (!t || !box) return;
+        t.setAttribute("aria-expanded", on ? "true" : "false");
+        t.textContent = on ? "Ocultar texto" : "Texto completo";
+        box.hidden = !on;
+      };
+      const todosAbiertos = document.getElementById("allText")?.getAttribute("aria-pressed") === "true";
+      if (!todosAbiertos) abrir(li, false);
+      for (let p = dest.parentElement; p && p !== root; p = p.parentElement) if (p.tagName === "DETAILS") p.open = true;
+      abrir(dest, true);
+      dest.scrollIntoView({ block: "start", behavior: "smooth" });
+      destacar(dest);
+    });
     const panelEl = document.getElementById("panel");
     const qEl = document.getElementById("q");
     const onlyEl = document.getElementById("onlyBiblio");
@@ -14795,7 +14831,7 @@
       const n18 = a.k18 && NORMTXT[a.k18] ? NORMTXT[a.k18] : null;
       const chips =
         (u.q.length ? `<button class="lk preg" data-nvpreg="${esc(k)}">${u.q.length} ${u.q.length === 1 ? "pregunta" : "preguntas"}</button>` : "") +
-        (u.f.length ? `<span class="lk nvf" title="Tarjetas del micro-learning que citan este artículo">${u.f.length} ${u.f.length === 1 ? "tarjeta" : "tarjetas"}</span>` : "") +
+        (u.f.length ? `<button class="lk nvf" data-nvtarj="${esc(k)}" title="Repasar las tarjetas del micro-learning que citan este artículo">${u.f.length} ${u.f.length === 1 ? "tarjeta" : "tarjetas"}</button>` : "") +
         (c.url ? `<a class="lk src" href="${esc(c.url)}" target="_blank" rel="noopener">Texto oficial ↗</a>` : "");
       const clave = "NV:" + k;
       return `<li class="art nart${a.d18 ? " cambio18" : ""}${u.q.length || u.f.length ? " cited" : ""}" id="${id}" data-k="${esc(k)}">` +
@@ -14806,14 +14842,14 @@
         (a.derog ? `<div class="nvpend"><b>Derogado:</b> el capítulo fue derogado; el texto queda solo como referencia.</div>` : "") +
         (a.fut ? `<div class="nvpend"><b>Cambia pronto:</b> la RG 1163/2026 lo reemplaza desde fines de octubre de 2026. El texto nuevo está al final de «Texto completo».</div>` : "") +
         (a.d18 ? `<div class="nv18"><b>Qué cambió:</b> ${esc(a.d18)}</div>` : "") +
-        `<div class="artfoot"><button class="showtxt" aria-expanded="false" aria-controls="t-${id}">Texto completo</button>${chips ? `<span class="vinc">${chips}</span>` : ""}</div>` +
+        `<div class="artfoot"><button class="showtxt" aria-expanded="false" aria-controls="t-${id}">Texto completo</button>${ARTNX_BTN}${chips ? `<span class="vinc">${chips}</span>` : ""}</div>` +
         `<div class="literal nvlit" id="t-${id}" hidden>` +
         subW(clave, nvParrafos(a, t, c.c), `${nvEt(t, c.c, a.a)}${a.ep ? " — " + a.ep : ""}`) +
         (a.fut ? `<details class="nvfut"><summary>Texto que va a regir con la RG 1163/2026</summary><p class="nvaviso">${esc(a.futNota || "")}</p>${a.fut.map(x => `<p>${XREF(x, { k: "N", t, c: c.c, a: a.a })}</p>`).join("")}</details>` : "") +
         (a.cnv ? `<p class="nvfuente">${esc(a.cnv)}</p>` : "") +
         ((a.notas || []).length ? `<div class="nvnotas">${a.notas.map(x => `<span>${esc(x)}</span>`).join("")}</div>` : "") +
         (n18 ? `<details class="nvcmp"><summary>Cómo decía el PDF de 2018 (${esc(n18.loc)}, pág. ${esc(n18.p)})</summary><p>${esc(n18.t)}</p></details>` : "") +
-        `<span class="lsrc">Normas CNV vigentes — ${esc(NV[t].al)}</span>` +
+        `<span class="lsrc">Normas CNV vigentes — ${esc(NV[t].al)}</span>` + ARTNX_ROW +
         `</div>` +
         `</div></li>`;
     }
@@ -14906,6 +14942,8 @@
       if (todo) { const on = todo.dataset.nvtodo === "1"; panelEl.querySelectorAll("details.ncap, details.nsec").forEach(d => d.open = on); return; }
       const tg = e.target.closest("#nvSolo18, #nvSoloQ");
       if (tg) { tg.setAttribute("aria-pressed", tg.getAttribute("aria-pressed") === "true" ? "false" : "true"); filterNorma(); return; }
+      const nt = e.target.closest("[data-nvtarj]");
+      if (nt) { const k = nt.dataset.nvtarj; microTarjetas(FLASH.filter(x => (x.refs || []).some(r => r.nv === k))); return; }
       const pr = e.target.closest("[data-nvpreg]");
       if (pr) {
         const k = pr.dataset.nvpreg, [t, c, a] = k.split("|");
@@ -15571,18 +15609,19 @@
         const chips = vinculos(ley.id, lit);
         const mods2 = reformas(ley.id, lit);
         const nPreg = PREGUNTAS.filter(q => preguntaCitaLey(q, ley.id, key)).length;
+        const nTarj = flashDeLey(ley.id, key).length;
         const grupos =
-          (nPreg ? `<span class="vinc"><button class="lk preg" data-preg="${ley.id}:${key}">${nPreg} ${nPreg === 1 ? "pregunta" : "preguntas"}</button></span>` : "") +
+          ((nPreg || nTarj) ? `<span class="vinc">${nPreg ? `<button class="lk preg" data-preg="${ley.id}:${key}">${nPreg} ${nPreg === 1 ? "pregunta" : "preguntas"}</button>` : ""}${nTarj ? `<button class="lk nvf" data-leytarj="${ley.id}:${key}" title="Repasar las tarjetas del micro-learning que citan este artículo">${nTarj} ${nTarj === 1 ? "tarjeta" : "tarjetas"}</button>` : ""}</span>` : "") +
           (chips.length ? `<span class="vinc"><span class="vlabel">Vínculos</span>${chips.join("")}</span>` : "") +
           (mods2.length ? `<span class="vinc"><span class="vlabel">Reformas</span>${mods2.join("")}</span>` : "") +
           `<span class="vinc"><a class="lk src" href="${ley.infoleg}" target="_blank" rel="noopener">InfoLeg ↗</a></span>`;
         pie =
           `<div class="artfoot">` +
-          `<button class="showtxt" aria-expanded="false" aria-controls="t-${ley.id}-${key}" data-subk="L:${ley.id}:${key}">Texto completo</button>` +
+          `<button class="showtxt" aria-expanded="false" aria-controls="t-${ley.id}-${key}" data-subk="L:${ley.id}:${key}">Texto completo</button>` + ARTNX_BTN +
           grupos +
           `</div>` +
           `<div class="literal" id="t-${ley.id}-${key}" hidden>${subW("L:" + ley.id + ":" + key, XREF(lit, { k: "L", l: ley.id, a: key }))}` +
-          `<span class="lsrc">Ley ${esc(ley.num)} — ${esc(ley.fuente || "texto actualizado, InfoLeg")}</span>` +
+          `<span class="lsrc">Ley ${esc(ley.num)} — ${esc(ley.fuente || "texto actualizado, InfoLeg")}</span>` + ARTNX_ROW +
           `</div>`;
       }
 
@@ -16278,7 +16317,7 @@
     <div class="afx-acc">
       ${(F.nv || []).length ? `<button class="lk" data-afx-leer="${esc(F.nv[0])}">Leer su capítulo vigente</button>` : ""}
       ${nq ? `<button class="lk preg" data-afx-preg="${id}">Practicar ${nq} ${nq === 1 ? "pregunta" : "preguntas"}</button>` : ""}
-      ${nf ? `<span class="afx-nf">${nf} ${nf === 1 ? "tarjeta" : "tarjetas"} de micro-learning lo tocan</span>` : ""}
+      ${nf ? `<button class="lk nvf" data-afx-tarj="${id}">Repasar ${nf} ${nf === 1 ? "tarjeta" : "tarjetas"}</button>` : ""}
       <button class="lk" data-afx-tabla="${id}">Verlo en la tabla</button>
       <label class="afx-cmp">Comparar con <select data-afx-cmp="${id}"><option value="">elegí…</option>${otros}</select></label>
     </div>
@@ -16336,6 +16375,8 @@
         agxEst.sel = AGX.ags.filter(x => x.g === g).map(x => x.id);
         agxGuardar(); msub = "agentes"; pintarMercado(); mzona.scrollIntoView({ block: "start" }); return;
       }
+      const tj = e.target.closest("[data-afx-tarj]");
+      if (tj) { microTarjetas(agxFlashDe(tj.dataset.afxTarj)); return; }
       const pq = e.target.closest("[data-afx-preg]");
       if (pq) {
         e.stopPropagation();
@@ -18928,6 +18969,8 @@
         if (box) box.hidden = abierto;
         return;
       }
+      const lt = e.target.closest("[data-leytarj]");
+      if (lt) { const [l, a] = lt.dataset.leytarj.split(":"); microTarjetas(flashDeLey(l, a)); return; }
       const pr = e.target.closest("button.lk.preg[data-preg]");
       if (pr) {
         const [leyId, key] = pr.dataset.preg.split(":");
@@ -19693,7 +19736,7 @@
       if (e.target.closest("[data-ntodos]")) { NORMAS.forEach(n => nOpen[n.id] = true); pintarMercado(); return; }
       if (e.target.closest("[data-nninguno]")) { NORMAS.forEach(n => nOpen[n.id] = false); pintarMercado(); return; }
       const mt = e.target.closest("[data-microt]");
-      if (mt) { microIr([mt.dataset.microt]); return; }
+      if (mt) { microTarjetas(flashDe(mt.dataset.microt)); return; }
       const gc = e.target.closest("[data-nvgo-cap]");
       if (gc) { goNorma(gc.dataset.nvgoCap + "|"); return; }
       const hc = e.target.closest("[data-nhecho]");
@@ -19981,6 +20024,20 @@
       uzona.innerHTML = microInicioHTML();
     }
 
+    /* Sesión con exactamente estas tarjetas (de un artículo, un título o una ficha),
+       aunque no venzan hoy: primero las vencidas, después las nuevas y al final el resto. */
+    function microTarjetas(cards) {
+      const hoy = hoyISO();
+      const its = (cards || []).map(c => ({ k: "f:" + c.id, tipo: "f", t: c.t, c }));
+      if (!its.length) return;
+      const venc = its.filter(x => U.c[x.k] && U.c[x.k].due <= hoy).sort((a, b) => U.c[a.k].due.localeCompare(U.c[b.k].due));
+      const nuevas = mezclar(its.filter(x => !U.c[x.k]));
+      const resto = mezclar(its.filter(x => U.c[x.k] && U.c[x.k].due > hoy));
+      setVista("micro");
+      SES = { items: [...venc, ...nuevas, ...resto], i: 0, visto: false, sel: [], bien: 0, hechas: 0, t0: Date.now(), repetidas: new Set(), pila: [] };
+      pintarMicro();
+      window.scrollTo({ top: microView.offsetTop - 10, behavior: "smooth" });
+    }
     function microIr(tits, soloNuevas, soloGlos) {
       setVista("micro");
       let items = armarSesion(tits || U.cfg.tits);
