@@ -755,11 +755,22 @@
       line-height: 1.4;
     }
 
+    .sig { text-decoration: underline dotted; text-decoration-color: color-mix(in srgb, var(--accent, var(--spine)) 55%, transparent); text-decoration-thickness: 1.5px; text-underline-offset: 3px; cursor: help; border-radius: 3px; }
+    .sig:hover, .sig:focus-visible { background: var(--accent-soft, rgba(0,0,0,.06)); outline: none; }
+    #sigpop { font-family: var(--f-body); position: fixed; inset: auto; margin: 0; z-index: 90; box-sizing: border-box; max-height: 60vh; overflow: auto; padding: 14px 16px 12px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface, var(--bg, #fff)); color: var(--ink); box-shadow: 0 10px 30px rgba(0,0,0,.22); font-size: 15px; line-height: 1.45; text-align: left; hyphens: manual; }
+    #sigpop[hidden] { display: none; }
+    #sigpop .sgp-x { position: absolute; top: 6px; right: 8px; border: 0; background: none; color: var(--ink-3); font-size: 22px; line-height: 1; padding: 4px 6px; cursor: pointer; }
+    #sigpop .sgp-s { font-family: var(--f-mono); font-size: 13px; letter-spacing: .04em; color: var(--accent, var(--spine)); margin-right: 26px; }
+    #sigpop .sgp-n { font-weight: 650; font-size: 16.5px; margin: 2px 26px 6px 0; }
+    #sigpop .sgp-d { margin: 6px 0 0; color: var(--ink-2, var(--ink)); font-size: 14.5px; text-align: left; }
+    #sigpop .sgp-ley b { color: var(--ink-3); font-weight: 600; }
+    #sigpop .sgp-acc { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    #sigpop .sgp-acc button { border: 1px solid var(--line-strong); background: transparent; color: var(--accent, var(--spine)); border-radius: 6px; padding: 7px 10px; min-height: 36px; font: inherit; font-size: 13.5px; cursor: pointer; }
     .artnx { display: none; border: 1px solid var(--line-strong); background: transparent; color: var(--accent, var(--spine)); border-radius: 4px; min-width: 34px; min-height: 26px; font-size: 18px; line-height: 1; cursor: pointer; }
     .showtxt[aria-expanded="true"] + .artnx { display: inline-flex; align-items: center; justify-content: center; }
     .artnav { display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; }
     .artnav-b { border: 1px solid var(--line-strong); background: transparent; color: var(--ink-3); border-radius: 6px; padding: 8px 14px; min-height: 40px; cursor: pointer; font: inherit; font-size: 14px; }
-    .artnav-b.sig { color: var(--accent, var(--spine)); border-color: currentColor; font-weight: 600; }
+    .artnav-b.nx { color: var(--accent, var(--spine)); border-color: currentColor; font-weight: 600; }
     .artnav-b:disabled { opacity: .5; cursor: default; }
     .showtxt:hover {
       border-color: var(--spine);
@@ -14695,9 +14706,106 @@
     };
 
     const tabsEl = document.getElementById("tabs");
+    /* ---- Siglas: subrayado punteado; al tocarlas, nombre completo y definición ---- */
+    const SIGDATA = [{"s": "AAGI", "n": "Agente Asesor Global de Inversión", "src": "N:I|II|2"}, {"s": "AAMC", "n": "Agente Asesor de Mercado de Capitales", "d": "Categoría eliminada en 2018 (RG 731); hoy existe el AAGI."}, {"s": "AAPIC", "n": "Agentes de administración de productos de inversión colectiva", "src": "N:I|II|2", "ley": "Sociedades gerentes de la ley 24.083 y sus modificaciones, a los fiduciarios financieros regidos por el capítulo 30 del libro tercero del título IV del Código Civil y Comercial de la Nación y sus modificaciones y a las demás entidades que desarrollen similares funciones y que, a criterio de la Comisión Nacional de Valores, corresponda registrar en este carácter para su actuación en el marco del funcionamiento de los productos de inversión colectiva.", "lsrc": "L:26831:2"}, {"s": "ACD", "n": "Agente de Colocación y Distribución", "src": "N:I|II|2", "ley": "Personas humanas y/o jurídicas registradas ante la Comisión Nacional de Valores para desarrollar canales de colocación y distribución de valores negociables, con arreglo a la reglamentación que a estos efectos establezca la citada Comisión.", "lsrc": "L:26831:2"}, {"s": "ACDI", "n": "Agente de Colocación y Distribución Integral", "src": "N:I|II|2"}, {"s": "ACR", "n": "Agente de Calificación de Riesgo", "src": "N:I|II|2", "ley": "Entidades registradas ante la Comisión Nacional de Valores para prestar servicios de calificación de valores negociables, y de otro tipo de riesgos, quedando bajo competencia del citado organismo las actividades afines y complementarias compatibles con el desarrollo de ese fin.", "lsrc": "L:26831:2"}, {"s": "ACR-UP", "n": "Agente de Calificación de Riesgo Universidad Pública", "src": "N:I|II|2"}, {"s": "ACRyP", "n": "Agente de Custodia, Registro y Pago", "src": "N:I|II|2"}, {"s": "ACVN", "n": "Agente de Corretaje de Valores Negociables", "src": "N:I|II|2", "ley": "Personas jurídicas registradas ante la Comisión Nacional de Valores para poner en relación a dos (2) o más partes para la conclusión de negocios sobre valores negociables, sin estar ligadas a ninguna de ellas por relaciones de colaboración, subordinación o representación (primera parte del inciso a) del artículo 34 del anexo I a la lev 25.028).", "lsrc": "L:26831:2"}, {"s": "ACyD", "n": "Agente de Colocación y Distribución", "d": "En el texto vigente: ACD.", "ley": "Personas humanas y/o jurídicas registradas ante la Comisión Nacional de Valores para desarrollar canales de colocación y distribución de valores negociables, con arreglo a la reglamentación que a estos efectos establezca la citada Comisión.", "lsrc": "L:26831:2"}, {"s": "ACyDI", "n": "Agente de Colocación y Distribución Integral", "d": "En el texto vigente: ACDI."}, {"s": "ADC", "n": "Agente de Depósito Colectivo", "d": "Hoy se llama ADCVN (Agente Depositario Central de Valores Negociables, RG 1165/2026).", "ley": "Personas jurídicas registradas ante la Comisión Nacional de Valores para recibir depósitos colectivos y regulares de valores negociables, prestar servicios de custodia, liquidación y pago de acreencias de los valores negociables depositados y en custodia y aquellas otras actividades que establezca la reglamentación de la Comisión Nacional de Valores, en los términos de la ley 20.643 y sus modificaciones y de la presente ley.", "lsrc": "L:26831:2"}, {"s": "ADCVN", "n": "Agente Depositario Central de Valores Negociables", "src": "N:I|II|2", "ley": "Personas jurídicas registradas ante la Comisión Nacional de Valores para recibir depósitos colectivos y regulares de valores negociables, prestar servicios de custodia, liquidación y pago de acreencias de los valores negociables depositados y en custodia y aquellas otras actividades que establezca la reglamentación de la Comisión Nacional de Valores, en los términos de la ley 20.643 y sus modificaciones y de la presente ley.", "lsrc": "L:26831:2"}, {"s": "ADR", "n": "American Depositary Receipt (Certificado de Depósito en Custodia)", "src": "N:I|II|2"}, {"s": "AFIP", "n": "Administración Federal de Ingresos Públicos", "d": "Hoy ARCA (Agencia de Recaudación y Control Aduanero)."}, {"s": "AIF", "n": "Autopista de la Información Financiera", "src": "N:I|II|2"}, {"s": "ALyC", "n": "Agente de Liquidación y Compensación", "src": "N:I|II|2", "ley": "Personas jurídicas registradas ante la Comisión Nacional de Valores para intervenir en la liquidación y compensación de operaciones con valores negociables registradas en el marco de mercados, incluyendo bajo su jurisdicción cualquier actividad que éstas realicen, con arreglo a la reglamentación que a estos efectos establezca la Comisión Nacional de Valores.", "lsrc": "L:26831:2"}, {"s": "AN", "n": "Agente de Negociación", "src": "N:I|II|2", "ley": "Personas jurídicas autorizadas a actuar como intermediarios de valores negociables en mercados bajo competencia del organismo, cualquier actividad vinculada y complementaria que éstos realicen, con arreglo a la reglamentación que a estos efectos establezca la Comisión Nacional de Valores.", "lsrc": "L:26831:2"}, {"s": "ANSES", "n": "Administración Nacional de la Seguridad Social", "src": "N:I|II|2"}, {"s": "AP", "n": "Agente Productor", "src": "N:I|II|2", "ley": "Personas humanas y/o jurídicas registradas ante la Comisión Nacional de Valores para desarrollar actividades de difusión y promoción de valores negociables bajo responsabilidad de un agente registrado, con arreglo a la reglamentación que a estos efectos establezca el citado organismo.", "lsrc": "L:26831:2"}, {"s": "APE", "n": "Acuerdo Preventivo Extrajudicial", "src": "N:I|II|2"}, {"s": "ARCA", "n": "Agencia de Recaudación y Control Aduanero", "d": "Ex AFIP."}, {"s": "ASG", "n": "Ambiental, Social y de Gobernanza (ESG en inglés)"}, {"s": "BADLAR", "n": "Tasa Promedio de Depósitos en Pesos con Aval de los Bancos", "d": "(Buenos Aires Deposits of Large Amounts Rate).", "src": "N:I|II|2"}, {"s": "BCRA", "n": "Banco Central de la República Argentina", "src": "N:I|II|2"}, {"s": "BID", "n": "Banco Interamericano de Desarrollo", "src": "N:I|II|2"}, {"s": "BNA", "n": "Banco de la Nación Argentina", "src": "N:I|II|2"}, {"s": "BYMA", "n": "Bolsas y Mercados Argentinos S.A.", "d": "Mercado autorizado por la CNV."}, {"s": "CABA", "n": "Ciudad Autónoma de Buenos Aires", "src": "N:I|II|2"}, {"s": "CCCN", "n": "Código Civil y Comercial de la Nación", "src": "N:I|II|2"}, {"s": "CCyC", "n": "Código Civil y Comercial de la Nación"}, {"s": "CDI", "n": "Clave de Identificación", "src": "N:I|II|2"}, {"s": "CEDEAR", "n": "Certificado de Depósito Argentino", "d": "Que constituyen valores negociables emitidos en la República Argentina, representativos de valores negociables emitidos en el exterior y custodiados por una entidad depositaria, en respaldo de los derechos de los tenedores.", "src": "N:I|II|2"}, {"s": "CER", "n": "Coeficiente de Estabilización de Referencia", "src": "N:I|II|2"}, {"s": "CEVA", "n": "Certificado de Valores", "d": "Que representa una pluralidad de otros valores negociables, depositados ante una entidad autorizada a tal fin, permitiendo su negociación indirecta en los mercados autorizados.", "src": "N:I|II|2"}, {"s": "CIE", "n": "Clave de Inversores del Exterior", "src": "N:I|II|2"}, {"s": "CNV", "n": "Comisión Nacional de Valores", "d": "Organismo que regula, supervisa y fiscaliza el mercado de capitales (Ley 26.831, Título I).", "src": "L:26831:6"}, {"s": "CPCCN", "n": "Código Procesal Civil y Comercial de la Nación", "src": "N:I|II|2"}, {"s": "CPCE", "n": "Consejo Profesional de Ciencias Económicas", "src": "N:I|II|2"}, {"s": "CSNU", "n": "Consejo de Seguridad de las Naciones Unidas", "src": "N:I|II|2"}, {"s": "CUIL", "n": "Clave Única de Identificación Laboral", "src": "N:I|II|2"}, {"s": "CUIT", "n": "Clave Única de Identificación Tributaria", "src": "N:I|II|2"}, {"s": "CVU", "n": "Clave Virtual Uniforme", "src": "N:I|II|2"}, {"s": "DDJJ", "n": "Declaración jurada", "src": "N:I|II|2"}, {"s": "DNI", "n": "Documento Nacional de Identidad", "src": "N:I|II|2"}, {"s": "DUVA", "n": "Declaración Unilateral de Voluntad de Adquisición de Acciones", "src": "N:I|II|2"}, {"s": "EECC", "n": "Estados Contables", "d": "Que son elaborados conforme a las NCPA de la FACPCE.", "src": "N:I|II|2"}, {"s": "EEFF", "n": "Estados Financieros", "d": "Elaborados conforme a las NIIF.", "src": "N:I|II|2"}, {"s": "EF", "n": "Emisor Frecuente", "src": "N:I|II|2"}, {"s": "EH", "n": "Entidad Habilitada FAL", "src": "N:I|II|2"}, {"s": "ETF", "n": "Exchange Traded Funds (Fondos Cotizados)", "src": "N:I|II|2"}, {"s": "ETP", "n": "Exchange Traded Products (Productos Cotizados)", "src": "N:I|II|2"}, {"s": "FACPCE", "n": "Federación Argentina de Consejos Profesionales de Ciencias Económicas", "src": "N:I|II|2"}, {"s": "FAL", "n": "Fondo de Asistencia Laboral", "src": "N:I|II|2"}, {"s": "FCE", "n": "Factura de Crédito Electrónica MiPyME", "src": "L:27440:4", "ley": "La \"Factura de Crédito Electrónica MiPyMEs\" constituirá un título ejecutivo y valor no cartular, conforme los términos del artículo 1850 del Código Civil y Comercial de la Nación, cuando reúna todos los requisitos que a continuación se indican:\na) Se emitan en el marco de un contrato de compraventa de bienes o locación de cosas muebles, servicios u obra;\nb) Ambas partes contratantes se domicilien en el territorio nacional;\nc) Se convenga entre las partes un plazo para el pago del precio superior a los quince (15) días corridos contados a partir de la fecha de recepción de la \"Factura de Crédito Electrónica MiPyMEs\" en el domicilio fiscal electrónico del obligado al pago;\nd) El comprador o locatario, adquiera, almacene, utilice o consuma las cosas, los servicios o la obra para integrarlos, directa o indirectamente, en un proceso de producción, transformación, comercialización o prestación a terceros, sea de manera genérica o específica.", "lsrc": "L:27440:4"}, {"s": "FCI", "n": "Fondo común de inversión", "src": "N:I|II|2", "ley": "Se considera Fondo Común de Inversión al patrimonio de titularidad de diversas personas a las cuales se les reconocen derechos de copropiedad representados por cuotapartes, las que podrán emitirse de manera cartular o escritural. Estos fondos no constituyen sociedades y carecen de personería jurídica.", "lsrc": "L:24083:1"}, {"s": "FCIA", "n": "Fondo Común de Inversión Abierto", "src": "N:I|II|2"}, {"s": "FCIC", "n": "Fondo Común de Inversión Cerrado", "src": "N:I|II|2"}, {"s": "FCICI", "n": "Fondo Común de Inversión Cerrado Inmobiliario", "src": "N:I|II|2"}, {"s": "FF", "n": "Fideicomiso financiero", "src": "N:I|II|2", "ley": "La definición ya no está en la Ley 24.441: sus artículos 1 a 26 fueron derogados por el Código Civil y Comercial, que regula el fideicomiso en el Capítulo 30 del Libro Tercero (artículos 1666 a 1707) y el fideicomiso financiero en los artículos 1690 a 1692. La Ley 26.831 lo menciona en su artículo 2, al definir a los agentes de administración de productos de inversión colectiva como los fiduciarios financieros regidos por ese capítulo del Código.", "lsrc": "L:24441:19"}, {"s": "FGS", "n": "Fondo de Garantía de Sustentabilidad del Sistema Integrado Previsional Argentino (FGS)", "src": "N:I|II|2"}, {"s": "FP", "n": "Financiamiento de la Proliferación de Armas de Destrucción Masiva", "src": "N:I|II|2"}, {"s": "GAFI", "n": "Grupo de Acción Financiera Internacional (FATF en inglés)"}, {"s": "GDE", "n": "Sistema de Gestión Documental Electrónica", "src": "N:I|II|2"}, {"s": "HR", "n": "Hecho Relevante"}, {"s": "IGJ", "n": "Inspección General de Justicia", "src": "N:I|II|2"}, {"s": "INAES", "n": "Instituto Nacional de Asociativismo y Economía Social", "src": "N:I|II|2"}, {"s": "IOSCO", "n": "Organización Internacional de Comisiones de Valores (IOSCO, por sus siglas en inglés)", "src": "N:I|II|2"}, {"s": "IPO", "n": "Oferta Pública Inicial (Initial Public Offering)"}, {"s": "LGS", "n": "Ley General de Sociedades N° 19.550"}, {"s": "LPA", "n": "Ley de Procedimiento Administrativo N° 19.549", "src": "N:I|II|2"}, {"s": "MAE", "n": "Mercado Abierto Electrónico S.A.", "d": "Mercado autorizado por la CNV (hoy integrado en A3 Mercados)."}, {"s": "MATBA", "n": "Mercado a Término de Buenos Aires", "d": "Hoy integrado en A3 Mercados."}, {"s": "MiPyME", "n": "Micro, Pequeña y Mediana Empresa"}, {"s": "NCPA", "n": "Normas Contables Profesionales Argentinas", "src": "N:I|II|2"}, {"s": "NIIF", "n": "Normas Internacionales de Información Financiera", "src": "N:I|II|2"}, {"s": "ON", "n": "Obligación Negociable", "src": "L:23576:1", "ley": "Las sociedades por acciones, las sociedades de responsabilidad limitada, las cooperativas y las asociaciones civiles constituidas en el país, y las sucursales de las sociedades por acciones constituidas en el extranjero en los términos del artículo 118 de la Ley General de Sociedades 19.550, t. o. 1.984 y sus modificaciones, pueden contraer empréstitos mediante la emisión de obligaciones negociables, conforme las disposiciones de la presente ley.", "lsrc": "L:23576:1"}, {"s": "ONs", "n": "Obligaciones Negociables", "src": "L:23576:1", "ley": "Las sociedades por acciones, las sociedades de responsabilidad limitada, las cooperativas y las asociaciones civiles constituidas en el país, y las sucursales de las sociedades por acciones constituidas en el extranjero en los términos del artículo 118 de la Ley General de Sociedades 19.550, t. o. 1.984 y sus modificaciones, pueden contraer empréstitos mediante la emisión de obligaciones negociables, conforme las disposiciones de la presente ley.", "lsrc": "L:23576:1"}, {"s": "OPA", "n": "Oferta Pública de Adquisición de acciones", "src": "N:I|II|2"}, {"s": "PEN", "n": "Poder Ejecutivo Nacional", "src": "N:I|II|2"}, {"s": "PEP", "n": "Persona Expuesta Políticamente", "d": "Régimen de la Res. UIF 35/2023 (texto según Res. UIF 192/2024)."}, {"s": "PFC", "n": "Plataforma de Financiamiento Colectivo", "src": "N:I|II|2"}, {"s": "PLAFT", "n": "Prevención del Lavado de Activos y la Financiación del Terrorismo"}, {"s": "PSAV", "n": "Proveedor de Servicios de Activos Virtuales", "src": "N:I|II|2"}, {"s": "PSP", "n": "Proveedor de Servicio de Pago", "src": "N:I|II|2"}, {"s": "PyME", "n": "Pequeña y Mediana Empresa", "src": "N:I|II|2"}, {"s": "RePET", "n": "Registro Público de Personas y Entidades vinculadas a actos de Terrorismo y su Financiamiento", "src": "N:I|II|2"}, {"s": "RFOG", "n": "Registro Fiscal de Operadores de Granos y Legumbres Secas", "src": "N:I|II|2"}, {"s": "RG", "n": "Resolución General", "src": "N:I|II|2"}, {"s": "RLPA", "n": "Reglamento de la Ley de Procedimientos Administrativos (Decreto 1759/72- T.O. 2017)", "src": "N:I|II|2"}, {"s": "RNR", "n": "Registro Nacional de Reincidencia", "src": "N:I|II|2"}, {"s": "ROFEX", "n": "Mercado a Término de Rosario", "d": "Hoy integrado en A3 Mercados."}, {"s": "ROS", "n": "Reporte de Operación Sospechosa", "src": "N:I|II|2"}, {"s": "RUCA", "n": "Registro Único de la Cadena Agroalimentaria", "src": "N:I|II|2"}, {"s": "SGR", "n": "Sociedad de Garantía Recíproca", "src": "N:I|II|2", "ley": "Caracterización. Créanse las Sociedades de Garantía Recíproca (S.G.R.) con el objeto de facilitar a las PYMES el acceso al crédito. Las Sociedades de Garantía Recíproca (S.G.R.) se regirán por las disposiciones del presente título y supletoriamente la Ley de Sociedades en particular las normas relativas a las Sociedades anónimas.", "lsrc": "L:24467:32"}, {"s": "SISA", "n": "Sistema de Información Simplificado Agrícola", "src": "N:I|II|2"}, {"s": "SOFR", "n": "Tasa de Financiamiento Garantizado a un Día (Secured Overnight Financing Rate)", "src": "N:I|II|2"}, {"s": "SSN", "n": "Superintendencia de Seguros de la Nación", "src": "N:I|II|2"}, {"s": "TAD", "n": "Trámites a Distancia", "d": "Plataforma de trámites electrónicos del Estado nacional."}, {"s": "TAMAR", "n": "Tasa Mayorista de Argentina", "src": "N:I|II|2"}, {"s": "TIR", "n": "Tasa Interna de Retorno", "src": "N:I|II|2"}, {"s": "TRD", "n": "Tecnología de Registro Distribuido o Tecnologías de Registro Distribuido, según el caso", "src": "N:I|II|2"}, {"s": "UIF", "n": "Unidad de Información Financiera", "src": "N:I|II|2"}, {"s": "UTs", "n": "Uniones transitorias de empresas", "src": "N:I|II|2"}, {"s": "UVA", "n": "Unidad de Valor Adquisitivo", "src": "N:I|II|2"}, {"s": "UVI", "n": "Unidad de Vivienda", "src": "N:I|II|2"}, {"s": "VCP", "n": "Valores de Corto Plazo"}, {"s": "VNEI", "n": "Valores Negociables de Emisión Individual", "d": "Siguientes valores negociables que gozan de oferta pública en los términos de la Ley de Mercado de Capitales y podrán ser negociados en Mercados autorizados y registrados ante la Comisión: cheques de pago diferido, cheques de pago diferido u otros valores negociables de emisión individual garantizados por Warrants, certificados de depósitos de plazo fijo, facturas de crédito electrónicas MiPyMEs, certificados de depósito y warrants, pagarés, letras de cambio y letras hipotecarias.", "src": "N:I|II|2"}, {"s": "VRD", "n": "Valores Representativos de Deuda", "d": "Valores fiduciarios de deuda que emite el fiduciario de un fideicomiso financiero."}];
+    const SIGMAP = {};
+    SIGDATA.forEach(o => {
+      const vs = [o.s, o.s.toUpperCase(), o.s + "s"];
+      if (o.s.length >= 3) vs.push(o.s.toUpperCase() + "S");
+      if (/PyME/.test(o.s)) { const p = o.s.replace("PyME", "Pyme"); vs.push(p, p + "s", o.s.replace("PyME", "PYME")); }
+      vs.forEach(v => { if (!SIGMAP[v]) SIGMAP[v] = o; });
+    });
+    const SIG_L = "A-Za-z0-9ÁÉÍÓÚÜÑáéíóúüñ";
+    const SIG_RE = new RegExp(`(?<![${SIG_L}])(${Object.keys(SIGMAP).sort((a, b) => b.length - a.length).map(k => k.replace(/[.*+?^${}()|[\]\\-]/g, "\\$&")).join("|")})(?![${SIG_L}])|\n`, "g");
+    /* texto plano → HTML escapado con las siglas marcadas (la primera de cada una por párrafo) */
+    function SIGX(raw, vistos) {
+      raw = String(raw || ""); vistos = vistos || new Set();
+      let out = "", ult = 0, m;
+      SIG_RE.lastIndex = 0;
+      while ((m = SIG_RE.exec(raw))) {
+        if (m[0] === "\n") { vistos.clear(); continue; }
+        const o = SIGMAP[m[1]];
+        if (!o || vistos.has(o.s)) continue;
+        vistos.add(o.s);
+        out += esc(raw.slice(ult, m.index)) + `<span class="sig" data-sig="${esc(o.s)}" tabindex="0" title="${esc(o.n)}">${esc(m[1])}</span>`;
+        ult = m.index + m[0].length;
+      }
+      return out + esc(raw.slice(ult));
+    }
+    const SIG_POP_OK = typeof HTMLElement !== "undefined" && "popover" in HTMLElement.prototype;
+    let sigPop = null, sigOrig = null;
+    function sigCerrar() {
+      if (!sigPop || sigPop.hidden) return;
+      try { if (SIG_POP_OK && sigPop.matches(":popover-open")) sigPop.hidePopover(); } catch (e) { }
+      sigPop.hidden = true; sigOrig = null;
+    }
+    function sigFuente(x) {
+      const [tipo, ...r] = x.split(":"), v = r.join(":");
+      if (tipo === "N") { const [t, c, a] = v.split("|"); return nvEt(t, c, a).replace("Normas CNV · ", "Normas · "); }
+      const [l, a] = v.split(":"), ley = leyPorId(l);
+      return ley ? `Ley ${ley.num}, art. ${a}` : "la ley";
+    }
+    function sigAbrir(el) {
+      const o = SIGDATA.find(x => x.s === el.dataset.sig);
+      if (!o) return;
+      if (!sigPop) {
+        sigPop = document.createElement("div");
+        sigPop.id = "sigpop"; sigPop.setAttribute("role", "dialog"); sigPop.hidden = true;
+        if (SIG_POP_OK) sigPop.setAttribute("popover", "manual");
+        document.body.appendChild(sigPop);
+        sigPop.addEventListener("click", e => {
+          const b = e.target.closest("[data-sigx]");
+          if (b) { const orig = sigOrig; sigCerrar(); sigIr(b.dataset.sigx, orig); return; }
+          if (e.target.closest("[data-sigcerrar]")) sigCerrar();
+        });
+      }
+      const corto = t => t.length > 320 ? t.slice(0, 300).replace(/\s+\S*$/, "") + "…" : t;
+      sigPop.innerHTML =
+        `<button class="sgp-x" data-sigcerrar="1" aria-label="Cerrar">×</button>` +
+        `<div class="sgp-s">${esc(o.s)}</div>` +
+        `<div class="sgp-n">${esc(o.n)}</div>` +
+        (o.d ? `<p class="sgp-d">${esc(corto(o.d))}</p>` : "") +
+        (o.ley ? `<p class="sgp-d sgp-ley"><b>En la ley:</b> ${esc(corto(o.ley))}</p>` : "") +
+        ((o.src || o.lsrc) ? `<div class="sgp-acc">` +
+          (o.src ? `<button data-sigx="${esc(o.src)}">${esc(sigFuente(o.src))} ›</button>` : "") +
+          (o.lsrc && o.lsrc !== o.src ? `<button data-sigx="${esc(o.lsrc)}">${esc(sigFuente(o.lsrc))} ›</button>` : "") +
+          `</div>` : "");
+      sigOrig = el;
+      sigPop.hidden = false;
+      if (SIG_POP_OK) { try { sigPop.showPopover(); } catch (e) { } }
+      const r = el.getBoundingClientRect(), w = Math.min(340, window.innerWidth - 24);
+      sigPop.style.width = w + "px";
+      sigPop.style.left = Math.max(12, Math.min(r.left, window.innerWidth - w - 12)) + "px";
+      const h = sigPop.offsetHeight;
+      const abajo = r.bottom + 8 + h < window.innerHeight - 70 || r.top - 8 - h < 8;
+      sigPop.style.top = Math.max(8, abajo ? r.bottom + 8 : r.top - 8 - h) + "px";
+    }
+    /* el salto usa la misma navegación que los enlaces entre artículos (con «Volver a…») */
+    function sigIr(x, orig) {
+      const a = document.createElement("a");
+      a.className = "xref"; a.dataset.x = x; a.hidden = true;
+      (orig && orig.isConnected ? orig.parentNode : document.body).insertBefore(a, orig && orig.isConnected ? orig.nextSibling : null);
+      try { xrIr(a); } finally { a.remove(); }
+    }
+    window.addEventListener("click", e => {
+      const el = e.target.closest && e.target.closest(".sig");
+      if (!el) { if (sigPop && !sigPop.hidden && !sigPop.contains(e.target)) sigCerrar(); return; }
+      const sel = window.getSelection();
+      if (sel && !sel.isCollapsed && String(sel).trim()) return;   // está subrayando
+      e.preventDefault(); e.stopPropagation();
+      if (sigOrig === el && !sigPop.hidden) { sigCerrar(); return; }
+      sigAbrir(el);
+    }, true);
+    window.addEventListener("keydown", e => {
+      if (e.key === "Escape") sigCerrar();
+      else if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("sig")) { e.preventDefault(); sigAbrir(e.target); }
+    });
+    window.addEventListener("scroll", () => sigCerrar(), true);
+    window.addEventListener("resize", () => sigCerrar());
+
     /* flechas para pasar de un artículo al siguiente sin cerrar la lectura */
     var ARTNX_BTN = `<button class="artnx" data-artnx="1" title="Artículo siguiente" aria-label="Artículo siguiente">›</button>`;
-    var ARTNX_ROW = `<div class="artnav"><button class="artnav-b" data-artnx="-1">‹ Anterior</button><button class="artnav-b sig" data-artnx="1">Siguiente ›</button></div>`;
+    var ARTNX_ROW = `<div class="artnav"><button class="artnav-b" data-artnx="-1">‹ Anterior</button><button class="artnav-b nx" data-artnx="1">Siguiente ›</button></div>`;
     function flashDeLey(leyId, key) {
       return FLASH.filter(c => (c.refs || []).some(r => r.t === "L" && r.ley === leyId && String(r.art) === String(key)));
     }
@@ -15126,7 +15234,7 @@
     function marcarX(txt, ex, ctx) { return XREF(txt || "", ctx, xrRangoMarca(txt || "", ex)); }
 
     function XREF(texto, ctx, marca) {
-      if (!texto || typeof NVKEYS === "undefined" || !ctx) return esc(texto || "");
+      if (!texto || typeof NVKEYS === "undefined" || !ctx) return SIGX(texto || "");
       const piezas = [];   // [inicio, fin, data-x]
       const selfLeyEn = ctx.k === "L" ? xrLeySelf(texto, ctx) : () => null;
       const consumido = [];
@@ -15191,7 +15299,8 @@
           if (xrNvCaps(t).length && t !== ctx.t && !tapado(m.index, m.index + m[1].length)) piezas.push([m.index, m.index + m[1].length, `T:${t}`]);
         }
       }
-      if (!piezas.length && !marca) return esc(texto);
+      if (!piezas.length && !marca) return SIGX(texto);
+      const vistos = new Set();
       piezas.sort((p, q) => p[0] - q[0]);
       const ps = []; let ult = 0;
       piezas.forEach(p => { if (p[0] >= ult) { ps.push(p); ult = p[1]; } });
@@ -15204,8 +15313,8 @@
       for (let i = 0; i < cs.length - 1; i++) {
         const a = cs[i], b = cs[i + 1];
         if (b <= a) continue;
-        let h = esc(texto.slice(a, b));
         const lk = ps.find(p => a >= p[0] && b <= p[1]);
+        let h = lk ? esc(texto.slice(a, b)) : SIGX(texto.slice(a, b), vistos);
         if (lk) h = `<a class="xref" role="link" tabindex="0" data-x="${esc(lk[2])}" title="${esc(xrTitulo(lk[2]))}">${h}</a>`;
         if (marca && a >= marca[0] && b <= marca[1]) h = `<mark>${h}</mark>`;
         out += h;
@@ -18252,7 +18361,7 @@
         fb = `<div class="qpie"><button class="qnext" id="qconfirmar">Confirmar respuesta</button></div>`;
       }
       return `<article class="qcard" data-q="${q.id}">${cabecera}
-    <p class="qtext">${esc(q.q)}</p>
+    <p class="qtext">${SIGX(q.q)}</p>
     <ul class="qops">${ops}</ul>${fb}</article>`;
     }
 
@@ -20118,8 +20227,8 @@
       if (it.tipo === "f") {
         const c = it.c, nt = ntPorId(c.t);
         cuerpo = `<div class="utag"><span class="mf norm">Tít. ${c.t}</span><span>${esc(nt ? nt.n : "")}</span>${U.c[it.k] ? `<span>· caja ${U.c[it.k].box}</span>` : "<span>· nueva</span>"}</div>
-      <p class="uq">${esc(c.q)}</p>
-      ${SES.visto ? `<div class="ua">${esc(c.a)}${(c.refs && c.refs.length) ? "" : `<div class="uf">${esc(c.f)}</div>`}</div>${notasHTML(c)}${fundamentoHTML(c, "f:" + c.id)}
+      <p class="uq">${SIGX(c.q)}</p>
+      ${SES.visto ? `<div class="ua">${SIGX(c.a)}${(c.refs && c.refs.length) ? "" : `<div class="uf">${esc(c.f)}</div>`}</div>${notasHTML(c)}${fundamentoHTML(c, "f:" + c.id)}
         <div class="ugrades">
           <button class="g1" data-ug="1">Otra vez<small>mañana</small></button>
           <button class="g2" data-ug="2">Difícil<small>${diasTxt(2, it.k)}</small></button>
@@ -20162,10 +20271,10 @@
         }).join("");
         const acierto = SES.visto && igual(SES.sel, p.ok);
         cuerpo = `<div class="utag"><span class="mf">${esc(MODNOM[p.mod] || "Banco")}</span><span>${esc(p.id)}</span>${multi ? "<span>· más de una correcta</span>" : ""}</div>
-      <p class="uq">${esc(p.q)}</p>
+      <p class="uq">${SIGX(p.q)}</p>
       <div class="uops">${ops}</div>
       ${SES.visto ? `<p class="uverdict ${acierto ? "ok" : "mal"}">${acierto ? "Correcta." : "No era esa."}</p>
-        <div class="ua">${esc(porqueDe(p))}</div>${notasHTML(p)}${fundamentoHTML(p, "q:" + p.id)}
+        <div class="ua">${SIGX(porqueDe(p))}</div>${notasHTML(p)}${fundamentoHTML(p, "q:" + p.id)}
         <div class="nacc"><button class="nbtn" data-ug="${acierto ? 3 : 1}">Seguir</button></div>`
             : `${dondeHTML(p, "q:" + p.id)}<div class="nacc"><button class="nbtn" data-ucheck="1" ${SES.sel.length ? "" : "disabled"}>Comprobar</button></div>`}`;
       }
