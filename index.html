@@ -22477,7 +22477,8 @@
     .mp-hist .din-lab { margin: 0 4px 0 0; }
     .mp-h { font: inherit; font-size: 13px; cursor: pointer; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 5px 11px; }
     .mp-h.on { background: var(--v, #0000FF); border-color: var(--v, #0000FF); color: #fff; }
-    .mp-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; align-items: start; }
+    .mp-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-areas: "mapa panel" "cuadro panel"; gap: 16px; align-items: start; }
+    .mp-izq { grid-area: mapa; } .mp-panel { grid-area: panel; } .mp-cuadro { grid-area: cuadro; }
     .mp-izq { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
     .mp-vp {
       --mv: #0000FF; --mv-soft: #EDEDFF; --mink: #0B0B0F; --mink3: #5A5D68; --mline: #C3C5CE; --mreg: #F4F4FA;
@@ -22541,11 +22542,48 @@
     .mp-ver { margin-left: auto; font: inherit; font-size: 12.5px; cursor: pointer; border: 1px solid var(--line-strong); border-radius: 999px; padding: 4px 10px; background: var(--surface); color: var(--v, #0000FF); }
     .mp-ver:hover { border-color: var(--v, #0000FF); }
     @media (max-width: 999px) {
-      .mp-cuerpo { grid-template-columns: 1fr; }
+      .mp-cuerpo { grid-template-columns: 1fr; grid-template-areas: "mapa" "panel" "cuadro"; }
       .mp-panel { max-height: none; position: static; }
     }
     @media (prefers-reduced-motion: reduce) { .mp-etq { animation: none; } .mp-nodo:hover { transform: none; } }
 
+
+    .mp-recs { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .mp-recs .din-lab { margin: 0 4px 0 0; }
+    .mp-recs button { font: 500 13px/1 var(--f-body, serif); cursor: pointer; padding: 8px 12px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface); color: var(--ink); }
+    .mp-recs button:hover { border-color: var(--v, #0000FF); color: var(--v, #0000FF); }
+    .mp-recs button[aria-selected="true"] { background: var(--v, #0000FF); border-color: var(--v, #0000FF); color: #fff; }
+    .mp-via { fill: none; stroke-width: 2; stroke-linecap: round; }
+    .mp-via.t-orden { stroke: var(--mink); }
+    .mp-via.t-titulo { stroke: var(--mv); }
+    .mp-via.t-plata { stroke: var(--mv); stroke-dasharray: 7 5; }
+    .mp-via.t-control { stroke: var(--mink3); stroke-dasharray: 2 5; }
+    .mp-via.on { stroke-width: 3; }
+    .mp-via.pasado { opacity: .35; }
+    .mp-via.futuro { opacity: .12; }
+    .mp-flecha { position: absolute; z-index: 3; width: 11px; height: 10px; clip-path: polygon(0 0, 100% 50%, 0 100%); background: var(--mv); pointer-events: none; }
+    .mp-flecha.orden { background: var(--mink); } .mp-flecha.control { background: var(--mink3); }
+    .mp-flecha.pasado { opacity: .35; }
+    .mp-pulso { position: absolute; left: 0; top: 0; z-index: 3; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--mv); box-shadow: 0 0 0 3px rgba(0, 0, 255, .18); pointer-events: none; offset-rotate: 0deg; offset-anchor: 50% 50%; animation: mpViaje 1.8s cubic-bezier(.45, 0, .55, 1) infinite both; }
+    .mp-pulso.orden { background: var(--mink); box-shadow: 0 0 0 3px rgba(0, 0, 0, .12); }
+    .mp-pulso.plata { border-radius: 2px; }
+    .mp-pulso.control { background: var(--mink3); }
+    @keyframes mpViaje { 0% { offset-distance: 0%; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { offset-distance: 100%; opacity: 0; } }
+    .mp-num { position: absolute; z-index: 4; transform: translate(-50%, -50%); width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: 700 11.5px/1 var(--f-body, serif); background: var(--mv); color: #fff; pointer-events: none; }
+    .mp-num.pasado { background: #fff; color: var(--mv); border: 1.5px solid var(--mv); box-sizing: border-box; }
+    .mp-num.futuro { background: #fff; color: var(--mink3); border: 1px solid var(--mline); box-sizing: border-box; }
+    .mp-rctl { display: flex; align-items: center; gap: 6px; margin: 10px 0 12px; }
+    .mp-rctl button { font: 500 13px/1 var(--f-body, serif); cursor: pointer; min-height: 36px; min-width: 36px; padding: 0 11px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface); color: var(--ink); }
+    .mp-rctl button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .mp-rctl .din-paso { color: var(--v, #0000FF); }
+    .mp-pasos { margin: 0; padding: 0; list-style: none; counter-reset: mpp; display: grid; gap: 4px; }
+    .mp-pasos li { counter-increment: mpp; }
+    .mp-pasos button { width: 100%; text-align: left; cursor: pointer; display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: baseline; font: 400 14px/1.4 var(--f-body, serif); color: var(--ink-2); background: none; border: 1px solid transparent; border-radius: 8px; padding: 7px 8px; }
+    .mp-pasos button::before { content: counter(mpp, decimal-leading-zero); font-weight: 700; color: var(--ink-3); }
+    .mp-pasos button:hover { border-color: var(--line); }
+    .mp-pasos button[aria-current="step"] { border-color: var(--v, #0000FF); background: var(--v-soft, #EDEDFF); color: var(--ink); }
+    .mp-pasos button[aria-current="step"]::before { color: var(--v, #0000FF); }
+    @media (prefers-reduced-motion: reduce) { .mp-pulso { display: none; } }
     /* ======================= Tipografía única: Literata en toda la página ======================= */
     :root, :root[data-zona][data-zona] {
       --f-lit: 'Literata', 'Source Serif 4', Georgia, 'Times New Roman', serif;
@@ -23473,7 +23511,7 @@
       alyc: [122, 150], an: [122, 222], aagi: [122, 294], ap: [122, 366], acvn: [122, 438],
       mercado: [380, 150], camara: [380, 260], caja: [380, 370],
       emisora: [638, 150], acr: [638, 222], gerente: [638, 294], depo: [638, 366], bancos: [638, 438],
-      inversor: [380, 540]
+      inversor: [380, 540], sgr: [638, 540]
     };
     const MP_NW = 132, MP_NH = 42;
     /* camino de una relación: recta si no pisa otra caja; si pisa, una curva que la esquive */
@@ -23591,6 +23629,13 @@
         control: ["CNV y, por ser banco, el BCRA"], req: ["Entidad financiera de la Ley 21.526"], citas: ["Ley 24.083 · art. 3", "art. 14"] },
       bancos: { n: "Bancos", sig: "Bancos", s: "cuentas de dinero", que: "Por sus cuentas se mueve la plata del mercado. Muchos bancos están registrados además como ALyC.",
         puede: ["Registrarse como ALyC o como sociedad depositaria"], nopuede: [], control: ["BCRA y, como agentes, la CNV"], req: ["Ley 21.526"], citas: ["Práctica del mercado"] },
+      sgr: { n: "Sociedad de garantía recíproca", sig: "SGR", s: "avala a las PyMEs",
+        que: "No intermedia ni custodia: avala. Existe para que una PyME acceda al crédito y al mercado con una garantía que el sistema acepta.",
+        puede: ["Otorgar garantías a sus socios partícipes y a terceros", "Asesorar a sus socios en lo técnico, económico y financiero"],
+        nopuede: ["Prestar plata a sus socios o a terceros", "Dar a un mismo socio garantías por más del 5 % del fondo de riesgo"],
+        control: ["La autoridad de aplicación que designe el Poder Ejecutivo", "El BCRA les da a sus garantías el carácter de preferidas"],
+        req: ["Pedir contragarantía a quien avala", "Fondo de riesgo", "Sindicatura de tres síndicos"],
+        citas: ["Ley 24.467 · art. 32", "art. 33", "art. 34", "art. 35", "art. 71", "art. 81"] },
       inversor: { n: "Inversor", sig: "Inversor", s: "pone la plata", que: "Opera siempre a través de un agente registrado, con una cuenta comitente a su nombre.",
         puede: ["Operar a través de un AN o un ALyC", "Darle mandato a un AAGI"], nopuede: ["Operar directo en el mercado"], control: [],
         req: ["Abrir una cuenta comitente y completar su perfil de riesgo"], citas: ["Ley 26.831 · art. 47"] }
@@ -23632,7 +23677,9 @@
       ["gerente", "depo", "separadas", "Responden de forma individual y separada: ninguna por la otra.", "separadas", "Responden de forma individual y separada.", ["Ley 24.083 · art. 4"]],
       ["gerente", "mercado", "invierte en", "Invierte el haber del fondo según el reglamento de gestión.", "opera el fondo", "Recibe las órdenes de la gerente por cuenta del fondo.", ["Ley 24.083 · art. 3"]],
       ["depo", "inversor", "cobra y paga", "Cobra sus suscripciones y le paga los rescates.", "suscribe y rescata", "Suscribe y rescata cuotapartes en la depositaria.", ["Ley 24.083 · art. 14"]],
-      ["acr", "emisora", "la califica", "Califica sus valores a pedido.", "le pide calificar", "Le pide la calificación de sus valores.", ["Ley 26.831 · art. 58"]]
+      ["acr", "emisora", "la califica", "Califica sus valores a pedido.", "le pide calificar", "Le pide la calificación de sus valores.", ["Ley 26.831 · art. 58"]],
+      ["sgr", "emisora", "la avala", "Le da una garantía a la PyME socia partícipe y le pide contragarantía.", "le pide aval", "Se asocia como socia partícipe y le pide un aval.", ["Ley 24.467 · art. 33", "art. 71"]],
+      ["bcra", "sgr", "prefiere sus avales", "Les da a sus garantías el carácter de preferidas ante el sistema financiero.", "garantía preferida", "Sus avales son garantías preferidas para el BCRA.", ["Ley 24.467 · art. 80"]]
     ];
     const MP_COLS = ["alyc", "an", "aagi", "ap", "acvn"];
     const MP_ACT = [
@@ -23661,9 +23708,9 @@
       return MP_E.filter(e => e[0] === sel || e[1] === sel).map(e => e[0] === sel
         ? { otro: e[1], c1: e[2], t: e[3], c: e[6] } : { otro: e[0], c1: e[4], t: e[5], c: e[6] });
     }
-    function mpLienzo() {
+    function mpLienzoActor() {
       const sel = MPS.sel, mios = mpMios(sel), vec = new Set(mios.map(m => m.otro));
-      const reg = [[0, 0, 760, 80, "Regulación y control"], [0, 96, 245, 388, "Intermediarios"], [257, 96, 246, 388, "Mercado y custodia"], [515, 96, 245, 388, "Emisión, fondos y bancos"], [0, 500, 760, 80, "La punta"]]
+      const reg = [[0, 0, 760, 80, "Regulación y control"], [0, 96, 245, 388, "Intermediarios"], [257, 96, 246, 388, "Mercado y custodia"], [515, 96, 245, 388, "Emisión, fondos y bancos"], [0, 500, 760, 80, "Las puntas y las garantías"]]
         .map(([x, y, w, h, t]) => `<div class="mp-reg" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"><span>${t}</span></div>`).join("");
       let lin = "", linOn = "", etq = "";
       MP_E.forEach(e => {
@@ -23680,7 +23727,7 @@
       }).join("");
       return reg + lin + nod + etq;
     }
-    function mpPanel() {
+    function mpPanelActor() {
       const d = MP[MPS.sel], mios = mpMios(MPS.sel);
       const lista = (xs, ic, cls) => xs.length ? xs.map(t => `<div class="mp-li"><span class="${cls}">${ic}</span><span>${esc(t)}</span></div>`).join("") : `<p class="mp-vacio">—</p>`;
       return `<span class="din-lab">Desde el punto de vista de</span>
@@ -23704,8 +23751,108 @@
     function mpHist() {
       return `<span class="din-lab">Viste</span>` + MPS.hist.map(id => `<button class="mp-h${id === MPS.sel ? " on" : ""}" data-mp="${id}">${esc(MP[id].sig)}</button>`).join("");
     }
+
+    /* ---- recorridos pintados sobre el mapa ---- */
+    const MP_ID = { prod: "ap", aapic: "gerente" };
+    const mpId = x => MP_ID[x] || x;
+    MPS.rec = null; MPS.paso = 0; MPS.play = false; MPS.t = 0;
+    function mpRecs() {
+      return `<span class="din-lab">Recorridos</span><button data-mprec="" aria-selected="${MPS.rec == null}">Explorar actores</button>` +
+        ESC.map((r, i) => `<button data-mprec="${i}" aria-selected="${MPS.rec === i}">${esc(r.n)}</button>`).join("");
+    }
+    function mpPunta(c, t, B) {
+      // punto de la curva justo en el borde de la caja B, y su dirección
+      const P = (u) => { const v = 1 - u; return [v * v * c.A[0] + 2 * v * u * c.C[0] + u * u * c.B[0], v * v * c.A[1] + 2 * v * u * c.C[1] + u * u * c.B[1]]; };
+      let u = t;
+      const fuera = q => Math.abs(q[0] - B[0]) > MP_NW / 2 + 2 || Math.abs(q[1] - B[1]) > MP_NH / 2 + 2;
+      while (u > 0.02 && !fuera(P(u))) u -= 0.01;
+      const q = P(u), q2 = P(Math.max(0, u - 0.02));
+      return { x: q[0], y: q[1], ang: Math.atan2(q[1] - q2[1], q[0] - q2[0]) * 180 / Math.PI };
+    }
+    function mpCaminoDir(a, b) {
+      const c = mpCamino(a, b);
+      const m = c.d.match(/Q([\d.\-]+),([\d.\-]+)/);
+      return Object.assign(c, { A: MP_POS[a], B: MP_POS[b], C: [+m[1], +m[2]] });
+    }
+    function mpLienzoRec() {
+      const R = ESC[MPS.rec], act = R.pasos[MPS.paso];
+      const enRec = new Set(), enPaso = new Set();
+      R.pasos.forEach((p, i) => p.e.forEach(([a, b]) => { [a, b].map(mpId).forEach(x => { enRec.add(x); if (i === MPS.paso) enPaso.add(x); }); }));
+      const reg = [[0, 0, 760, 80, "Regulación y control"], [0, 96, 245, 388, "Intermediarios"], [257, 96, 246, 388, "Mercado y custodia"], [515, 96, 245, 388, "Emisión, fondos y bancos"], [0, 500, 760, 80, "Las puntas y las garantías"]]
+        .map(([x, y, w, h, t]) => `<div class="mp-reg" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"><span>${t}</span></div>`).join("");
+      let base = "", vias = "", extra = "", n = 0;
+      R.pasos.forEach((p, i) => p.e.forEach(([a0, b0, tipo]) => {
+        const a = mpId(a0), b = mpId(b0); if (!MP_POS[a] || !MP_POS[b]) return;
+        const c = mpCaminoDir(a, b), est = i === MPS.paso ? "on" : i < MPS.paso ? "pasado" : "futuro";
+        vias += `<path class="mp-via t-${tipo} ${est}" d="${c.d}"/>`;
+        if (est !== "futuro") {
+          const f = mpPunta(c, 1, c.B);
+          extra += `<i class="mp-flecha ${tipo} ${est}" style="left:${f.x}px;top:${f.y}px;transform:translate(-100%,-50%) rotate(${f.ang}deg);transform-origin:100% 50%"></i>`;
+        }
+        if (i === MPS.paso && !quieto()) for (let k = 0; k < 3; k++)
+          extra += `<i class="mp-pulso ${tipo}" style="offset-path:path('${c.d}');animation-delay:${k * 0.6}s"></i>`;
+        extra += `<span class="mp-num ${est}" style="left:${c.lx}px;top:${c.ly}px">${i + 1}</span>`;
+        n++;
+      }));
+      const svg = `<svg class="mp-svg" width="${MP_W}" height="${MP_H}" viewBox="0 0 ${MP_W} ${MP_H}" aria-hidden="true">${base}${vias}</svg>`;
+      const nod = Object.keys(MP_POS).map(id => {
+        const d = MP[id], [x, y] = MP_POS[id];
+        const cls = enPaso.has(id) ? " sel" : enRec.has(id) ? " vec" : " apag";
+        return `<button class="mp-nodo${cls}" data-mp="${id}" style="left:${x - MP_NW / 2}px;top:${y - MP_NH / 2}px">${esc(d.sig.length <= 15 ? d.sig : d.n)}<small>${esc(d.s)}</small></button>`;
+      }).join("");
+      return reg + svg + nod + extra;
+    }
+    function mpPanelRec() {
+      const R = ESC[MPS.rec], p = R.pasos[MPS.paso];
+      const tipos = [...new Set(p.e.map(x => x[2]))];
+      const fichas = [...new Set(p.e.flatMap(([a, b]) => [mpId(a), mpId(b)]))].filter(id => MP[id]);
+      return `<span class="din-lab">Recorrido · ${esc(R.n)}</span>
+        <h3>${esc(p.t)}</h3>
+        <div class="mp-rctl">
+          <button id="mpRAnt" aria-label="Paso anterior">◀</button>
+          <button id="mpRPlay" aria-pressed="${MPS.play}">${MPS.play ? "Pausar" : "Reproducir"}</button>
+          <button id="mpRSig" aria-label="Paso siguiente">▶</button>
+          <span class="din-paso">${String(MPS.paso + 1).padStart(2, "0")}<small>/${String(R.pasos.length).padStart(2, "0")}</small></span>
+        </div>
+        ${tipos.map(t => `<span class="din-tipo"><i class="k-${t}"></i>${esc(TIPOS[t])}</span>`).join(" ")}
+        <p class="mp-que">${esc(p.x)}</p>${chipsDe(p)}
+        <div class="mp-sec"><span class="din-lab">Quiénes intervienen · tocá uno para verlo desde su lugar</span>
+          <div class="din-chips">${fichas.map(id => `<button class="mp-ver" data-mp="${id}">${esc(MP[id].sig)}</button>`).join("")}</div></div>
+        <div class="mp-sec"><span class="din-lab">${esc(R.d)}</span>
+          <ol class="mp-pasos">${R.pasos.map((q, i) => `<li><button data-mppaso="${i}"${i === MPS.paso ? ' aria-current="step"' : ""}>${esc(q.t)}</button></li>`).join("")}</ol></div>`;
+    }
+    function mpLienzo() { return MPS.rec == null ? mpLienzoActor() : mpLienzoRec(); }
+    function mpPanel() { return MPS.rec == null ? mpPanelActor() : mpPanelRec(); }
+    function mpRefrescar() {
+      const l = document.getElementById("mpLienzo"); if (l) l.innerHTML = mpLienzo();
+      const p = document.getElementById("mpPanel"); if (p) p.innerHTML = mpPanel();
+      const r = document.getElementById("mpRecs"); if (r) r.innerHTML = mpRecs();
+      const q = document.getElementById("mpAyuda"); if (q) q.innerHTML = mpAyuda();
+    }
+    function mpRecorrido(i) {
+      MPS.rec = i; MPS.paso = 0; MPS.play = i != null && !quieto(); MPS.t = Date.now();
+      mpRefrescar();
+      const p = document.getElementById("mpPanel"); if (p) p.scrollTop = 0;
+    }
+    function mpPaso(i) {
+      if (MPS.rec == null) return;
+      const n = ESC[MPS.rec].pasos.length;
+      MPS.paso = (i + n) % n; MPS.t = Date.now();
+      mpRefrescar();
+    }
+    setInterval(() => {
+      if (!MPS.play || MPS.rec == null || vista !== "mercado" || msub !== "mapa" || document.hidden) return;
+      if (!document.getElementById("mpVp")) return;
+      if (Date.now() - MPS.t > 5200) mpPaso(MPS.paso + 1);
+    }, 400);
+    function mpAyuda() {
+      return MPS.rec == null
+        ? `Arrastrá para moverte y acercá con los botones o con Ctrl + rueda. Las etiquetas dicen cada relación vista desde <b>${esc(MP[MPS.sel].sig)}</b>.`
+        : `Los números marcan el orden de los pasos: lo que ya pasó queda tenue y el paso actual se mueve. Tocá un actor para verlo desde su lugar.`;
+    }
     function mpHTML() {
       return `<div class="mp">
+        <div class="mp-recs" id="mpRecs" role="tablist" aria-label="Recorridos">${mpRecs()}</div>
         <div class="mp-hist" id="mpHist">${mpHist()}</div>
         <div class="mp-cuerpo">
           <div class="mp-izq">
@@ -23713,11 +23860,11 @@
               <div class="mp-lienzo" id="mpLienzo" style="width:${MP_W}px;height:${MP_H}px">${mpLienzo()}</div>
               <div class="mp-zoom"><button id="mpMenos" aria-label="Alejar">−</button><button id="mpAjustar">Ver todo</button><button id="mpMas" aria-label="Acercar">+</button></div>
             </div>
-            <p class="mp-ayuda">Arrastrá para moverte, acercá con los botones o con Ctrl + rueda. Las etiquetas dicen cada relación vista desde <b id="mpQuien">${esc(MP[MPS.sel].sig)}</b>.</p>
-            <section class="mp-cuadro"><div class="mp-cuadro-h"><span class="din-lab">Cuadro comparativo</span><span>Tocá el nombre de una columna para verlo en el mapa.</span></div>
-              <div class="mp-tbl-box" id="mpTabla">${mpTabla()}</div></section>
+            <p class="mp-ayuda" id="mpAyuda">${mpAyuda()}</p>
           </div>
           <aside class="din-panel mp-panel" id="mpPanel" aria-live="polite">${mpPanel()}</aside>
+          <section class="mp-cuadro"><div class="mp-cuadro-h"><span class="din-lab">Cuadro comparativo</span><span>Tocá el nombre de una columna para verlo en el mapa.</span></div>
+            <div class="mp-tbl-box" id="mpTabla">${mpTabla()}</div></section>
         </div>
       </div>`;
     }
@@ -23744,13 +23891,15 @@
     }
     function mpElegir(id) {
       if (!MP[id]) return;
+      MPS.rec = null; MPS.play = false;
+      const rb = document.getElementById("mpRecs"); if (rb) rb.innerHTML = mpRecs();
       MPS.sel = id; guardar("mapa-idoneo-mapa-sel", id);
       MPS.hist = MPS.hist.filter(x => x !== id).concat(id).slice(-8);
       const l = document.getElementById("mpLienzo"); if (l) l.innerHTML = mpLienzo();
       const p = document.getElementById("mpPanel"); if (p) { p.innerHTML = mpPanel(); p.scrollTop = 0; }
       const t = document.getElementById("mpTabla"); if (t) t.innerHTML = mpTabla();
       const h = document.getElementById("mpHist"); if (h) h.innerHTML = mpHist();
-      const q = document.getElementById("mpQuien"); if (q) q.textContent = MP[id].sig;
+      const q = document.getElementById("mpAyuda"); if (q) q.innerHTML = mpAyuda();
       if (innerWidth < 1000 && p) p.scrollIntoView({ behavior: quieto() ? "auto" : "smooth", block: "nearest" });
     }
     function mpArmar() {
@@ -23807,6 +23956,13 @@
       if (e.target.closest("#mpMas")) { mpZoom(1.2); return; }
       if (e.target.closest("#mpMenos")) { mpZoom(1 / 1.2); return; }
       if (e.target.closest("#mpAjustar")) { mpAjustar(); return; }
+      const rc = e.target.closest("[data-mprec]");
+      if (rc) { mpRecorrido(rc.dataset.mprec === "" ? null : +rc.dataset.mprec); return; }
+      const ps = e.target.closest("[data-mppaso]");
+      if (ps) { MPS.play = false; mpPaso(+ps.dataset.mppaso); return; }
+      if (e.target.closest("#mpRAnt")) { MPS.play = false; mpPaso(MPS.paso - 1); return; }
+      if (e.target.closest("#mpRSig")) { MPS.play = false; mpPaso(MPS.paso + 1); return; }
+      if (e.target.closest("#mpRPlay")) { MPS.play = !MPS.play; MPS.t = Date.now(); mpRefrescar(); return; }
       const b = e.target.closest("[data-mp]");
       if (b) mpElegir(b.dataset.mp);
     }, true);
