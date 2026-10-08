@@ -5656,7 +5656,7 @@
             style="background:var(--accent);color:var(--surface);border-color:var(--accent)">Mer</span><span>La pestaña
             <b>El mercado</b> arma el mapa de quién es quién. <b>Estructura</b>: el mercado de arriba hacia abajo, con la CNV
             por encima de todos, los agentes que liquidan y custodian más grandes que los que solo negocian, el
-            inversor y, en la base, la Caja de Valores; abajo, qué se emite y quién lo emite. Tocá una caja para ver qué es. <b>Dinámica</b>: recorridos animados paso a paso —comprar acciones, suscribir un FCI, emitir una ON, un cheque avalado, una caución y quién controla a quién— con lo que viaja entre los agentes, el mercado y el sistema financiero. <b>Agentes</b>: los catorce agentes en una sola tabla, con qué puede hacer
+            inversor y, en la base, la Caja de Valores; abajo, qué se emite y quién lo emite. Tocá una caja para ver qué es. <b>Mapa interactivo</b>: todos los actores y sus relaciones vistas desde cada uno, con recorridos paso a paso —comprar acciones, suscribir un FCI, emitir una ON, un cheque avalado, una caución y quién controla a quién— y el cuadro comparativo. <b>Agentes</b>: los catorce agentes en una sola tabla, con qué puede hacer
             cada uno, qué tiene prohibido y cómo se compara con los demás sección por sección, con el artículo de cada dato. <b>Instrumentos</b>: cada valor negociable con quién lo emite, lo
             negocia, lo custodia, lo califica y lo controla. <b>Fichas</b>: el detalle de cada actor con sus
             números.</span></li>
@@ -22663,7 +22663,7 @@
           ["cuestionario", "Cuestionario", `${nP} preguntas con corrección inmediata y el artículo que las responde.`, "Practicar", "data-ini"],
           ["simulacro", "Simulacro", "Como el examen real: 60 preguntas en 45 minutos, con tu nota por módulo.", "Armar un simulacro", "data-zini"]],
         mercado: [
-          ["dinamica", "Cómo se mueve el mercado", "Órdenes, títulos y plata entre agentes, mercado y bancos, paso a paso.", "Ver la dinámica", "data-zini"],
+          ["dinamica", "Cómo se mueve el mercado", "Órdenes, títulos y plata entre agentes, mercado y bancos, paso a paso.", "Ver el mapa", "data-zini"],
           ["hoy", "Quién es quién hoy", "Cada categoría de agente, si hoy se usa y con nombres reales.", "Ver el mercado real", "data-ini"],
           ["agentes", "Agentes y fichas", "Qué puede y qué no puede cada agente, con su artículo.", "Comparar agentes", "data-zini"]]
       };
@@ -22766,7 +22766,7 @@
       if (!z) return;
       const d = z.dataset.zini;
       if (d === "simulacro") { setVista("cuestionario"); const b = document.getElementById("mSimulacro"); if (b) b.click(); }
-      else if (d === "dinamica" || d === "agentes") { msub = d; setVista("mercado"); pintarMercado(); }
+      else if (d === "dinamica" || d === "agentes") { msub = d === "dinamica" ? "mapa" : d; setVista("mercado"); pintarMercado(); }
     });
     if (vista === "inicio") pintarInicio();
 
@@ -23460,7 +23460,7 @@
     /* la subpestaña nueva, después de «Estructura» */
     if (typeof MSUBS !== "undefined" && !MSUBS.some(x => x[0] === "dinamica")) {
       const i = MSUBS.findIndex(x => x[0] === "estructura");
-      MSUBS.splice(i + 1, 0, ["dinamica", "Dinámica"]);
+      /* la Dinámica se retiró: sus recorridos viven en el Mapa interactivo */
     }
     {
       const pm = pintarMercado;
@@ -23938,6 +23938,7 @@
     {
       const pm2 = pintarMercado;
       pintarMercado = function () {
+        if (msub === "dinamica") msub = "mapa";
         if (msub !== "mapa") return pm2();
         dinParar();
         msubEl.innerHTML = MSUBS.map(([k, n]) => `<button class="mtab" data-msub="${k}" aria-selected="${msub === k}">${n}</button>`).join("");
@@ -23973,9 +23974,9 @@
     }
     if (location.hash === "#mapa") { msub = "mapa"; setVista("mercado"); pintarMercado(); }
 
-    try { if (vista === "cuestionario") pintarCuestionario(); else if (vista === "micro") pintarMicro(); } catch (e) { }
+    try { if (vista === "cuestionario") pintarCuestionario(); else if (vista === "micro") pintarMicro(); else if (vista === "mercado") pintarMercado(); } catch (e) { }
     /* #dinamica abre directo el recorrido */
-    if (location.hash === "#dinamica") { msub = "dinamica"; setVista("mercado"); pintarMercado(); }
+    if (location.hash === "#dinamica") { msub = "mapa"; setVista("mercado"); pintarMercado(); }
     else if (vista === "mercado" && msub === "dinamica") pintarMercado();
   })();
 </script>
