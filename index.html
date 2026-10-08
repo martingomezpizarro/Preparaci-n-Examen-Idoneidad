@@ -22469,6 +22469,19 @@
       .zm-red .act { animation: none; }
       .din svg .d-nodo.llega .d-halo { animation: none; }
     }
+
+    /* ======================= Tipografía única: Literata en toda la página ======================= */
+    :root, :root[data-zona][data-zona] {
+      --f-lit: 'Literata', 'Source Serif 4', Georgia, 'Times New Roman', serif;
+      --f-display: var(--f-lit); --f-body: var(--f-lit); --f-law: var(--f-lit);
+      --f-label: var(--f-lit); --f-mono: var(--f-lit); --f-num: var(--f-lit); --f-pixel: var(--f-lit);
+    }
+    body { font-family: var(--f-lit); font-optical-sizing: auto; }
+    :root[data-zona="mercado"] .mtab { font-size: 11.5px; padding: 8px 10px; letter-spacing: .01em; }
+    .din-esc button { font-size: 11.5px; padding: 9px 10px; letter-spacing: .01em; }
+    button, input, select, textarea { font-family: inherit; }
+    .zhud, .zatajos, .din-paso, .din-pasos button::before, :root[data-zona] .qhead, :root[data-zona] .utag,
+    :root[data-zona] .count, :root[data-zona] .qstat { font-variant-numeric: tabular-nums lining-nums; }
 </style>
 <script id="zonas-js">
   /* =================== Estilos por zona v2, Inicio nuevo, estudio interactivo y Dinámica del mercado (08/10/2026) =================== */
@@ -22493,7 +22506,7 @@
     {
       const l = document.createElement("link");
       l.rel = "stylesheet";
-      l.href = "https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Doto:wght@700&display=swap";
+      l.href = "https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;0,7..72,700;1,7..72,400;1,7..72,600&display=swap";
       document.head.appendChild(l);
     }
     {
