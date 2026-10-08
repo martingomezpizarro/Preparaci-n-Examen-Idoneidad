@@ -22470,6 +22470,82 @@
       .din svg .d-nodo.llega .d-halo { animation: none; }
     }
 
+
+    /* ---------- Mapa interactivo del mercado (A + C) ---------- */
+    .mp { margin-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+    .mp-hist { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .mp-hist .din-lab { margin: 0 4px 0 0; }
+    .mp-h { font: inherit; font-size: 13px; cursor: pointer; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 5px 11px; }
+    .mp-h.on { background: var(--v, #0000FF); border-color: var(--v, #0000FF); color: #fff; }
+    .mp-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; align-items: start; }
+    .mp-izq { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+    .mp-vp {
+      --mv: #0000FF; --mv-soft: #EDEDFF; --mink: #0B0B0F; --mink3: #5A5D68; --mline: #C3C5CE; --mreg: #F4F4FA;
+      position: relative; height: 560px; border: 1px solid #E4E5EA; border-radius: 12px; background: #FFFFFF; overflow: hidden;
+      cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; color: var(--mink);
+    }
+    .mp-vp.arrastrando { cursor: grabbing; }
+    .mp-lienzo { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+    .mp-reg { position: absolute; border-radius: 14px; background: var(--mreg); }
+    .mp-reg span { position: absolute; left: 14px; top: 9px; font: 500 11px/1.4 var(--f-label, serif); letter-spacing: .08em; text-transform: uppercase; color: var(--mink3); }
+    .mp-svg { position: absolute; left: 0; top: 0; z-index: 1; pointer-events: none; overflow: visible; }
+    .mp-lin { fill: none; stroke: #CDD0D8; stroke-width: 1.2; opacity: .7; }
+    .mp-lin.on { stroke: var(--mv); stroke-width: 2; opacity: 1; }
+    .mp-nodo {
+      position: absolute; z-index: 2; width: 132px; height: 42px; box-sizing: border-box; padding: 0; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+      font: 600 13.5px/1.15 var(--f-display, serif); color: var(--mink); background: #FFFFFF; border: 1px solid var(--mline); border-radius: 9px;
+      transition: opacity 200ms ease, border-color 160ms ease, background-color 160ms ease, transform 160ms var(--ease-out, ease);
+    }
+    .mp-nodo small { font-size: 10.5px; font-weight: 400; color: var(--mink3); }
+    .mp-nodo:hover { border-color: var(--mv); transform: translateY(-1px); }
+    .mp-nodo.sel { background: var(--mv); border: 2px solid var(--mv); color: #FFFFFF; box-shadow: 0 0 0 6px rgba(0, 0, 255, .14); }
+    .mp-nodo.sel small { color: #DADAFF; }
+    .mp-nodo.vec { background: var(--mv-soft); border: 2px solid var(--mv); }
+    .mp-nodo.apag { opacity: .38; }
+    .mp-nodo:focus-visible { outline: 2px solid var(--mink); outline-offset: 2px; }
+    .mp-etq { position: absolute; z-index: 3; transform: translate(-50%, -50%); pointer-events: none; white-space: nowrap;
+      background: #FFFFFF; border: 1px solid var(--mv); color: #0000CC; border-radius: 999px; padding: 2px 8px; font: 500 11px/1.3 var(--f-body, serif);
+      animation: mpEtq 260ms var(--ease-out, ease) both; }
+    @keyframes mpEtq { from { opacity: 0; transform: translate(-50%, -40%); } to { opacity: 1; transform: translate(-50%, -50%); } }
+    .mp-zoom { position: absolute; right: 10px; bottom: 10px; z-index: 5; display: flex; gap: 4px; }
+    .mp-zoom button { font: 500 13px/1 var(--f-body, serif); min-width: 36px; min-height: 36px; padding: 0 10px; cursor: pointer; border: 1px solid var(--mline); border-radius: 8px; background: #FFFFFF; color: var(--mink); }
+    .mp-zoom button:hover { border-color: var(--mv); color: var(--mv); }
+    .mp-ayuda { margin: 0; font-size: 13px; color: var(--ink-3); }
+    .mp-cuadro { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+    .mp-cuadro-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); font-size: 13.5px; color: var(--ink-2); }
+    .mp-cuadro-h .din-lab { margin: 0; }
+    .mp-tbl-box { overflow-x: auto; padding: 2px 10px 8px; }
+    .mp-tbl { border-collapse: collapse; width: 100%; font-size: 14px; }
+    .mp-tbl th { font-weight: 600; padding: 0; border-bottom: 1px solid var(--line); text-align: center; white-space: nowrap; }
+    .mp-tbl th.izq { padding: 9px 8px; }
+    .mp-tbl th button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; padding: 9px 8px; border-radius: 6px; width: 100%; }
+    .mp-tbl th button:hover { color: var(--v, #0000FF); }
+    .mp-tbl td { padding: 9px 8px; border-bottom: 1px solid var(--line); text-align: center; color: var(--ink-2); }
+    .mp-tbl .izq { text-align: left; }
+    .mp-tbl .csel { background: var(--v-soft, #EDEDFF); }
+    .mp-si { color: var(--v, #0000FF); font-weight: 700; }
+    .mp-no { color: var(--ink-3); }
+    .mp-cond { color: var(--v, #0000FF); font-style: italic; font-size: 12.5px; }
+    .mp-ic { color: var(--v, #0000FF); }
+    .mp-panel { max-height: calc(100vh - var(--tbh, 52px) - 90px); overflow-y: auto; border-color: var(--v, #0000FF); }
+    .mp-panel h3 { margin-bottom: 2px; }
+    .mp-sig { font-size: 13px; color: var(--ink-3); }
+    .mp-que { margin-top: 10px !important; }
+    .mp-sec { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .mp-sec .din-lab { margin: 0; }
+    .mp-li { display: grid; grid-template-columns: 16px 1fr; gap: 8px; font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+    .mp-vacio { margin: 0 !important; color: var(--ink-3) !important; }
+    .mp-rel { display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; line-height: 1.45; color: var(--ink-2); }
+    .mp-rel b { font-size: 14px; color: var(--ink); }
+    .mp-ver { margin-left: auto; font: inherit; font-size: 12.5px; cursor: pointer; border: 1px solid var(--line-strong); border-radius: 999px; padding: 4px 10px; background: var(--surface); color: var(--v, #0000FF); }
+    .mp-ver:hover { border-color: var(--v, #0000FF); }
+    @media (max-width: 999px) {
+      .mp-cuerpo { grid-template-columns: 1fr; }
+      .mp-panel { max-height: none; position: static; }
+    }
+    @media (prefers-reduced-motion: reduce) { .mp-etq { animation: none; } .mp-nodo:hover { transform: none; } }
+
     /* ======================= Tipografía única: Literata en toda la página ======================= */
     :root, :root[data-zona][data-zona] {
       --f-lit: 'Literata', 'Source Serif 4', Georgia, 'Times New Roman', serif;
@@ -23389,6 +23465,357 @@
       const n = e.target.closest && e.target.closest("[data-dn]");
       if (n && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); n.dispatchEvent(new MouseEvent("click", { bubbles: true })); }
     });
+
+
+    /* =================== Mapa del mercado (A + C): navegable, con relaciones vistas desde cada actor =================== */
+    const MP_POS = {
+      cnv: [200, 40], bcra: [420, 40], uif: [640, 40],
+      alyc: [122, 150], an: [122, 222], aagi: [122, 294], ap: [122, 366], acvn: [122, 438],
+      mercado: [380, 150], camara: [380, 260], caja: [380, 370],
+      emisora: [638, 150], acr: [638, 222], gerente: [638, 294], depo: [638, 366], bancos: [638, 438],
+      inversor: [380, 540]
+    };
+    const MP_NW = 132, MP_NH = 42;
+    /* camino de una relación: recta si no pisa otra caja; si pisa, una curva que la esquive */
+    function mpCamino(a, b) {
+      const A = MP_POS[a], B = MP_POS[b];
+      const dx = B[0] - A[0], dy = B[1] - A[1], len = Math.hypot(dx, dy) || 1;
+      const nx = -dy / len, ny = dx / len;
+      const choques = (cx, cy) => {
+        let n = 0;
+        for (const id in MP_POS) {
+          if (id === a || id === b) continue;
+          const [x, y] = MP_POS[id];
+          for (let t = .08; t < .93; t += .04) {
+            const u = 1 - t, px = u * u * A[0] + 2 * u * t * cx + t * t * B[0], py = u * u * A[1] + 2 * u * t * cy + t * t * B[1];
+            if (Math.abs(px - x) < MP_NW / 2 + 6 && Math.abs(py - y) < MP_NH / 2 + 6) { n++; break; }
+          }
+        }
+        return n;
+      };
+      const mx = (A[0] + B[0]) / 2, my = (A[1] + B[1]) / 2;
+      let mejor = { cx: mx, cy: my, n: choques(mx, my) };
+      if (mejor.n) {
+        for (const k of [60, 110, 170, 240]) for (const sg of [1, -1]) {
+          const cx = mx + nx * k * sg, cy = my + ny * k * sg, n = choques(cx, cy);
+          if (n < mejor.n) mejor = { cx, cy, n };
+          if (!n) break;
+        }
+      }
+      const lx = .25 * A[0] + .5 * mejor.cx + .25 * B[0], ly = .25 * A[1] + .5 * mejor.cy + .25 * B[1];
+      return { d: `M${A[0]},${A[1]} Q${mejor.cx},${mejor.cy} ${B[0]},${B[1]}`, lx, ly };
+    }
+    const MP_FICHA = { cnv: "cnv", alyc: "alyc_int", an: "an", aagi: "aagi", ap: "ap", acvn: "acvn", mercado: "mercados", camara: "camaras", caja: "adcvn", acr: "acr", gerente: "aapic", depo: "acpic", emisora: "emisora", inversor: "inversor" };
+    const MP = {
+      cnv: { n: "Comisión Nacional de Valores", sig: "CNV", s: "regula y sanciona",
+        que: "Autoridad de aplicación de la Ley 26.831. Autoriza la oferta pública, registra a cada agente y es la única con competencia disciplinaria sobre ellos.",
+        puede: ["Registrar, supervisar, inspeccionar y sancionar a los agentes", "Autorizar la oferta pública y aprobar los reglamentos de mercados y cámaras", "Suspender la negociación ante riesgo sistémico"],
+        nopuede: ["Sancionar sin sumario previo y derecho de defensa", "Revelar lo que recoge inspeccionando, salvo las excepciones de la ley"],
+        control: ["Sus sanciones se apelan ante las Cámaras Federales con competencia comercial", "Comparte información con BCRA, SSN y UIF sin que se oponga el secreto"],
+        req: ["Resolver la autorización de oferta pública en 30 días hábiles desde que la documentación está completa"],
+        citas: ["Ley 26.831 · art. 19", "art. 20", "art. 25", "art. 84", "art. 141", "art. 143"] },
+      bcra: { n: "Banco Central", sig: "BCRA", s: "regula a los bancos",
+        que: "Regula y supervisa a las entidades financieras. No controla a los agentes del mercado de capitales, pero los bancos que son ALyC o depositarias responden ante los dos.",
+        puede: ["Supervisar a los bancos (Ley 21.526)", "Intercambiar información con la CNV, la SSN y la UIF"], nopuede: ["Sancionar a un agente por su actividad en el mercado de capitales"],
+        control: ["Su carta orgánica"], req: [], citas: ["Ley 26.831 · art. 27"] },
+      uif: { n: "Unidad de Información Financiera", sig: "UIF", s: "previene el lavado",
+        que: "Recibe los reportes de operaciones sospechosas de los sujetos obligados y supervisa la prevención del lavado de dinero.",
+        puede: ["Recibir reportes de operaciones sospechosas", "Pedir información sin que se le oponga el secreto bursátil"], nopuede: ["Operar en el mercado"],
+        control: ["Ley 25.246"], req: [], citas: ["Ley 26.831 · art. 53", "Normas CNV · Tít. XI"] },
+      alyc: { n: "Agente de liquidación y compensación", sig: "ALyC", s: "negocia y liquida",
+        que: "Negocia y además liquida y compensa lo propio, lo de sus clientes y, el integral, lo de otros agentes de negociación que le firmen convenio. Por eso responde por ellos.",
+        puede: ["Liquidar y compensar sus operaciones y las de sus clientes", "Liquidar para otros AN, por convenio (el integral)", "Negociar, colocar en primaria y custodiar fondos y valores", "Asesorar y administrar carteras con mandato expreso"],
+        nopuede: ["Disponer de los fondos del cliente sin su autorización", "Financiar a sus clientes", "Hacer promociones sobre clientes de otros agentes", "Registrar operaciones de clientes de otros agentes"],
+        control: ["CNV: registro y competencia disciplinaria exclusiva", "La cámara le exige márgenes y garantías y lo supervisa", "El mercado lo habilita y debe denunciar sus faltas a la CNV", "UIF: es sujeto obligado"],
+        req: ["Patrimonio neto mínimo del integral: 470.350 UVA", "Contrapartida líquida: al menos el 50 % del patrimonio neto mínimo", "Idóneos registrados para quienes atienden al público", "Persona jurídica"],
+        citas: ["Ley 26.831 · art. 2", "art. 47", "art. 56", "Normas CNV · Tít. VII, Cap. II"] },
+      an: { n: "Agente de negociación", sig: "AN", s: "te conecta con el mercado",
+        que: "Ingresa ofertas y registra operaciones, en primaria y en secundaria. No cobra, no custodia y no liquida: para cerrar la operación necesita un ALyC.",
+        puede: ["Actuar en la colocación primaria y en la negociación secundaria", "Cursar la liquidación por el ALyC con el que tenga convenio", "Asesorar y administrar carteras con mandato expreso"],
+        nopuede: ["Recibir cobros de clientes", "Custodiar fondos ni valores de clientes", "Liquidar directamente sus operaciones"],
+        control: ["CNV: registro y competencia disciplinaria exclusiva", "El mercado reglamenta cómo actúa en su ámbito", "El ALyC con el que tiene convenio responde por su liquidación", "UIF: es sujeto obligado"],
+        req: ["Patrimonio neto mínimo: 65.350 UVA", "Convenio obligatorio con un ALyC", "Idóneos registrados para quienes atienden al público"],
+        citas: ["Ley 26.831 · art. 2", "art. 47", "Normas CNV · Tít. VII, Cap. I"] },
+      aagi: { n: "Agente asesor global de inversión", sig: "AAGI", s: "asesora con mandato",
+        que: "Asesor independiente: asesora, gestiona órdenes y administra carteras con mandato, operando a través de un ALyC o de un intermediario del exterior regulado.",
+        puede: ["Asesorar sobre inversiones", "Gestionar órdenes y administrar carteras con mandato expreso", "Operar a través de un ALyC o de intermediarios del exterior de países cooperadores"],
+        nopuede: ["Recibir, transferir o custodiar fondos o valores", "Cobrar o pagar por el cliente, salvo su remuneración", "Ser cliente del ALyC con el que tiene convenio", "Hacer rotación excesiva de la cartera", "Inscribirse en otra categoría de agente"],
+        control: ["CNV: registro y competencia disciplinaria", "Revisa el perfil de riesgo del cliente al menos una vez por año"],
+        req: ["Sociedad anónima de objeto exclusivo", "Patrimonio neto mínimo: $2.500.000 (texto de 2018)", "Convenio con un ALyC"],
+        citas: ["Normas CNV · Tít. VII, Cap. VII"] },
+      ap: { n: "Agente productor", sig: "AP", s: "capta y asesora",
+        que: "La puerta de entrada: por contrato con un AN, un ALyC o un AAGI, asesora, difunde y capta clientes para que el agente les dé el alta. Nunca toca la plata ni los títulos.",
+        puede: ["Asesorar sobre inversiones", "Difundir y promocionar valores negociables autorizados", "Captar clientes y acercarles la documentación de alta"],
+        nopuede: ["Recibir ni custodiar fondos o valores", "Gestionar órdenes ni administrar carteras", "Usar la denominación del agente ni compartir su domicilio", "Usar contraseñas o firmas electrónicas del cliente"],
+        control: ["CNV: registro de agentes y de idóneos", "El agente con el que tiene contrato responde por él"],
+        req: ["No tiene patrimonio neto mínimo", "Inscripción en el registro de idóneos (persona humana y empleados)", "Contrato con un AN, ALyC o AAGI", "Cobra una parte de la comisión del agente; el cliente no paga más"],
+        citas: ["Ley 26.831 · art. 2", "Normas CNV · Tít. VII, Cap. IV"] },
+      acvn: { n: "Agente de corretaje de valores negociables", sig: "ACVN", s: "pone en contacto",
+        que: "Pone en contacto a dos partes para que cierren un negocio, sin estar ligado a ninguna. Registra lo concertado e informa los volúmenes al mercado.",
+        puede: ["Poner en relación a dos o más partes", "Registrar las operaciones concertadas", "Informar al mercado los volúmenes operados"],
+        nopuede: ["Recibir ni custodiar fondos o valores", "Operar para sí por su propio sistema", "Estar ligado a alguna de las partes"],
+        control: ["CNV: registro y disciplina", "El mercado lo habilita"],
+        req: ["Patrimonio neto mínimo: $2.000.000, permanente", "Contrapartida líquida: 20 % del patrimonio neto mínimo", "Persona jurídica"],
+        citas: ["Ley 26.831 · art. 2", "Normas CNV · Tít. VI"] },
+      mercado: { n: "Mercado", sig: "Mercado", s: "BYMA · A3 · MAV",
+        que: "Sociedad anónima autorizada por la CNV para organizar las operaciones con valores negociables. Habilita a los agentes y administra los sistemas de negociación.",
+        puede: ["Habilitar a los agentes a actuar en su ámbito", "Autorizar, suspender y cancelar el listado de valores", "Actuar como contraparte central si garantiza", "Constituir fondos de garantía"],
+        nopuede: ["Exigirle al agente ser accionista", "Aplicar un reglamento sin aprobación previa de la CNV"],
+        control: ["CNV: autorización y aprobación de reglamentos", "Debe denunciar las faltas de sus agentes"],
+        req: ["Sociedad anónima con acciones listadas", "Tribunal arbitral permanente", "Aranceles con los máximos que fije la CNV"],
+        citas: ["Ley 26.831 · art. 31", "art. 32", "art. 44", "art. 46"] },
+      camara: { n: "Cámara compensadora", sig: "Cámara", s: "contraparte central",
+        que: "Liquida y compensa las operaciones y, cuando garantiza, se pone entre las dos puntas como contraparte central.",
+        puede: ["Administrar la compensación y liquidación", "Exigir márgenes y garantías a los agentes", "Supervisar a sus agentes participantes"],
+        nopuede: ["Aplicar un reglamento sin aprobación previa de la CNV"],
+        control: ["CNV: autorización y aprobación de reglamentos", "Debe denunciar las faltas de sus agentes"],
+        req: ["Sociedad anónima autorizada por la CNV", "Requisitos patrimoniales y de liquidez", "Fondos de garantía"],
+        citas: ["Ley 26.831 · art. 35", "art. 40", "art. 45"] },
+      caja: { n: "Caja de Valores", sig: "Caja de Valores", s: "ADCVN · custodia",
+        que: "Agente depositario central: recibe los depósitos colectivos, custodia, liquida y paga las acreencias de los valores depositados.",
+        puede: ["Custodiar valores negociables", "Llevar el registro de los valores escriturales", "Pagar dividendos, renta y amortización"],
+        nopuede: ["Negociar por cuenta de clientes"], control: ["CNV: registro"], req: ["Régimen de la Ley 20.643"],
+        citas: ["Ley 26.831 · art. 2", "art. 129"] },
+      emisora: { n: "Emisora", sig: "Emisora", s: "se financia", que: "La empresa que emite valores negociables para financiarse.",
+        puede: ["Pedir autorización de oferta pública", "Listar sus valores en un mercado"], nopuede: ["Ofrecer valores al público sin autorización de la CNV"],
+        control: ["CNV: autorización y régimen informativo", "Auditor externo y comité de auditoría"], req: ["Prospecto", "Informar hechos relevantes"],
+        citas: ["Ley 26.831 · art. 80", "art. 99", "Ley 23.576 · art. 1"] },
+      acr: { n: "Agente de calificación de riesgo", sig: "ACR", s: "opina sobre el riesgo", que: "Califica valores negociables a pedido de la emisora. No intermedia ni toca fondos.",
+        puede: ["Calificar cualquier valor negociable, con o sin oferta pública"], nopuede: ["Intermediar"], control: ["CNV: registro"],
+        req: ["Formalidades que fije la CNV; pueden ser universidades públicas"], citas: ["Ley 26.831 · art. 57", "art. 58"] },
+      gerente: { n: "Sociedad gerente de FCI", sig: "Gerente FCI", s: "AAPIC · administra", que: "Dirige y administra el fondo común de inversión: decide en qué se invierte, sin custodiarlo.",
+        puede: ["Administrar el fondo según el reglamento de gestión"], nopuede: ["Invertir el haber del fondo en valores propios o de la depositaria"],
+        control: ["CNV: fiscalización y registro"], req: ["Reglamento de gestión", "Responde de forma separada de la depositaria"], citas: ["Ley 24.083 · art. 3", "art. 4", "art. 7", "art. 32"] },
+      depo: { n: "Sociedad depositaria de FCI", sig: "Depositaria", s: "ACPIC · banco del FCI", que: "Custodia los activos del fondo, recibe las suscripciones y paga los rescates. Tiene que ser una entidad financiera.",
+        puede: ["Custodiar los activos del fondo", "Cobrar suscripciones y pagar rescates"], nopuede: ["Ser a la vez la gerente si es entidad financiera"],
+        control: ["CNV y, por ser banco, el BCRA"], req: ["Entidad financiera de la Ley 21.526"], citas: ["Ley 24.083 · art. 3", "art. 14"] },
+      bancos: { n: "Bancos", sig: "Bancos", s: "cuentas de dinero", que: "Por sus cuentas se mueve la plata del mercado. Muchos bancos están registrados además como ALyC.",
+        puede: ["Registrarse como ALyC o como sociedad depositaria"], nopuede: [], control: ["BCRA y, como agentes, la CNV"], req: ["Ley 21.526"], citas: ["Práctica del mercado"] },
+      inversor: { n: "Inversor", sig: "Inversor", s: "pone la plata", que: "Opera siempre a través de un agente registrado, con una cuenta comitente a su nombre.",
+        puede: ["Operar a través de un AN o un ALyC", "Darle mandato a un AAGI"], nopuede: ["Operar directo en el mercado"], control: [],
+        req: ["Abrir una cuenta comitente y completar su perfil de riesgo"], citas: ["Ley 26.831 · art. 47"] }
+    };
+    // [a, b, corto desde a, largo desde a, corto desde b, largo desde b, citas]
+    const MP_E = [
+      ["cnv", "alyc", "lo registra", "Lo registra y tiene la competencia disciplinaria exclusiva sobre él.", "se registra", "Se registra en la CNV y queda bajo su control disciplinario.", ["Ley 26.831 · art. 47", "art. 56"]],
+      ["cnv", "an", "lo registra", "Lo registra y tiene la competencia disciplinaria exclusiva sobre él.", "se registra", "Se registra en la CNV y queda bajo su control disciplinario.", ["Ley 26.831 · art. 47", "art. 56"]],
+      ["cnv", "ap", "lo registra", "Lo registra como agente y, si es persona humana, como idóneo.", "se registra", "Se inscribe en el registro de agentes y en el de idóneos.", ["Ley 26.831 · art. 47"]],
+      ["cnv", "aagi", "lo registra", "Lo registra como sociedad de objeto exclusivo.", "se registra", "Se registra y no puede inscribirse en otra categoría.", ["Ley 26.831 · art. 47"]],
+      ["cnv", "acvn", "lo registra", "Lo registra y lo supervisa.", "se registra", "Se registra en la CNV.", ["Ley 26.831 · art. 47"]],
+      ["cnv", "mercado", "lo autoriza", "Lo autoriza y le aprueba cada reglamento antes de que rija.", "lo autoriza", "Necesita su autorización y la aprobación previa de sus reglamentos.", ["Ley 26.831 · art. 44"]],
+      ["cnv", "camara", "la autoriza", "La autoriza y le aprueba cada reglamento.", "la autoriza", "Necesita su autorización y la aprobación de sus reglamentos.", ["Ley 26.831 · art. 44"]],
+      ["cnv", "emisora", "autoriza la oferta", "Autoriza su oferta pública y recibe su información.", "pide autorización", "Le pide autorización de oferta pública y le informa hechos relevantes.", ["Ley 26.831 · art. 80", "art. 99"]],
+      ["cnv", "gerente", "la fiscaliza", "Fiscaliza, supervisa y registra a la gerente.", "la fiscaliza", "Está bajo fiscalización y registro de la CNV.", ["Ley 24.083 · art. 32"]],
+      ["cnv", "acr", "la registra", "Fija sus requisitos y la registra.", "se registra", "Se registra en la CNV.", ["Ley 26.831 · art. 57"]],
+      ["mercado", "alyc", "lo habilita", "Lo habilita a actuar en su ámbito sin exigirle ser accionista.", "opera en", "Ingresa ofertas y registra operaciones en su sistema.", ["Ley 26.831 · art. 32"]],
+      ["mercado", "an", "lo habilita", "Lo habilita a actuar en su ámbito sin exigirle ser accionista.", "opera en", "Ingresa ofertas y registra operaciones en su sistema.", ["Ley 26.831 · art. 32"]],
+      ["mercado", "acvn", "lo habilita", "Lo habilita a actuar en su ámbito.", "le informa", "Le informa los volúmenes de lo que registra.", ["Normas CNV · Tít. VI"]],
+      ["mercado", "camara", "le pasa lo concertado", "Le pasa las operaciones concertadas para liquidar.", "liquida lo concertado", "Liquida y compensa lo que se concertó en el mercado.", ["Ley 26.831 · art. 35"]],
+      ["mercado", "emisora", "lista sus valores", "Autoriza, suspende o cancela el listado de sus valores.", "lista en", "Lista sus valores e informa simultáneamente al mercado.", ["Ley 26.831 · art. 32", "art. 100"]],
+      ["alyc", "an", "le liquida", "Le presta el servicio de liquidación por convenio y responde por sus obligaciones.", "liquida por", "Necesita convenio con un ALyC: sin él no puede operar.", ["Normas CNV · Tít. VII, Cap. I y II"]],
+      ["alyc", "camara", "compensa en", "Compensa sus operaciones a través de ella.", "le exige márgenes", "Le exige márgenes, su reposición y activos de garantía.", ["Ley 26.831 · art. 35"]],
+      ["alyc", "caja", "deposita en", "Deposita los valores de sus clientes, en la subcuenta de cada comitente.", "custodia lo suyo", "Custodia los valores que el ALyC deposita por sus clientes.", ["Ley 26.831 · art. 2"]],
+      ["ap", "alyc", "trabaja para", "Actúa bajo su responsabilidad y le acerca clientes; cobra parte de su comisión.", "responde por", "Responde por el AP y le cede parte de su comisión.", ["Ley 26.831 · art. 2", "Normas CNV · Tít. VII, Cap. IV"]],
+      ["ap", "an", "trabaja para", "Actúa bajo su responsabilidad y le acerca clientes.", "responde por", "Responde por el AP con el que tiene contrato.", ["Ley 26.831 · art. 2"]],
+      ["ap", "aagi", "puede trabajar para", "Puede tener contrato con un AAGI para captarle clientes.", "lo contrata", "Puede contratar AP para captar clientes.", ["Normas CNV · Tít. VII"]],
+      ["aagi", "alyc", "opera a través de", "Opera a través de él y no puede ser su cliente.", "le ejecuta", "Ejecuta las órdenes del AAGI y custodia lo de sus clientes.", ["Normas CNV · Tít. VII, Cap. VII"]],
+      ["inversor", "alyc", "opera con", "Abre su cuenta comitente y le deja la plata y los títulos.", "custodia su plata", "Guarda la plata y los títulos del cliente.", ["Ley 26.831 · art. 47"]],
+      ["inversor", "an", "opera con", "Le da las órdenes; la plata queda en el ALyC.", "le cursa órdenes", "Le cursa las órdenes, sin recibir su plata.", ["Ley 26.831 · art. 47"]],
+      ["ap", "inversor", "lo capta", "Lo capta, lo asesora y le acerca la documentación de alta.", "lo asesora", "Lo asesora, pero nunca le entrega la plata.", ["Normas CNV · Tít. VII, Cap. IV"]],
+      ["aagi", "inversor", "le administra", "Le administra la cartera con mandato expreso.", "le da mandato", "Le da mandato; la plata queda en el ALyC.", ["Normas CNV · Tít. VII, Cap. VII"]],
+      ["uif", "alyc", "recibe sus reportes", "Recibe sus reportes de operaciones sospechosas.", "le reporta", "Es sujeto obligado: conoce a su cliente y reporta lo sospechoso.", ["Normas CNV · Tít. XI"]],
+      ["uif", "an", "recibe sus reportes", "Recibe sus reportes de operaciones sospechosas.", "le reporta", "Es sujeto obligado: conoce a su cliente y reporta.", ["Normas CNV · Tít. XI"]],
+      ["cnv", "bcra", "comparten información", "Pueden intercambiar información sin que se les oponga el secreto.", "comparten información", "Pueden intercambiar información sin que se les oponga el secreto.", ["Ley 26.831 · art. 27"]],
+      ["bcra", "bancos", "los supervisa", "Regula y supervisa a las entidades financieras.", "lo supervisa", "Está bajo la supervisión del Banco Central.", ["Ley 21.526"]],
+      ["bcra", "depo", "la supervisa", "La supervisa por ser entidad financiera.", "la supervisa", "Por ser banco, también responde ante el BCRA.", ["Ley 24.083 · art. 3"]],
+      ["bancos", "alyc", "pueden ser", "Muchos bancos están registrados como ALyC.", "mueve plata por", "Mueve la plata de sus clientes por cuentas bancarias.", ["Práctica del mercado"]],
+      ["gerente", "depo", "separadas", "Responden de forma individual y separada: ninguna por la otra.", "separadas", "Responden de forma individual y separada.", ["Ley 24.083 · art. 4"]],
+      ["gerente", "mercado", "invierte en", "Invierte el haber del fondo según el reglamento de gestión.", "opera el fondo", "Recibe las órdenes de la gerente por cuenta del fondo.", ["Ley 24.083 · art. 3"]],
+      ["depo", "inversor", "cobra y paga", "Cobra sus suscripciones y le paga los rescates.", "suscribe y rescata", "Suscribe y rescata cuotapartes en la depositaria.", ["Ley 24.083 · art. 14"]],
+      ["acr", "emisora", "la califica", "Califica sus valores a pedido.", "le pide calificar", "Le pide la calificación de sus valores.", ["Ley 26.831 · art. 58"]]
+    ];
+    const MP_COLS = ["alyc", "an", "aagi", "ap", "acvn"];
+    const MP_ACT = [
+      ["Negociar en el mercado", "si si no no cond"], ["Colocar en primaria", "si si no no no"], ["Liquidar y compensar", "si conv no no no"],
+      ["Liquidar para otros agentes", "si no no no no"], ["Recibir y custodiar fondos", "si no no no no"], ["Custodiar valores", "si no no no no"],
+      ["Captar clientes", "si si si si no"], ["Asesorar sobre inversiones", "si si si si no"], ["Administrar carteras", "si si si no no"], ["Gestionar órdenes", "si si si no no"]
+    ];
+    const MP_W = 760, MP_H = 590;
+    const MPS = { sel: leer("mapa-idoneo-mapa-sel", "an"), hist: [], z: 1, x: 0, y: 0, ajustado: false };
+    if (!MP[MPS.sel]) MPS.sel = "an";
+    MPS.hist = [MPS.sel];
+
+    function mpCitas(xs) {
+      let ley = "26831";
+      return (xs || []).map(c => {
+        const m = c.match(/^(?:Ley (\d{2})\.(\d{3}) · )?art\. (\d+)/);
+        if (m) {
+          if (m[1]) ley = m[1] + m[2];
+          return `<button class="mf" data-go="${ley}:${m[3]}" title="Leer el artículo">${esc(c)}</button>`;
+        }
+        if (/^Ley \d/.test(c)) { const k = c.match(/^Ley (\d{2})\.(\d{3})/); if (k) ley = k[1] + k[2]; }
+        return /Práctica/.test(c) ? `<span class="din-prac">Práctica del mercado</span>` : `<span class="mf norm">${esc(c)}</span>`;
+      }).join("");
+    }
+    function mpMios(sel) {
+      return MP_E.filter(e => e[0] === sel || e[1] === sel).map(e => e[0] === sel
+        ? { otro: e[1], c1: e[2], t: e[3], c: e[6] } : { otro: e[0], c1: e[4], t: e[5], c: e[6] });
+    }
+    function mpLienzo() {
+      const sel = MPS.sel, mios = mpMios(sel), vec = new Set(mios.map(m => m.otro));
+      const reg = [[0, 0, 760, 80, "Regulación y control"], [0, 96, 245, 388, "Intermediarios"], [257, 96, 246, 388, "Mercado y custodia"], [515, 96, 245, 388, "Emisión, fondos y bancos"], [0, 500, 760, 80, "La punta"]]
+        .map(([x, y, w, h, t]) => `<div class="mp-reg" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"><span>${t}</span></div>`).join("");
+      let lin = "", linOn = "", etq = "";
+      MP_E.forEach(e => {
+        const [a, b] = e, c = mpCamino(a, b);
+        const mio = a === sel || b === sel;
+        if (mio) { linOn += `<path class="mp-lin on" d="${c.d}"/>`; etq += `<span class="mp-etq" style="left:${c.lx}px;top:${c.ly}px">${esc(a === sel ? e[2] : e[4])}</span>`; }
+        else lin += `<path class="mp-lin" d="${c.d}"/>`;
+      });
+      lin = `<svg class="mp-svg" width="${MP_W}" height="${MP_H}" viewBox="0 0 ${MP_W} ${MP_H}" aria-hidden="true">${lin}${linOn}</svg>`;
+      const nod = Object.keys(MP_POS).map(id => {
+        const d = MP[id], [x, y] = MP_POS[id];
+        const cls = id === sel ? " sel" : vec.has(id) ? " vec" : " apag";
+        return `<button class="mp-nodo${cls}" data-mp="${id}" style="left:${x - MP_NW / 2}px;top:${y - MP_NH / 2}px" aria-pressed="${id === sel}">${esc(d.sig.length <= 15 ? d.sig : d.n)}<small>${esc(d.s)}</small></button>`;
+      }).join("");
+      return reg + lin + nod + etq;
+    }
+    function mpPanel() {
+      const d = MP[MPS.sel], mios = mpMios(MPS.sel);
+      const lista = (xs, ic, cls) => xs.length ? xs.map(t => `<div class="mp-li"><span class="${cls}">${ic}</span><span>${esc(t)}</span></div>`).join("") : `<p class="mp-vacio">—</p>`;
+      return `<span class="din-lab">Desde el punto de vista de</span>
+        <h3>${esc(d.n)}</h3>${d.sig !== d.n ? `<span class="mp-sig">${esc(d.sig)}</span>` : ""}
+        <p class="mp-que">${esc(d.que)}</p>
+        <div class="mp-sec"><span class="din-lab">Sus relaciones · ${mios.length}</span>
+          ${mios.map(m => `<div class="mp-rel"><b>Con ${esc(MP[m.otro].n)}</b><span>${esc(m.t)}</span>
+            <div class="din-chips">${mpCitas(m.c)}<button class="mp-ver" data-mp="${m.otro}">Ver desde ${esc(MP[m.otro].sig)} →</button></div></div>`).join("")}</div>
+        <div class="mp-sec"><span class="din-lab">Puede</span>${lista(d.puede, "●", "mp-si")}</div>
+        <div class="mp-sec"><span class="din-lab">No puede</span>${lista(d.nopuede, "—", "mp-no")}</div>
+        <div class="mp-sec"><span class="din-lab">Cómo se lo controla</span>${lista(d.control, "◆", "mp-ic")}</div>
+        <div class="mp-sec"><span class="din-lab">Qué le exigen</span>${lista(d.req, "▪", "mp-ic")}</div>
+        <div class="mp-sec"><span class="din-lab">Dónde está escrito</span><div class="din-chips">${mpCitas(d.citas)}</div></div>
+        ${MP_FICHA[MPS.sel] ? `<div class="din-acts"><button data-ficha="${MP_FICHA[MPS.sel]}">Ver la ficha completa</button></div>` : ""}`;
+    }
+    function mpTabla() {
+      const T = { si: ["●", "mp-si"], no: ["—", "mp-no"], conv: ["Por convenio", "mp-cond"], cond: ["Con límites", "mp-cond"] };
+      return `<table class="mp-tbl"><thead><tr><th class="izq">Actividad</th>${MP_COLS.map(id => `<th class="${id === MPS.sel ? "csel" : ""}"><button data-mp="${id}">${esc(MP[id].sig)}</button></th>`).join("")}</tr></thead>
+        <tbody>${MP_ACT.map(([n, v]) => `<tr><td class="izq">${esc(n)}</td>${v.split(" ").map((k, i) => `<td class="${T[k][1]}${MP_COLS[i] === MPS.sel ? " csel" : ""}">${T[k][0]}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+    }
+    function mpHist() {
+      return `<span class="din-lab">Viste</span>` + MPS.hist.map(id => `<button class="mp-h${id === MPS.sel ? " on" : ""}" data-mp="${id}">${esc(MP[id].sig)}</button>`).join("");
+    }
+    function mpHTML() {
+      return `<div class="mp">
+        <div class="mp-hist" id="mpHist">${mpHist()}</div>
+        <div class="mp-cuerpo">
+          <div class="mp-izq">
+            <div class="mp-vp" id="mpVp" aria-label="Mapa del mercado: arrastrá para moverte">
+              <div class="mp-lienzo" id="mpLienzo" style="width:${MP_W}px;height:${MP_H}px">${mpLienzo()}</div>
+              <div class="mp-zoom"><button id="mpMenos" aria-label="Alejar">−</button><button id="mpAjustar">Ver todo</button><button id="mpMas" aria-label="Acercar">+</button></div>
+            </div>
+            <p class="mp-ayuda">Arrastrá para moverte, acercá con los botones o con Ctrl + rueda. Las etiquetas dicen cada relación vista desde <b id="mpQuien">${esc(MP[MPS.sel].sig)}</b>.</p>
+            <section class="mp-cuadro"><div class="mp-cuadro-h"><span class="din-lab">Cuadro comparativo</span><span>Tocá el nombre de una columna para verlo en el mapa.</span></div>
+              <div class="mp-tbl-box" id="mpTabla">${mpTabla()}</div></section>
+          </div>
+          <aside class="din-panel mp-panel" id="mpPanel" aria-live="polite">${mpPanel()}</aside>
+        </div>
+      </div>`;
+    }
+    function mpAplicar() {
+      const l = document.getElementById("mpLienzo"); if (!l) return;
+      l.style.transform = `translate(${MPS.x}px, ${MPS.y}px) scale(${MPS.z})`;
+    }
+    function mpAjustar() {
+      const vp = document.getElementById("mpVp"); if (!vp) return;
+      const w = vp.clientWidth;
+      MPS.z = Math.min(1.2, Math.max(.62, (w - 24) / MP_W));
+      vp.style.height = Math.round(Math.min(760, Math.max(380, MP_H * MPS.z + 70))) + "px";
+      const [sx] = MP_POS[MPS.sel] || [MP_W / 2];
+      MPS.x = MP_W * MPS.z <= w - 24 ? (w - MP_W * MPS.z) / 2 : Math.min(12, Math.max(w - 12 - MP_W * MPS.z, w / 2 - sx * MPS.z));
+      MPS.y = 12;
+      mpAplicar();
+    }
+    function mpZoom(f, cx, cy) {
+      const vp = document.getElementById("mpVp"); if (!vp) return;
+      if (cx == null) { cx = vp.clientWidth / 2; cy = vp.clientHeight / 2; }
+      const z = Math.min(2.2, Math.max(.35, MPS.z * f));
+      MPS.x = cx - (cx - MPS.x) * z / MPS.z; MPS.y = cy - (cy - MPS.y) * z / MPS.z; MPS.z = z;
+      mpAplicar();
+    }
+    function mpElegir(id) {
+      if (!MP[id]) return;
+      MPS.sel = id; guardar("mapa-idoneo-mapa-sel", id);
+      MPS.hist = MPS.hist.filter(x => x !== id).concat(id).slice(-8);
+      const l = document.getElementById("mpLienzo"); if (l) l.innerHTML = mpLienzo();
+      const p = document.getElementById("mpPanel"); if (p) { p.innerHTML = mpPanel(); p.scrollTop = 0; }
+      const t = document.getElementById("mpTabla"); if (t) t.innerHTML = mpTabla();
+      const h = document.getElementById("mpHist"); if (h) h.innerHTML = mpHist();
+      const q = document.getElementById("mpQuien"); if (q) q.textContent = MP[id].sig;
+      if (innerWidth < 1000 && p) p.scrollIntoView({ behavior: quieto() ? "auto" : "smooth", block: "nearest" });
+    }
+    function mpArmar() {
+      const vp = document.getElementById("mpVp"); if (!vp) return;
+      mpAjustar();
+      let arr = null;
+      vp.addEventListener("pointerdown", e => {
+        if (e.target.closest(".mp-zoom")) return;
+        arr = { x: e.clientX, y: e.clientY, x0: MPS.x, y0: MPS.y, mov: false, id: e.pointerId };
+      });
+      vp.addEventListener("pointermove", e => {
+        if (!arr || e.pointerId !== arr.id) return;
+        const dx = e.clientX - arr.x, dy = e.clientY - arr.y;
+        if (!arr.mov && Math.hypot(dx, dy) < 5) return;
+        if (!arr.mov) { arr.mov = true; vp.setPointerCapture(e.pointerId); vp.classList.add("arrastrando"); }
+        MPS.x = arr.x0 + dx; MPS.y = arr.y0 + dy; mpAplicar();
+      });
+      const fin = e => {
+        if (!arr) return;
+        const mov = arr.mov; arr = null; vp.classList.remove("arrastrando");
+        if (mov) { vp.dataset.recien = "1"; setTimeout(() => { delete vp.dataset.recien; }, 0); }
+      };
+      vp.addEventListener("pointerup", fin); vp.addEventListener("pointercancel", fin);
+      vp.addEventListener("wheel", e => {
+        if (!e.ctrlKey && !e.metaKey) return;
+        e.preventDefault();
+        const r = vp.getBoundingClientRect();
+        mpZoom(e.deltaY < 0 ? 1.12 : 1 / 1.12, e.clientX - r.left, e.clientY - r.top);
+      }, { passive: false });
+    }
+
+    if (typeof MSUBS !== "undefined" && !MSUBS.some(x => x[0] === "mapa")) {
+      const i = MSUBS.findIndex(x => x[0] === "hoy");
+      MSUBS.splice(i + 1, 0, ["mapa", "Mapa interactivo"]);
+    }
+    {
+      const pm2 = pintarMercado;
+      pintarMercado = function () {
+        if (msub !== "mapa") return pm2();
+        dinParar();
+        msubEl.innerHTML = MSUBS.map(([k, n]) => `<button class="mtab" data-msub="${k}" aria-selected="${msub === k}">${n}</button>`).join("");
+        const intro = document.getElementById("mintro");
+        if (intro) intro.textContent = "Todo el mercado en un mapa. Tocá un actor y mirá cada relación desde su lugar: qué puede, qué no, cómo se lo controla, qué le exigen y dónde está escrito. Abajo, el cuadro comparativo de los agentes.";
+        try { redDestruir(); estrDestruir(); } catch (e) { }
+        countEl.textContent = `${Object.keys(MP).length} actores · ${MP_E.length} relaciones`;
+        mzona.innerHTML = mpHTML();
+        if (!mercView.hidden) mpArmar();
+      };
+    }
+    mercView.addEventListener("click", e => {
+      if (msub !== "mapa") return;
+      const vp = document.getElementById("mpVp");
+      if (vp && vp.dataset.recien && e.target.closest("#mpVp")) { e.stopPropagation(); return; }
+      if (e.target.closest("#mpMas")) { mpZoom(1.2); return; }
+      if (e.target.closest("#mpMenos")) { mpZoom(1 / 1.2); return; }
+      if (e.target.closest("#mpAjustar")) { mpAjustar(); return; }
+      const b = e.target.closest("[data-mp]");
+      if (b) mpElegir(b.dataset.mp);
+    }, true);
+    window.addEventListener("resize", () => { if (vista === "mercado" && msub === "mapa") mpAjustar(); });
+    {
+      const sv2 = setVista;
+      setVista = function (v) { sv2(v); if (v === "mercado" && msub === "mapa") pintarMercado(); };
+    }
+    if (location.hash === "#mapa") { msub = "mapa"; setVista("mercado"); pintarMercado(); }
 
     try { if (vista === "cuestionario") pintarCuestionario(); else if (vista === "micro") pintarMicro(); } catch (e) { }
     /* #dinamica abre directo el recorrido */
