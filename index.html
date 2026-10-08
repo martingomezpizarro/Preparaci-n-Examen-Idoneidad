@@ -5656,7 +5656,7 @@
             style="background:var(--accent);color:var(--surface);border-color:var(--accent)">Mer</span><span>La pestaña
             <b>El mercado</b> arma el mapa de quién es quién. <b>Estructura</b>: el mercado de arriba hacia abajo, con la CNV
             por encima de todos, los agentes que liquidan y custodian más grandes que los que solo negocian, el
-            inversor y, en la base, la Caja de Valores; abajo, qué se emite y quién lo emite. Tocá una caja para ver qué es. <b>Agentes</b>: los catorce agentes en una sola tabla, con qué puede hacer
+            inversor y, en la base, la Caja de Valores; abajo, qué se emite y quién lo emite. Tocá una caja para ver qué es. <b>Dinámica</b>: recorridos animados paso a paso —comprar acciones, suscribir un FCI, emitir una ON, un cheque avalado, una caución y quién controla a quién— con lo que viaja entre los agentes, el mercado y el sistema financiero. <b>Agentes</b>: los catorce agentes en una sola tabla, con qué puede hacer
             cada uno, qué tiene prohibido y cómo se compara con los demás sección por sección, con el artículo de cada dato. <b>Instrumentos</b>: cada valor negociable con quién lo emite, lo
             negocia, lo custodia, lo califica y lo controla. <b>Fichas</b>: el detalle de cada actor con sus
             números.</span></li>
@@ -21992,6 +21992,974 @@
       if (!panel.hidden && angosto() && e.target.closest("#srcdlg [data-go], #srcdlg [data-nvgo]")) cerrar();
     }, true);
     if (location.hash === "#tutor") setTimeout(() => abrir(), 600);
+  })();
+</script>
+<!-- zonas -->
+<style id="zonas-css">
+    /* =================== Estilos por zona (08/10/2026) ===================
+       Tres climas según la pestaña, en claro y en oscuro:
+       · lectura  (Inicio, Las leyes, Glosario, Mis notas, Mi perfil) → Google for Education
+       · estudio  (Cuestionario, Micro-learning)                       → Slite (claro) + Graphite (oscuro), con el naranja de ambos
+       · mercado  (El mercado)                                          → Base (claro) + Vana (oscuro), con el azul eléctrico de ambos
+       La zona la pone el script en <html data-zona="…">; todo lo demás se apoya en los tokens. */
+
+    :root { --zt: 280ms; }
+    body, .sb, .tb, .controls { transition: background-color var(--zt) ease, color var(--zt) ease, border-color var(--zt) ease, padding-left 320ms var(--ease-drawer, ease); }
+
+    /* ---------- LECTURA · Google for Education ---------- */
+    :root[data-zona="lectura"] {
+      --bg: #F8F9FA; --surface: #FFFFFF; --surface-2: #F1F3F4;
+      --ink: #202124; --ink-2: #3C4043; --ink-3: #5F6368;
+      --line: #DADCE0; --line-strong: #C4C6C7;
+      --accent: #1A73E8; --accent-2: #1967D2; --accent-soft: #E8F0FE; --spine: #1A73E8;
+      --shadow: none;
+      --f-display: 'Google Sans', 'Google Sans Text', 'DM Sans', Roboto, -apple-system, 'Segoe UI', Arial, sans-serif;
+      --f-body: var(--f-display); --f-label: var(--f-display); --f-mono: var(--f-display);
+      --f-law: var(--f-display); --f-num: var(--f-display);
+      --zr-card: 20px; --zr-in: 12px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root[data-zona="lectura"]:not([data-theme="light"]) {
+        --bg: #1B1C1D; --surface: #232426; --surface-2: #2D2E31;
+        --ink: #E8EAED; --ink-2: #BDC1C6; --ink-3: #9AA0A6;
+        --line: #3C4043; --line-strong: #5F6368;
+        --accent: #8AB4F8; --accent-2: #AECBFA; --accent-soft: #263449; --spine: #8AB4F8;
+      }
+    }
+    :root[data-zona="lectura"][data-theme="dark"] {
+      --bg: #1B1C1D; --surface: #232426; --surface-2: #2D2E31;
+      --ink: #E8EAED; --ink-2: #BDC1C6; --ink-3: #9AA0A6;
+      --line: #3C4043; --line-strong: #5F6368;
+      --accent: #8AB4F8; --accent-2: #AECBFA; --accent-soft: #263449; --spine: #8AB4F8;
+    }
+
+    :root[data-zona="lectura"] body { font-feature-settings: "tnum" 0; letter-spacing: .01em; }
+    :root[data-zona="lectura"] h1, :root[data-zona="lectura"] h2, :root[data-zona="lectura"] h3 { font-weight: 500 !important; letter-spacing: -.006em !important; }
+    :root[data-zona="lectura"] .ini h1, :root[data-zona="lectura"] .ini-hero h1 { font-size: clamp(32px, 4.6vw, 48px); line-height: 1.15; }
+    :root[data-zona="lectura"] .ini h2 { font-size: 28px; line-height: 1.2; }
+    :root[data-zona="lectura"] .tb-t { font-weight: 500; }
+    :root[data-zona="lectura"] .sb-marca b { font-weight: 500; letter-spacing: -.006em; }
+    /* navegación: píldora azul clara, como Classroom */
+    :root[data-zona="lectura"] .sb-nav .vbtn { border-radius: 9999px; font-weight: 400; }
+    :root[data-zona="lectura"] .sb-nav .vbtn[aria-selected="true"] { font-weight: 500; color: var(--accent-2); }
+    /* botones: píldora llena (una sola por bloque) y fantasma con borde gris */
+    :root[data-zona="lectura"] .nbtn { border-radius: 9999px; font-weight: 500; min-height: 40px; padding: 8px 22px; letter-spacing: .01em; }
+    :root[data-zona="lectura"] .nbtn:not(.sec):hover { background: var(--accent-2); border-color: var(--accent-2); filter: none; }
+    :root[data-zona="lectura"] .nbtn.sec { border-color: var(--line); color: var(--accent); background: transparent; }
+    :root[data-zona="lectura"] .nbtn.sec:hover { background: var(--surface-2); border-color: var(--accent); }
+    :root[data-zona="lectura"] .tb-cuenta, :root[data-zona="lectura"] .toggle,
+    :root[data-zona="lectura"] .glosleyes button, :root[data-zona="lectura"] .glosletras button,
+    :root[data-zona="lectura"] .lk, :root[data-zona="lectura"] .gsrc, :root[data-zona="lectura"] .tag,
+    :root[data-zona="lectura"] .preg, :root[data-zona="lectura"] .mod, :root[data-zona="lectura"] .showtxt,
+    :root[data-zona="lectura"] .nvf { border-radius: 9999px; }
+    :root[data-zona="lectura"] .search { border-radius: 9999px; background: var(--surface); border-color: var(--line); }
+    :root[data-zona="lectura"] .search:focus-within { border-color: var(--line-strong); box-shadow: 0 0 0 3px color-mix(in srgb, var(--line-strong) 45%, transparent); }
+    /* tarjetas: planas, sin sombra, con radio grande; la elevación es el cambio de superficie */
+    :root[data-zona="lectura"] .ini-card,
+    :root[data-zona="lectura"] .tab,
+    :root[data-zona="lectura"] .gitem,
+    :root[data-zona="lectura"] .ucard,
+    :root[data-zona="lectura"] section.titulo,
+    :root[data-zona="lectura"] .ini-prin,
+    :root[data-zona="lectura"] .ini-fuentes > *,
+    :root[data-zona="lectura"] .invita { border-radius: var(--zr-card); box-shadow: none; }
+    :root[data-zona="lectura"] .ini-card { padding: 18px 20px; transition: background-color 160ms ease, border-color 160ms ease, transform 160ms var(--ease-out); }
+    :root[data-zona="lectura"] .ini-card:hover { background: var(--accent-soft); border-color: transparent; transform: translateY(-1px); }
+    :root[data-zona="lectura"] .tab { padding: 14px 16px 15px 20px; }
+    :root[data-zona="lectura"] .tab::before { inset: 14px auto 14px 8px; width: 4px; border-radius: 4px; }
+    :root[data-zona="lectura"] .tab[aria-selected="true"] { background: var(--accent-soft); border-color: transparent; color: var(--ink); }
+    :root[data-zona="lectura"] .literal { border-radius: var(--zr-in); }
+    :root[data-zona="lectura"] a, :root[data-zona="lectura"] .xref { text-underline-offset: 2px; }
+    :root[data-zona="lectura"] .eyebrow { color: var(--ink-3); font-weight: 500; }
+
+    /* ---------- ESTUDIO · Slite (claro) + Graphite (oscuro) ---------- */
+    :root[data-zona="estudio"] {
+      --bg: #FDF9F4; --surface: #FFFFFF; --surface-2: #F9EFE4;
+      --ink: #2D2F34; --ink-2: #3F434A; --ink-3: #5E646E;
+      --line: #EDE6DC; --line-strong: #D9D2C6;
+      --accent: #B8481C; --accent-soft: #FDEADF; --spine: #F67748;
+      --ember: #F67748; --ember-ink: #1E1F22; --ok: #2F7A3E; --no: #B3453C;
+      --spectrum: linear-gradient(90deg, #F67748 0%, #FFB931 45%, #74A6F1 100%);
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.01);
+      --f-display: 'Lora', 'Source Serif 4', Georgia, serif;
+      --f-body: 'Inter', -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      --f-label: var(--f-body); --f-mono: var(--f-body);
+      --f-law: 'Lora', 'Source Serif 4', Georgia, serif;
+      --f-num: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+      --zr-card: 16px; --zr-op: 12px; --zr-btn: 999px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root[data-zona="estudio"]:not([data-theme="light"]) {
+        --bg: #0A0A0A; --surface: #111111; --surface-2: #171717;
+        --ink: #FAFAFA; --ink-2: #A1A1A1; --ink-3: #8C8C8C;
+        --line: #262626; --line-strong: #3A3A3A;
+        --accent: #FF8833; --accent-soft: #24170D; --spine: #FF8833;
+        --ember: #FF8833; --ember-ink: #111111; --ok: #6CCF8A; --no: #F0857A;
+        --spectrum: linear-gradient(90deg, #FFB931 0%, #FFFFFF 35%, #FFFFFF 45%, #2E73FC 75%, #FF8833 100%);
+        --shadow: 0 0 0 1px #262626, 0 8px 10px rgba(0,0,0,.3);
+        --zr-card: 10px; --zr-op: 8px; --zr-btn: 8px;
+      }
+    }
+    :root[data-zona="estudio"][data-theme="dark"] {
+      --bg: #0A0A0A; --surface: #111111; --surface-2: #171717;
+      --ink: #FAFAFA; --ink-2: #A1A1A1; --ink-3: #8C8C8C;
+      --line: #262626; --line-strong: #3A3A3A;
+      --accent: #FF8833; --accent-soft: #24170D; --spine: #FF8833;
+      --ember: #FF8833; --ember-ink: #111111; --ok: #6CCF8A; --no: #F0857A;
+      --spectrum: linear-gradient(90deg, #FFB931 0%, #FFFFFF 35%, #FFFFFF 45%, #2E73FC 75%, #FF8833 100%);
+      --shadow: 0 0 0 1px #262626, 0 8px 10px rgba(0,0,0,.3);
+      --zr-card: 10px; --zr-op: 8px; --zr-btn: 8px;
+    }
+
+    :root[data-zona="estudio"] .sb-marca b, :root[data-zona="estudio"] .tb-t { font-family: var(--f-display); font-weight: 600; }
+    :root[data-zona="estudio"] .sb-nav .vbtn[aria-selected="true"] { background: var(--accent-soft); color: var(--accent); }
+    /* tarjetas de pregunta: blanco sobre papel (claro) / obsidiana con filo (oscuro) */
+    :root[data-zona="estudio"] .qcard, :root[data-zona="estudio"] .utarj, :root[data-zona="estudio"] .ucard {
+      border-radius: var(--zr-card); border-color: var(--line); box-shadow: var(--shadow); position: relative;
+    }
+    :root[data-zona="estudio"] .qtext, :root[data-zona="estudio"] .uq { font-family: var(--f-law); font-weight: 500; letter-spacing: -.005em; }
+    :root[data-zona="estudio"] .ucard h2, :root[data-zona="estudio"] .ubig { font-family: var(--f-display); }
+    :root[data-zona="estudio"] .qhead, :root[data-zona="estudio"] .utag, :root[data-zona="estudio"] .umeta,
+    :root[data-zona="estudio"] .qpie .count, :root[data-zona="estudio"] .qstat { font-family: var(--f-num); font-size: 12px; letter-spacing: 0; }
+    /* opciones */
+    :root[data-zona="estudio"] .qop, :root[data-zona="estudio"] .uop {
+      border-radius: var(--zr-op); border-color: var(--line-strong); background: var(--surface);
+      transition: transform 160ms var(--ease-out), border-color 140ms ease, background-color 140ms ease, box-shadow 160ms ease;
+    }
+    :root[data-zona="estudio"] .qop:not(:disabled):hover, :root[data-zona="estudio"] .uop:not(:disabled):hover {
+      border-color: var(--ember); transform: translateX(3px); box-shadow: -3px 0 0 0 var(--ember);
+    }
+    :root[data-zona="estudio"] .uop[aria-pressed="true"]:not(.ok):not(.mal) { border-color: var(--ember); background: var(--accent-soft); box-shadow: -3px 0 0 0 var(--ember); }
+    :root[data-zona="estudio"] .qop .letra, :root[data-zona="estudio"] .uop .ul { font-family: var(--f-num); }
+    /* botones: brasa en claro, pálido tipo Graphite en oscuro */
+    :root[data-zona="estudio"] .nbtn, :root[data-zona="estudio"] .qnext:not(.sec) {
+      border-radius: var(--zr-btn); background: var(--ember); border-color: var(--ember); color: var(--ember-ink);
+      font-weight: 600; padding: 9px 20px;
+    }
+    :root[data-zona="estudio"] .nbtn.sec, :root[data-zona="estudio"] .qnext.sec, :root[data-zona="estudio"] .hbtn {
+      border-radius: var(--zr-btn); background: transparent; color: var(--ink); border: 2px solid var(--ink); font-weight: 600;
+    }
+    :root[data-zona="estudio"] .mbtn { border-radius: var(--zr-btn); border-color: var(--line-strong); }
+    :root[data-zona="estudio"] .qcita { border-left-color: var(--ember); }
+    :root[data-zona="estudio"] .mbtn[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+    :root[data-zona="estudio"] .toggle, :root[data-zona="estudio"] .qfiltro button, :root[data-zona="estudio"] .ugrades button { border-radius: 9999px; }
+    :root[data-zona="estudio"] .search { border-radius: 12px; }
+    @media (prefers-color-scheme: dark) {
+      :root[data-zona="estudio"]:not([data-theme="light"]) .nbtn:not(.sec), :root[data-zona="estudio"]:not([data-theme="light"]) .qnext:not(.sec) {
+        background: #E5E5E5; border-color: rgba(255,255,255,.1); color: #171717;
+        box-shadow: inset 0 1px 0 #fff, inset 0 -2px 6px rgba(0,0,0,.1);
+      }
+      :root[data-zona="estudio"]:not([data-theme="light"]) .nbtn.sec, :root[data-zona="estudio"]:not([data-theme="light"]) .hbtn,
+      :root[data-zona="estudio"]:not([data-theme="light"]) .qnext.sec { background: #262626; border: 1px solid #464646; color: #FAFAFA; }
+    }
+    :root[data-zona="estudio"][data-theme="dark"] .nbtn:not(.sec), :root[data-zona="estudio"][data-theme="dark"] .qnext:not(.sec) {
+      background: #E5E5E5; border-color: rgba(255,255,255,.1); color: #171717;
+      box-shadow: inset 0 1px 0 #fff, inset 0 -2px 6px rgba(0,0,0,.1);
+    }
+    :root[data-zona="estudio"][data-theme="dark"] .nbtn.sec, :root[data-zona="estudio"][data-theme="dark"] .hbtn,
+    :root[data-zona="estudio"][data-theme="dark"] .qnext.sec { background: #262626; border: 1px solid #464646; color: #FAFAFA; }
+
+    /* barra de progreso: el espectro, con un brillo que pasa despacio */
+    :root[data-zona="estudio"] .qprog, :root[data-zona="estudio"] .ubarra { height: 4px; border-radius: 4px; background: var(--line); overflow: hidden; border: 0; }
+    :root[data-zona="estudio"] .qprog i, :root[data-zona="estudio"] .ubarra i {
+      background: var(--spectrum); background-size: 200% 100%; border-radius: 4px;
+      transition: width 520ms var(--ease-out); animation: zBrillo 7s linear infinite;
+    }
+    @keyframes zBrillo { from { background-position: 0% 0; } to { background-position: -200% 0; } }
+
+    /* entrada de cada pregunta o tarjeta */
+    :root[data-zona="estudio"] .qcard, :root[data-zona="estudio"] .utarj { animation: zEntra 340ms var(--ease-out) both; }
+    @keyframes zEntra { from { opacity: 0; transform: translateY(10px) scale(.995); } to { opacity: 1; transform: none; } }
+    :root[data-zona="estudio"] .qops li, :root[data-zona="estudio"] .uops .uop { animation: zEntra 300ms var(--ease-out) both; }
+    :root[data-zona="estudio"] .qops li:nth-child(2), :root[data-zona="estudio"] .uops .uop:nth-child(2) { animation-delay: 40ms; }
+    :root[data-zona="estudio"] .qops li:nth-child(3), :root[data-zona="estudio"] .uops .uop:nth-child(3) { animation-delay: 80ms; }
+    :root[data-zona="estudio"] .qops li:nth-child(4), :root[data-zona="estudio"] .uops .uop:nth-child(4) { animation-delay: 120ms; }
+    :root[data-zona="estudio"] .qops li:nth-child(5), :root[data-zona="estudio"] .uops .uop:nth-child(5) { animation-delay: 160ms; }
+    /* una vez respondida, no se repite la cascada */
+    :root[data-zona="estudio"] .qcard:has(.qfb) .qops li, :root[data-zona="estudio"] .utarj:has(.uverdict) .uop,
+    :root[data-zona="estudio"] .qcard:has(.qfb), :root[data-zona="estudio"] .utarj:has(.uverdict) { animation: none; }
+
+    /* acierto: la opción respira y el veredicto se subraya a mano (garabato de Slite) */
+    :root[data-zona="estudio"] .qop.bien, :root[data-zona="estudio"] .uop.ok { animation: zAcierto 520ms var(--ease-out) both; }
+    @keyframes zAcierto { 0% { transform: scale(1); } 35% { transform: scale(1.012); } 100% { transform: scale(1); } }
+    :root[data-zona="estudio"] .qop.mal, :root[data-zona="estudio"] .uop.mal { animation: zError 300ms ease both; }
+    @keyframes zError { 0%,100% { transform: none; } 25% { transform: translateX(-4px); } 50% { transform: translateX(3px); } 75% { transform: translateX(-2px); } }
+    :root[data-zona="estudio"] .qveredicto, :root[data-zona="estudio"] .uverdict {
+      display: inline-block; position: relative; padding-bottom: 6px; font-family: var(--f-display); font-size: 18px; letter-spacing: 0; text-transform: none; font-weight: 600;
+    }
+    :root[data-zona="estudio"] .qveredicto.ok, :root[data-zona="estudio"] .uverdict.ok { color: var(--ok); }
+    :root[data-zona="estudio"] .qveredicto.no, :root[data-zona="estudio"] .uverdict:not(.ok) { color: var(--no); }
+    :root[data-zona="estudio"] .qveredicto::after, :root[data-zona="estudio"] .uverdict::after {
+      content: ""; position: absolute; left: -4px; right: -6px; bottom: 0; height: 9px;
+      background: currentColor; opacity: .9;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 C 40 3, 80 10, 120 5 S 180 4, 198 7' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+              mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 C 40 3, 80 10, 120 5 S 180 4, 198 7' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+      clip-path: inset(0 100% 0 0); animation: zGarabato 560ms 120ms var(--ease-out) forwards;
+    }
+    :root[data-zona="estudio"] .qveredicto.ok::after, :root[data-zona="estudio"] .uverdict.ok::after { background: var(--ember); }
+    @keyframes zGarabato { to { clip-path: inset(0 0 0 0); } }
+    :root[data-zona="estudio"] .qfb, :root[data-zona="estudio"] .ua, :root[data-zona="estudio"] .utarj .qfund { animation: zEntra 360ms 80ms var(--ease-out) both; }
+
+    /* la racha: aparece arriba a la derecha de la tarjeta con cada acierto seguido */
+    .zracha {
+      position: absolute; top: 14px; right: 16px; display: inline-flex; align-items: center; gap: 6px;
+      font: 600 12px/1 var(--f-num); color: var(--ink-2); background: var(--surface-2);
+      border: 1px solid var(--line); border-radius: 999px; padding: 5px 9px 5px 7px; pointer-events: none;
+      animation: zRacha 420ms var(--ease-out) both;
+    }
+    .zracha i { width: 8px; height: 8px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 0 0 var(--ember); animation: zLatido 1.6s ease-out 2; }
+    .zracha.zr-alta { color: var(--ember-ink); background: var(--ember); border-color: var(--ember); }
+    .zracha.zr-alta i { background: var(--ember-ink); }
+    @keyframes zRacha { from { opacity: 0; transform: translateY(-6px) scale(.9); } to { opacity: 1; transform: none; } }
+    @keyframes zLatido { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ember) 60%, transparent); } 100% { box-shadow: 0 0 0 8px transparent; } }
+    :root[data-zona="estudio"] .qhead, :root[data-zona="estudio"] .utag { padding-right: 96px; }
+
+    /* oscuro: un filo de luz arriba de la tarjeta activa (las líneas de Graphite) */
+    @media (prefers-color-scheme: dark) {
+      :root[data-zona="estudio"]:not([data-theme="light"]) .qcard::before, :root[data-zona="estudio"]:not([data-theme="light"]) .utarj::before {
+        content: ""; position: absolute; left: 24px; right: 24px; top: -1px; height: 1px; background: var(--spectrum); opacity: .55; pointer-events: none;
+      }
+    }
+    :root[data-zona="estudio"][data-theme="dark"] .qcard::before, :root[data-zona="estudio"][data-theme="dark"] .utarj::before {
+      content: ""; position: absolute; left: 24px; right: 24px; top: -1px; height: 1px; background: var(--spectrum); opacity: .55; pointer-events: none;
+    }
+
+    /* números que suben al pintar el panel del micro-learning */
+    .zcuenta { font-variant-numeric: tabular-nums; }
+
+    /* ---------- MERCADO · Base (claro) + Vana (oscuro) ---------- */
+    :root[data-zona="mercado"] {
+      --bg: #FFFFFF; --surface: #FFFFFF; --surface-2: #F2F2F2;
+      --ink: #000000; --ink-2: #323232; --ink-3: #626A78;
+      --line: #E4E6EB; --line-strong: #B1B7C3;
+      --accent: #0000FF; --accent-fill: #0000FF; --accent-soft: #EDEDFF; --spine: #0000FF;
+      --m-verde: #098551; --m-lila: #6B47DC; --m-ink-on: #FFFFFF;
+      --shadow: none;
+      --f-display: 'Inter', -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      --f-body: var(--f-display); --f-law: var(--f-display);
+      --f-label: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+      --f-mono: var(--f-label); --f-num: var(--f-label);
+      --f-pixel: 'Doto', 'JetBrains Mono', monospace;
+      --zr: 8px; --zr-tag: 2px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root[data-zona="mercado"]:not([data-theme="light"]) {
+        --bg: #0D0D0D; --surface: #161616; --surface-2: #252525;
+        --ink: #FFFFFF; --ink-2: #D4D4D4; --ink-3: #9C9C9C;
+        --line: #2A2A2A; --line-strong: #3B3B3B;
+        --accent: #8B8BFE; --accent-fill: #0000FF; --accent-soft: #16163A; --spine: #4141FC;
+        --m-verde: #7FD579; --m-lila: #D896FF;
+        --zr: 2px; --zr-tag: 2px;
+      }
+    }
+    :root[data-zona="mercado"][data-theme="dark"] {
+      --bg: #0D0D0D; --surface: #161616; --surface-2: #252525;
+      --ink: #FFFFFF; --ink-2: #D4D4D4; --ink-3: #9C9C9C;
+      --line: #2A2A2A; --line-strong: #3B3B3B;
+      --accent: #8B8BFE; --accent-fill: #0000FF; --accent-soft: #16163A; --spine: #4141FC;
+      --m-verde: #7FD579; --m-lila: #D896FF;
+      --zr: 2px; --zr-tag: 2px;
+    }
+    :root[data-zona="mercado"] h1, :root[data-zona="mercado"] h2, :root[data-zona="mercado"] h3 { letter-spacing: -.02em; }
+    :root[data-zona="mercado"] .tb-t, :root[data-zona="mercado"] .sb-marca b { font-weight: 700; letter-spacing: -.02em; }
+    :root[data-zona="mercado"] .sb-nav .vbtn { border-radius: var(--zr); }
+    :root[data-zona="mercado"] .sb-nav .vbtn[aria-selected="true"] { background: var(--accent-fill); color: #fff; }
+    :root[data-zona="mercado"] .sb-nav .vbtn[aria-selected="true"] * { color: #fff !important; }
+    /* subpestañas: etiquetas en mono mayúscula con punto, como el nav de Vana */
+    :root[data-zona="mercado"] .mtab {
+      font-family: var(--f-label); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .02em;
+      border-radius: var(--zr); border-color: var(--line-strong); color: var(--ink); background: var(--surface); padding: 8px 13px;
+    }
+    :root[data-zona="mercado"] .mtab::before { content: "•"; margin-right: 6px; color: var(--ink-3); }
+    :root[data-zona="mercado"] .mtab:hover { color: var(--accent); border-color: var(--accent); }
+    :root[data-zona="mercado"] .mtab[aria-selected="true"] { background: var(--accent-fill); border-color: var(--accent-fill); color: #fff; }
+    :root[data-zona="mercado"] .mtab[aria-selected="true"]::before { color: #fff; }
+    :root[data-zona="mercado"] .nbtn { border-radius: var(--zr); background: var(--accent-fill); border-color: var(--accent-fill); color: #fff; font-weight: 500; }
+    :root[data-zona="mercado"] .nbtn.sec { background: var(--surface); color: var(--ink); border-color: var(--line-strong); }
+    :root[data-zona="mercado"] .search { border-radius: var(--zr); }
+    :root[data-zona="mercado"] .mf, :root[data-zona="mercado"] .est, :root[data-zona="mercado"] .tag, :root[data-zona="mercado"] .agx-chip { border-radius: var(--zr-tag); }
+    :root[data-zona="mercado"] .mintro, :root[data-zona="mercado"] .mnota { color: var(--ink-3); }
+    :root[data-zona="mercado"] #mzona article, :root[data-zona="mercado"] #mzona .mficha,
+    :root[data-zona="mercado"] #mzona section { border-radius: var(--zr); box-shadow: none; }
+    :root[data-zona="mercado"] .count { font-family: var(--f-label); text-transform: uppercase; font-size: 11px; letter-spacing: .04em; }
+
+    /* ---------- Dinámica del mercado ---------- */
+    .din { margin-top: 18px; }
+    .din-esc { display: flex; flex-wrap: wrap; gap: 6px; }
+    .din-esc button {
+      font: 500 12px/1 var(--f-label, monospace); text-transform: uppercase; letter-spacing: .02em; cursor: pointer;
+      padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: var(--zr, 8px); background: var(--surface); color: var(--ink);
+      transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+    }
+    .din-esc button::before { content: "• "; color: var(--ink-3); }
+    .din-esc button:hover { border-color: var(--accent); color: var(--accent); }
+    .din-esc button[aria-selected="true"] { background: var(--accent-fill, var(--accent)); border-color: var(--accent-fill, var(--accent)); color: #fff; }
+    .din-esc button[aria-selected="true"]::before { color: #fff; }
+    .din-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; margin-top: 14px; align-items: start; }
+    .din-lienzo { position: relative; border: 1px solid var(--line); border-radius: var(--zr, 8px); background: var(--surface); overflow: hidden; }
+    .din-lienzo svg { display: block; width: 100%; height: auto; user-select: none; -webkit-user-select: none; }
+    .din-ctrl { display: flex; align-items: center; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+    .din-ctrl button {
+      font: 500 12px/1 var(--f-label, monospace); text-transform: uppercase; cursor: pointer; min-height: 34px; min-width: 34px;
+      padding: 0 11px; border: 1px solid var(--line-strong); border-radius: var(--zr, 8px); background: var(--surface); color: var(--ink);
+    }
+    .din-ctrl button:hover { border-color: var(--accent); color: var(--accent); }
+    .din-ctrl button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .din-paso { margin-left: auto; font: 700 26px/1 var(--f-pixel, monospace); color: var(--accent); letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+    .din-paso small { font-size: 15px; color: var(--ink-3); }
+    .din-panel { border: 1px solid var(--line); border-radius: var(--zr, 8px); background: var(--surface); padding: 16px 16px 14px; position: sticky; top: calc(var(--tbh, 52px) + 64px); }
+    .din-panel .din-lab, .din-lab { font: 500 11px/1.4 var(--f-label, monospace); text-transform: uppercase; letter-spacing: .073em; color: var(--ink-3); margin: 0 0 8px; text-align: left; hyphens: none; }
+    .din-panel h3 { margin: 0 0 8px; font: 600 20px/1.25 var(--f-display); letter-spacing: -.015em; color: var(--ink); }
+    .din-panel p { margin: 0 0 10px; font-size: 15px; line-height: 1.55; color: var(--ink-2); text-align: justify; hyphens: auto; }
+    .din-panel .din-tipo { display: inline-flex; align-items: center; gap: 6px; font: 500 11px/1 var(--f-label, monospace); text-transform: uppercase; letter-spacing: .04em; color: var(--ink-2); margin-bottom: 10px; }
+    .din-panel .din-tipo i { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
+    .din-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .din-chips .mf { cursor: pointer; }
+    .din-prac { display: inline-block; font: 500 11px/1.3 var(--f-label, monospace); text-transform: uppercase; letter-spacing: .04em; color: var(--ink-3); border: 1px dashed var(--line-strong); border-radius: var(--zr-tag, 2px); padding: 4px 7px; }
+    .din-acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+    .din-acts button { font: 500 12px/1 var(--f-label, monospace); cursor: pointer; padding: 7px 10px; border-radius: var(--zr, 8px); border: 1px solid var(--line-strong); background: var(--surface-2); color: var(--ink); }
+    .din-acts button:hover { border-color: var(--accent); color: var(--accent); }
+    .din-ley { display: flex; flex-wrap: wrap; gap: 14px; padding: 10px 12px 0; font: 500 11px/1 var(--f-label, monospace); text-transform: uppercase; letter-spacing: .04em; color: var(--ink-3); }
+    .din-ley span { display: inline-flex; align-items: center; gap: 6px; }
+    .din-ley i { width: 18px; height: 0; border-top: 2px solid; display: inline-block; }
+    .din-pasos { list-style: none; margin: 16px 0 0; padding: 0; counter-reset: dp; display: grid; gap: 6px; }
+    .din-pasos li { counter-increment: dp; }
+    .din-pasos button {
+      width: 100%; display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: baseline; text-align: left; cursor: pointer;
+      padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--zr, 8px); background: var(--surface); color: var(--ink-2);
+      font: 400 15px/1.45 var(--f-body); transition: border-color 140ms ease, background-color 140ms ease, color 140ms ease;
+    }
+    .din-pasos button::before { content: counter(dp, decimal-leading-zero); font: 700 15px/1 var(--f-pixel, monospace); color: var(--ink-3); }
+    .din-pasos button:hover { border-color: var(--line-strong); color: var(--ink); }
+    .din-pasos button[aria-current="step"] { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); }
+    .din-pasos button[aria-current="step"]::before { color: var(--accent); }
+    .din-pasos b { color: var(--ink); font-weight: 600; }
+
+    /* el lienzo (SVG) */
+    .din svg .d-carril { fill: var(--surface-2); opacity: .55; }
+    .din svg .d-carril-t { font: 500 11px var(--f-label, monospace); letter-spacing: .07em; text-transform: uppercase; fill: var(--ink-3); }
+    .din svg .d-barra { fill: var(--line-strong); opacity: .35; }
+    .din svg .d-base { fill: none; stroke: var(--line-strong); stroke-width: 1; opacity: .55; }
+    .din svg .d-arista { fill: none; stroke-width: 2; stroke-linecap: round; opacity: 0; transition: opacity 300ms ease; }
+    .din svg .d-arista.on { opacity: 1; }
+    .din svg .d-arista.tenue { opacity: .18; }
+    .din svg .t-orden { stroke: var(--ink); }
+    .din svg .t-titulo { stroke: var(--accent); }
+    .din svg .t-plata { stroke: var(--m-verde, #098551); }
+    .din svg .t-control { stroke: var(--m-lila, #6B47DC); stroke-dasharray: 5 5; }
+    .din svg .d-pulso { pointer-events: none; }
+    .din svg .p-orden { fill: var(--ink); }
+    .din svg .p-titulo { fill: var(--accent); }
+    .din svg .p-plata { fill: var(--m-verde, #098551); }
+    .din svg .p-control { fill: var(--m-lila, #6B47DC); }
+    .din svg .d-nodo { cursor: pointer; outline: none; }
+    .din svg .d-nodo rect { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1; transition: stroke 160ms ease, fill 160ms ease; }
+    .din svg .d-nodo .n1 { font: 600 15px var(--f-display); fill: var(--ink); letter-spacing: -.01em; }
+    .din svg .d-nodo .n2 { font: 400 11.5px var(--f-label, monospace); fill: var(--ink-3); text-transform: uppercase; letter-spacing: .02em; }
+    .din svg .d-nodo:hover rect, .din svg .d-nodo:focus-visible rect { stroke: var(--accent); }
+    .din svg .d-nodo.activo rect { stroke: var(--accent); stroke-width: 2; fill: var(--accent-soft); }
+    .din svg .d-nodo.sel rect { stroke: var(--ink); stroke-width: 2; }
+    .din svg .d-nodo.apagado { opacity: .38; }
+    .din svg .d-nodo { transition: opacity 260ms ease; }
+    .din svg .d-halo { fill: none; stroke: var(--accent); stroke-width: 2; opacity: 0; }
+    .din svg .d-nodo.llega .d-halo { animation: dHalo 900ms var(--ease-out); }
+    @keyframes dHalo { 0% { opacity: .7; transform: scale(1); } 100% { opacity: 0; transform: scale(1.12); } }
+    .din svg .d-halo { transform-box: fill-box; transform-origin: center; }
+    .din-vacio { color: var(--ink-3); font-size: 14px; }
+
+    @media (max-width: 999px) {
+      .din-cuerpo { grid-template-columns: 1fr; }
+      .din-panel { position: static; }
+    }
+    @media (max-width: 640px) {
+      .din-esc { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -16px; padding-inline: 16px; }
+      .din-esc button { flex: none; }
+      .din-paso { font-size: 22px; }
+    }
+
+    /* ---------- accesibilidad: sin movimiento si el sistema lo pide ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      :root[data-zona] .qcard, :root[data-zona] .utarj, :root[data-zona] .qops li, :root[data-zona] .uop,
+      :root[data-zona] .qop, :root[data-zona] .qfb, :root[data-zona] .ua, .zracha, .zracha i { animation: none !important; }
+      :root[data-zona] .qprog i, :root[data-zona] .ubarra i { animation: none !important; }
+      :root[data-zona] .qveredicto::after, :root[data-zona] .uverdict::after { animation: none !important; clip-path: none !important; }
+      :root[data-zona] .qop:hover, :root[data-zona] .uop:hover, :root[data-zona] .ini-card:hover { transform: none !important; }
+      .din svg .d-nodo.llega .d-halo { animation: none; }
+      body, .sb, .tb, .controls { transition: none; }
+    }
+</style>
+<script id="zonas-js">
+  /* =================== Estilos por zona y Dinámica del mercado (08/10/2026) =================== */
+  (function () {
+    const raiz = document.documentElement;
+    const quieto = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const ZONA = { inicio: "lectura", leyes: "lectura", glosario: "lectura", notas: "lectura", perfil: "lectura",
+                   cuestionario: "estudio", micro: "estudio", mercado: "mercado" };
+    const FONDO = {
+      lectura: ["#F8F9FA", "#1B1C1D"], estudio: ["#FDF9F4", "#0A0A0A"], mercado: ["#FFFFFF", "#0D0D0D"]
+    };
+    function oscuro() {
+      const t = raiz.getAttribute("data-theme");
+      if (t === "dark") return true;
+      if (t === "light") return false;
+      return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    function ponerZona(v) {
+      const z = ZONA[v] || "lectura";
+      raiz.setAttribute("data-zona", z);
+      const c = FONDO[z][oscuro() ? 1 : 0];
+      document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute("content", c));
+    }
+    /* fuentes de cada zona (además de las que ya cargaba la página) */
+    {
+      const l = document.createElement("link");
+      l.rel = "stylesheet";
+      l.href = "https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Lora:wght@500;600&family=JetBrains+Mono:wght@400;500;700&family=Doto:wght@700&display=swap";
+      document.head.appendChild(l);
+    }
+    {
+      const sv = setVista;
+      setVista = function (v) {
+        ponerZona(v); sv(v);
+        if (v !== "mercado") dinParar();
+        else if (msub === "dinamica" && !DIN.viva) pintarMercado();
+      };
+    }
+    ponerZona(typeof vista !== "undefined" ? vista : "inicio");
+    try { new MutationObserver(() => ponerZona(typeof vista !== "undefined" ? vista : "inicio")).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] }); } catch (e) { }
+
+    /* ---------- estudio: racha de aciertos y números que suben ---------- */
+    let racha = 0;
+    function verVeredictos(root) {
+      root.querySelectorAll(".qveredicto:not([data-zv]), .uverdict:not([data-zv])").forEach(el => {
+        el.setAttribute("data-zv", "1");
+        const ok = el.classList.contains("ok");
+        racha = ok ? racha + 1 : 0;
+        const card = el.closest(".qcard, .utarj");
+        if (!card) return;
+        card.querySelectorAll(".zracha").forEach(x => x.remove());
+        if (racha >= 2) {
+          const s = document.createElement("span");
+          s.className = "zracha" + (racha >= 5 ? " zr-alta" : "");
+          s.setAttribute("aria-label", `${racha} respuestas correctas seguidas`);
+          s.innerHTML = `<i></i>${racha} seguidas`;
+          card.appendChild(s);
+        }
+      });
+    }
+    function contar(root) {
+      if (quieto()) return;
+      root.querySelectorAll(".ustat > b:not([data-zc])").forEach(b => {
+        b.setAttribute("data-zc", "1");
+        const n = parseInt(b.textContent, 10);
+        if (!(n > 0) || String(n) !== b.textContent.trim()) return;
+        b.classList.add("zcuenta");
+        const t0 = performance.now(), dur = Math.min(900, 350 + n * 8);
+        const paso = t => {
+          const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+          b.textContent = String(Math.round(n * e));
+          if (k < 1) requestAnimationFrame(paso);
+        };
+        b.textContent = "0";
+        requestAnimationFrame(paso);
+      });
+    }
+    ["qzona", "uzona"].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      new MutationObserver(() => { verVeredictos(el); contar(el); }).observe(el, { childList: true, subtree: true });
+    });
+
+    /* =================== Dinámica: agentes · mercado · sistema financiero =================== */
+    const NODOS = {
+      cnv: { c: "reg", n: "CNV", s: "regula y sanciona", ns: "regula", f: "cnv",
+        d: "Autoridad de aplicación y contralor de la Ley 26.831: autoriza la oferta pública, registra a cada agente, supervisa, inspecciona y sanciona. La competencia disciplinaria sobre los agentes es exclusivamente suya.",
+        cit: [["26831", "19"], ["26831", "56"]] },
+      uif: { c: "reg", n: "UIF", s: "Información financiera", ns: "lavado",
+        d: "Unidad de Información Financiera. Los agentes, los bancos y demás sujetos obligados le reportan las operaciones sospechosas. Con la CNV, el BCRA y la Superintendencia de Seguros puede intercambiar información sin que le opongan el secreto.",
+        cit: [["26831", "27"]], norm: ["Normas CNV · Tít. XI (prevención de lavado)"] },
+      bcra: { c: "reg", n: "BCRA", s: "Banco Central", ns: "bancos",
+        d: "Regula y supervisa a las entidades financieras (Ley 21.526). No controla a los agentes del mercado de capitales —eso es de la CNV—, pero los bancos que son ALyC o sociedades depositarias responden ante los dos.",
+        cit: [["26831", "27"]] },
+      inversor: { c: "ag", n: "Inversor", s: "persona o empresa", ns: "cliente", f: "inversor",
+        d: "Quien pone la plata. No entra solo al mercado: lo hace siempre a través de un agente registrado en la CNV, con una cuenta comitente a su nombre.",
+        cit: [["26831", "1"], ["26831", "47"]] },
+      prod: { c: "ag", n: "AP · AAGI", s: "productor y asesor", ns: "asesora", f: "ap",
+        d: "El agente productor difunde, asesora y capta clientes bajo responsabilidad de un agente registrado; el asesor global (AAGI) además gestiona órdenes y administra carteras con mandato. Ninguno de los dos recibe ni custodia la plata o los títulos del cliente.",
+        cit: [["26831", "2"]], norm: ["Normas CNV · Tít. VII, Cap. IV y VII"] },
+      alyc: { c: "ag", n: "ALyC · AN", s: "liquida · negocia", ns: "liquida", f: "alyc_int",
+        d: "El ALyC interviene en la liquidación y compensación de las operaciones y puede tener la plata y los títulos del cliente. El AN solo negocia: para liquidar necesita un ALyC. Muchos bancos están registrados como ALyC.",
+        cit: [["26831", "2"], ["26831", "47"]] },
+      aapic: { c: "ag", n: "Sociedad gerente", nn: "Gerente FCI", s: "AAPIC · administra FCI", ns: "gerente", f: "aapic",
+        d: "Dirige y administra el fondo común de inversión: decide en qué se invierte. No custodia los activos; eso lo hace la sociedad depositaria.",
+        cit: [["24083", "3"], ["26831", "2"]] },
+      emisora: { c: "ag", n: "Emisora · PyME", s: "se financia", ns: "emite", f: "emisora",
+        d: "La empresa que busca financiarse emitiendo valores negociables: acciones, obligaciones negociables o, en el caso de una PyME, cheques y pagarés que se negocian en el mercado.",
+        cit: [["23576", "1"], ["26831", "80"]] },
+      mercado: { c: "mer", n: "Mercado", s: "BYMA · A3 · MAV", ns: "concierta", f: "mercados",
+        d: "Sociedad anónima autorizada por la CNV para organizar las operaciones: habilita a los agentes en su ámbito, lista los valores y administra los sistemas de negociación donde se concierta el precio.",
+        cit: [["26831", "2"], ["26831", "32"]] },
+      camara: { c: "mer", n: "Cámara", s: "compensa · contraparte", ns: "compensa", f: "camaras",
+        d: "Compensa y liquida las operaciones, exige márgenes y garantías a los agentes y administra fondos de garantía. Cuando garantiza, es contraparte central: le compra al vendedor y le vende al comprador.",
+        cit: [["26831", "35"], ["26831", "40"]] },
+      caja: { c: "mer", n: "Caja de Valores", s: "ADCVN · custodia", ns: "custodia", f: "adcvn",
+        d: "El agente depositario central: recibe los depósitos colectivos de valores negociables, los custodia, liquida y paga sus acreencias (dividendos, renta y amortización).",
+        cit: [["26831", "2"], ["26831", "129"]] },
+      acr: { c: "mer", n: "Calificadora", s: "ACR · riesgo", ns: "califica", f: "acr",
+        d: "Agente de calificación de riesgo registrado en la CNV. Opina sobre la capacidad de pago de un instrumento; no intermedia ni toca fondos.",
+        cit: [["26831", "57"], ["26831", "58"]] },
+      bancos: { c: "fin", n: "Bancos", s: "cuentas de dinero", ns: "pagan",
+        d: "Entidades financieras de la Ley 21.526. La plata del inversor y de los agentes vive en cuentas bancarias, y por ellas se pagan y se cobran las operaciones. Muchos bancos son, además, ALyC.",
+        cit: [], prac: true },
+      depo: { c: "fin", n: "Sociedad depositaria", nn: "Depositaria", s: "ACPIC · banco del FCI", ns: "custodia FCI", f: "acpic",
+        d: "La custodia de los activos de un fondo común de inversión tiene que estar a cargo de una entidad financiera: la sociedad depositaria. Recibe las suscripciones y paga los rescates.",
+        cit: [["24083", "3"], ["24083", "14"]] },
+      sgr: { c: "fin", n: "SGR", s: "garantía recíproca", ns: "avala", f: "sgr",
+        d: "Sociedad de garantía recíproca: existe para facilitar el crédito a las PyMEs otorgando garantías a sus socios partícipes. No puede prestar plata; avala, y pide una contragarantía.",
+        cit: [["24467", "32"], ["24467", "33"], ["24467", "35"]] }
+    };
+    const TIPOS = { orden: "Órdenes y operaciones", titulo: "Títulos", plata: "Plata", control: "Control, garantías e información" };
+
+    const ESC = [
+      { k: "acciones", n: "Comprar acciones", d: "Mercado secundario: un inversor compra acciones que ya cotizan.", pasos: [
+        { e: [["prod", "inversor", "orden"]], t: "Te acerca un productor o un asesor",
+          x: "El productor difunde y asesora; el AAGI puede además gestionar tu orden con mandato. Pero la cuenta, la plata y los títulos nunca quedan en sus manos: quedan en el agente registrado que te da de alta.",
+          cit: [["26831", "2"]], norm: ["Normas CNV · Tít. VII, Cap. IV art. 9"] },
+        { e: [["inversor", "alyc", "orden"]], t: "Abrís la cuenta comitente y das la orden",
+          x: "El inversor no opera solo en el mercado: lo hace a través de un agente autorizado y registrado en la CNV. Con un ALyC (o con un AN, que después liquida por un ALyC) abre su cuenta comitente y da la orden de compra.",
+          cit: [["26831", "47"], ["26831", "2"]] },
+        { e: [["alyc", "mercado", "orden"]], t: "El agente la ingresa al mercado",
+          x: "El ALyC carga la oferta en el sistema de negociación del mercado, que es donde se encuentra con una de venta y se concierta el precio. El mercado reglamenta quién puede actuar ahí y asegura la veracidad de los precios.",
+          cit: [["26831", "32"]] },
+        { e: [["mercado", "camara", "orden"]], t: "Se compensa y se garantiza",
+          x: "Concertada, la operación pasa a la cámara compensadora, que calcula qué entrega cada agente y le exige garantías. Cuando garantiza el cumplimiento, actúa como contraparte central.",
+          cit: [["26831", "35"], ["26831", "40"]] },
+        { e: [["bancos", "camara", "plata"]], t: "Viaja la plata",
+          x: "El ALyC entrega los pesos con los que pagaste. La plata se mueve entre cuentas bancarias de los participantes, que es por donde el mercado de capitales se toca con el sistema financiero.",
+          prac: true },
+        { e: [["caja", "alyc", "titulo"]], t: "Viajan los títulos",
+          x: "La Caja de Valores, agente depositario central, acredita las acciones en la subcuenta comitente del inversor dentro de la cuenta del ALyC. Desde ahí cobra dividendos sin que nadie le toque un papel.",
+          cit: [["26831", "2"], ["26831", "129"]] },
+        { e: [["cnv", "alyc", "control"], ["cnv", "mercado", "control"], ["cnv", "camara", "control"], ["cnv", "caja", "control"]], t: "La CNV mira todo el circuito",
+          x: "Supervisa, inspecciona y sanciona a cada eslabón. Los mercados y las cámaras tienen que denunciarle las infracciones de los agentes, que quedan bajo su competencia disciplinaria exclusiva.",
+          cit: [["26831", "19"], ["26831", "56"]] }
+      ] },
+      { k: "fci", n: "Suscribir un FCI", d: "Un inversor entra a un fondo común de inversión.", pasos: [
+        { e: [["inversor", "alyc", "orden"]], t: "Pedís la suscripción",
+          x: "Lo hacés a través de un agente colocador o directamente con la sociedad gerente. Antes tenés que tener el reglamento de gestión del fondo, que es el contrato.",
+          norm: ["Normas CNV · Tít. V (productos de inversión colectiva)"] },
+        { e: [["bancos", "depo", "plata"]], t: "La plata va a la depositaria",
+          x: "No va a la gerente ni al agente: va a la cuenta del fondo en la sociedad depositaria, que por ley tiene que ser una entidad financiera. Por eso un FCI es un puente directo entre el mercado de capitales y el sistema bancario.",
+          cit: [["24083", "3"]] },
+        { e: [["depo", "inversor", "titulo"]], t: "Recibís cuotapartes",
+          x: "No comprás acciones de una sociedad: el fondo no es una sociedad ni tiene personería jurídica. Pasás a ser copropietario de su patrimonio, y tu parte se mide en cuotapartes.",
+          cit: [["24083", "1"]] },
+        { e: [["aapic", "mercado", "orden"]], t: "La gerente decide en qué invertir",
+          x: "La sociedad gerente dirige y administra el fondo: elige los activos según el reglamento y da las órdenes en el mercado.",
+          cit: [["24083", "3"], ["26831", "2"]] },
+        { e: [["caja", "depo", "titulo"]], t: "Los activos quedan en custodia",
+          x: "Lo que el fondo compra queda bajo custodia de la sociedad depositaria; los valores escriturales están depositados en la Caja de Valores a su nombre, por cuenta del fondo. Gerente y depositaria tienen que ser independientes.",
+          cit: [["24083", "3"]], prac: true },
+        { e: [["cnv", "aapic", "control"], ["cnv", "depo", "control"], ["bcra", "depo", "control"]], t: "Dos supervisores",
+          x: "La CNV controla a la gerente y a la depositaria como agentes registrados. La depositaria, además, es un banco: responde también ante el BCRA. Para eso existe el intercambio de información entre los dos.",
+          cit: [["26831", "19"], ["26831", "27"]] }
+      ] },
+      { k: "on", n: "Emitir una ON", d: "Mercado primario: una empresa sale a pedir plata prestada emitiendo obligaciones negociables.", pasos: [
+        { e: [["emisora", "cnv", "control"]], t: "Pide autorización de oferta pública",
+          x: "Presenta el prospecto y la documentación. La CNV es la autoridad de autorización de la oferta pública en todo el país y tiene que resolver dentro de los 30 días hábiles desde que la documentación está completa.",
+          cit: [["23576", "1"], ["26831", "80"], ["26831", "84"]] },
+        { e: [["acr", "emisora", "control"]], t: "Una calificadora opina",
+          x: "Si la emisión se califica, un agente de calificación de riesgo registrado en la CNV opina sobre la capacidad de pago. Califica; no garantiza ni vende.",
+          cit: [["26831", "57"]] },
+        { e: [["emisora", "alyc", "orden"]], t: "Contrata organizadores y colocadores",
+          x: "Los agentes que organizan o colocan la emisión tienen que revisar diligentemente el prospecto: si hay información falsa, responden como responsables indirectos.",
+          cit: [["26831", "120"], ["26831", "119"]] },
+        { e: [["inversor", "alyc", "orden"], ["alyc", "mercado", "orden"]], t: "Los inversores ofertan",
+          x: "Durante el período de colocación los inversores dan sus órdenes a los colocadores, que las ingresan en el sistema del mercado donde se arma la licitación o el libro.",
+          prac: true },
+        { e: [["bancos", "emisora", "plata"]], t: "Integran: la plata llega a la empresa",
+          x: "Adjudicada la colocación, los inversores integran y los fondos se transfieren a la emisora por el circuito bancario. Ese es el momento en que el ahorro se convierte en financiamiento.",
+          prac: true },
+        { e: [["caja", "inversor", "titulo"]], t: "Las ON llegan a las cuentas",
+          x: "Las obligaciones negociables se acreditan en las cuentas comitentes de los inversores en la Caja de Valores, que después paga la renta y la amortización.",
+          cit: [["26831", "2"]] },
+        { e: [["emisora", "mercado", "control"]], t: "Cotiza e informa",
+          x: "Desde ahí la ON se negocia en el secundario, y la emisora tiene que informar a la CNV y a los mercados, de forma directa y oportuna, todo hecho relevante.",
+          cit: [["26831", "99"], ["26831", "100"]] }
+      ] },
+      { k: "cheque", n: "Cheque avalado por SGR", d: "Una PyME descuenta un cheque de pago diferido en el mercado con el aval de una SGR.", pasos: [
+        { e: [["emisora", "sgr", "orden"]], t: "La PyME pide un aval",
+          x: "Se asocia a una SGR como socia partícipe. El objeto principal de la SGR es otorgar garantías a sus socios partícipes, y tiene que pedir una contragarantía.",
+          cit: [["24467", "33"], ["24467", "71"]] },
+        { e: [["sgr", "emisora", "control"]], t: "La SGR garantiza el pago",
+          x: "Con el aval, el riesgo que asume el inversor ya no es el de la PyME sino el de la SGR, respaldada por su fondo de riesgo. La SGR no presta: solo garantiza.",
+          cit: [["24467", "32"], ["24467", "35"]] },
+        { e: [["emisora", "alyc", "titulo"], ["alyc", "mercado", "orden"]], t: "El cheque entra al mercado",
+          x: "La PyME entrega el cheque a un ALyC, que lo ingresa al segmento de cheques del mercado. Ahí se subasta: gana quien pide la tasa más baja.",
+          prac: true },
+        { e: [["inversor", "alyc", "orden"]], t: "Un inversor lo compra con descuento",
+          x: "Paga hoy menos que el valor del cheque; la diferencia es su rendimiento hasta el vencimiento.",
+          prac: true },
+        { e: [["bancos", "emisora", "plata"]], t: "La PyME cobra hoy",
+          x: "Recibe la plata en su cuenta bancaria sin esperar al vencimiento. Es financiamiento de capital de trabajo a tasa de mercado.",
+          prac: true },
+        { e: [["bancos", "inversor", "plata"], ["sgr", "inversor", "plata"]], t: "Al vencimiento",
+          x: "El banco librado paga el cheque. Si no lo paga, responde la SGR que lo avaló, y después le reclama a la PyME con la contragarantía.",
+          cit: [["24467", "71"]], prac: true }
+      ] },
+      { k: "caucion", n: "Caución", d: "Un inversor presta pesos a muy corto plazo; otro los toma dejando títulos en garantía.", pasos: [
+        { e: [["inversor", "alyc", "orden"]], t: "Colocás pesos a plazo",
+          x: "Le pedís a tu agente colocar, por ejemplo, a un día. Del otro lado hay alguien que necesita pesos y deja sus títulos como garantía: el tomador.",
+          prac: true },
+        { e: [["alyc", "mercado", "orden"]], t: "Se concierta la tasa",
+          x: "Colocador y tomador se encuentran en el sistema de negociación del mercado; el precio de la caución es una tasa.",
+          cit: [["26831", "32"]] },
+        { e: [["alyc", "camara", "titulo"]], t: "El tomador deja garantías",
+          x: "La cámara le exige márgenes iniciales y su reposición, y define qué activos sirven como garantía. Recibe y administra esas garantías.",
+          cit: [["26831", "35"]] },
+        { e: [["bancos", "camara", "plata"]], t: "Los pesos pasan al tomador",
+          x: "La plata del colocador llega al tomador a través de la liquidación de la cámara, por el circuito bancario.",
+          prac: true },
+        { e: [["camara", "inversor", "plata"]], t: "Al vencimiento, capital más interés",
+          x: "El tomador devuelve lo que recibió más la tasa pactada. Si no cumple, la cámara ejecuta la garantía y, como contraparte central, le paga igual al colocador; para eso también tiene fondos de garantía.",
+          cit: [["26831", "40"], ["26831", "45"]] }
+      ] },
+      { k: "control", n: "Quién controla a quién", d: "Los tres supervisores y cómo se pasan información.", pasos: [
+        { e: [["cnv", "prod", "control"], ["cnv", "alyc", "control"], ["cnv", "aapic", "control"], ["cnv", "emisora", "control"], ["cnv", "mercado", "control"], ["cnv", "camara", "control"], ["cnv", "caja", "control"], ["cnv", "acr", "control"], ["cnv", "depo", "control"]],
+          t: "La CNV: todo el mercado de capitales",
+          x: "Agentes, mercados, cámaras, la Caja de Valores, calificadoras y emisoras están bajo su registro y su poder de policía: supervisar, inspeccionar, investigar y sancionar.",
+          cit: [["26831", "19"], ["26831", "20"], ["26831", "132"]] },
+        { e: [["bcra", "bancos", "control"], ["bcra", "depo", "control"]], t: "El BCRA: los bancos",
+          x: "Las entidades financieras están bajo el Banco Central. Cuando un banco es también ALyC o sociedad depositaria, tiene dos supervisores.",
+          prac: true },
+        { e: [["alyc", "uif", "control"], ["bancos", "uif", "control"], ["sgr", "uif", "control"]], t: "La UIF: la prevención del lavado",
+          x: "Los sujetos obligados conocen a su cliente y reportan a la UIF las operaciones sospechosas. Es el corazón del Módulo 2.",
+          norm: ["Normas CNV · Tít. XI", "Ley 25.246"] },
+        { e: [["cnv", "bcra", "control"], ["bcra", "uif", "control"], ["uif", "cnv", "control"]], t: "Y se pasan información",
+          x: "La CNV, el BCRA, la Superintendencia de Seguros y la UIF pueden intercambiar información entre sí sin que se les oponga el secreto. Lo que la CNV junta inspeccionando, en cambio, es secreto para el resto.",
+          cit: [["26831", "27"], ["26831", "25"]] }
+      ] }
+    ];
+
+    /* posiciones: ancho (escritorio) y angosto (celular) */
+    const LAY = {
+      ancho: { W: 760, H: 640, w: 176, h: 56, wr: 150,
+        carriles: [["reg", 10, 10, 740, 96, "Reguladores y control"], ["ag", 10, 120, 236, 476, "Agentes y personas"], ["mer", 262, 120, 236, 476, "El mercado"], ["fin", 514, 120, 236, 476, "Sistema financiero"]],
+        p: { cnv: [255, 62], uif: [446, 62], bcra: [632, 62],
+             inversor: [128, 176], prod: [128, 270], alyc: [128, 364], aapic: [128, 458], emisora: [128, 552],
+             mercado: [380, 190], camara: [380, 304], caja: [380, 418], acr: [380, 532],
+             bancos: [632, 216], depo: [632, 362], sgr: [632, 508] } },
+      angosto: { W: 420, H: 720, w: 118, h: 56, wr: 118,
+        carriles: [["reg", 6, 8, 408, 92, "Control"], ["ag", 6, 112, 132, 548, "Agentes"], ["mer", 144, 112, 132, 548, "Mercado"], ["fin", 282, 112, 132, 548, "Financiero"]],
+        p: { cnv: [77, 62], uif: [210, 62], bcra: [343, 62],
+             inversor: [77, 176], prod: [77, 278], alyc: [77, 380], aapic: [77, 482], emisora: [77, 584],
+             mercado: [210, 196], camara: [210, 318], caja: [210, 440], acr: [210, 562],
+             bancos: [343, 226], depo: [343, 384], sgr: [343, 542] } }
+    };
+
+    const DIN = { esc: 0, paso: 0, play: !quieto(), sel: null, lay: null, raf: 0, tPaso: 0, pulsos: [], ult: 0, ro: null, viva: false };
+    window.dinParar = dinParar;
+    function dinParar() {
+      DIN.viva = false;
+      if (DIN.raf) cancelAnimationFrame(DIN.raf);
+      DIN.raf = 0;
+      if (DIN.ro) { DIN.ro.disconnect(); DIN.ro = null; }
+    }
+
+    const cita = ([l, a]) => {
+      const ley = (typeof LEYES !== "undefined" && LEYES.find(x => x.id === l)) || null;
+      const num = ley ? ley.num : l;
+      return `<button class="mf" data-go="${l}:${a}" title="Leer el artículo">Ley ${num} · art. ${a}</button>`;
+    };
+    const chipsDe = o => {
+      const c = (o.cit || []).map(cita).concat((o.norm || []).map(n => `<span class="mf norm">${esc(n)}</span>`));
+      if (o.prac) c.push(`<span class="din-prac" title="Funcionamiento habitual del mercado; no lo dice literalmente la ley">Práctica del mercado</span>`);
+      return c.length ? `<div class="din-chips">${c.join("")}</div>` : "";
+    };
+
+    function caja(id, L) {
+      const [x, y] = L.p[id];
+      const w = NODOS[id].c === "reg" ? L.wr : L.w;
+      return { x, y, w, h: L.h, l: x - w / 2, r: x + w / 2, t: y - L.h / 2, b: y + L.h / 2 };
+    }
+    function camino(a, b, L, off) {
+      const A = caja(a, L), B = caja(b, L);
+      const dx = B.x - A.x, dy = B.y - A.y;
+      const misma = Math.abs(dx) < 8;
+      if (misma) {
+        const salto = Math.abs(dy) > L.h * 2.2;  // hay otra caja en el medio: rodear por el costado
+        if (salto) {
+          const izq = A.x < L.W / 2;
+          const sx = izq ? A.l : A.r, ex = izq ? B.l : B.r;
+          const bulto = (izq ? -1 : 1) * (L === LAY.angosto ? 13 : 34);
+          const y1 = A.y + off, y2 = B.y + off;
+          return `M${sx},${y1} C${sx + bulto},${y1} ${ex + bulto},${y2} ${ex},${y2}`;
+        }
+        const x = A.x + off, y1 = dy > 0 ? A.b : A.t, y2 = dy > 0 ? B.t : B.b;
+        return `M${x},${y1} L${x},${y2}`;
+      }
+      const vertical = Math.abs(dx) < (A.w + B.w) / 2 + 4 || (Math.abs(dy) > Math.abs(dx) * 1.1 && (NODOS[a].c === "reg" || NODOS[b].c === "reg"));
+      if (vertical) {
+        const x1 = A.x + off + Math.max(-A.w / 3, Math.min(A.w / 3, dx * .25)), x2 = B.x + off - Math.max(-B.w / 3, Math.min(B.w / 3, dx * .25));
+        const y1 = dy > 0 ? A.b : A.t, y2 = dy > 0 ? B.t : B.b;
+        const m = (y2 - y1) / 2;
+        return `M${x1},${y1} C${x1},${y1 + m} ${x2},${y2 - m} ${x2},${y2}`;
+      }
+      const x1 = dx > 0 ? A.r : A.l, x2 = dx > 0 ? B.l : B.r;
+      const y1 = A.y + off, y2 = B.y + off;
+      const m = (x2 - x1) / 2;
+      return `M${x1},${y1} C${x1 + m},${y1} ${x2 - m},${y2} ${x2},${y2}`;
+    }
+
+    function aristasEsc(s) {
+      const out = [];
+      s.pasos.forEach((p, i) => p.e.forEach(([a, b, t]) => out.push({ a, b, t, i })));
+      // separar las que van y vuelven entre los mismos dos nodos
+      out.forEach(x => {
+        const vuelta = out.some(y => y.a === x.b && y.b === x.a);
+        x.off = vuelta ? (x.a < x.b ? -6 : 6) : 0;
+      });
+      return out;
+    }
+
+    function barras(L) {
+      // la «tierra» de Base: barritas verticales al pie del lienzo
+      let s = "", seed = 7;
+      const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+      const paso = L === LAY.angosto ? 6 : 7;
+      for (let x = 10; x < L.W - 10; x += paso) {
+        const h = 3 + Math.round(Math.pow(rnd(), 1.6) * (L === LAY.angosto ? 26 : 34) * (0.55 + 0.45 * Math.sin(x / 61) ** 2));
+        s += `<rect class="d-barra" x="${x}" y="${L.H - 10 - h}" width="1.6" height="${h}"/>`;
+      }
+      return s;
+    }
+
+    function svgHTML(L) {
+      const s = ESC[DIN.esc];
+      const ar = aristasEsc(s);
+      const ang = L === LAY.angosto;
+      const nodosUsados = new Set();
+      ar.forEach(x => { nodosUsados.add(x.a); nodosUsados.add(x.b); });
+      // red de fondo: las relaciones de este recorrido, tenues
+      const vistos = new Set(); let base = "";
+      [s].forEach(e => e.pasos.forEach(p => p.e.forEach(([a, b]) => {
+        const k = [a, b].sort().join("|");
+        if (vistos.has(k)) return; vistos.add(k);
+        base += `<path class="d-base" d="${camino(a, b, L, 0)}"/>`;
+      })));
+      const flechas = ["orden", "titulo", "plata", "control"].map(t =>
+        `<marker id="dm-${t}" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="p-${t}"/></marker>`).join("");
+      const carriles = L.carriles.map(([k, x, y, w, h, t]) =>
+        `<rect class="d-carril" x="${x}" y="${y}" width="${w}" height="${h}" rx="${ang ? 2 : 6}"/><text class="d-carril-t" x="${x + 10}" y="${y + 17}">${esc(t)}</text>`).join("");
+      const aristas = ar.map((x, j) => `<path class="d-arista t-${x.t}" data-i="${x.i}" data-j="${j}" d="${camino(x.a, x.b, L, x.off)}" marker-end="url(#dm-${x.t})"/>`).join("");
+      const nodos = Object.keys(NODOS).map(id => {
+        const n = NODOS[id], B = caja(id, L);
+        const t1 = ang && n.nn ? n.nn : n.n, t2 = ang ? n.ns : n.s;
+        return `<g class="d-nodo${nodosUsados.has(id) ? "" : " apagado"}" data-dn="${id}" tabindex="0" role="button" aria-label="${esc(n.n + ": " + n.s)}">
+          <rect class="d-halo" x="${B.l}" y="${B.t}" width="${B.w}" height="${B.h}" rx="${ang ? 3 : 8}"/>
+          <rect x="${B.l}" y="${B.t}" width="${B.w}" height="${B.h}" rx="${ang ? 3 : 8}"/>
+          <text class="n1" x="${B.x}" y="${B.y - 3}" text-anchor="middle" ${ang ? 'style="font-size:13.5px"' : ""}>${esc(t1)}</text>
+          <text class="n2" x="${B.x}" y="${B.y + 15}" text-anchor="middle" ${ang ? 'style="font-size:11px"' : ""}>${esc(t2)}</text>
+        </g>`;
+      }).join("");
+      return `<svg viewBox="0 0 ${L.W} ${L.H}" role="img" aria-label="Diagrama: ${esc(s.n)}">
+        <defs>${flechas}</defs>${carriles}${barras(L)}<g>${base}</g><g class="d-ars">${aristas}</g><g class="d-pul"></g>${nodos}</svg>`;
+    }
+
+    function dinHTML() {
+      const s = ESC[DIN.esc];
+      return `<div class="din">
+        <div class="din-esc" role="tablist" aria-label="Recorridos">${ESC.map((e, i) =>
+          `<button role="tab" data-desc="${i}" aria-selected="${i === DIN.esc}">${esc(e.n)}</button>`).join("")}</div>
+        <div class="din-cuerpo">
+          <div>
+            <div class="din-lienzo" id="dinLienzo"></div>
+            <div class="din-ley">${Object.entries(TIPOS).map(([k, n]) => `<span><i class="t-${k}" style="border-top-style:${k === "control" ? "dashed" : "solid"};border-color:var(${k === "orden" ? "--ink" : k === "titulo" ? "--accent" : k === "plata" ? "--m-verde" : "--m-lila"})"></i>${esc(n)}</span>`).join("")}</div>
+            <ol class="din-pasos" id="dinPasos">${s.pasos.map((p, i) => `<li><button data-dpaso="${i}"><span><b>${esc(p.t)}</b></span></button></li>`).join("")}</ol>
+          </div>
+          <aside class="din-panel" id="dinPanel" aria-live="polite"></aside>
+        </div>
+      </div>`;
+    }
+
+    function pintarLienzo() {
+      const cont = document.getElementById("dinLienzo");
+      if (!cont) return;
+      const L = cont.clientWidth && cont.clientWidth < 560 ? LAY.angosto : LAY.ancho;
+      DIN.lay = L;
+      DIN.pulsos = [];
+      cont.innerHTML = svgHTML(L) + `<div class="din-ctrl">
+        <button id="dinAnt" aria-label="Paso anterior">◀</button>
+        <button id="dinPlay" aria-pressed="${DIN.play}">${DIN.play ? "Pausar" : "Reproducir"}</button>
+        <button id="dinSig" aria-label="Paso siguiente">▶</button>
+        <span class="din-paso" id="dinNum"></span></div>`;
+      aplicarPaso(false);
+    }
+
+    function aplicarPaso(llegada) {
+      const cont = document.getElementById("dinLienzo");
+      if (!cont) return;
+      const s = ESC[DIN.esc], p = s.pasos[DIN.paso];
+      const svg = cont.querySelector("svg");
+      const activos = new Set();
+      p.e.forEach(([a, b]) => { activos.add(a); activos.add(b); });
+      svg.querySelectorAll(".d-arista").forEach(el => {
+        const i = +el.dataset.i;
+        const tocaSel = DIN.sel && ESC[DIN.esc].pasos[i].e.some(([a, b]) => a === DIN.sel || b === DIN.sel);
+        el.classList.toggle("on", DIN.sel ? !!tocaSel : i === DIN.paso);
+        el.classList.toggle("tenue", !DIN.sel && i < DIN.paso);
+      });
+      svg.querySelectorAll(".d-nodo").forEach(g => {
+        const id = g.dataset.dn;
+        g.classList.toggle("activo", !DIN.sel && activos.has(id));
+        g.classList.toggle("sel", DIN.sel === id);
+        if (llegada && !DIN.sel && p.e.some(([, b]) => b === id)) {
+          g.classList.remove("llega"); void g.getBBox(); g.classList.add("llega");
+        }
+      });
+      const num = document.getElementById("dinNum");
+      if (num) num.innerHTML = `${String(DIN.paso + 1).padStart(2, "0")}<small>/${String(s.pasos.length).padStart(2, "0")}</small>`;
+      document.querySelectorAll("#dinPasos [data-dpaso]").forEach(b => {
+        if (+b.dataset.dpaso === DIN.paso && !DIN.sel) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current");
+      });
+      pintarPanel();
+      DIN.pulsos = [];
+      const pl = svg.querySelector(".d-pul"); if (pl) pl.innerHTML = "";
+      DIN.ult = 0;
+    }
+
+    function pintarPanel() {
+      const panel = document.getElementById("dinPanel");
+      if (!panel) return;
+      const s = ESC[DIN.esc];
+      if (DIN.sel) {
+        const n = NODOS[DIN.sel];
+        const pasos = s.pasos.map((p, i) => p.e.some(([a, b]) => a === DIN.sel || b === DIN.sel) ? i : -1).filter(i => i >= 0);
+        panel.innerHTML = `<p class="din-lab">${n.c === "ag" ? "Agentes y personas" : n.c === "mer" ? "El mercado" : n.c === "fin" ? "Sistema financiero" : "Control"}</p>
+          <h3>${esc(n.n)}</h3><p>${esc(n.d)}</p>${chipsDe(n)}
+          <div class="din-acts">${n.f ? `<button data-ficha="${n.f}">Ver la ficha completa</button>` : ""}
+          <button data-dsel="">${pasos.length ? `Volver al recorrido` : "Cerrar"}</button></div>
+          ${pasos.length ? `<p class="din-lab" style="margin-top:12px">En «${esc(s.n)}» aparece en ${pasos.length === 1 ? "el paso" : "los pasos"} ${pasos.map(i => i + 1).join(", ")}</p>` : `<p class="din-lab" style="margin-top:12px">No interviene en «${esc(s.n)}»</p>`}`;
+        return;
+      }
+      const p = s.pasos[DIN.paso];
+      const tipos = [...new Set(p.e.map(x => x[2]))];
+      const fichas = [...new Set(p.e.flatMap(([a, b]) => [a, b]))].filter(id => NODOS[id].f);
+      panel.innerHTML = `<p class="din-lab">${esc(s.n)} · paso ${DIN.paso + 1} de ${s.pasos.length}</p>
+        <h3>${esc(p.t)}</h3>
+        ${tipos.map(t => `<span class="din-tipo"><i style="background:var(${t === "orden" ? "--ink" : t === "titulo" ? "--accent" : t === "plata" ? "--m-verde" : "--m-lila"})"></i>${esc(TIPOS[t])}</span>`).join(" ")}
+        <p>${esc(p.x)}</p>${chipsDe(p)}
+        ${fichas.length ? `<div class="din-acts">${fichas.map(id => `<button data-ficha="${NODOS[id].f}">Ficha: ${esc(NODOS[id].n)}</button>`).join("")}</div>` : ""}`;
+    }
+
+    function irPaso(i, llegada) {
+      const s = ESC[DIN.esc];
+      DIN.paso = (i + s.pasos.length) % s.pasos.length;
+      DIN.tPaso = performance.now();
+      aplicarPaso(llegada !== false);
+    }
+
+    function bucle(t) {
+      if (!DIN.viva) return;
+      DIN.raf = requestAnimationFrame(bucle);
+      const cont = document.getElementById("dinLienzo");
+      if (!cont || !cont.isConnected) { dinParar(); return; }
+      if (DIN.play && !DIN.sel && t - DIN.tPaso > 4600) irPaso(DIN.paso + 1);
+      if (quieto() || !DIN.play) return;
+      const svg = cont.querySelector("svg"), pl = svg && svg.querySelector(".d-pul");
+      if (!pl) return;
+      // un pulso nuevo por arista activa cada 750 ms
+      if (t - DIN.ult > 750) {
+        DIN.ult = t;
+        svg.querySelectorAll(".d-arista.on").forEach(el => {
+          if (DIN.pulsos.length > 40) return;
+          const len = el.getTotalLength();
+          const tipo = [...el.classList].find(c => c.startsWith("t-")).slice(2);
+          const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          c.setAttribute("r", DIN.lay === LAY.angosto ? 3.6 : 4.2);
+          c.setAttribute("class", "d-pulso p-" + tipo);
+          pl.appendChild(c);
+          DIN.pulsos.push({ el, c, len, t0: t, dur: Math.max(900, len * 6.5) });
+        });
+      }
+      DIN.pulsos = DIN.pulsos.filter(p => {
+        const k = (t - p.t0) / p.dur;
+        if (k >= 1 || !p.el.classList.contains("on")) { p.c.remove(); return false; }
+        const e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+        const pt = p.el.getPointAtLength(e * p.len);
+        p.c.setAttribute("cx", pt.x); p.c.setAttribute("cy", pt.y);
+        p.c.setAttribute("opacity", k < .1 ? k * 10 : k > .9 ? (1 - k) * 10 : 1);
+        return true;
+      });
+    }
+
+    function dinArmar() {
+      DIN.viva = true;
+      pintarLienzo();
+      DIN.tPaso = performance.now();
+      if (DIN.raf) cancelAnimationFrame(DIN.raf);
+      DIN.raf = requestAnimationFrame(bucle);
+      const cont = document.getElementById("dinLienzo");
+      if (window.ResizeObserver && cont) {
+        let ultimo = cont.clientWidth < 560;
+        DIN.ro = new ResizeObserver(() => {
+          const ahora = cont.clientWidth < 560;
+          if (ahora !== ultimo) { ultimo = ahora; pintarLienzo(); }
+        });
+        DIN.ro.observe(cont);
+      }
+    }
+
+    /* la subpestaña nueva, después de «Estructura» */
+    if (typeof MSUBS !== "undefined" && !MSUBS.some(x => x[0] === "dinamica")) {
+      const i = MSUBS.findIndex(x => x[0] === "estructura");
+      MSUBS.splice(i + 1, 0, ["dinamica", "Dinámica"]);
+    }
+    {
+      const pm = pintarMercado;
+      pintarMercado = function () {
+        if (msub !== "dinamica") { dinParar(); return pm(); }
+        msubEl.innerHTML = MSUBS.map(([k, n]) =>
+          `<button class="mtab" data-msub="${k}" aria-selected="${msub === k}">${n}</button>`).join("");
+        const intro = document.getElementById("mintro");
+        if (intro) intro.textContent = "Cómo se mueven las cosas entre los agentes, el mercado y el sistema financiero. Elegí un recorrido y miralo paso a paso: qué viaja (órdenes, títulos, plata o control), entre quiénes y qué artículo lo dice. Tocá una caja para ver qué es y su ficha.";
+        try { redDestruir(); estrDestruir(); } catch (e) { }
+        countEl.textContent = `${ESC.length} recorridos · ${Object.keys(NODOS).length} actores`;
+        mzona.innerHTML = dinHTML();
+        if (!mercView.hidden) dinArmar();
+      };
+    }
+
+    mercView.addEventListener("click", e => {
+      if (msub !== "dinamica") return;
+      const es = e.target.closest("[data-desc]");
+      if (es) { DIN.esc = +es.dataset.desc; DIN.paso = 0; DIN.sel = null; dinParar(); mzona.innerHTML = dinHTML(); dinArmar(); const b = mzona.querySelector(`[data-desc="${DIN.esc}"]`); if (b) b.scrollIntoView({ block: "nearest", inline: "nearest" }); return; }
+      const dp = e.target.closest("[data-dpaso]");
+      if (dp) { DIN.sel = null; DIN.play = false; const b = document.getElementById("dinPlay"); if (b) { b.setAttribute("aria-pressed", "false"); b.textContent = "Reproducir"; } irPaso(+dp.dataset.dpaso); return; }
+      if (e.target.closest("#dinAnt")) { DIN.sel = null; irPaso(DIN.paso - 1); return; }
+      if (e.target.closest("#dinSig")) { DIN.sel = null; irPaso(DIN.paso + 1); return; }
+      const pb = e.target.closest("#dinPlay");
+      if (pb) {
+        DIN.play = !DIN.play; DIN.tPaso = performance.now();
+        pb.setAttribute("aria-pressed", DIN.play ? "true" : "false");
+        pb.textContent = DIN.play ? "Pausar" : "Reproducir";
+        if (!DIN.play) { DIN.pulsos.forEach(p => p.c.remove()); DIN.pulsos = []; }
+        return;
+      }
+      const ds = e.target.closest("[data-dsel]");
+      if (ds) { DIN.sel = null; DIN.tPaso = performance.now(); aplicarPaso(false); return; }
+      const n = e.target.closest("[data-dn]");
+      if (n) { DIN.sel = DIN.sel === n.dataset.dn ? null : n.dataset.dn; DIN.tPaso = performance.now(); aplicarPaso(false); return; }
+    });
+    mercView.addEventListener("keydown", e => {
+      if (msub !== "dinamica") return;
+      const n = e.target.closest && e.target.closest("[data-dn]");
+      if (n && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); n.dispatchEvent(new MouseEvent("click", { bubbles: true })); }
+    });
+
+    /* #dinamica abre directo el recorrido */
+    if (location.hash === "#dinamica") { msub = "dinamica"; setVista("mercado"); pintarMercado(); }
+    else if (vista === "mercado" && msub === "dinamica") pintarMercado();
   })();
 </script>
 </body>
