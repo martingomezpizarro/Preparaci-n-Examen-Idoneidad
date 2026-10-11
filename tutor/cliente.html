@@ -288,6 +288,48 @@
       return out;
     }
 
+    /* ---------------------------------------------------------- la última cita abierta */
+    // Cada vez que la página abre un artículo (desde una ficha, una tarjeta, el mapa…) queda anotado
+    // cuál es de verdad, así «Explicámelo» y la pantalla le pasan al tutor ese artículo y no el título de la ficha.
+    let CITA = null;
+    if (typeof abrirRef === "function" && !abrirRef.__tutor) {
+      const orig = abrirRef;
+      const envuelta = function (r) {
+        try {
+          let id = null, txt = "";
+          if (r && r.t === "L" && r.ley && r.art) id = `L:${r.ley}:${artKey(r.art)}`;
+          else if (r && r.nv) id = `N:${r.nv}`;
+          else if (r && r.t === "N" && NORMTXT[r.k]) txt = NORMTXT[r.k].t;
+          CITA = { id: id && valida(id) ? id : null, et: (r && r.et) || "", ex: (r && r.ex) || "", txt };
+        } catch (e) { CITA = null; }
+        return orig.apply(this, arguments);
+      };
+      envuelta.__tutor = true;
+      window.abrirRef = envuelta;
+    }
+
+    /* Qué artículo muestra de verdad el diálogo de cita: se lee del propio texto (las fichas del mercado,
+       la tabla de agentes y las notas lo arman sin pasar por abrirRef). */
+    function citaDialogo() {
+      const d = document.getElementById("srcdlg");
+      if (!d) return null;
+      let id = null;
+      for (const el of d.querySelectorAll("#sdbody [data-sub]")) {
+        const k = el.dataset.sub || "";
+        let m;
+        if ((m = k.match(/^L:(\d+):(.+)$/))) id = `L:${m[1]}:${m[2]}`;
+        else if ((m = k.match(/^NV:(.+)$/))) id = `N:${m[1]}`;
+        else if ((m = k.match(/^V:(.+):([^:]+)$/))) id = `N:${m[1]}|${m[2]}`;
+        if (id && valida(id)) break;
+        id = null;
+      }
+      if (!id && CITA && CITA.id) id = CITA.id;
+      if (!id) return null;
+      const mk = d.querySelector("#sdbody mark");
+      const ex = (mk && mk.textContent.trim()) || (CITA && CITA.id === id ? CITA.ex : "") || "";
+      return { id, ex };
+    }
+
     /* ---------------------------------------------------------- lo que hay en pantalla */
     const LETRA = "abcdefghij";
     const idRef = r => r && r.t === "L" ? `L:${r.ley}:${artKey(r.art)}` : r && r.nv ? `N:${r.nv}` : null;
@@ -322,7 +364,12 @@
           }
         }
         const dlg = document.getElementById("srcdlg");
-        if (dlg && dlg.open) return { t: `Está leyendo: ${document.getElementById("sdtit").textContent}.`, refs: [], resuelta: true, et: "el artículo abierto" };
+        if (dlg && dlg.open) {
+          const tit = document.getElementById("sdtit").textContent;
+          const cd = citaDialogo();
+          if (cd) return { t: `Está leyendo ${etiqueta(cd.id)} (lo abrió desde «${tit}»)${cd.ex ? `, con resaltada esta parte: «${cd.ex.slice(0, 300)}»` : ""}. Si pregunta por «esto» o «este artículo», habla de ese artículo.`, q: cd.ex || "", refs: [cd.id], resuelta: true, et: corta(cd.id) };
+          return { t: `Está leyendo: ${tit}.${CITA && CITA.txt ? "\nTexto (edición 2018 de las Normas): " + CITA.txt.slice(0, 2500) : ""}`, refs: [], resuelta: true, et: "el artículo abierto" };
+        }
         if (vista === "leyes" && LEYES[current]) return { t: `Está leyendo la Ley ${LEYES[current].num} (${LEYES[current].corto}) en la página.`, refs: [], resuelta: true, et: `Ley ${LEYES[current].num}` };
       } catch (e) { }
       return null;
@@ -467,7 +514,8 @@
       return j;
     }
 
-    async function preguntar(texto) {
+    async function preguntar(texto, opts) {
+      opts = opts || {};
       texto = String(texto || "").trim();
       if (!texto || ocupado) return;
       ultimoError = null;
@@ -480,7 +528,12 @@
         const ix = await construir(s => { if (s) { ocupado = s; repintar(); } });
         ocupado = true; repintar();
         const pt = usarPantalla ? pantalla() : null;
-        const ctx = contexto(ix, pt && !pt.simul ? texto + " " + (pt.q || "") : texto, previaUser && previaUser.txt, pt && !pt.simul ? pt.refs : []);
+        // artículos que van sí o sí: los que pidió (Explicámelo), los de la pantalla y los que citó la respuesta anterior
+        const fijos = [...(opts.fijos || []), ...(pt && !pt.simul ? pt.refs : [])];
+        const ultima = [...CH.m].reverse().find(m => m.rol === "model");
+        if (ultima && !opts.fijos) (ultima.txt.match(/\[\[\s*[LN]:[^\]]+?\s*\]\]/g) || []).map(x => x.replace(/\[\[\s*|\s*\]\]/g, "").replace(/\s+/g, ""))
+          .filter(valida).filter(id => !fijos.includes(id)).slice(0, 3).forEach(id => fijos.push(id));
+        const ctx = contexto(ix, pt && !pt.simul ? texto + " " + (pt.q || "") : texto, previaUser && previaUser.txt, [...new Set(fijos)]);
         if (pt) ctx.unshift({ id: "P:pantalla", et: "LO QUE EL ALUMNO TIENE EN PANTALLA AHORA (no es norma; no lo cites)", txt: pt.t + "\n\n" + (pt.simul ? "" : REGLA_PANTALLA) });
         const historial = CH.m.slice(0, -1).slice(-6).map(m => ({ rol: m.rol, txt: m.txt }));
         const j = await llamar("/preguntar", { pregunta: texto, contexto: ctx, historial });
@@ -620,12 +673,12 @@
 
     /* ---------------------------------------------------------- abrir, cerrar, eventos */
     const angosto = () => !window.matchMedia("(min-width: 1000px)").matches;
-    function abrir(pregunta) {
+    function abrir(pregunta, opts) {
       panel.hidden = false;
       usarPantalla = true; pintarPantalla();
       try { if (typeof nubeIniciar === "function") nubeIniciar(); } catch (e) { }
       repintar();
-      if (pregunta) preguntar(pregunta);
+      if (pregunta) preguntar(pregunta, opts);
       else if (!angosto()) inp.focus();
       construir(() => { }).catch(() => { });   // el índice se arma mientras escribís
       if (location.hash !== "#tutor") history.replaceState(null, "", location.pathname + location.search + "#tutor");
@@ -678,8 +731,14 @@
     document.addEventListener("click", e => {
       if (e.target.closest("#srcdlg [data-texpl]")) {
         const tit = $("sdtit").textContent.trim(), d = $("srcdlg");
+        
+        const cd = citaDialogo();
         if (d.open) d.close();
-        abrir(`Explicame en simple qué dice ${tit} y qué suele preguntar el examen sobre esto.`);
+        if (cd) {
+          const nom = etiqueta(cd.id);
+          const parte = cd.ex ? ` En especial esta parte: «${cd.ex.slice(0, 280)}».` : "";
+          abrir(`Explicame en simple qué dice ${nom}${tit && !tit.includes(nom) ? ` (lo abrí desde «${tit}»)` : ""}.${parte} ¿Qué suele preguntar el examen sobre esto?`, { fijos: [cd.id] });
+        } else abrir(`Explicame en simple qué dice ${tit} y qué suele preguntar el examen sobre esto.`);
         return;
       }
       // en el celular el tutor tapa la pantalla: si desde una cita vas a la ley o al título, se cierra
