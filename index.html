@@ -18165,21 +18165,52 @@
       return k;
     }
     /* Dónde está cada subrayado: la ruta (norma › título › capítulo › sección) y, aparte, el artículo. */
+    /* Orden de lectura: leyes (en el orden de la bibliografía) › Normas vigentes por título,
+       capítulo y artículo (la numeración de los artículos ya respeta las secciones) › Normas 2018. */
+    const ordRom = r => { const v = { I: 1, V: 5, X: 10, L: 50, C: 100 }; let n = 0; r = String(r || "").toUpperCase();
+      if (!/^[IVXLC]+$/.test(r)) return NaN; for (let i = 0; i < r.length; i++) { const a = v[r[i]], b = v[r[i + 1]] || 0; n += a < b ? -a : a; } return n; };
+    const ordTit = T => { const i = NVTIT.findIndex(x => x.id === T); return i >= 0 ? i : 100 + (ordRom(T) || 0); };
+    const ordCap = C => !C || C === "U" || C === "P" || /^prelim/i.test(C) ? 0 : (ordRom(C) || parseInt(C) || 0);
+    const ordArt = a => { const m = String(a || "").match(/(\d+)\s*(bis|ter|qu[aá]ter|quinquies|sexies)?/i);
+      if (!m) return 0; const suf = ["bis", "ter", "quater", "quinquies", "sexies"].indexOf((m[2] || "").toLowerCase().replace("á", "a")); return +m[1] + (suf + 1) * 0.01; };
+    const ordLey = l => { const i = LEYES.findIndex(x => x.id === l); return i >= 0 ? i : 99; };
+    function ordCmp(a, b) {
+      for (let i = 0; i < Math.max(a.length, b.length); i++) { const x = a[i] ?? -1, y = b[i] ?? -1; if (x !== y) return x < y ? -1 : 1; }
+      return 0;
+    }
     function notasUbic(k) {
+      const u = notasUbic0(k);
+      if (!u.ord) u.ord = [3];
+      return u;
+    }
+    function notasUbic0(k) {
       const sinEp = t => String(t || "").replace(/\.$/, "");
       const deLey = (ley, art, extra) => {
         const l = leyPorId(ley), u = ubicLey(ley, art) || {};
         return { ruta: [`Ley ${l ? l.num : ley}${l && l.corto ? " · " + l.corto : ""}`, u.tit, u.cap, u.sec].filter(Boolean),
-                 art: `Art. ${art}`, ep: sinEp(u.ep), extra };
+                 art: `Art. ${art}`, ep: sinEp(u.ep), extra, ord: [0, ordLey(ley), ordArt(art), extra === "Resumen del artículo" ? 1 : 0] };
       };
       const deNV = (T, C, A, extra) => {
         const tt = NVIDX[T] || {}, cp = (tt.caps || []).find(c => c[0] === C), ub = NVUB[`${T}|${C}|${A}`] || [];
-        const ruta = [`Normas CNV · Título ${T}${tt.n ? " · " + tt.n : ""}`];
-        if (C && C !== "U") ruta.push(`${C === "P" ? "Capítulo preliminar" : "Capítulo " + C}${cp && cp[1] ? " · " + cp[1] : ""}`);
-        if (ub[0]) ruta.push(`Sección ${ub[0]}${ub[1] ? " · " + ub[1] : ""}`);
-        let ep = ub[2] || "";
+        // El título completo (si ya se cargó) dice la sección de TODOS los artículos; NVUB es solo un índice parcial.
+        const nk = x => String(x).replace(/\s+/g, "").toLowerCase();
+        let na = NVART[`${T}|${C}|${A}`];
+        if (!na && NV[T]) na = Object.entries(NVART).find(([k]) => { const p = k.split("|"); return p[0] === T && p[1] === C && nk(p[2]) === nk(A); })?.[1];
+        const titulo = NV[T] || {};
+        const sec = na && na.sec && na.sec.s ? [na.sec.s, na.sec.n] : (ub[0] ? [ub[0], ub[1]] : null);
+        const ruta = [`Normas CNV · Título ${T}${(titulo.n || tt.n) ? " · " + (titulo.n || tt.n) : ""}`];
+        const capN = (na && na.cap && na.cap.n) || (cp && cp[1]) || "";
+        if (C && C !== "U") ruta.push(`${C === "P" ? "Capítulo preliminar" : "Capítulo " + C}${capN ? " · " + capN : ""}`);
+        if (sec) ruta.push(/^[IVXLC]+$/.test(sec[0]) ? `Sección ${sec[0]}${sec[1] ? " · " + sec[1] : ""}` : (sec[1] || sec[0]));
+        let ep = (na && na.art && na.art.ep) || ub[2] || "";
         if (!ep) { const src = subTextoDe("NV:" + `${T}|${C}|${A}`); const m = src && src.et && src.et.split(" — ")[1]; if (m) ep = m; }
-        return { ruta, art: `Art. ${A}`, ep: sinEp(ep), extra };
+        // posición real dentro del título: capítulo › sección › artículo, tal como están en el texto
+        let ord = [1, ordTit(T), ordCap(C), 0, ordArt(A)];
+        if (na && titulo.caps) {
+          const ci = titulo.caps.indexOf(na.cap), si = na.cap.secs.indexOf(na.sec), ai = na.sec.arts.indexOf(na.art);
+          if (ci >= 0) ord = [1, ordTit(T), ci, si, ai];
+        }
+        return { ruta, art: `Art. ${A}`, ep: sinEp(ep), extra, ord, T, completo: !!na };
       };
       let m = k.match(/^NV:([^|]+)\|([^|]*)\|(.+)$/); if (m) return deNV(m[1], m[2], m[3]);
       if (/^V:/.test(k)) {
@@ -18189,12 +18220,18 @@
       m = k.match(/^L:([^:]+):(.+)$/); if (m) return deLey(m[1], m[2]);
       m = k.match(/^R:([^:]+):(.+)$/); if (m) return deLey(m[1], m[2], "Resumen del artículo");
       m = k.match(/^RC:([^:]+):(.+)$/);
-      if (m) { const l = leyPorId(m[1]); return { ruta: [`Ley ${l ? l.num : m[1]}${l && l.corto ? " · " + l.corto : ""}`, m[2]], art: "", ep: "", extra: "Descripción del capítulo: no es un artículo" }; }
+      if (m) {
+        const l = leyPorId(m[1]); let desde = 0;
+        (function bus(o) { if (desde || !o || typeof o !== "object") return; if (!Array.isArray(o) && (o.c === m[2] || o.n === m[2]) && o.r) { desde = ordArt(o.r) || 0; return; } Object.values(o).forEach(bus); })(l);
+        return { ruta: [`Ley ${l ? l.num : m[1]}${l && l.corto ? " · " + l.corto : ""}`, m[2]], art: "", ep: "", extra: "Descripción del capítulo: no es un artículo", ord: [0, ordLey(m[1]), desde - 0.5] };
+      }
       m = k.match(/^N:(.+)$/);
       if (m) {
         const n = NORMTXT[m[1]] || {}, loc = String(n.loc || m[1]);
         const am = loc.match(/,?\s*art\.\s*([\w ]+)$/i);
-        return { ruta: ["Normas CNV · edición 2018", am ? loc.slice(0, am.index) : loc], art: am ? `Art. ${am[1]}` : "", ep: "", extra: n.p ? `Tu PDF, pág. ${n.p}` : "" };
+        const pz = m[1].split("|");
+        return { ruta: ["Normas CNV · edición 2018", am ? loc.slice(0, am.index) : loc], art: am ? `Art. ${am[1]}` : "", ep: "", extra: n.p ? `Tu PDF, pág. ${n.p}` : "",
+          ord: [2, ordTit(pz[0]), ordCap(pz[1]), pz.length > 3 ? ordCap(pz[2]) : 0, ordArt(pz[pz.length - 1])] };
       }
       m = k.match(/^G:([^:]+):(.+)$/);
       if (m) {
@@ -18204,7 +18241,8 @@
         return { ruta: ["Glosario"], art: "", ep: "", extra: m[2] };
       }
       m = k.match(/^NQ:(.+)$/);
-      if (m) return { ruta: ["Guía de estudio", "Normas CNV · Título " + m[1]], art: "", ep: "", extra: "Descripción del título: no es un artículo" };
+      if (m) { const tn = (NV[m[1]] && NV[m[1]].n) || (NVIDX[m[1]] || {}).n || "";
+        return { ruta: [`Normas CNV · Título ${m[1]}${tn ? " · " + tn : ""}`], art: "", ep: "", extra: "Descripción del título (guía de estudio): no es un artículo", ord: [1, ordTit(m[1]), -1] }; }
       m = k.match(/^AG:([^|]+)\|([^|]+)/);
       if (m) {
         const et = notasEtiqueta(k);
@@ -18237,12 +18275,19 @@
     }
     function pintarNotas() {
       const zona = document.getElementById("nzona"); if (!zona) return;
+      const faltan = [...new Set(subLista().map(x => notasUbic(x.k)).filter(u => u.T && !u.completo && !NV[u.T] && NVTIT.some(t => t.id === u.T)).map(u => u.T))]
+        .filter(t => !(pintarNotas.pedidos || (pintarNotas.pedidos = new Set())).has(t));
+      if (faltan.length && !pintarNotas.cargando) {
+        pintarNotas.cargando = true; faltan.forEach(t => pintarNotas.pedidos.add(t));
+        Promise.allSettled(faltan.map(t => nvCargar(t))).then(() => { pintarNotas.cargando = false; if (vista === "notas") pintarNotas(); });
+      }
       const todos = subLista().map(x => { const u = notasUbic(x.k); return { ...x, u, et: notasEtiqueta(x.k), grupo: u.ruta.join(" › "), artEt: [u.art, u.ep].filter(Boolean).join(" · "), cita: x.src ? x.src.txt.slice(x.r[0], x.r[1]) : "" }; });
       const conNota = todos.filter(x => x.nota).length;
       const q = (qEl.value || "").trim().toLowerCase();
       let vis = notasVer === "notas" ? todos.filter(x => x.nota) : notasVer === "sin" ? todos.filter(x => !x.nota) : todos;
       if (q) vis = vis.filter(x => (x.et + " " + x.grupo + " " + x.artEt + " " + x.cita + " " + x.nota).toLowerCase().includes(q));
       if (notasOrden === "recientes") vis = vis.slice().sort((a, b) => b.t - a.t || a.r[0] - b.r[0]);
+      else vis = vis.slice().sort((a, b) => ordCmp(a.u.ord, b.u.ord) || a.k.localeCompare(b.k) || a.r[0] - b.r[0]);
       countEl.textContent = todos.length ? (q || notasVer !== "todas" ? `${vis.length} de ${todos.length} subrayados` : `${todos.length} subrayados · ${conNota} con nota`) : "";
       notasContador();
       let conCuenta = false; try { conCuenta = !!(NUBE && NUBE.user); } catch (e) { }
