@@ -4560,6 +4560,11 @@
       color: var(--ink)
     }
 
+    .ucaps { margin-top: 10px; }
+    .utitsres { font-size: .92em; margin: 6px 0 10px; line-height: 1.6; }
+    .utitsres .nchip { margin-left: 4px; vertical-align: middle; }
+    .ucaps > summary { cursor: pointer; font-weight: 600; color: var(--accent); padding: 4px 0; }
+    .ucaps .uenflab b { color: var(--accent); }
     .utits {
       display: flex;
       flex-wrap: wrap;
@@ -20473,21 +20478,35 @@
         || (a.length === b.length && a[i] === b[i + 1] && a[i + 1] === b[i] && a.slice(i + 2) === b.slice(i + 2));
     }
 
-    function itemsDisponibles(tits) {
-      const fl = FLASH.filter(c => tits.includes(c.t) && (U.cfg.fichas !== false || !c.fx)).map(c => ({ k: "f:" + c.id, tipo: "f", t: c.t, c }));
+    /* Capítulos elegidos por título para la sesión diaria: U.cfg.caps = { VI: ["IV", "V"] }.
+       Sin capítulos elegidos entra el título entero. El capítulo de cada tarjeta o pregunta sale de sus citas al texto vigente. */
+    const capsCfg = () => (U.cfg.caps && typeof U.cfg.caps === "object" && !Array.isArray(U.cfg.caps)) ? U.cfg.caps : (U.cfg.caps = {});
+    function capsDeItem(x, T) {
+      const vt = vigDe(T), out = new Set();
+      (x.refs || []).forEach(r => { if (r.nv) { const [a, b] = r.nv.split("|"); if (a === vt && b) out.add(b); } });
+      return out;
+    }
+    let UCAPS_OPEN = false;
+    function itemsDisponibles(tits, conCaps) {
+      const cf = conCaps ? capsCfg() : {};
+      const filt = T => !!(cf[T] && cf[T].length);
+      const enCaps = (x, T) => { const cs = capsDeItem(x, T); return cf[T].some(c => cs.has(c)); };
+      const fl = FLASH.filter(c => tits.includes(c.t) && (U.cfg.fichas !== false || !c.fx) && (!filt(c.t) || enCaps(c, c.t))).map(c => ({ k: "f:" + c.id, tipo: "f", t: c.t, c }));
       if (U.cfg.glos) fl.push(...itemsGlosario());
       let bq = [];
       if (U.cfg.banco) {
-        const mods = new Set(tits.flatMap(t => TIT_MOD[t] || []));
-        bq = PREGUNTAS.filter(p => mods.has(p.mod) && p.ok && p.ok.length && p.op && p.op.length > 1)
+        // los títulos sin capítulos elegidos traen sus módulos enteros; los filtrados, solo las preguntas que citan esos capítulos
+        const mods = new Set(tits.filter(t => !filt(t)).flatMap(t => TIT_MOD[t] || []));
+        const filtrados = tits.filter(filt);
+        bq = PREGUNTAS.filter(p => (mods.has(p.mod) || filtrados.some(t => enCaps(p, t))) && p.ok && p.ok.length && p.op && p.op.length > 1)
           .map(p => ({ k: "q:" + p.id, tipo: "q", t: "M" + p.mod, p }));
       }
       return { fl, bq };
     }
 
-    function armarSesion(tits) {
+    function armarSesion(tits, conCaps) {
       const hoy = hoyISO();
-      const { fl, bq } = itemsDisponibles(tits);
+      const { fl, bq } = itemsDisponibles(tits, conCaps);
       const cupo = Math.max(1, U.cfg.tarj || 20);
       // las que vencen, primero las más atrasadas; las que no entran hoy quedan para mañana
       const vencidas = [...fl, ...bq].filter(it => U.c[it.k] && U.c[it.k].due <= hoy)
@@ -20553,7 +20572,7 @@
       return n;
     }
     function pendientesHoy() {
-      const { fl, bq } = itemsDisponibles(U.cfg.tits);
+      const { fl, bq } = itemsDisponibles(U.cfg.tits, true);
       const hoy = hoyISO();
       const venc = [...fl, ...bq].filter(it => U.c[it.k] && U.c[it.k].due <= hoy).length;
       const nuevas = fl.filter(it => !U.c[it.k]).length + bq.filter(it => !U.c[it.k]).length;
@@ -20575,6 +20594,24 @@
       const dias = Array.from({ length: 21 }, (_, i) => hoyISO(i - 20)).map(d => `<i class="${U.dias[d] ? "on" : ""}${d === hoyISO() ? " hoy" : ""}" title="${d}${U.dias[d] ? ` · ${U.dias[d].n} tarjetas` : ""}"></i>`).join("");
       const tits = NORMAS.filter(n => flashDe(n.id).length).map(n =>
         `<button class="nchip mini" data-ut="${n.id}" aria-pressed="${U.cfg.tits.includes(n.id)}" title="${esc(n.n)}">Tít. ${n.id} · ${flashDe(n.id).length}</button>`).join("");
+      const capsFilas = U.cfg.tits.filter(T => NORMAS.some(n => n.id === T)).sort((a, b) => NORMAS.findIndex(n => n.id === a) - NORMAS.findIndex(n => n.id === b)).map(T => {
+        const v = NVIDX[vigDe(T)]; if (!v) return "";
+        const cnt = {};
+        flashDe(T).filter(c => U.cfg.fichas !== false || !c.fx).forEach(c => capsDeItem(c, T).forEach(k => { cnt[k] = (cnt[k] || 0) + 1; }));
+        const lst = v.caps.filter(c => cnt[c[0]]);
+        if (lst.length < 2) return "";
+        const sel = capsCfg()[T] || [];
+        const corto = t => { t = String(t || ""); return t.length > 42 ? t.slice(0, 40).replace(/[\s.,;–-]+\S*$/, "") + "…" : t; };
+        return `<p class="uenflab">Tít. ${T} · ${esc(v.n)}${sel.length ? ` · <b>${sel.length} de ${lst.length} capítulos</b>` : ""}</p>
+        <div class="utits"><button class="nchip mini" data-ucapall="${T}" aria-pressed="${!sel.length}">Todo el título</button>${lst.map(([c, cn]) => `<button class="nchip mini" data-ucap="${T}|${c}" aria-pressed="${sel.includes(c)}" title="${esc(capEt(c) + (cn ? " · " + cn : ""))}">${capEt(c)}${cn ? " · " + esc(corto(cn)) : ""} · ${cnt[c]}</button>`).join("")}</div>`;
+      }).join("");
+      const resumenTits = (() => {
+        const cf = capsCfg();
+        const ts = NORMAS.filter(n => U.cfg.tits.includes(n.id)).map(n => cf[n.id] && cf[n.id].length
+          ? `<b>Tít. ${n.id}</b> (${cf[n.id].length === 1 ? "Cap. " : "Caps. "}${cf[n.id].map(c => c === "U" ? "único" : c).join(", ")})` : `Tít. ${n.id}`);
+        return ts.length > 10 ? ts.slice(0, 10).join(" · ") + ` y ${ts.length - 10} más` : ts.join(" · ");
+      })();
+      const nCapsSel = Object.keys(capsCfg()).filter(T => U.cfg.tits.includes(T) && capsCfg()[T].length).length;
       const opts = (arr, v, suf) => arr.map(x => `<option value="${x}"${+v === x ? " selected" : ""}>${x}${suf}</option>`).join("");
       const notif = ("Notification" in window);
       return `<div class="ugrid">
@@ -20585,6 +20622,7 @@
       <p class="utarjlab">Tarjetas por día</p>
       <div class="nfil utarjchips">${chipsTarj}</div>
       <p class="uaviso">De esas, al menos <b>${Math.min(U.cfg.nuevas, U.cfg.tarj || 20)}</b> son nuevas y el resto repasos. ${faltan ? `Te quedan <b>${faltan}</b> sin ver en los títulos elegidos: a este ritmo las viste todas en unos <b>${diasFin} día${diasFin === 1 ? "" : "s"}</b>.` : "Ya viste todas las de los títulos elegidos."}</p>
+      <div class="utitsres">Entran: ${resumenTits || "ningún título"} <button class="nchip mini" data-uircfg="1">Elegir títulos y capítulos</button></div>
       <div class="ustats">
         <div class="ustat"><b>${racha()}</b><span>días seguidos</span></div>
         <div class="ustat"><b>${Object.keys(U.c).length}</b><span>tarjetas vistas</span></div>
@@ -20609,6 +20647,9 @@
       <p>Títulos de las Normas que entran en tu sesión:</p>
       <div class="utits">${tits}</div>
       <div class="nfil"><button class="nchip mini" data-uall="1">Todos</button><button class="nchip mini" data-uprio="1">Solo prioridad alta</button></div>
+      ${capsFilas ? `<details class="ucaps"${UCAPS_OPEN || nCapsSel ? " open" : ""}><summary>Filtrar por capítulo${nCapsSel ? ` · ${nCapsSel} título${nCapsSel === 1 ? "" : "s"} filtrado${nCapsSel === 1 ? "" : "s"}` : " (opcional)"}</summary>
+        <p class="uaviso">Si elegís capítulos de un título, tu sesión diaria trae solo las tarjetas y preguntas que citan esos capítulos. Sin elegir ninguno entra el título entero.</p>
+        ${capsFilas}</details>` : ""}
     </section>
     <section class="ucard">
       ${conI("<h3>El aviso diario</h3>", `${("Notification" in window) ? (esApp() ? "Estás usando la app instalada: los avisos salen por el sistema." : "Para que funcione en el celular, instalala como app: en Chrome, menú ⋮ → «Instalar app» o «Agregar a la pantalla principal» (en iPhone, Compartir → «Agregar a inicio»). Abrila desde el ícono y activá el aviso ahí.") + " " : ""}Si el celular está dormido a esa hora, el aviso llega apenas vuelve a la vida, hasta 30 minutos tarde; si la app estuvo cerrada del todo, el que suena seguro es el del calendario.`)}
@@ -20657,14 +20698,14 @@
     }
     function microIr(tits, soloNuevas, soloGlos) {
       setVista("micro");
-      let items = armarSesion(tits || U.cfg.tits);
+      let items = armarSesion(tits || U.cfg.tits, !tits);
       if (soloGlos) {
         // primero las que vencen, después nuevas, hasta el cupo del día
         const hoy = hoyISO(), gl = itemsGlosario(), cupo = Math.max(1, U.cfg.tarj || 20);
         const venc = gl.filter(it => U.c[it.k] && U.c[it.k].due <= hoy).sort((a, b) => U.c[a.k].due.localeCompare(U.c[b.k].due));
         items = [...venc, ...mezclar(gl.filter(it => !U.c[it.k]))].slice(0, cupo);
       } else if (soloNuevas) {
-        const { fl } = itemsDisponibles(tits || U.cfg.tits);
+        const { fl } = itemsDisponibles(tits || U.cfg.tits, !tits);
         items = intercalar(mezclar(fl.filter(it => !U.c[it.k])).slice(0, Math.max(5, U.cfg.nuevas)));
       }
       if (!items.length) { SES = null; pintarMicro(); if (soloGlos) { uzona.insertAdjacentHTML("afterbegin", `<p class="nvacio">Ya repasaste todas las definiciones del glosario que vencían hoy.</p>`); return; } uzona.insertAdjacentHTML("afterbegin", `<p class="nvacio">No hay tarjetas pendientes para hoy en esos títulos. Sumá títulos o pedí solo tarjetas nuevas.</p>`); return; }
@@ -20929,6 +20970,21 @@
       if (uf) { sesGuardar(); setVista("mercado"); agxIrFicha(uf.dataset.ufic); return; }
       const ut = e.target.closest("[data-ut]");
       if (ut) { const id = ut.dataset.ut; U.cfg.tits = U.cfg.tits.includes(id) ? U.cfg.tits.filter(x => x !== id) : [...U.cfg.tits, id]; guardarU(); pintarMicro(); return; }
+      if (e.target.closest("[data-uircfg]")) {
+        UCAPS_OPEN = true; pintarMicro();
+        setTimeout(() => {
+          // la tarjeta «Cómo querés estudiar» puede estar plegada: se despliega (y queda recordada)
+          const h = document.querySelector('#uzona [data-zpleg="Cómo querés estudiar"]');
+          if (h && h.parentElement.classList.contains("zpleg")) h.click();
+          const d = document.querySelector("#uzona [data-ut]");
+          if (d) d.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 60);
+        return;
+      }
+      const ucp = e.target.closest("[data-ucap]");
+      if (ucp) { const [T, C] = ucp.dataset.ucap.split("|"), cf = capsCfg(), a = cf[T] || []; cf[T] = a.includes(C) ? a.filter(x => x !== C) : [...a, C]; if (!cf[T].length) delete cf[T]; UCAPS_OPEN = true; U.cfgT = Date.now(); guardarU(); pintarMicro(); return; }
+      const uca = e.target.closest("[data-ucapall]");
+      if (uca) { delete capsCfg()[uca.dataset.ucapall]; UCAPS_OPEN = true; U.cfgT = Date.now(); guardarU(); pintarMicro(); return; }
       const utj = e.target.closest("[data-utarj]");
       if (utj) { U.cfg.tarj = +utj.dataset.utarj; U.cfgT = Date.now(); guardarU(); pintarMicro(); return; }
       if (e.target.closest("[data-uall]")) { U.cfg.tits = NORMAS.filter(n => flashDe(n.id).length).map(n => n.id); guardarU(); pintarMicro(); return; }
