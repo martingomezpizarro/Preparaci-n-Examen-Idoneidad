@@ -14894,6 +14894,8 @@
 
     /* flechas para pasar de un artículo al siguiente sin cerrar la lectura */
     var ARTNX_BTN = `<button class="artnx" data-artnx="1" title="Artículo siguiente" aria-label="Artículo siguiente">›</button>`;
+    // «Explicámelo, Tutor»: el tutor lee este artículo (y los que cita) y lo explica
+    var TEXP = id => `<button class="lk texp" data-texart="${esc(id)}" title="El tutor lee este artículo y te lo explica">✦ Explicámelo, Tutor</button>`;
     var ARTNX_ROW = `<div class="artnav"><button class="artnav-b" data-artnx="-1">‹ Anterior</button><button class="artnav-b nx" data-artnx="1">Siguiente ›</button></div>`;
     function flashDeLey(leyId, key) {
       return FLASH.filter(c => (c.refs || []).some(r => r.t === "L" && r.ley === leyId && String(r.art) === String(key)));
@@ -15039,7 +15041,7 @@
         (a.derog ? `<div class="nvpend"><b>Derogado:</b> el capítulo fue derogado; el texto queda solo como referencia.</div>` : "") +
         (a.fut ? `<div class="nvpend"><b>Cambia pronto:</b> la RG 1163/2026 lo reemplaza desde fines de octubre de 2026. El texto nuevo está al final de «Texto completo».</div>` : "") +
         (a.d18 ? `<div class="nv18"><b>Qué cambió:</b> ${esc(a.d18)}</div>` : "") +
-        `<div class="artfoot"><button class="showtxt" aria-expanded="false" aria-controls="t-${id}">Texto completo</button>${ARTNX_BTN}${chips ? `<span class="vinc">${chips}</span>` : ""}</div>` +
+        `<div class="artfoot"><button class="showtxt" aria-expanded="false" aria-controls="t-${id}">Texto completo</button>${ARTNX_BTN}${TEXP("N:" + k)}${chips ? `<span class="vinc">${chips}</span>` : ""}</div>` +
         `<div class="literal nvlit" id="t-${id}" hidden>` +
         subW(clave, nvParrafos(a, t, c.c), `${nvEt(t, c.c, a.a)}${a.ep ? " — " + a.ep : ""}`) +
         (a.fut ? `<details class="nvfut"><summary>Texto que va a regir con la RG 1163/2026</summary><p class="nvaviso">${esc(a.futNota || "")}</p>${a.fut.map(x => `<p>${XREF(x, { k: "N", t, c: c.c, a: a.a })}</p>`).join("")}</details>` : "") +
@@ -15824,7 +15826,7 @@
           `<span class="vinc"><a class="lk src" href="${ley.infoleg}" target="_blank" rel="noopener">InfoLeg ↗</a></span>`;
         pie =
           `<div class="artfoot">` +
-          `<button class="showtxt" aria-expanded="false" aria-controls="t-${ley.id}-${key}" data-subk="L:${ley.id}:${key}">Texto completo</button>` + ARTNX_BTN +
+          `<button class="showtxt" aria-expanded="false" aria-controls="t-${ley.id}-${key}" data-subk="L:${ley.id}:${key}">Texto completo</button>` + ARTNX_BTN + TEXP(`L:${ley.id}:${key}`) +
           grupos +
           `</div>` +
           `<div class="literal" id="t-${ley.id}-${key}" hidden>${subW("L:" + ley.id + ":" + key, XREF(lit, { k: "L", l: ley.id, a: key }))}` +
@@ -24041,6 +24043,8 @@
     border: 0; border-radius: 999px; padding: 12px 18px 12px 14px; background: var(--accent); color: var(--surface); font: 600 14.5px/1 var(--f-body);
     box-shadow: 0 8px 24px -6px rgba(20, 26, 34, .45); cursor: pointer; }
   #tutfab svg { width: 20px; height: 20px; flex: none; }
+  .lk.texp { border-color: var(--accent); color: var(--accent); background: var(--accent-soft, transparent); }
+  .lk.texp:hover { background: var(--accent); color: var(--surface); }
   @media (max-width: 999px) { #tutfab { bottom: calc(env(safe-area-inset-bottom, 0px) + 74px); padding: 12px; } #tutfab span { display: none; } }
   body:has(#tutor:not([hidden])) #tutfab, body:has(dialog[open]) #tutfab, body:has(.subbtn:not([hidden])) #tutfab { display: none; }
   #tutor { position: fixed; z-index: 70; top: 0; right: 0; bottom: 0; width: min(460px, 100vw); display: flex; flex-direction: column;
@@ -24762,7 +24766,7 @@
       const tit = ($("sdtit") || {}).textContent || "";
       if (!tit.trim()) return;
       const b = document.createElement("button");
-      b.className = "lk"; b.dataset.texpl = "1"; b.textContent = "Explicámelo (tutor)";
+      b.className = "lk texp"; b.dataset.texpl = "1"; b.textContent = "✦ Explicámelo, Tutor";
       f.appendChild(b);
     }).observe($("sdfoot"), { childList: true });
     document.addEventListener("click", e => {
@@ -24780,6 +24784,28 @@
       }
       // en el celular el tutor tapa la pantalla: si desde una cita vas a la ley o al título, se cierra
       if (!panel.hidden && angosto() && e.target.closest("#srcdlg [data-go], #srcdlg [data-nvgo]")) cerrar();
+    }, true);
+    // Desde cada artículo de las leyes y de las Normas vigentes: el tutor lee ese artículo (fijo en el contexto),
+    // los que cita adentro (hasta 3) y, si marcaste una parte con el mouse o el dedo, se enfoca en esa parte.
+    // la selección se lee al apretar (el clic en un botón la borra antes del «click»)
+    let SELART = null;
+    const leerSel = () => { try { const sel = window.getSelection(); return { t: String(sel || "").replace(/\s+/g, " ").trim(), n: sel.anchorNode, h: Date.now() }; } catch (err) { return null; } };
+    document.addEventListener("pointerdown", e => { if (e.target.closest("[data-texart]")) SELART = leerSel(); }, true);
+    document.addEventListener("click", e => {
+      const b = e.target.closest("[data-texart]");
+      if (!b) return;
+      e.preventDefault(); e.stopPropagation();
+      const id = b.dataset.texart, li = b.closest("li.art");
+      const epEl = li && li.querySelector(".ep");
+      const ep = epEl && epEl.childNodes[0] ? String(epEl.childNodes[0].textContent || "").trim() : "";
+      let parte = "";
+      const sl = SELART && Date.now() - SELART.h < 4000 && SELART.t ? SELART : leerSel();
+      SELART = null;
+      if (sl && sl.t.length > 3 && li && sl.n && li.contains(sl.n)) parte = ` En especial esta parte: «${sl.t.slice(0, 280)}».`;
+      if (!valida(id)) { abrir(`Explicame en simple qué dice ${etiqueta(id)}${ep ? ` («${ep}»)` : ""}.${parte} ¿Qué suele preguntar el examen sobre esto?`); return; }
+      const rem = li ? [...new Set([...li.querySelectorAll(".xref[data-x]")].map(a => a.dataset.x))]
+        .filter(x => /^[LN]:/.test(x) && x !== id && valida(x)).slice(0, 3) : [];
+      abrir(`Explicame en simple qué dice ${etiqueta(id)}${ep ? ` («${ep}»)` : ""}.${parte} Dame un ejemplo práctico y decime qué suele preguntar el examen sobre esto.`, { fijos: [id, ...rem] });
     }, true);
     if (location.hash === "#tutor") setTimeout(() => abrir(), 600);
   })();
