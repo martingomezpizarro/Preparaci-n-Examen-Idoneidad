@@ -29,6 +29,8 @@ Cada definición se puede practicar también como tarjeta para completar: se tap
 
 **El cuestionario.** 942 preguntas en tres modos: práctica (una por vez, con corrección inmediata), simulacro (todas seguidas, cronometradas) y repaso (todo a la vista para leer de corrido). Filtrás por módulo, por origen y por «solo las que fallé». El progreso queda en el navegador.
 
+**El práctico.** Un simulador de bonos con los Bonares y Globales reales (AL29, AL30, AL35, AE38, AL41 y sus GD, más el GD46, con el cronograma del Decreto 676/2020), un bono armado por parámetros, uno que se dibuja arrastrando las barras y la opción de pegar flujos propios. Se mueve la fecha de valuación, se fija el precio o la TIR y se ven la duration, la duration modificada, el PPV, la convexidad, el valor técnico y la paridad, con cada cuenta resuelta con los números del bono. Suma un explorador de «qué pasa si», la curva precio–TIR con la aproximación por duration y convexidad, un conversor de TNA, TEA y TEM, y los 50 ejercicios de bonos y TIR para resolver con Excel.
+
 ## Los dos bancos de preguntas
 
 No son lo mismo y la página los distingue con un filtro de origen:

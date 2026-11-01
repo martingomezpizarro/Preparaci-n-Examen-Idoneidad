@@ -5625,7 +5625,8 @@
         <button class="vbtn" id="vInicio" role="tab" aria-selected="false">Inicio<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg><span class="vc"></span></button>
         <button class="vbtn" id="vLeyes" role="tab" aria-selected="false">Las leyes<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg><span class="vc">8</span></button>
         <button class="vbtn" id="vGlosario" role="tab" aria-selected="false">Glosario<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg><span class="vc" id="gcount"></span></button>
-        <button class="vbtn" id="vCuest" role="tab" aria-selected="false">Cuestionario y prácticos<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6"/><path d="M12 17h.01"/></svg><span class="vc" id="qcount"></span></button>
+        <button class="vbtn" id="vCuest" role="tab" aria-selected="false">Cuestionario<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6"/><path d="M12 17h.01"/></svg><span class="vc" id="qcount"></span></button>
+        <button class="vbtn" id="vPractico" role="tab" aria-selected="false">Práctico<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8.5 7h7"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01M8.5 14.5h.01M12 14.5h.01M15.5 14.5h.01M8.5 18h.01M12 18h.01M15.5 18h.01"/></svg></button>
         <button class="vbtn" id="vMercado" role="tab" aria-selected="false">El mercado<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M6 16V9"/><path d="M11 16V5"/><path d="M16 16v-4"/><path d="M20 16V8"/></svg><span class="vc" id="mcount"></span></button>
         <button class="vbtn" id="vMicro" role="tab" aria-selected="false">Micro-learning<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="vc" id="ucount"></span></button>
         <button class="vbtn" id="vNotas" role="tab" aria-selected="false">Mis notas<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span class="vc" id="ncount"></span></button>
@@ -5696,12 +5697,27 @@
         <button class="mbtn" id="mSimulacro" aria-selected="false">Simulacro</button>
         <button class="mbtn" id="mRepaso" aria-selected="false">Repaso</button>
         <button class="mbtn" id="mHistorial" aria-selected="false">Historial</button>
-        <button class="mbtn" id="mPracticos" aria-selected="false">Prácticos con Excel</button>
         <span class="qstat" id="qstat"></span>
       </div>
       <div class="qfiltro" id="qfiltro"></div>
       <div class="invita" data-donde="cuestionario" hidden></div>
       <div id="qzona"></div>
+    </section>
+
+    <section id="practico" hidden>
+      <p class="uintro" id="xintro"></p>
+      <div class="qbar xbar">
+        <span class="zseg" role="tablist" id="xseg" aria-label="Secciones del práctico">
+          <button class="mbtn" data-xsub="calc" aria-selected="true">Calculadora de bonos</button>
+          <button class="mbtn" data-xsub="exp" aria-selected="false">¿Qué pasa si…?</button>
+          <button class="mbtn" data-xsub="ptir" aria-selected="false">Precio y TIR</button>
+          <button class="mbtn" data-xsub="tasas" aria-selected="false">TNA, TEA y TIR</button>
+          <button class="mbtn" data-xsub="ej" aria-selected="false">50 prácticos</button>
+          <span class="zseg-ind"></span>
+        </span>
+      </div>
+      <div id="labhost"></div>
+      <div id="prxzona" hidden></div>
     </section>
 
     <section id="mercado" hidden>
@@ -15922,6 +15938,7 @@
 
     function filter() {
       if (vista === "micro") { pintarMicro(); return; }
+      if (vista === "practico") { pintarPractico(); return; }
       if (vista === "perfil") { countEl.textContent = ""; pintarPerfil(); return; }
       if (vista === "notas") { pintarNotas(); return; }
       if (vista === "glosario") { filterGlosario(); return; }
@@ -16051,11 +16068,13 @@
       document.getElementById("mercado").hidden = v !== "mercado";
       document.getElementById("micro").hidden = v !== "micro";
       document.getElementById("perfil").hidden = v !== "perfil";
+      document.getElementById("practico").hidden = v !== "practico";
+      document.getElementById("vPractico").setAttribute("aria-selected", v === "practico" ? "true" : "false");
       document.getElementById("notas").hidden = v !== "notas";
       document.getElementById("vNotas").setAttribute("aria-selected", v === "notas" ? "true" : "false");
       document.getElementById("vPerfil").setAttribute("aria-selected", v === "perfil" ? "true" : "false");
       document.getElementById("vMicro").setAttribute("aria-selected", v === "micro" ? "true" : "false");
-      document.querySelector(".controls .search").hidden = v === "micro" || v === "perfil";
+      document.querySelector(".controls .search").hidden = v === "micro" || v === "perfil" || v === "practico";
       if (v !== "mercado") { redDestruir(); estrDestruir(); }
       document.getElementById("vMercado").setAttribute("aria-selected", v === "mercado" ? "true" : "false");
       document.querySelector(".leyenda").hidden = (v !== "leyes" && v !== "mercado");
@@ -17703,8 +17722,8 @@
     const esProp = q => q.id.startsWith("P-");
     const deOrigen = (q, o) => o === "verif" ? !esIcnv(q) && !esProp(q) : o === "icnv" ? esIcnv(q) : o === "prop" ? esProp(q) : true;
     const MODS = [...new Set(PREGUNTAS.map(q => q.mod))].sort((a, b) => a - b);
-    const MODOS = ["practica", "simulacro", "repaso", "historial", "practicos"];
-    const IDMODO = { practica: "mPractica", simulacro: "mSimulacro", repaso: "mRepaso", historial: "mHistorial", practicos: "mPracticos" };
+    const MODOS = ["practica", "simulacro", "repaso", "historial"];
+    const IDMODO = { practica: "mPractica", simulacro: "mSimulacro", repaso: "mRepaso", historial: "mHistorial" };
 
     let quiz = {
       modo: "practica",
@@ -19167,7 +19186,7 @@
       Object.assign(quiz, { mod: d.mod || 0, origen: d.origen || "todas", filtro: d.filtro || null, soloFallos: !!d.soloFallos, dificiles: !!d.dificiles, qBusca: d.qBusca || "" });
       quiz.cola = cola; quiz.i = Math.min(d.i || 0, cola.length); quiz.marcadas = d.marcadas || []; quiz.resuelta = !!d.resuelta; quiz.pasos = d.pasos || [];
       if (d.simul && d.simul.activo) { quiz.simul = d.simul; marcarModo("simulacro"); arrancarReloj(); }
-      else marcarModo(d.modo === "simulacro" ? "practica" : (d.modo || "practica"));
+      else marcarModo(d.modo === "simulacro" || d.modo === "practicos" ? "practica" : (d.modo || "practica"));
       if (quiz.qBusca && !qEl.value) qEl.value = quiz.qBusca;
     }
     /* ---------------- Prácticos con Excel ---------------- */
@@ -19224,17 +19243,17 @@
     document.addEventListener("click", e => {
       if (!e.target.closest || !e.target.closest(".prx")) return;
       const t = e.target.closest("[data-prxtema]");
-      if (t) { prxTema = t.dataset.prxtema; pintarCuestionario(); return; }
+      if (t) { prxTema = t.dataset.prxtema; pintarPracticos(); return; }
       const c = e.target.closest("[data-prxcheck]");
       if (c) {
         const n = +c.dataset.prxcheck, x = PRACTICOS.find(y => y.n === n), inp = document.querySelector(`[data-prxin="${n}"]`);
         const v = prxNum(inp && inp.value, x.pct);
         if (isNaN(v)) { if (inp) inp.focus(); return; }
-        PRX[n] = Object.assign(PRX[n] || {}, { v: inp.value, ok: prxOk(v, x.sol), abierto: true }); prxGuardar(); pintarCuestionario(); return;
+        PRX[n] = Object.assign(PRX[n] || {}, { v: inp.value, ok: prxOk(v, x.sol), abierto: true }); prxGuardar(); pintarPracticos(); return;
       }
       const vr = e.target.closest("[data-prxver]");
-      if (vr) { const n = +vr.dataset.prxver; PRX[n] = Object.assign(PRX[n] || {}, { ver: !(PRX[n] && PRX[n].ver), abierto: true }); if (PRX[n].v == null) delete PRX[n].ok; prxGuardar(); pintarCuestionario(); return; }
-      if (e.target.closest("[data-prxborrar]")) { if (confirm("¿Borrás las respuestas de los prácticos guardadas en este dispositivo?")) { PRX = {}; prxGuardar(); pintarCuestionario(); } return; }
+      if (vr) { const n = +vr.dataset.prxver; PRX[n] = Object.assign(PRX[n] || {}, { ver: !(PRX[n] && PRX[n].ver), abierto: true }); if (PRX[n].v == null) delete PRX[n].ok; prxGuardar(); pintarPracticos(); return; }
+      if (e.target.closest("[data-prxborrar]")) { if (confirm("¿Borrás las respuestas de los prácticos guardadas en este dispositivo?")) { PRX = {}; prxGuardar(); pintarPracticos(); } return; }
     });
     document.addEventListener("keydown", e => {
       const i = e.target.closest && e.target.closest("[data-prxin]");
@@ -19245,19 +19264,570 @@
       const n = +d.dataset.prx; PRX[n] = Object.assign(PRX[n] || {}, { abierto: d.open }); prxGuardar();
     }, true);
 
+    function pintarPracticos() { const z = document.getElementById("prxzona"); if (z && !z.hidden) z.innerHTML = practicosHTML(); }
+
+    /* ---------------- Práctico: simulador de bonos + 50 prácticos ---------------- */
+    const XINTRO = {
+      calc: "Elegí un bono real (Bonares y Globales, con el cronograma del Decreto 676/2020), armalo por parámetros, dibujalo arrastrando las barras o cargá tus propios flujos. Mové la fecha de valuación para ver los pagos pasados y futuros, y fijá el precio o la TIR: se recalculan la duration, la duration modificada, el PPV, la convexidad, el valor técnico, la paridad y el current yield, con cada cuenta hecha con tus números. Las fórmulas son las del apunte de Títulos Públicos.",
+      exp: "Elegí qué mover (el cupón, la TIR, el plazo, dónde se concentra la amortización, la gracia o la frecuencia) y mirá cómo responden juntas la duration, la DM, el PPV, la convexidad, el precio y el current yield. Podés dejar fija la TIR o el precio.",
+      ptir: "La curva precio–TIR del bono que tenés elegido en la calculadora, la recta de la duration y la mejora con la convexidad, con la fórmula del apunte resuelta con tus números.",
+      tasas: "Conversor entre TNA, TEA y TEM según la capitalización, la TNA equivalente para una misma TEA, el rendimiento por un plazo en días y cómo se lee la TIR de un bono como tasa.",
+      ej: "Ejercicios prácticos de bonos y TIR para resolver con Excel, como en el examen. Bajá el archivo y resolvelo con las funciones (TIR, VA, TASA, VNA, TIR.NO.PER): cada ejercicio se corrige solo. Abajo están los mismos 50 para revisarlos o corregirlos desde acá."
+    };
+    const XLAB = { calc: "bono", exp: "explorador", ptir: "precio-tir", tasas: "tasas" };
+    const LSXSUB = "mapa-idoneo-practico-sub";
+    let xsub = "calc";
+    try { const v = localStorage.getItem(LSXSUB); if (XINTRO[v]) xsub = v; } catch (e) { }
+    let LAB = null;
+    const LAB_CSS = ":host{display:block;container-type:inline-size;\n  --muted:var(--ink-2);--sunken:var(--surface-2);--pv:var(--accent);\n  --amort:var(--lab-amort,#2E7D52);--renta:var(--lab-renta,#B8860B);--bad:var(--lab-bad,#B3453C);--good:var(--lab-amort,#2E7D52);\n  --card-shadow:var(--z-card-shadow,0 1px 3px rgba(0,0,0,.08));\n  color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}\n*{box-sizing:border-box}\n[hidden]{display:none!important}\n.num,.tile .v,.mini .hd span,.big3 .card .v,.big3 .card .e,.datebox .dv,table,.form .eq,.field input,.ctl input[type=number],.chart text,.chart .tip{font-variant-numeric:tabular-nums lining-nums}\ncode{font-family:var(--f-mono);font-size:.92em}\n.wrap{display:flex;flex-direction:column;gap:18px}\n.grid{display:grid;grid-template-columns:290px minmax(0,1fr);gap:18px;align-items:start}\n.grid.solo{grid-template-columns:minmax(0,1fr)}\n.grid.solo aside{display:none}\n@container (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}\naside{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--card-shadow);padding:16px;display:flex;flex-direction:column;gap:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px);max-height:calc(100vh - 80px);overflow:auto;scrollbar-width:thin}\n@container (max-width:860px){aside{position:static;max-height:none;overflow:visible}}\nh2{font-family:var(--f-display);font-weight:600;font-size:18px;margin:0;letter-spacing:-.005em;text-wrap:balance}\n.lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2);font-weight:600;font-family:var(--f-label,var(--f-body))}\n.ctl{display:flex;flex-direction:column;gap:5px}\n.ctl .row{display:flex;align-items:center;justify-content:space-between;gap:8px}\n.ctl input[type=number]{width:88px;font:500 14px var(--f-body);text-align:right;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:5px 8px}\n.ctl input[type=range],input[type=range]{width:100%;accent-color:var(--accent)}\n.ctl .ends{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-3)}\n.ctl.off{opacity:.4;pointer-events:none}\n.seg{display:flex;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:3px;gap:2px}\n.seg button{flex:1;border:0;background:transparent;color:var(--ink-3);font:500 13px var(--f-body);padding:7px 4px;border-radius:7px;cursor:pointer;transition:background .2s,color .2s}\n.seg button:hover{color:var(--ink)}\n.seg button[aria-pressed=\"true\"]{background:var(--ink);color:var(--surface)}\n.seg button:disabled{opacity:.35;cursor:not-allowed}\nbutton:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}\nselect{font:500 14px var(--f-body);background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px}\n.note{font-size:13px;color:var(--ink-2);margin:0;line-height:1.5}\nmain{display:flex;flex-direction:column;gap:18px;min-width:0}\n.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--card-shadow);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}\n.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--card-shadow)}\n@container (max-width:600px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}\n.tile{background:var(--surface);padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}\n.tile .v{font:600 22px var(--f-display);letter-spacing:-.01em}\n.tile .s{font-size:12px;color:var(--ink-3)}\n.tile.d .v{color:var(--accent)}\n.tile.dim .v{color:var(--ink-3)}\n.chart{position:relative;width:100%;min-width:0}\n.chart svg{display:block;width:100%;height:auto;overflow:visible}\n.chart text{font-family:var(--f-body);font-size:10.5px;fill:var(--ink-3)}\n.chart .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--surface);font:500 12px/1.45 var(--f-body);padding:6px 9px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-100%);z-index:2}\n.chart.drag svg{cursor:ns-resize;touch-action:none}\n.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--ink-2)}\n.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}\n.legend i.line{height:3px;border-radius:2px;vertical-align:3px;width:16px}\n.insights{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}\n.insights li{background:var(--accent-soft);border-radius:10px;padding:10px 13px;font-size:14.5px;text-align:justify;hyphens:auto}\n.insights b{font-weight:600}\n.forms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}\n@container (max-width:640px){.forms{grid-template-columns:minmax(0,1fr)}}\n.form{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}\n.form h3{margin:0;font:600 14.5px var(--f-body)}\n.form .eq{font:500 13.5px/1.7 var(--f-body);overflow-x:auto;white-space:nowrap;color:var(--ink)}\n.form .eq .r{color:var(--accent);font-weight:700}\n.tablewrap{overflow:auto;max-height:400px;border:1px solid var(--line);border-radius:12px}\ntable{border-collapse:collapse;width:100%;font:13px var(--f-body)}\nth,td{padding:6px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}\nth{position:sticky;top:0;background:var(--surface-2);font:600 11px var(--f-label,var(--f-body));text-transform:uppercase;letter-spacing:.05em;color:var(--ink-2);z-index:1}\ntfoot td{position:sticky;bottom:0;background:var(--surface-2);font-weight:600}\ntd.l,th.l{text-align:left}\ntr.past td{color:var(--ink-3)}\ntr.nextp td{background:var(--accent-soft)}\n.chips{display:flex;flex-wrap:wrap;gap:6px}\n.chips button{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font:500 13.5px var(--f-body);padding:6px 13px;border-radius:9999px;cursor:pointer}\n.chips button:hover{border-color:var(--line-strong);color:var(--ink)}\n.chips button[aria-pressed=\"true\"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}\n.minis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}\n@container (max-width:900px){.minis{grid-template-columns:repeat(2,minmax(0,1fr))}}\n@container (max-width:520px){.minis{grid-template-columns:minmax(0,1fr)}}\n.mini{border:1px solid var(--line);border-radius:12px;padding:10px 10px 4px;min-width:0}\n.mini .hd{display:flex;justify-content:space-between;align-items:baseline;gap:8px}\n.mini .hd b{font:600 13.5px var(--f-body)}\n.mini .hd span{font:700 14px var(--f-body);color:var(--accent)}\n.big3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}\n@container (max-width:600px){.big3{grid-template-columns:minmax(0,1fr)}}\n.big3 .card{border:1px solid var(--line);border-radius:12px;padding:12px 14px}\n.big3 .card .v{font:600 26px var(--f-display);letter-spacing:-.01em}\n.big3 .card .e{font:500 12.5px var(--f-body);color:var(--ink-3)}\n.big3 .card.real{border-color:var(--ink)}\n.callout{border-left:3px solid var(--accent);padding:9px 13px;background:var(--surface-2);border-radius:0 10px 10px 0;font-size:14.5px;text-align:justify;hyphens:auto}\n.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}\n@container (max-width:760px){.two{grid-template-columns:minmax(0,1fr)}}\n.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}\n@container (max-width:600px){.fields{grid-template-columns:minmax(0,1fr)}}\n.field{display:flex;flex-direction:column;gap:4px}\n.field input{font:600 20px var(--f-body);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:8px 10px;width:100%}\n.field small{color:var(--ink-3);font-size:12px}\n.bondsel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}\n.bondsel button{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13px var(--f-body);padding:7px 2px;border-radius:10px;cursor:pointer;line-height:1.2}\n.bondsel button:hover{border-color:var(--line-strong)}\n.bondsel button small{display:block;font:500 10.5px var(--f-body);color:var(--ink-3)}\n.bondsel button[aria-pressed=\"true\"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}\n.bondsel button[aria-pressed=\"true\"] small{color:var(--surface);opacity:.8}\n.bondsel .w{grid-column:span 3;text-align:left;padding:8px 12px;font-weight:500}\n.grp{display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--line);padding-top:14px}\n.datebox{display:flex;align-items:center;gap:6px;flex-wrap:wrap}\n.datebox .dv{font:600 16px var(--f-body);flex:1;min-width:110px}\n.mini-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 12.5px var(--f-body);padding:5px 11px;border-radius:9999px;cursor:pointer}\n.mini-btn:hover{border-color:var(--accent);color:var(--accent)}\ntextarea{width:100%;min-height:160px;font:12.5px/1.5 var(--f-mono);background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px;resize:vertical}\ninput[type=date]{font:500 14px var(--f-body)!important}\n.err{color:var(--bad);font-size:12.5px;margin:0}\n.ok{color:var(--good);font-size:12.5px;margin:0}\n.tmpl{display:flex;flex-wrap:wrap;gap:6px}\n.hint{font-size:13px;background:var(--accent-soft);padding:9px 12px;border-radius:10px;margin:0}\n@media (prefers-reduced-motion: reduce){*{transition:none!important}}\n";
+    const LAB_HTML = "<div class=\"wrap\">\n  \n\n  <div class=\"grid\" id=\"grid\">\n    <aside aria-label=\"Bono y parámetros\">\n      <div id=\"g-sel\" class=\"ctl\" style=\"gap:8px\">\n        <h2>Bono<\/h2>\n        <div class=\"bondsel\" id=\"bondsel\"><\/div>\n      <\/div>\n      <p class=\"hint\" id=\"g-exnote\" hidden>Esta sección usa el <b>bono armado por parámetros<\/b>. Cambiá sus condiciones acá.<\/p>\n\n      <!-- paramétrico -->\n      <div id=\"g-param\" class=\"grp\">\n        <div class=\"ctl\"><span class=\"lbl\">Forma de pago<\/span>\n          <div class=\"seg\" id=\"modo\"><button data-v=\"cero\" aria-pressed=\"false\">Cupón cero<\/button><button data-v=\"bullet\" aria-pressed=\"true\">Bullet<\/button><button data-v=\"amort\" aria-pressed=\"false\">Amortizable<\/button><\/div><\/div>\n        <div id=\"c-plazo\"><\/div>\n        <div class=\"ctl\"><span class=\"lbl\">Frecuencia de pago (m)<\/span>\n          <div class=\"seg\" id=\"freq\"><button data-v=\"1\" aria-pressed=\"false\">Anual<\/button><button data-v=\"2\" aria-pressed=\"true\">Semestral<\/button><button data-v=\"4\" aria-pressed=\"false\">Trim.<\/button><button data-v=\"12\" aria-pressed=\"false\">Mensual<\/button><\/div><\/div>\n        <div id=\"c-cupon\"><\/div>\n        <div id=\"c-conc\"><\/div>\n        <div id=\"c-gracia\"><\/div>\n      <\/div>\n\n      <!-- a mano -->\n      <div id=\"g-hand\" class=\"grp\">\n        <p class=\"hint\">Arrastrá las barras del gráfico hacia arriba o abajo para cambiar el tamaño de cada pago. Podés pintar varias de una pasada.<\/p>\n        <div id=\"c-hplazo\"><\/div>\n        <div class=\"ctl\"><span class=\"lbl\">Pagos por año<\/span>\n          <div class=\"seg\" id=\"hfreq\"><button data-v=\"1\" aria-pressed=\"false\">1<\/button><button data-v=\"2\" aria-pressed=\"true\">2<\/button><button data-v=\"4\" aria-pressed=\"false\">4<\/button><button data-v=\"12\" aria-pressed=\"false\">12<\/button><\/div><\/div>\n        <div class=\"ctl\"><span class=\"lbl\">Empezar desde<\/span>\n          <div class=\"tmpl\" id=\"tmpl\">\n            <button class=\"mini-btn\" data-t=\"bullet\">Bullet 8 %<\/button>\n            <button class=\"mini-btn\" data-t=\"cero\">Cupón cero<\/button>\n            <button class=\"mini-btn\" data-t=\"lineal\">Amortizable parejo<\/button>\n            <button class=\"mini-btn\" data-t=\"inicio\">Cargado al inicio<\/button>\n            <button class=\"mini-btn\" data-t=\"final\">Cargado al final<\/button>\n            <button class=\"mini-btn\" data-t=\"plano\">Todos iguales<\/button>\n          <\/div><\/div>\n      <\/div>\n\n      <!-- cargado -->\n      <div id=\"g-custom\" class=\"grp\">\n        <div class=\"ctl\"><label class=\"lbl\" for=\"ctext\">Tus flujos (por cada 100 de VN)<\/label>\n          <textarea id=\"ctext\" spellcheck=\"false\"><\/textarea>\n          <p class=\"note\">Una fila por pago: <code>fecha; renta; amortización<\/code>. Fecha dd/mm/aaaa. Decimales con coma o punto. Separá con punto y coma o tabulación (sirve pegar desde Excel).<\/p><\/div>\n        <div class=\"ctl\"><label class=\"lbl\" for=\"cemi\">Fecha de emisión (inicio del primer cupón)<\/label>\n          <input id=\"cemi\" type=\"date\" style=\"font:500 14px var(--f-mono);background:var(--sunken);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px\"><\/div>\n        <div class=\"tmpl\"><button class=\"mini-btn\" id=\"cload\">Cargar flujos<\/button><button class=\"mini-btn\" id=\"ccopy\">Copiar los de AL30 para editar<\/button><\/div>\n        <p id=\"cmsg\" class=\"note\"><\/p>\n      <\/div>\n\n      <!-- fecha -->\n      <div id=\"g-fecha\" class=\"grp\">\n        <div class=\"ctl\"><span class=\"lbl\">Fecha de valuación<\/span>\n          <div class=\"datebox\"><span class=\"dv\" id=\"fecha-v\"><\/span>\n            <button class=\"mini-btn\" id=\"f-prev\" title=\"Pago anterior\">◀ pago<\/button>\n            <button class=\"mini-btn\" id=\"f-next\" title=\"Pago siguiente\">pago ▶<\/button>\n            <button class=\"mini-btn\" id=\"f-hoy\">Hoy<\/button><\/div>\n          <input id=\"fecha-r\" type=\"range\" min=\"0\" max=\"100\" step=\"1\" aria-label=\"Fecha de valuación\" style=\"width:100%;accent-color:var(--accent)\">\n          <div class=\"ends\"><span id=\"fecha-a\"><\/span><span id=\"fecha-b\"><\/span><\/div><\/div>\n      <\/div>\n\n      <!-- precio -->\n      <div id=\"g-precio\" class=\"grp\">\n        <div class=\"ctl\"><span class=\"lbl\">Lo que fijás vos<\/span>\n          <div class=\"seg\" id=\"entrada\"><button data-v=\"tir\" aria-pressed=\"true\">La TIR<\/button><button data-v=\"precio\" aria-pressed=\"false\">El precio<\/button><\/div><\/div>\n        <div id=\"c-tir\"><\/div>\n        <div id=\"c-precio\"><\/div>\n        <div class=\"ctl\" id=\"g-tipo\"><span class=\"lbl\">El precio que cargás es<\/span>\n          <div class=\"seg\" id=\"tipo\"><button data-v=\"sucio\" aria-pressed=\"true\">Sucio (con corridos)<\/button><button data-v=\"limpio\" aria-pressed=\"false\">Limpio<\/button><\/div><\/div>\n        <div class=\"ctl\"><span class=\"lbl\">TIR expresada como<\/span>\n          <div class=\"seg\" id=\"conv\"><button data-v=\"tea\" aria-pressed=\"false\">Efectiva anual<\/button><button data-v=\"nom\" aria-pressed=\"true\">Nominal (cap. m)<\/button><\/div>\n          <p class=\"note\" id=\"conv-note\"><\/p><\/div>\n      <\/div>\n    <\/aside>\n\n    <main>\n      <!-- ============ CALCULADORA ============ -->\n      <section id=\"v-bono\" role=\"tabpanel\" aria-labelledby=\"t-bono\">\n        <div style=\"display:flex;flex-direction:column;gap:18px\">\n          <div class=\"tiles\" id=\"tiles\"><\/div>\n          <div class=\"panel\">\n            <header style=\"display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px\">\n              <h2 id=\"fl-title\">Flujo de fondos<\/h2>\n              <div class=\"legend\" id=\"fl-legend\"><\/div>\n            <\/header>\n            <div class=\"chart\" id=\"ch-flujos\"><\/div>\n            <p class=\"note\" id=\"fl-note\">La duration (▲) es el centro de gravedad de los valores actuales de los flujos que faltan cobrar. El PPV (◆) hace lo mismo con los flujos sin descontar. Los pagos ya cobrados quedan en gris.<\/p>\n          <\/div>\n          <div class=\"panel\">\n            <header style=\"display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center\">\n              <h2>Con el paso del tiempo<\/h2>\n              <div class=\"seg\" id=\"hold\" style=\"min-width:250px\"><button data-v=\"tir\" aria-pressed=\"true\">TIR constante<\/button><button data-v=\"par\" aria-pressed=\"false\">Paridad constante<\/button><\/div>\n            <\/header>\n            <div class=\"chips\" id=\"tmet\">\n              <button data-k=\"D\" aria-pressed=\"true\">Duration<\/button><button data-k=\"DM\" aria-pressed=\"false\">Duration modif.<\/button><button data-k=\"PPV\" aria-pressed=\"false\">PPV<\/button><button data-k=\"C\" aria-pressed=\"false\">Convexidad<\/button><button data-k=\"TIR\" aria-pressed=\"false\">TIR<\/button><button data-k=\"P\" aria-pressed=\"false\">Precio sucio<\/button><button data-k=\"clean\" aria-pressed=\"false\">Precio limpio<\/button><button data-k=\"VT\" aria-pressed=\"false\">Valor técnico<\/button><button data-k=\"par\" aria-pressed=\"false\">Paridad<\/button>\n            <\/div>\n            <div class=\"chart\" id=\"ch-time\"><\/div>\n            <p class=\"note\" id=\"time-note\"><\/p>\n          <\/div>\n          <div class=\"panel\"><h2>Qué estás viendo<\/h2><ul class=\"insights\" id=\"insights\"><\/ul><\/div>\n          <div class=\"panel\"><h2>La cuenta, con tus números<\/h2><div class=\"forms\" id=\"forms\"><\/div><\/div>\n          <div class=\"panel\"><h2>Tabla de flujos<\/h2><div class=\"tablewrap\"><table id=\"tabla\"><\/table><\/div><\/div>\n        <\/div>\n      <\/section>\n\n      <!-- ============ EXPLORADOR ============ -->\n      <section id=\"v-explorador\" role=\"tabpanel\" aria-labelledby=\"t-explorador\" hidden>\n        <div class=\"panel\">\n          <h2>¿Qué pasa si muevo…?<\/h2>\n          <div class=\"chips\" id=\"xsel\">\n            <button data-x=\"cupon\" aria-pressed=\"true\">el cupón<\/button>\n            <button data-x=\"tir\" aria-pressed=\"false\">la TIR<\/button>\n            <button data-x=\"plazo\" aria-pressed=\"false\">el plazo<\/button>\n            <button data-x=\"conc\" aria-pressed=\"false\">dónde se concentra la amortización<\/button>\n            <button data-x=\"gracia\" aria-pressed=\"false\">el período de gracia<\/button>\n            <button data-x=\"m\" aria-pressed=\"false\">la frecuencia de pago<\/button>\n          <\/div>\n          <div style=\"display:flex;flex-wrap:wrap;gap:12px;align-items:center\">\n            <span class=\"lbl\">Y dejo fijo<\/span>\n            <div class=\"seg\" id=\"fijo\" style=\"min-width:220px\"><button data-v=\"tir\" aria-pressed=\"true\">la TIR<\/button><button data-v=\"precio\" aria-pressed=\"false\">el precio<\/button><\/div>\n            <span class=\"note\" id=\"fijo-note\"><\/span>\n          <\/div>\n          <div class=\"callout\" id=\"x-explica\"><\/div>\n          <div class=\"minis\" id=\"minis\"><\/div>\n          <p class=\"note\">El punto marca el bono por parámetros que tenés armado a la izquierda. Pasá el mouse o el dedo por los gráficos para leer cada valor.<\/p>\n        <\/div>\n      <\/section>\n\n      <!-- ============ PRECIO Y TIR ============ -->\n      <section id=\"v-precio-tir\" role=\"tabpanel\" aria-labelledby=\"t-precio-tir\" hidden>\n        <div style=\"display:flex;flex-direction:column;gap:18px\">\n          <div class=\"panel\">\n            <h2 id=\"ptir-title\">Si la TIR se mueve, ¿cuánto cambia el precio?<\/h2>\n            <div class=\"ctl\" id=\"c-delta\"><\/div>\n            <div class=\"big3\" id=\"big3\"><\/div>\n            <div class=\"legend\">\n              <span><i class=\"line\" style=\"background:var(--ink)\"><\/i>Precio real<\/span>\n              <span><i class=\"line\" style=\"background:var(--renta)\"><\/i>Estimado con la duration (recta)<\/span>\n              <span><i class=\"line\" style=\"background:var(--accent)\"><\/i>Estimado con duration + convexidad<\/span>\n            <\/div>\n            <div class=\"chart\" id=\"ch-ptir\"><\/div>\n            <div class=\"callout\" id=\"ptir-nota\"><\/div>\n          <\/div>\n          <div class=\"panel\"><h2>La fórmula del apunte, con tus números<\/h2><div class=\"forms\" id=\"ptir-forms\"><\/div><\/div>\n          <div class=\"panel\"><h2>Escenarios<\/h2><div class=\"tablewrap\"><table id=\"escenarios\"><\/table><\/div><\/div>\n        <\/div>\n      <\/section>\n\n      <!-- ============ TASAS ============ -->\n      <section id=\"v-tasas\" role=\"tabpanel\" aria-labelledby=\"t-tasas\" hidden>\n        <div style=\"display:flex;flex-direction:column;gap:18px\">\n          <div class=\"panel\">\n            <h2>Convertidor de tasas<\/h2>\n            <p class=\"note\">Escribí en cualquiera de los tres casilleros y los otros se recalculan. Las tres describen el mismo rendimiento.<\/p>\n            <div class=\"ctl\"><span class=\"lbl\">Capitalización de la TNA<\/span>\n              <select id=\"cap\" aria-label=\"Capitalización de la TNA\">\n                <option value=\"1\">Anual (m = 1)<\/option><option value=\"2\">Semestral (m = 2)<\/option><option value=\"4\">Trimestral (m = 4)<\/option>\n                <option value=\"12\">Mensual (m = 12)<\/option><option value=\"12.1666667\" selected>Cada 30 días (m = 365/30)<\/option><option value=\"365\">Diaria (m = 365)<\/option>\n              <\/select><\/div>\n            <div class=\"fields\">\n              <label class=\"field\" for=\"f-tna\"><span class=\"lbl\">TNA %<\/span><input id=\"f-tna\" type=\"number\" step=\"0.01\" inputmode=\"decimal\"><small id=\"s-tna\"><\/small><\/label>\n              <label class=\"field\" for=\"f-tea\"><span class=\"lbl\">TEA %<\/span><input id=\"f-tea\" type=\"number\" step=\"0.01\" inputmode=\"decimal\"><small>(1 + TNA/m)<sup>m<\/sup> − 1<\/small><\/label>\n              <label class=\"field\" for=\"f-tem\"><span class=\"lbl\">TEM % (30 días)<\/span><input id=\"f-tem\" type=\"number\" step=\"0.001\" inputmode=\"decimal\"><small>(1 + TEA)<sup>30/365<\/sup> − 1<\/small><\/label>\n            <\/div>\n            <ul class=\"insights\" id=\"tasas-ins\"><\/ul>\n          <\/div>\n          <div class=\"two\">\n            <div class=\"panel\"><h2>Misma TNA, distinta capitalización<\/h2><div class=\"chart\" id=\"ch-cap\"><\/div>\n              <p class=\"note\">Cuanto más seguido se capitaliza, más intereses ganan intereses y más alta queda la TEA. El techo es la capitalización continua, e<sup>TNA<\/sup> − 1.<\/p><\/div>\n            <div class=\"panel\"><h2>Misma TEA, ¿qué TNA corresponde?<\/h2><div class=\"tablewrap\" style=\"max-height:none\"><table id=\"equiv\"><\/table><\/div>\n              <p class=\"note\">Para comparar dos instrumentos, pasalos a TEA. Dos TNA con distinta capitalización no se comparan directo.<\/p><\/div>\n          <\/div>\n          <div class=\"panel\"><h2>Rendimiento por un plazo en días (letras, plazo fijo, cauciones)<\/h2><div class=\"ctl\" id=\"c-dias\"><\/div><div class=\"forms\" id=\"dias-forms\"><\/div><\/div>\n          <div class=\"panel\"><h2>¿Y la TIR?<\/h2><div id=\"tir-link\" class=\"forms\"><\/div><\/div>\n        <\/div>\n      <\/section>\n    <\/main>\n  <\/div>\n<\/div>";
+    function crearLab() {
+      const host = document.getElementById("labhost");
+      const root = host.attachShadow({ mode: "open" });
+      root.innerHTML = "<style>" + LAB_CSS + "<\/style>" + LAB_HTML;
+      return initLab(root, host);
+    }
+    function xIndicador() {
+      const seg = document.getElementById("xseg"); if (!seg) return;
+      const sel = seg.querySelector('.mbtn[aria-selected="true"]'), ind = seg.querySelector(".zseg-ind");
+      if (sel && ind) { ind.style.left = sel.offsetLeft + "px"; ind.style.width = sel.offsetWidth + "px"; }
+    }
+    function pintarPractico() {
+      document.querySelectorAll("#xseg .mbtn").forEach(b => b.setAttribute("aria-selected", b.dataset.xsub === xsub ? "true" : "false"));
+      const ej = xsub === "ej";
+      document.getElementById("labhost").hidden = ej;
+      document.getElementById("prxzona").hidden = !ej;
+      const it = document.getElementById("xintro"); if (it) it.textContent = XINTRO[xsub];
+      countEl.textContent = ej ? "50 ejercicios de bonos y TIR" : "";
+      if (ej) pintarPracticos();
+      else { try { if (!LAB) LAB = crearLab(); LAB.show(XLAB[xsub]); } catch (e) { console.warn(e); } }
+      requestAnimationFrame(xIndicador);
+    }
+    document.getElementById("xseg").addEventListener("click", e => {
+      const b = e.target.closest("[data-xsub]"); if (!b) return;
+      xsub = b.dataset.xsub; try { localStorage.setItem(LSXSUB, xsub); } catch (e) { }
+      pintarPractico();
+    });
+    window.addEventListener("resize", () => { if (vista === "practico") xIndicador(); });
+    document.getElementById("vPractico").addEventListener("click", () => setVista("practico"));
+
+
+    /* ---- motor del simulador de bonos (corre dentro del shadow DOM de #labhost) ---- */
+
+function initLab(ROOT,HOST){
+"use strict";
+const $=s=>ROOT.querySelector(s);
+const nf=(x,d=2)=>isFinite(x)?x.toLocaleString('es-AR',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+const pc=(x,d=2)=>nf(x*100,d)+' %';
+const sg=(x,d=2)=>(x>0?'+':'')+nf(x,d);
+const DAY=86400000,YR=365;
+const UTC=(y,m,d)=>Date.UTC(y,m-1,d);
+const TODAY=UTC(2026,11,1);
+function fmtDate(ms){const d=new Date(ms);return String(d.getUTCDate()).padStart(2,'0')+'/'+String(d.getUTCMonth()+1).padStart(2,'0')+'/'+d.getUTCFullYear()}
+function d360(a,b){const A=new Date(a),B=new Date(b);let d1=Math.min(A.getUTCDate(),30),d2=B.getUTCDate();if(d2===31&&d1===30)d2=30;
+  return(B.getUTCFullYear()-A.getUTCFullYear())*360+(B.getUTCMonth()-A.getUTCMonth())*30+(d2-d1)}
+
+/* ================= bonos reales (Decreto 676/2020) ================= */
+const ISSUE=UTC(2020,9,4);
+const REAL={
+ '29':{tick:'AL29 · GD29',name:'Bonar/Global 2029 1 %',mat:UTC(2029,7,9),steps:[[ISSUE,1]],am:dt=>dt>=UTC(2025,1,9)?10:0},
+ '30':{tick:'AL30 · GD30',name:'Bonar/Global 2030 step-up',mat:UTC(2030,7,9),steps:[[ISSUE,.125],[UTC(2021,7,9),.5],[UTC(2023,7,9),.75],[UTC(2027,7,9),1.75]],am:dt=>dt===UTC(2024,7,9)?4:(dt>UTC(2024,7,9)?8:0)},
+ '35':{tick:'AL35 · GD35',name:'Bonar/Global 2035 step-up',mat:UTC(2035,7,9),steps:[[ISSUE,.125],[UTC(2021,7,9),1.125],[UTC(2022,7,9),1.5],[UTC(2023,7,9),3.625],[UTC(2024,7,9),4.125],[UTC(2027,7,9),4.75],[UTC(2028,7,9),5]],am:dt=>dt>=UTC(2031,1,9)?10:0},
+ '38':{tick:'AE38 · GD38',name:'Bonar/Global 2038 step-up',mat:UTC(2038,1,9),steps:[[ISSUE,.125],[UTC(2021,7,9),2],[UTC(2022,7,9),3.875],[UTC(2023,7,9),4.25],[UTC(2024,7,9),5]],am:dt=>dt>=UTC(2027,7,9)?100/22:0},
+ '41':{tick:'AL41 · GD41',name:'Bonar/Global 2041 step-up',mat:UTC(2041,7,9),steps:[[ISSUE,.125],[UTC(2021,7,9),2.5],[UTC(2022,7,9),3.5],[UTC(2029,7,9),4.875]],am:dt=>dt>=UTC(2028,1,9)?100/28:0},
+ '46':{tick:'GD46',name:'Global 2046 step-up',mat:UTC(2046,7,9),steps:[[ISSUE,.125],[UTC(2021,7,9),1.125],[UTC(2022,7,9),1.5],[UTC(2023,7,9),3.625],[UTC(2024,7,9),4.125],[UTC(2027,7,9),4.375],[UTC(2028,7,9),5]],am:dt=>dt>=UTC(2025,1,9)?100/44:0}
+};
+function realBond(id){const sp=REAL[id],dates=[];let y=2021,mo=7;
+  for(;;){const dt=UTC(y,mo,9);if(dt>sp.mat)break;dates.push(dt);if(mo===7){mo=1;y++}else mo=7}
+  let vr=100,prev=ISSUE;const pays=[];
+  for(const dt of dates){let rate=0;for(const s of sp.steps)if(s[0]<=prev)rate=s[1];
+    const r=vr*rate/100*d360(prev,dt)/360,a=sp.am(dt);
+    pays.push({tau:(dt-ISSUE)/DAY/YR,st:(prev-ISSUE)/DAY/YR,r,a,cf:r+a,rate,vr});vr-=a;prev=dt}
+  return{kind:'real',id,name:sp.name,tick:sp.tick,dated:true,epoch:ISSUE,m:2,pays,T:pays[pays.length-1].tau};
+}
+
+/* ================= bono por parámetros ================= */
+const S={src:'30',lastReal:'30',plazo:5,m:2,cupon:8,tir:10,precio:100,modo:'bullet',conc:0,gracia:0,entrada:'tir',tipo:'sucio',conv:'tea',
+  tvd:0,delta:100,x:'cupon',fijo:'tir',dias:90,hold:'tir',tmet:'D',hplazo:5,hm:2,hcf:null,htmpl:'bullet',custom:null};
+function paramBond(s){
+  const m=s.m,n=Math.max(1,Math.round(s.plazo*m)),g=Math.max(0,Math.min(Math.round(s.gracia*m),n-1));
+  const cup=s.modo==='cero'?0:s.cupon/100,am=new Array(n+1).fill(0);
+  if(s.modo!=='amort')am[n]=100;
+  else{const L=n-g,ws=[];for(let j=0;j<L;j++){const x=L===1?1:j/(L-1);ws.push(Math.exp(4*s.conc*(x-.5)))}const W=ws.reduce((a,b)=>a+b,0);for(let j=0;j<L;j++)am[g+1+j]=100*ws[j]/W}
+  let vr=100;const pays=[];
+  for(let k=1;k<=n;k++){const r=vr*cup/m,a=am[k];pays.push({tau:k/m,st:(k-1)/m,r,a,cf:r+a,rate:cup*100,vr});vr-=a}
+  return{kind:'param',name:'Bono por parámetros',dated:false,epoch:TODAY,m,pays,T:n/m};
+}
+function handTemplate(t,n,m){const cf=[];
+  for(let k=1;k<=n;k++){let v=0;
+    if(t==='bullet')v=8/m+(k===n?100:0);
+    else if(t==='cero')v=k===n?100:0;
+    else if(t==='plano')v=100/n+8/m;
+    else{const w=t==='lineal'?1:t==='inicio'?Math.exp(-3*(k-1)/Math.max(1,n-1)):Math.exp(3*(k-1)/Math.max(1,n-1));v=w}
+    cf.push(v)}
+  if(t==='lineal'||t==='inicio'||t==='final'){const W=cf.reduce((a,b)=>a+b,0);let vr=100;for(let k=0;k<n;k++){const a=100*cf[k]/W;cf[k]=a+vr*.08/m;vr-=a}}
+  return cf.map(v=>+v.toFixed(3));
+}
+function handBond(){const m=S.hm,n=Math.max(1,Math.round(S.hplazo*m));
+  if(!S.hcf||S.hcf.length!==n)S.hcf=handTemplate(S.htmpl,n,m);
+  const pays=S.hcf.map((cf,i)=>({tau:(i+1)/m,st:i/m,r:0,a:0,cf,rate:NaN,vr:NaN}));
+  return{kind:'hand',name:'Bono dibujado a mano',dated:false,epoch:TODAY,m,pays,T:n/m,hand:true};
+}
+
+/* ================= bono cargado ================= */
+function parseDate(s){s=s.trim();let m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/);
+  if(m){let y=+m[3];if(y<100)y+=2000;return UTC(y,+m[2],+m[1])}
+  m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);if(m)return UTC(+m[1],+m[2],+m[3]);return NaN}
+function parseNum(s){s=(s||'').trim().replace(/\s/g,'');if(!s)return 0;
+  if(s.includes(',')&&s.includes('.'))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(',','.');return parseFloat(s)}
+function parseCustom(txt,emiStr){
+  const rows=[];const errs=[];
+  txt.split(/\r?\n/).forEach((ln,i)=>{if(!ln.trim())return;const c=ln.split(/[;\t|]/);const d=parseDate(c[0]||'');
+    if(!isFinite(d)){if(i===0)return;errs.push(`Fila ${i+1}: no entiendo la fecha «${(c[0]||'').trim()}».`);return}
+    const r=parseNum(c[1]),a=parseNum(c[2]);if(!isFinite(r)||!isFinite(a)){errs.push(`Fila ${i+1}: renta o amortización no es un número.`);return}
+    rows.push({d,r,a})});
+  if(errs.length)return{err:errs.slice(0,3).join(' ')};
+  if(!rows.length)return{err:'No encontré ninguna fila con fecha; renta; amortización.'};
+  rows.sort((x,y)=>x.d-y.d);
+  let emi=emiStr?Date.parse(emiStr+'T00:00:00Z'):NaN;
+  const gap=rows.length>1?(rows[1].d-rows[0].d):182*DAY;
+  if(!isFinite(emi)||emi>=rows[0].d)emi=rows[0].d-gap;
+  const span=(rows[rows.length-1].d-emi)/DAY;const m=Math.max(1,Math.min(12,Math.round(rows.length*365/span)));
+  let prev=emi,vr=100;const pays=rows.map(x=>{const p={tau:(x.d-emi)/DAY/YR,st:(prev-emi)/DAY/YR,r:x.r,a:x.a,cf:x.r+x.a,rate:NaN,vr};prev=x.d;vr-=x.a;return p});
+  const sumA=rows.reduce((s,x)=>s+x.a,0);
+  return{bond:{kind:'custom',name:'Bono cargado por vos',dated:true,epoch:emi,m,pays,T:pays[pays.length-1].tau},sumA,n:rows.length};
+}
+function bondToText(B){return B.pays.map(p=>`${fmtDate(B.epoch+Math.round(p.tau*YR)*DAY)}; ${nf(p.r,4)}; ${nf(p.a,4)}`).join('\n')}
+
+/* ================= análisis ================= */
+function priceAt(B,tv,y,mc){const v=1+y/mc;let P=0;for(const p of B.pays){if(p.tau<=tv+1e-9)continue;P+=p.cf*Math.pow(v,-mc*(p.tau-tv))}return P}
+function analyze(B,tv,y,mc){
+  const v=1+y/mc;let P=0,Dt=0,Cv=0,Sc=0,St=0,paidA=0,paidR=0,ra=0,nf_=0,next=null;
+  for(const p of B.pays){if(p.tau<=tv+1e-9){paidA+=p.a;paidR+=p.r;continue}
+    if(!next)next=p;const t=p.tau-tv,pv=p.cf*Math.pow(v,-mc*t);
+    P+=pv;Dt+=t*pv;Cv+=p.cf*t*(t+1/mc)*Math.pow(v,-mc*t-2);Sc+=p.cf;St+=t*p.cf;if(t<=1+1e-6)ra+=p.r;nf_++}
+  if(!nf_)return null;
+  const VR=B.hand?NaN:100-paidA;
+  const frac=next?Math.max(0,Math.min(1,(tv-next.st)/(next.tau-next.st))):0;
+  const IC=B.hand?0:next.r*frac;
+  const D=Dt/P;
+  return{P,D,DM:D/v,C:Cv/P,PPV:St/Sc,VR,IC,VT:VR+IC,clean:P-IC,par:P/(VR+IC)*100,CY:ra/(P-IC),tea:Math.pow(v,mc)-1,Dt,Sc,St,ra,next,frac,paidA,paidR,v};
+}
+function solveY(B,tv,mc,P){let lo=-0.6,hi=30;if(priceAt(B,tv,lo,mc)<P||priceAt(B,tv,hi,mc)>P)return NaN;
+  for(let i=0;i<100;i++){const mid=(lo+hi)/2;if(priceAt(B,tv,mid,mc)>P)lo=mid;else hi=mid}return(lo+hi)/2}
+
+/* ================= gráficos ================= */
+function niceTicks(a,b,c){if(!(b>a)){a-=1;b+=1}const st0=(b-a)/c,mag=Math.pow(10,Math.floor(Math.log10(st0))),r=st0/mag;
+  const step=(r<1.5?1:r<3?2:r<7?5:10)*mag,t=[];for(let v=Math.ceil(a/step-1e-9)*step;v<=b+1e-9;v+=step)t.push(+v.toFixed(10));return t}
+function lineChart(host,o){
+  const W=Math.max(240,host.clientWidth||600),H=o.h||240,p={l:o.padL||48,r:16,t:12,b:o.xLabel?40:24},iw=W-p.l-p.r,ih=H-p.t-p.b;
+  let y0=Infinity,y1=-Infinity;
+  o.series.forEach(s=>s.ys.forEach(v=>{if(isFinite(v)){y0=Math.min(y0,v);y1=Math.max(y1,v)}}));
+  (o.points||[]).forEach(q=>{if(isFinite(q.y)){y0=Math.min(y0,q.y);y1=Math.max(y1,q.y)}});
+  if(!isFinite(y0)){y0=0;y1=1}
+  if(y1-y0<1e-9){const e=Math.abs(y0)*.05+.5;y0-=e;y1+=e}
+  const pad=(y1-y0)*.08;y0-=pad;y1+=pad;
+  const xs=o.xs,x0=o.x0!=null?o.x0:xs[0],x1=o.x1!=null?o.x1:xs[xs.length-1];
+  const X=v=>p.l+(v-x0)/(x1-x0||1)*iw,Y=v=>p.t+(1-(v-y0)/(y1-y0))*ih;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.aria||'gráfico'}">`;
+  niceTicks(y0,y1,o.yT||4).forEach(t=>{if(t<y0||t>y1)return;s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${p.l-6}" y="${Y(t)+3.5}" text-anchor="end">${(o.yFmt||(v=>nf(v,1)))(t)}<\/text>`});
+  const xt=o.xTicks||niceTicks(x0,x1,o.xT||(W<420?4:6)).map(v=>[v,(o.xFmt||(q=>nf(q,1)))(v)]);
+  xt.forEach(([t,l])=>{if(t<x0-1e-9||t>x1+1e-9)return;s+=`<line x1="${X(t)}" x2="${X(t)}" y1="${p.t+ih}" y2="${p.t+ih+4}" stroke="var(--muted)"/><text x="${X(t)}" y="${p.t+ih+16}" text-anchor="middle">${l}<\/text>`});
+  if(o.xLabel)s+=`<text x="${p.l+iw/2}" y="${H-4}" text-anchor="middle">${o.xLabel}<\/text>`;
+  (o.vlines||[]).forEach(v=>{s+=`<line x1="${X(v.x)}" x2="${X(v.x)}" y1="${p.t}" y2="${p.t+ih}" stroke="${v.color||'var(--muted)'}" stroke-dasharray="${v.dash||'3 3'}" stroke-width="${v.w||1}"/>`;
+    if(v.label)s+=`<text x="${Math.min(X(v.x)+4,W-p.r-40)}" y="${p.t+10}" style="fill:${v.color||'var(--muted)'}">${v.label}<\/text>`});
+  o.series.forEach(se=>{let d='',pen=false;se.ys.forEach((v,i)=>{if(!isFinite(v)){pen=false;return}d+=(pen?'L':'M')+X(xs[i]).toFixed(1)+','+Y(v).toFixed(1);pen=true});
+    s+=`<path d="${d}" fill="none" stroke="${se.color}" stroke-width="${se.w||2.2}" ${se.dash?`stroke-dasharray="${se.dash}"`:''} stroke-linejoin="round" stroke-linecap="round"/>`});
+  (o.points||[]).forEach(q=>{if(isFinite(q.y))s+=`<circle cx="${X(q.x)}" cy="${Y(q.y)}" r="${q.r||5}" fill="${q.color}" stroke="var(--surface)" stroke-width="2"/>`});
+  s+=`<g class="hov" style="display:none"><line class="hl1" y1="${p.t}" y2="${p.t+ih}" stroke="var(--muted)"/><\/g>`;
+  s+=`<rect x="${p.l}" y="${p.t}" width="${iw}" height="${ih}" fill="transparent" class="hit" style="${o.onPick?'cursor:pointer':''}"/><\/svg><div class="tip" hidden><\/div>`;
+  host.innerHTML=s;
+  const svg=host.querySelector('svg'),hov=svg.querySelector('.hov'),ln=svg.querySelector('.hl1'),tip=host.querySelector('.tip'),hit=svg.querySelector('.hit');
+  const ns='http://www.w3.org/2000/svg',dots=o.series.map(se=>{const c=document.createElementNS(ns,'circle');c.setAttribute('r','3.5');c.setAttribute('fill',se.color);hov.appendChild(c);return c});
+  function idx(ev){const r=svg.getBoundingClientRect(),sx=(ev.clientX-r.left)*W/r.width;let best=0,bd=Infinity;xs.forEach((x,i)=>{const d=Math.abs(X(x)-sx);if(d<bd){bd=d;best=i}});return{best,r}}
+  function mv(ev){const{best,r}=idx(ev);hov.style.display='';ln.setAttribute('x1',X(xs[best]));ln.setAttribute('x2',X(xs[best]));
+    o.series.forEach((se,j)=>{const v=se.ys[best];dots[j].setAttribute('cx',X(xs[best]));dots[j].setAttribute('cy',isFinite(v)?Y(v):-99)});
+    tip.hidden=false;tip.innerHTML=o.tip(best);const px=X(xs[best])*r.width/W;tip.style.left=Math.min(Math.max(px,80),r.width-80)+'px';tip.style.top=(p.t*r.height/H+4)+'px'}
+  hit.addEventListener('pointermove',mv);
+  hit.addEventListener('pointerdown',ev=>{mv(ev);if(o.onPick)o.onPick(idx(ev).best)});
+  hit.addEventListener('pointerleave',()=>{hov.style.display='none';tip.hidden=true});
+}
+function timeTicks(B,W){
+  if(!B.dated)return niceTicks(0,B.T,W<420?4:8).map(v=>[v,nf(v,v%1?1:0)]);
+  const y0=new Date(B.epoch).getUTCFullYear()+1,y1=new Date(B.epoch+B.T*YR*DAY).getUTCFullYear();
+  const n=y1-y0+1,step=Math.max(1,Math.ceil(n/(W<420?4:9)));const out=[];
+  for(let y=y0;y<=y1;y+=step)out.push([(UTC(y,1,1)-B.epoch)/DAY/YR,String(y)]);return out}
+function tauLabel(B,t){return B.dated?fmtDate(B.epoch+Math.round(t*YR)*DAY):'año '+nf(t,2)}
+
+let drag=null;
+function flowsChart(host,B,tv,A,y,mc){
+  const W=Math.max(260,host.clientWidth||700),H=300,p={l:44,r:14,t:18,b:46},iw=W-p.l-p.r,ih=H-p.t-p.b;
+  const T=B.T;let maxv=Math.max(...B.pays.map(f=>f.cf))*1.1||1;
+  if(B.hand)maxv=drag?drag.max:Math.max(110,maxv);
+  const X=t=>p.l+t/T*iw,Y=v=>p.t+(1-v/maxv)*ih;
+  const bw=Math.max(1.5,Math.min(26,iw/(T*B.m+1)*.62));
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Flujo de fondos">`;
+  niceTicks(0,maxv,4).forEach(t=>{if(t>maxv)return;s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${p.l-6}" y="${Y(t)+3.5}" text-anchor="end">${nf(t,t<10&&t%1?1:0)}<\/text>`});
+  timeTicks(B,W).forEach(([t,l])=>{if(t<0||t>T)return;s+=`<line x1="${X(t)}" x2="${X(t)}" y1="${p.t+ih}" y2="${p.t+ih+4}" stroke="var(--muted)"/><text x="${X(t)}" y="${p.t+ih+16}" text-anchor="middle">${l}<\/text>`});
+  s+=`<text x="${p.l+iw/2}" y="${H-2}" text-anchor="middle">${B.dated?'fecha de pago':'años desde la emisión'}<\/text>`;
+  if(tv>0)s+=`<rect x="${p.l}" y="${p.t}" width="${Math.max(0,X(tv)-p.l)}" height="${ih}" fill="var(--sunken)"/>`;
+  B.pays.forEach(f=>{const past=f.tau<=tv+1e-9,op=past?.28:1,x=X(f.tau)-bw/2;
+    if(B.hand){s+=`<rect x="${x}" y="${Y(f.cf)}" width="${bw}" height="${Math.max(0,p.t+ih-Y(f.cf))}" fill="var(--accent)" opacity="${past?.28:.85}" rx="1"/>`;return}
+    s+=`<rect x="${x}" y="${Y(f.a)}" width="${bw}" height="${Math.max(0,p.t+ih-Y(f.a))}" fill="var(--amort)" opacity="${op}"/>`;
+    if(f.r>0)s+=`<rect x="${x}" y="${Y(f.a+f.r)}" width="${bw}" height="${Math.max(0,Y(f.a)-Y(f.a+f.r))}" fill="var(--renta)" opacity="${op}"/>`});
+  if(A){let d='';B.pays.forEach(f=>{if(f.tau<=tv+1e-9)return;const pv=f.cf*Math.pow(1+y/mc,-mc*(f.tau-tv));d+=(d?'L':'M')+X(f.tau).toFixed(1)+','+Y(pv).toFixed(1)});
+    s+=`<path d="${d}" fill="none" stroke="${B.hand?'var(--renta)':'var(--pv)'}" stroke-width="2"/>`;
+    const nfut=B.pays.filter(f=>f.tau>tv).length;
+    if(nfut<=60)B.pays.forEach(f=>{if(f.tau<=tv+1e-9)return;s+=`<circle cx="${X(f.tau)}" cy="${Y(f.cf*Math.pow(1+y/mc,-mc*(f.tau-tv)))}" r="2.6" fill="${B.hand?'var(--renta)':'var(--pv)'}"/>`})}
+  s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${p.t+ih}" y2="${p.t+ih}" stroke="var(--muted)"/>`;
+  s+=`<line x1="${X(tv)}" x2="${X(tv)}" y1="${p.t-6}" y2="${p.t+ih}" stroke="var(--ink)" stroke-width="1.5"/><text x="${Math.min(Math.max(X(tv),p.l+30),W-p.r-30)}" y="${p.t-8}" text-anchor="middle" style="fill:var(--ink);font-weight:600">${tv>0?'valuación':'emisión'}<\/text>`;
+  if(A){const xd=X(tv+A.D),xp=X(tv+A.PPV);
+    s+=`<line x1="${xd}" x2="${xd}" y1="${p.t}" y2="${p.t+ih}" stroke="var(--accent)" stroke-dasharray="4 3"/><path d="M${xd},${p.t+ih+1} l-7,11 h14 z" fill="var(--accent)"/>`;
+    s+=`<path d="M${xp},${p.t+ih+20} l5,6 l-5,6 l-5,-6 z" fill="var(--muted)"/>`;
+    s+=`<text x="${Math.min(Math.max(xd,p.l+70),W-p.r-70)}" y="${p.t+12}" text-anchor="middle" style="fill:var(--accent);font-weight:600">D = ${nf(A.D,2)} años<\/text>`}
+  s+=`<rect x="${p.l}" y="${p.t}" width="${iw}" height="${ih}" fill="transparent" class="hit"/><\/svg><div class="tip" hidden><\/div>`;
+  host.innerHTML=s;host.classList.toggle('drag',!!B.hand);
+  const svg=host.querySelector('svg'),tip=host.querySelector('.tip'),hit=svg.querySelector('.hit');
+  host._geo={W,H,p,ih,maxv,X,T};
+  function near(ev){const r=svg.getBoundingClientRect(),sx=(ev.clientX-r.left)*W/r.width;let bi=0,bd=Infinity;B.pays.forEach((f,i)=>{const dd=Math.abs(X(f.tau)-sx);if(dd<bd){bd=dd;bi=i}});return{bi,r}}
+  function mv(ev){if(drag)return;const{bi,r}=near(ev),f=B.pays[bi],past=f.tau<=tv+1e-9;
+    const pv=past?null:f.cf*Math.pow(1+y/mc,-mc*(f.tau-tv));tip.hidden=false;
+    tip.innerHTML=`${tauLabel(B,f.tau)}${past?' · ya pagado':''}<br>${B.hand?'':`Renta ${nf(f.r,3)} · Amort. ${nf(f.a,3)}<br>`}Flujo ${nf(f.cf,3)}${pv!=null?` → VA ${nf(pv,3)}`:''}`;
+    const px=X(f.tau)*r.width/W;tip.style.left=Math.min(Math.max(px,100),r.width-100)+'px';tip.style.top=(Math.max(Y(f.cf),p.t+40)*r.height/H-6)+'px'}
+  hit.addEventListener('pointermove',mv);hit.addEventListener('pointerleave',()=>tip.hidden=true);
+  if(B.hand){hit.addEventListener('pointerdown',ev=>{ev.preventDefault();drag={max:maxv};tip.hidden=true;paint(ev);
+    window.addEventListener('pointermove',paint);window.addEventListener('pointerup',endDrag,{once:true});window.addEventListener('pointercancel',endDrag,{once:true})})}
+  else hit.addEventListener('pointerdown',mv);
+}
+function paint(ev){const host=$('#ch-flujos'),g=host._geo,svg=host.querySelector('svg');if(!g||!svg)return;
+  const r=svg.getBoundingClientRect(),sx=(ev.clientX-r.left)*g.W/r.width,sy=(ev.clientY-r.top)*g.H/r.height;
+  const n=S.hcf.length;let bi=Math.round(((sx-g.p.l)/(g.W-g.p.l-g.p.r))*g.T*S.hm)-1;bi=Math.max(0,Math.min(n-1,bi));
+  const v=Math.max(0,Math.min(g.maxv,(1-(sy-g.p.t)/g.ih)*g.maxv));S.hcf[bi]=Math.round(v*4)/4;update()}
+function endDrag(){window.removeEventListener('pointermove',paint);drag=null;update()}
+
+/* ================= controles ================= */
+const CTL={};
+function control(id,key,label,min,max,step,dec,ends){
+  const host=$('#'+id);host.className='ctl';
+  host.innerHTML=`<div class="row"><label class="lbl" for="${id}-n">${label}<\/label><input id="${id}-n" type="number" min="${min}" max="${max}" step="${step}"><\/div>
+  <input id="${id}-r" type="range" min="${min}" max="${max}" step="${step}" aria-label="${label}">${ends?`<div class="ends">${ends.map(e=>`<span>${e}<\/span>`).join('')}<\/div>`:''}`;
+  const n=host.querySelector('input[type=number]'),r=host.querySelector('input[type=range]');
+  const set=v=>{v=+v;if(!isFinite(v))return;S[key]=v;if(CTL[key].after)CTL[key].after();update()};
+  r.addEventListener('input',()=>set(r.value));n.addEventListener('change',()=>set(n.value));
+  CTL[key]={host,n,r,dec,setRange(mn,mx){r.min=mn;r.max=mx;n.min=mn;n.max=mx}};
+}
+function sync(){for(const k in CTL){const c=CTL[k];if(ROOT.activeElement!==c.n)c.n.value=(+S[k]).toFixed(c.dec);c.r.value=S[k]}}
+control('c-plazo','plazo','Plazo (años)',0.5,30,0.5,1);
+control('c-cupon','cupon','Tasa de cupón (% anual)',0,25,0.25,2);
+control('c-conc','conc','Dónde se concentra la amortización',-1,1,0.05,2,['← al inicio','pareja','al final →']);
+control('c-gracia','gracia','Período de gracia (años)',0,29.5,0.5,1);
+control('c-hplazo','hplazo','Plazo (años)',0.5,30,0.5,1);CTL.hplazo.after=()=>{S.hcf=null};
+control('c-tir','tir','TIR (%)',0.5,40,0.05,2);
+control('c-precio','precio','Precio (por 100 de VN original)',1,160,0.05,2);
+control('c-delta','delta','Cambio en la TIR (puntos básicos)',-1000,1000,5,0,['−10 puntos','+10 puntos']);
+control('c-dias','dias','Plazo en días',1,730,1,0);
+function setSeg(id,v){$('#'+id).querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.v==String(v))))}
+function seg(id,key,num,after){const el=$('#'+id);el.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;
+  S[key]=num?+b.dataset.v:b.dataset.v;setSeg(id,S[key]);if(after)after();update()})}
+seg('modo','modo');seg('freq','m',true);seg('entrada','entrada');seg('fijo','fijo');seg('tipo','tipo');seg('hold','hold');
+seg('hfreq','hm',true,()=>{S.hcf=null});
+seg('conv','conv',false);
+$('#tmpl').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.htmpl=b.dataset.t;S.hcf=null;update()});
+$('#xsel').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.x=b.dataset.x;$('#xsel').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));update()});
+$('#tmet').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.tmet=b.dataset.k;$('#tmet').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));update()});
+
+/* selector de bonos */
+const SRC=[...Object.keys(REAL).map(k=>({id:k,lab:REAL[k].tick.split(' · ')[0],sub:REAL[k].tick.includes('·')?REAL[k].tick.split(' · ')[1]:'ley NY'})),
+  {id:'param',lab:'Armado por parámetros',w:1},{id:'hand',lab:'Dibujado a mano',w:1},{id:'custom',lab:'Cargado por vos',w:1}];
+$('#bondsel').innerHTML=SRC.map(s=>`<button data-id="${s.id}" class="${s.w?'w':''}" aria-pressed="false">${s.lab}${s.sub?`<small>${s.sub}<\/small>`:''}<\/button>`).join('');
+$('#bondsel').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;selectSrc(b.dataset.id)});
+function selectSrc(id){S.src=id;if(REAL[id])S.lastReal=id;S.entrada='tir';setSeg('entrada','tir');
+  S.conv=REAL[id]||id==='custom'?'tea':'nom';setSeg('conv',S.conv);
+  const B=currentBond();
+  if(B){if(B.dated){S.tvd=Math.max(0,Math.min(Math.floor(B.T*YR)-1,Math.round((TODAY-B.epoch)/DAY)))}else S.tvd=0}
+  $('#ccopy').textContent=`Copiar los de ${REAL[S.lastReal].tick.split(' · ')[0]} para editar`;
+  update()}
+
+/* cargado */
+const EX_CUSTOM=`fecha; renta; amortización
+15/05/2027; 3,50; 0
+15/11/2027; 3,50; 0
+15/05/2028; 3,50; 25
+15/11/2028; 2,625; 25
+15/05/2029; 1,75; 25
+15/11/2029; 0,875; 25`;
+$('#ctext').value=EX_CUSTOM;$('#cemi').value='2026-11-15';
+function loadCustom(){const res=parseCustom($('#ctext').value,$('#cemi').value);
+  if(res.err){$('#cmsg').className='err';$('#cmsg').textContent=res.err;return}
+  S.custom=res.bond;$('#cmsg').className=Math.abs(res.sumA-100)>0.01?'err':'ok';
+  $('#cmsg').textContent=`${res.n} pagos cargados. Suma de amortizaciones: ${nf(res.sumA,2)}${Math.abs(res.sumA-100)>0.01?' (no da 100: revisá, el valor residual va a quedar raro)':''}.`;
+  selectSrc('custom')}
+$('#cload').addEventListener('click',loadCustom);
+$('#ccopy').addEventListener('click',()=>{const B=realBond(S.lastReal);$('#ctext').value='fecha; renta; amortización\n'+bondToText(B);$('#cemi').value='2020-09-04';loadCustom()});
+
+/* fecha */
+const fr=$('#fecha-r');
+fr.addEventListener('input',()=>{S.tvd=+fr.value;update()});
+$('#f-hoy').addEventListener('click',()=>{const B=currentBond();S.tvd=Math.round((TODAY-B.epoch)/DAY);update()});
+$('#f-next').addEventListener('click',()=>{const B=currentBond(),tv=S.tvd/YR;const p=B.pays.find(q=>q.tau>tv+1e-6);if(p)S.tvd=Math.round(p.tau*YR);update()});
+$('#f-prev').addEventListener('click',()=>{const B=currentBond(),tv=S.tvd/YR;const ps=B.pays.filter(q=>q.tau<tv-1e-6);S.tvd=ps.length?Math.round(ps[ps.length-1].tau*YR):0;update()});
+
+/* pestañas */
+const TABS=['bono','explorador','precio-tir','tasas'];
+function curTab(){return TABS.find(k=>!$('#v-'+k).hidden)||'bono'}
+function showTab(t){if(!TABS.includes(t))t='bono';
+  TABS.forEach(k=>{$('#v-'+k).hidden=k!==t});
+  $('#grid').classList.toggle('solo',t==='tasas');update()}
+
+/* ================= estado calculado ================= */
+let B,TV,Y,A,MC;
+function currentBond(){if(REAL[S.src])return realBond(S.src);if(S.src==='param')return paramBond(S);if(S.src==='hand')return handBond();
+  if(S.src==='custom'){if(!S.custom){const r=parseCustom(EX_CUSTOM,'2026-11-15');S.custom=r.bond}return S.custom}}
+function compute(){
+  B=currentBond();
+  const maxd=Math.max(0,Math.ceil(B.T*YR)-1);S.tvd=Math.max(0,Math.min(S.tvd,maxd));
+  TV=S.tvd/YR;MC=S.conv==='tea'?1:B.m;
+  if(S.entrada==='tir'){Y=S.tir/100;A=analyze(B,TV,Y,MC);S.precio=+(S.tipo==='limpio'&&!B.hand?A.clean:A.P).toFixed(2)}
+  else{const A0=analyze(B,TV,.1,MC);const Pd=S.tipo==='limpio'&&!B.hand?S.precio+A0.IC:S.precio;
+    let y=solveY(B,TV,MC,Pd);if(!isFinite(y)){y=S.tir/100}else S.tir=+(y*100).toFixed(3);Y=y;A=analyze(B,TV,Y,MC)}
+}
+function convName(){return S.conv==='tea'?'efectiva anual':`nominal anual cap. ${({1:'anual',2:'semestral',4:'trimestral',12:'mensual'})[MC]||('m='+MC)}`}
+
+/* ================= render calculadora ================= */
+function renderBono(){
+  const h=B.hand;
+  const tl=[
+    ['Precio sucio',nf(A.P,2),'por 100 de VN original'],
+    ['Precio limpio',h?'—':nf(A.clean,2),'sucio − interés corrido'],
+    ['TIR',nf(Y*100,2)+' %',S.conv==='tea'?'efectiva anual':`nominal, cap. m=${MC} · TEA ${pc(A.tea)}`],
+    ['Paridad',h?'—':nf(A.par,2)+' %','precio / valor técnico'],
+    ['Duration',nf(A.D,3),'años (Macaulay)','d'],
+    ['Duration modif.',nf(A.DM,3),'% de caída por +1 punto de TIR','d'],
+    ['PPV',nf(A.PPV,3),'años · Σt(A+R) / Σ(A+R)','d'],
+    ['Convexidad',nf(A.C,2),'años²'],
+    ['Valor residual',h?'—':nf(A.VR,2),'VN − amortizaciones pagadas'],
+    ['Interés corrido',h?'—':nf(A.IC,3),h?'':`${nf(A.frac*100,0)} % del cupón en curso`],
+    ['Valor técnico',h?'—':nf(A.VT,3),'VR + interés corrido'],
+    ['Current yield',h?'—':pc(A.CY),'renta próx. 12 meses / precio limpio']];
+  $('#tiles').innerHTML=tl.map(t=>`<div class="tile ${t[3]||''} ${t[1]==='—'?'dim':''}"><span class="lbl">${t[0]}<\/span><span class="v">${t[1]}<\/span><span class="s">${t[2]}<\/span><\/div>`).join('');
+  $('#fl-title').textContent=`${B.tick||B.name} · ${B.dated?'al '+tauLabel(B,TV):(TV>0?'en el '+tauLabel(B,TV):'al emitirse')}`;
+  $('#fl-legend').innerHTML=(h?'<span><i style="background:var(--accent)"><\/i>Flujo (arrastrá)<\/span><span><i class="line" style="background:var(--renta)"><\/i>Valor actual<\/span>':
+    '<span><i style="background:var(--amort)"><\/i>Amortización<\/span><span><i style="background:var(--renta)"><\/i>Renta<\/span><span><i class="line" style="background:var(--pv)"><\/i>Valor actual<\/span>')+'<span>▲ Duration<\/span><span>◆ PPV<\/span>';
+  flowsChart($('#ch-flujos'),B,TV,A,Y,MC);
+  if(!drag)renderTime();
+  renderInsights();renderForms();renderTable();
+}
+function renderTime(){
+  const h=B.hand,hold=h&&S.hold==='par'?'precio':S.hold;
+  $('#hold').querySelectorAll('button')[1].textContent=h?'Precio constante':'Paridad constante';
+  const N=260,xs=[],ys=[],end=B.T-1/YR;const parFix=A.par,pFix=A.P;
+  for(let i=0;i<=N;i++){const t=end*i/N;xs.push(t);let y=Y;
+    if(hold==='par'){const a0=analyze(B,t,.1,MC);y=solveY(B,t,MC,parFix/100*a0.VT)}
+    else if(hold==='precio')y=solveY(B,t,MC,pFix);
+    const a=isFinite(y)?analyze(B,t,y,MC):null;
+    ys.push(!a?NaN:S.tmet==='TIR'?y*100:a[S.tmet])}
+  const lab={D:'Duration (años)',DM:'Duration modificada',PPV:'PPV (años)',C:'Convexidad',TIR:'TIR (%)',P:'Precio sucio',clean:'Precio limpio',VT:'Valor técnico',par:'Paridad (%)'}[S.tmet];
+  const cur=S.tmet==='TIR'?Y*100:A[S.tmet];
+  lineChart($('#ch-time'),{xs,x0:0,x1:B.T,h:250,series:[{ys,color:'var(--accent)'}],padL:48,xTicks:timeTicks(B,$('#ch-time').clientWidth||600),
+    yFmt:v=>nf(v,Math.abs(v)<10?1:0),points:[{x:TV,y:cur,color:'var(--ink)'}],vlines:[{x:TV,color:'var(--ink)',dash:'0',w:1.2}],aria:lab+' a lo largo del tiempo',
+    tip:i=>`${tauLabel(B,xs[i])}<br>${lab}: ${nf(ys[i],2)}`,onPick:i=>{S.tvd=Math.round(xs[i]*YR);update()}});
+  const notes={tir:`Con la TIR fija en ${nf(Y*100,2)} %. `,par:`Con la paridad fija en ${nf(parFix,2)} %: la TIR se recalcula en cada fecha. `,precio:`Con el precio fijo en ${nf(pFix,2)}: la TIR se recalcula en cada fecha. `};
+  const expl={D:'La duration baja con el tiempo pero salta hacia arriba justo después de cada pago: al cobrar un flujo cercano, el resto queda más lejos en promedio.',
+    DM:'Sigue a la duration: se achica a medida que el bono se acerca al vencimiento.',PPV:'El PPV también se acorta con el tiempo y salta en cada pago, igual que la duration.',
+    C:'La convexidad cae muy rápido con el plazo: los bonos cortos casi no tienen curvatura.',TIR:S.hold==='tir'?'Con TIR constante esta línea es plana. Pasá a «Paridad constante» para ver cómo cambiaría la TIR si el precio se mantiene relativo al valor técnico.':'Si un bono bajo la par mantiene la paridad, la TIR sube a medida que se acerca el vencimiento: la misma ganancia de capital se concentra en menos tiempo.',
+    P:'El precio sucio sube entre pagos (se devengan intereses) y cae de golpe cuando el bono paga renta o amortiza.',clean:'El precio limpio no tiene los saltos del cupón; con TIR constante converge al valor residual (pull to par).',VT:'El valor técnico sube con el interés corrido y baja en escalones con cada amortización.',par:'Con TIR constante, la paridad converge a 100 % al vencimiento.'}[S.tmet];
+  $('#time-note').innerHTML=notes[hold]+expl+' Tocá el gráfico para mover la fecha de valuación.';
+}
+function renderInsights(){
+  const ins=[],h=B.hand,fut=B.pays.filter(p=>p.tau>TV+1e-9),last=B.pays[B.pays.length-1];
+  const rest=last.tau-TV;
+  if(B.kind==='real'){const nx=A.next;
+    ins.push(`Al ${tauLabel(B,TV)} el ${B.tick.split(' · ')[0]} ya pagó <b>${nf(A.paidR,2)} de renta<\/b> y <b>${nf(A.paidA,2)} de amortización<\/b> por cada 100 de VN. Le quedan ${fut.length} pagos y un valor residual de <b>${nf(A.VR,2)}<\/b>.`);
+    ins.push(`Próximo pago: <b>${tauLabel(B,nx.tau)}<\/b>, renta ${nf(nx.r,3)} (cupón ${nf(nx.rate,3)} % anual sobre VR ${nf(nx.vr,2)}) + amortización ${nf(nx.a,2)}.`);
+    const up=B.pays.find(p=>p.tau>TV&&p.rate>nx.rate+1e-9);if(up)ins.push(`Es un <b>step-up<\/b>: el cupón pasa a ${nf(up.rate,3)} % en el período que termina el ${tauLabel(B,up.tau)}. Por eso los pagos de renta crecen aunque el capital no cambie.`)}
+  if(fut.length===1)ins.push(`Queda <b>un solo flujo<\/b>: no hay nada que promediar, entonces <b>Duration = PPV = tiempo al vencimiento<\/b> (${nf(rest,2)} años).`);
+  else ins.push(`La <b>duration (${nf(A.D,2)})<\/b> es menor que el <b>PPV (${nf(A.PPV,2)})<\/b> porque descuenta: con TIR de ${nf(Y*100,1)} % los flujos lejanos pesan menos hoy. Con TIR = 0 serían iguales.`);
+  ins.push(`La duration es el <b>${nf(A.D/rest*100,0)} % del tiempo que falta<\/b> hasta el último pago (${nf(rest,2)} años).`);
+  if(!h){if(A.par>100.05)ins.push(`Paridad ${nf(A.par,2)} %: cotiza <b>sobre la par<\/b>. La TIR queda por debajo del cupón.`);
+    else if(A.par<99.95)ins.push(`Paridad ${nf(A.par,2)} %: cotiza <b>bajo la par<\/b>. Además del cupón, ganás la diferencia hasta el valor técnico: por eso la TIR (${nf(Y*100,2)} %) supera al cupón.`);
+    else ins.push('Cotiza <b>a la par<\/b>: la TIR coincide con la tasa de cupón (en la misma convención).')}
+  ins.push(`Si la TIR sube 1 punto (100 pb), el precio cae aprox. <b>${nf(A.DM,2)} %<\/b> por duration modificada; la convexidad le devuelve <b>+${nf(.5*A.C*.0001*100,3)} %<\/b>.`);
+  $('#insights').innerHTML=ins.map(x=>`<li>${x}<\/li>`).join('');
+}
+function renderForms(){
+  const h=B.hand,v=1+Y/MC;
+  let f=`
+  <div class="form"><h3>Precio = Σ Flujo<sub>t<\/sub> / (1 + TIR/m)<sup>m·t<\/sup><\/h3><div class="eq">Σ VA de los flujos que faltan = <span class="r">${nf(A.P,4)}<\/span><\/div><p class="note">t en años desde la fecha de valuación. Con m = 1 es (1 + TIR)<sup>t<\/sup>, como en el apunte (y como TIR.NO.PER de Excel).<\/p><\/div>
+  <div class="form"><h3>PPV = Σ t · (A<sub>t<\/sub> + R<sub>t<\/sub>) / Σ (A<sub>t<\/sub> + R<sub>t<\/sub>)<\/h3><div class="eq">${nf(A.St,3)} / ${nf(A.Sc,3)} = <span class="r">${nf(A.PPV,4)} años<\/span><\/div><p class="note">Pondera el tiempo por los flujos <b>nominales<\/b>. No depende de la TIR ni del precio.<\/p><\/div>
+  <div class="form"><h3>Duration = Σ t · [Flujo<sub>t<\/sub> / (1+TIR)<sup>t<\/sup>] / P<\/h3><div class="eq">${nf(A.Dt,3)} / ${nf(A.P,3)} = <span class="r">${nf(A.D,4)} años<\/span><\/div><p class="note">Igual que el PPV, pero ponderando por <b>valores actuales<\/b>. P es el precio sucio.<\/p><\/div>
+  <div class="form"><h3>Duration modificada = D / (1 + TIR/m)<\/h3><div class="eq">${nf(A.D,4)} / (1 + ${nf(Y,4)}/${MC}) = <span class="r">${nf(A.DM,4)}<\/span><\/div><p class="note">% que cambia el precio por cada punto de TIR.<\/p><\/div>
+  <div class="form"><h3>Convexidad = (1/P) · Σ Flujo<sub>t<\/sub> · t(t + 1/m) / (1+TIR/m)<sup>m·t+2<\/sup><\/h3><div class="eq">= <span class="r">${nf(A.C,4)}<\/span><\/div><p class="note">Derivada segunda del precio respecto de la TIR, sobre el precio.<\/p><\/div>`;
+  if(!h)f+=`
+  <div class="form"><h3>Valor técnico = VR + interés corrido<\/h3><div class="eq">VR = 100 − ${nf(A.paidA,3)} = ${nf(A.VR,3)}<\/div><div class="eq">IC = ${nf(A.next.r,4)} × ${nf(A.frac,4)} = ${nf(A.IC,4)}<\/div><div class="eq">VT = <span class="r">${nf(A.VT,4)}<\/span><\/div><p class="note">El corrido es la parte del próximo cupón ya devengada (proporcional al tiempo transcurrido del período).<\/p><\/div>
+  <div class="form"><h3>Paridad = Precio / VT × 100<\/h3><div class="eq">${nf(A.P,3)} / ${nf(A.VT,3)} × 100 = <span class="r">${nf(A.par,2)} %<\/span><\/div><p class="note">Se usa el precio sucio contra el VT (los dos incluyen el corrido).<\/p><\/div>
+  <div class="form"><h3>Current yield = Renta anual / Precio<\/h3><div class="eq">${nf(A.ra,3)} / ${nf(A.clean,3)} = <span class="r">${pc(A.CY,3)}<\/span><\/div><p class="note">Renta de los próximos 12 meses sobre el precio limpio. No mira la ganancia de capital; la TIR sí.<\/p><\/div>`;
+  $('#forms').innerHTML=f;
+}
+function renderTable(){
+  const h=B.hand,v=1+Y/MC;let nextMarked=false;
+  const rows=B.pays.map((f,i)=>{const past=f.tau<=TV+1e-9;let cls=past?'past':'';if(!past&&!nextMarked){cls='nextp';nextMarked=true}
+    const t=f.tau-TV,dfac=past?NaN:Math.pow(v,-MC*t),pv=past?NaN:f.cf*dfac;
+    return `<tr class="${cls}"><td class="l">${i+1}<\/td><td class="l">${tauLabel(B,f.tau)}${past?' ✓':''}<\/td>${h?'':`<td>${nf(f.rate,3)}<\/td><td>${nf(f.vr,2)}<\/td><td>${nf(f.r,4)}<\/td><td>${nf(f.a,4)}<\/td>`}<td>${nf(f.cf,4)}<\/td><td>${past?'pagado':nf(t,3)}<\/td><td>${past?'':nf(dfac,5)}<\/td><td>${past?'':nf(pv,4)}<\/td><td>${past?'':nf(pv/A.P*100,2)+' %'}<\/td><td>${past?'':nf(t*pv/A.P,4)}<\/td><\/tr>`}).join('');
+  $('#tabla').innerHTML=`<thead><tr><th class="l">#<\/th><th class="l">${B.dated?'Fecha':'Momento'}<\/th>${h?'':'<th>Cupón %<\/th><th>VR inicio<\/th><th>Renta<\/th><th>Amort.<\/th>'}<th>Flujo<\/th><th>t (años)<\/th><th>Factor desc.<\/th><th>VA<\/th><th>Peso VA<\/th><th>t · peso<\/th><\/tr><\/thead><tbody>${rows}<\/tbody>
+  <tfoot><tr><td class="l" colspan="${h?3:7}">Σ flujos que faltan<\/td><td><\/td><td><\/td><td>${nf(A.P,4)}<\/td><td>100 %<\/td><td>${nf(A.D,4)}<\/td><\/tr><\/tfoot>`;
+}
+
+/* ================= explorador (bono por parámetros) ================= */
+const XDEF={
+  cupon:{lab:'Tasa de cupón (%)',rng:()=>[0,25],fmt:v=>nf(v,0)+'%',expl:'Más cupón significa más plata que vuelve antes. Los flujos tempranos pesan más y la <b>duration baja<\/b>. El PPV también baja. Con cupón 0 la duration toca el plazo. A precio fijo, más cupón implica más TIR.'},
+  tir:{lab:'TIR (%)',rng:()=>[0.5,40],fmt:v=>nf(v,0)+'%',expl:'Una TIR más alta castiga más a los flujos lejanos, así que la <b>duration baja<\/b> aunque el bono sea el mismo. El <b>PPV no se mueve<\/b>: no descuenta, no depende de la TIR. El precio cae y lo hace en curva (convexidad).'},
+  plazo:{lab:'Plazo (años)',rng:()=>[0.5,30],fmt:v=>nf(v,0),expl:'Más plazo, más duration, pero no en línea recta: en un bono con cupón la duration se aplana porque los flujos muy lejanos valen poco hoy. En un cupón cero, duration = plazo siempre.'},
+  conc:{lab:'Concentración (−1 al inicio · +1 al final)',rng:()=>[-1,1],fmt:v=>nf(v,1),expl:'Si el capital se devuelve <b>al principio<\/b>, los flujos grandes llegan antes y bajan la duration, la DM, el PPV y la convexidad. Si se concentra <b>al final<\/b>, el bono se parece a un bullet y todo sube.'},
+  gracia:{lab:'Período de gracia (años)',rng:()=>[0,Math.max(0,S.plazo-1/S.m)],fmt:v=>nf(v,1),expl:'Durante la gracia solo se paga renta. Cuanta más gracia, más tarde vuelve el capital: suben la duration y el PPV. Con gracia máxima el amortizable se vuelve un bullet.'},
+  m:{lab:'Pagos por año (m)',rng:()=>[1,12],fmt:v=>nf(v,0),expl:'Pagar más seguido adelanta un poco la renta: la duration baja levemente. La DM = D/(1+TIR/m) también cambia por el divisor. El efecto es chico comparado con cupón, plazo o TIR.'}};
+function renderExplorador(){
+  const X=S.x,def=XDEF[X];let fijo=S.fijo;const fb=$('#fijo').querySelectorAll('button');
+  const y0=S.tir/100;
+  const base={...S};let note='';
+  if((X==='conc'||X==='gracia')&&base.modo!=='amort'){base.modo='amort';note='amortizable'}
+  if(X==='cupon'&&base.modo==='cero'){base.modo='bullet';note='bullet'}
+  const mcOf=s=>S.conv==='tea'?1:s.m;
+  const B0=paramBond(base),M0=analyze(B0,0,y0,mcOf(base));
+  if(X==='tir'){fijo='tir';fb[1].disabled=true;$('#fijo-note').textContent='Si movés la TIR, el precio es el resultado.'}
+  else{fb[1].disabled=false;$('#fijo-note').textContent=fijo==='precio'?`Precio fijo en ${nf(M0.P,2)}: la TIR pasa a ser un resultado.`:`TIR fija en ${nf(y0*100,2)} % (${S.conv==='tea'?'efectiva anual':'nominal cap. m'}).`}
+  setSeg('fijo',fijo);
+  $('#x-explica').innerHTML=def.expl+(note?`<br><span class="note">Tu bono no es de ese tipo, así que se analiza como ${note}.<\/span>`:'');
+  const[a,b]=def.rng(),xs=[];if(X==='m')xs.push(1,2,3,4,6,12);else for(let i=0;i<=72;i++)xs.push(a+(b-a)*i/72);
+  const out={D:[],DM:[],PPV:[],C:[],P:[],TIR:[],CY:[]};
+  xs.forEach(xv=>{const s={...base};if(X!=='tir')s[X]=xv;const Bx=paramBond(s),mc=mcOf(s);let y=X==='tir'?xv/100:y0;
+    if(fijo==='precio'&&X!=='tir')y=solveY(Bx,0,mc,M0.P);
+    const mm=isFinite(y)?analyze(Bx,0,y,mc):null;
+    ['D','DM','PPV','C','P'].forEach(k=>out[k].push(mm?mm[k]:NaN));out.TIR.push(y*100);out.CY.push(mm?mm.CY*100:NaN)});
+  const cur=X==='tir'?y0*100:S[X];
+  const cards=[['Duration (años)','D',M0.D,v=>nf(v,2),'var(--accent)'],['Duration modificada','DM',M0.DM,v=>nf(v,2),'var(--accent)'],['PPV (años)','PPV',M0.PPV,v=>nf(v,2),'var(--amort)'],
+    ['Convexidad','C',M0.C,v=>nf(v,1),'var(--renta)'],fijo==='precio'&&X!=='tir'?['TIR (%)','TIR',y0*100,v=>nf(v,2),'var(--bad)']:['Precio','P',M0.P,v=>nf(v,2),'var(--bad)'],['Current yield (%)','CY',M0.CY*100,v=>nf(v,2),'var(--muted)']];
+  $('#minis').innerHTML=cards.map((c,i)=>`<div class="mini"><div class="hd"><b>${c[0]}<\/b><span>${c[3](c[2])}<\/span><\/div><div class="chart" id="mini${i}"><\/div><\/div>`).join('');
+  cards.forEach((c,i)=>{const ys=out[c[1]];lineChart($('#mini'+i),{xs,series:[{ys,color:c[4]}],h:170,padL:40,xT:4,yT:3,xFmt:def.fmt,yFmt:v=>nf(v,Math.abs(v)<10?1:0),
+    points:[{x:cur,y:c[2],color:c[4]}],aria:c[0]+' según '+def.lab,tip:j=>`${def.lab.split(' (')[0]}: ${nf(xs[j],2)}<br>${c[0]}: ${c[3](ys[j])}`})});
+}
+
+/* ================= precio y TIR ================= */
+function renderPrecioTir(){
+  const dy=S.delta/10000,y1=Y+dy,P1=priceAt(B,TV,y1,MC),real=P1/A.P-1,estD=-A.DM*dy,estC=estD+.5*A.C*dy*dy;
+  $('#ptir-title').textContent=`${B.tick?B.tick.split(' · ')[0]:B.name}: si la TIR se mueve, ¿cuánto cambia el precio?`;
+  $('#big3').innerHTML=`
+   <div class="card real"><span class="lbl">Cambio real<\/span><div class="v">${sg(real*100,3)} %<\/div><div class="e">precio ${nf(A.P,2)} → ${nf(P1,2)}<\/div><\/div>
+   <div class="card"><span class="lbl">Solo duration modif.<\/span><div class="v" style="color:var(--renta)">${sg(estD*100,3)} %<\/div><div class="e">error ${sg((estD-real)*100,3)} pp<\/div><\/div>
+   <div class="card"><span class="lbl">DM + convexidad<\/span><div class="v" style="color:var(--accent)">${sg(estC*100,3)} %<\/div><div class="e">error ${sg((estC-real)*100,3)} pp<\/div><\/div>`;
+  const span=Math.max(.08,Math.abs(dy)*1.3,Y*.6),lo=Math.max(-.02,Y-span),hi=Y+span,xs=[],a=[],b=[],c=[];
+  for(let i=0;i<=120;i++){const yy=lo+(hi-lo)*i/120,d=yy-Y;xs.push(yy*100);a.push(priceAt(B,TV,yy,MC));b.push(A.P*(1-A.DM*d));c.push(A.P*(1-A.DM*d+.5*A.C*d*d))}
+  lineChart($('#ch-ptir'),{xs,h:300,xLabel:`TIR (%, ${convName()})`,xFmt:v=>nf(v,0),yFmt:v=>nf(v,0),aria:'Precio en función de la TIR',
+    series:[{ys:a,color:'var(--ink)',w:2.6},{ys:b,color:'var(--renta)',dash:'6 4'},{ys:c,color:'var(--accent)',dash:'2 3'}],
+    vlines:[{x:Y*100},{x:y1*100,color:'var(--accent)'}],
+    points:[{x:Y*100,y:A.P,color:'var(--ink)'},{x:y1*100,y:P1,color:'var(--ink)',r:4},{x:y1*100,y:A.P*(1+estD),color:'var(--renta)',r:4},{x:y1*100,y:A.P*(1+estC),color:'var(--accent)',r:4}],
+    tip:j=>`TIR ${nf(xs[j],2)} %<br>Real ${nf(a[j],2)}<br>Duration ${nf(b[j],2)}<br>Dur.+conv. ${nf(c[j],2)}`});
+  $('#ptir-nota').innerHTML=`La recta (duration) siempre queda <b>por debajo<\/b> de la curva real: subestima el precio cuando la TIR sube y también cuando baja. Esa diferencia es la convexidad, y crece con el tamaño del salto. Probá ±50 pb y después ±800 pb, y compará un bono corto (AL29) con uno largo (GD46).`;
+  $('#ptir-forms').innerHTML=`
+  <div class="form"><h3>Primera aproximación<\/h3><div class="eq">Var.% Pr. = − DM × ΔTIR × 100<\/div>
+   <div class="eq">= − ${nf(A.DM,4)} × ${nf(dy,4)} × 100 = <span class="r">${sg(estD*100,3)} %<\/span><\/div>
+   <p class="note"><b>Ojo:<\/b> «Var% TIR» en el apunte es el cambio de la TIR en puntos, expresado en decimal (${sg(S.delta,0)} pb = ${nf(dy,4)}), no la variación porcentual de la TIR.<\/p><\/div>
+  <div class="form"><h3>Con factor de convexidad<\/h3><div class="eq">Var.% Pr. = − DM × ΔTIR × 100 + 0,5 × ΔTIR² × 100 × FC<\/div>
+   <div class="eq">= ${sg(estD*100,3)} + 0,5 × ${nf(dy*dy,6)} × 100 × ${nf(A.C,2)}<\/div>
+   <div class="eq">= ${sg(estD*100,3)} ${sg(.5*A.C*dy*dy*100,3)} = <span class="r">${sg(estC*100,3)} %<\/span><\/div>
+   <p class="note">El término de convexidad siempre suma (ΔTIR² es positivo), suba o baje la TIR.<\/p><\/div>`;
+  const sc=[-500,-300,-100,-50,50,100,300,500];
+  $('#escenarios').innerHTML=`<thead><tr><th class="l">ΔTIR<\/th><th>Nueva TIR<\/th><th>Precio real<\/th><th>Var. real<\/th><th>Con DM<\/th><th>Con DM + conv.<\/th><th>Error DM<\/th><th>Error DM+conv.<\/th><\/tr><\/thead><tbody>`+
+    sc.map(bp=>{const d=bp/10000,p1=priceAt(B,TV,Y+d,MC),r=p1/A.P-1,e1=-A.DM*d,e2=e1+.5*A.C*d*d;
+      return `<tr class="${bp===S.delta?'nextp':''}"><td class="l">${sg(bp,0)} pb<\/td><td>${nf((Y+d)*100,2)} %<\/td><td>${nf(p1,2)}<\/td><td>${sg(r*100,2)} %<\/td><td>${sg(e1*100,2)} %<\/td><td>${sg(e2*100,2)} %<\/td><td>${sg((e1-r)*100,3)}<\/td><td>${sg((e2-r)*100,3)}<\/td><\/tr>`}).join('')+'<\/tbody>';
+}
+
+/* ================= tasas ================= */
+const R={tna:.40,m:365/30};
+function renderTasas(src){
+  const m=R.m,tea=Math.pow(1+R.tna/m,m)-1,tem=Math.pow(1+tea,30/365)-1;
+  if(src!=='tna')$('#f-tna').value=(R.tna*100).toFixed(2);
+  if(src!=='tea')$('#f-tea').value=(tea*100).toFixed(2);
+  if(src!=='tem')$('#f-tem').value=(tem*100).toFixed(3);
+  $('#s-tna').textContent=`tasa por período = TNA/m = ${pc(R.tna/m,4)} cada ${nf(365/m,1)} días`;
+  $('#tasas-ins').innerHTML=[
+    `Una TNA de <b>${pc(R.tna)}<\/b> capitalizable cada ${nf(365/m,0)} días equivale a una TEA de <b>${pc(tea)}<\/b>. La diferencia (${nf((tea-R.tna)*100,2)} puntos) es interés sobre interés.`,
+    `La «TEM» que se ve en plazos fijos suele ser TNA × 30/365 = <b>${pc(R.tna*30/365,3)}<\/b> (proporcional). La efectiva compuesta es ${pc(tem,3)}.`,
+    'La TNA es una tasa de referencia: sola no dice cuánto ganás. La TEA sí, porque ya incluye la capitalización.'].map(x=>`<li>${x}<\/li>`).join('');
+  const caps=[['Anual',1],['Semestral',2],['Trimestral',4],['Mensual',12],['30 días',365/30],['Diaria',365]];
+  const host=$('#ch-cap'),W=Math.max(260,host.clientWidth||500),H=250,p={l:44,r:10,t:22,b:30},iw=W-p.l-p.r,ih=H-p.t-p.b;
+  const vals=caps.map(c=>Math.pow(1+R.tna/c[1],c[1])-1),cont=Math.exp(R.tna)-1,mx=Math.max(cont,...vals)*1.12,Y0=v=>p.t+(1-v/mx)*ih,bw=iw/caps.length;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="TEA según capitalización">`;
+  niceTicks(0,mx,4).forEach(t=>{if(t>mx)return;s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${Y0(t)}" y2="${Y0(t)}" stroke="var(--line)"/><text x="${p.l-6}" y="${Y0(t)+3.5}" text-anchor="end">${nf(t*100,0)}%<\/text>`});
+  s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${Y0(cont)}" y2="${Y0(cont)}" stroke="var(--bad)" stroke-dasharray="4 3"/><text x="${W-p.r}" y="${Y0(cont)-5}" text-anchor="end" style="fill:var(--bad)">continua ${nf(cont*100,2)}%<\/text>`;
+  s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${Y0(R.tna)}" y2="${Y0(R.tna)}" stroke="var(--muted)" stroke-dasharray="2 3"/><text x="${p.l+4}" y="${Y0(R.tna)+13}">TNA ${nf(R.tna*100,1)}%<\/text>`;
+  caps.forEach((c,i)=>{const x=p.l+i*bw+bw*.18,w=bw*.64,sel=Math.abs(c[1]-m)<.01;
+    s+=`<rect x="${x}" y="${Y0(vals[i])}" width="${w}" height="${p.t+ih-Y0(vals[i])}" rx="3" fill="${sel?'var(--accent)':'var(--line)'}"/><text x="${x+w/2}" y="${Y0(vals[i])-4}" text-anchor="middle" style="fill:var(--ink)">${nf(vals[i]*100,1)}<\/text><text x="${x+w/2}" y="${H-10}" text-anchor="middle">${c[0]}<\/text>`});
+  host.innerHTML=s+'<\/svg>';
+  $('#equiv').innerHTML=`<thead><tr><th class="l">Capitalización<\/th><th>m<\/th><th>TNA equivalente<\/th><th>Tasa del período<\/th><\/tr><\/thead><tbody>`+
+    caps.map(c=>{const tn=c[1]*(Math.pow(1+tea,1/c[1])-1);return `<tr class="${Math.abs(c[1]-m)<.01?'nextp':''}"><td class="l">${c[0]}<\/td><td>${nf(c[1],c[1]%1?2:0)}<\/td><td>${pc(tn)}<\/td><td>${pc(tn/c[1],4)}<\/td><\/tr>`}).join('')+
+    `<tr><td class="l">Continua<\/td><td>∞<\/td><td>${pc(Math.log(1+tea))}<\/td><td>—<\/td><\/tr><\/tbody>`;
+  const n=S.dias,iS=R.tna*n/365,iC=Math.pow(1+tea,n/365)-1,per=365/m;
+  $('#dias-forms').innerHTML=`
+   <div class="form"><h3>Con la TNA (proporcional)<\/h3><div class="eq">i = TNA × n / 365 = ${nf(R.tna,4)} × ${n} / 365 = <span class="r">${pc(iS,3)}<\/span><\/div>
+    <div class="eq">Precio de una letra VN 100 = 100 / (1 + i) = <span class="r">${nf(100/(1+iS),3)}<\/span><\/div><p class="note">Convención habitual en letras, cauciones y plazo fijo.<\/p><\/div>
+   <div class="form"><h3>Con la TEA (compuesta)<\/h3><div class="eq">i = (1 + TEA)<sup>n/365<\/sup> − 1 = (1 + ${nf(tea,4)})<sup>${n}/365<\/sup> − 1 = <span class="r">${pc(iC,3)}<\/span><\/div>
+    <div class="eq">Precio VN 100 = <span class="r">${nf(100/(1+iC),3)}<\/span><\/div><p class="note">${Math.abs(n-per)<.6?'Con n igual al período de capitalización, las dos coinciden.':(n<per?'Para plazos más cortos que el período de capitalización, la compuesta da un poco menos.':'Para plazos más largos que el período de capitalización, la compuesta da más.')}<\/p><\/div>`;
+  $('#tir-link').innerHTML=`
+   <div class="form"><h3>La TIR es una tasa como las otras<\/h3><p class="note" style="color:var(--ink)">Es la tasa que iguala el valor actual de los flujos con el precio. Se puede expresar como efectiva anual (la fórmula de duration del apunte usa (1+TIR)<sup>t<\/sup>; Excel la calcula con TIR.NO.PER) o como nominal con capitalización m (la que usa DM = D / (1 + TIR/m)).<\/p><\/div>
+   <div class="form"><h3>Tu bono de la calculadora (${B.tick?B.tick.split(' · ')[0]:B.name})<\/h3><div class="eq">TIR ${convName()} = ${nf(Y*100,2)} %<\/div><div class="eq">TEA = (1 + ${nf(Y,4)}/${MC})<sup>${MC}<\/sup> − 1 = <span class="r">${pc(A.tea)}<\/span><\/div><p class="note">Para comparar bonos con distinta frecuencia de pago, compará sus TIR en TEA.<\/p><\/div>`;
+}
+$('#cap').addEventListener('change',e=>{R.m=+e.target.value;renderTasas()});
+$('#f-tna').addEventListener('input',e=>{const v=+e.target.value/100;if(isFinite(v)&&v>-.99){R.tna=v;renderTasas('tna')}});
+$('#f-tea').addEventListener('input',e=>{const v=+e.target.value/100;if(isFinite(v)&&v>-.99){R.tna=R.m*(Math.pow(1+v,1/R.m)-1);renderTasas('tea')}});
+$('#f-tem').addEventListener('input',e=>{const v=+e.target.value/100;if(isFinite(v)&&v>-.99){const tea=Math.pow(1+v,365/30)-1;R.tna=R.m*(Math.pow(1+tea,1/R.m)-1);renderTasas('tem')}});
+
+/* ================= ciclo ================= */
+function update(){
+  const tab=curTab();
+  if(tab==='explorador'){const sv=S.src;S.src='param';compute();S.src=sv}
+  compute();
+  // visibilidad del panel
+  const ex=tab==='explorador';
+  $('#g-sel').hidden=ex;$('#g-exnote').hidden=!ex;
+  $('#g-param').hidden=!(ex||S.src==='param');
+  $('#g-hand').hidden=ex||S.src!=='hand';
+  $('#g-custom').hidden=ex||S.src!=='custom';
+  $('#g-fecha').hidden=ex;
+  $('#g-tipo').hidden=ex||B.hand;
+  $('#entrada').parentElement.hidden=ex;
+  if(ex){CTL.tir.host.hidden=false;CTL.precio.host.hidden=true}else{CTL.tir.host.hidden=S.entrada!=='tir';CTL.precio.host.hidden=S.entrada!=='precio'}
+  CTL.tir.host.querySelector('label').textContent=`TIR (% ${S.conv==='tea'?'efectiva anual':'nominal anual'})`;
+  $('#conv-note').textContent=ex?'':`m = ${B.m} (pagos por año de este bono). ${S.conv==='tea'?'Descuenta con (1 + TIR)^t.':'Descuenta con (1 + TIR/m)^(m·t).'}`;
+  $('#bondsel').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.id===S.src)));
+  CTL.gracia.setRange(0,Math.max(0,S.plazo-1/S.m));
+  CTL.cupon.host.classList.toggle('off',S.modo==='cero');
+  CTL.conc.host.classList.toggle('off',S.modo!=='amort');
+  CTL.gracia.host.classList.toggle('off',S.modo!=='amort');
+  setSeg('hfreq',S.hm);setSeg('freq',S.m);setSeg('modo',S.modo);setSeg('tipo',S.tipo);setSeg('hold',S.hold);setSeg('conv',S.conv);setSeg('entrada',S.entrada);
+  // rango de precio
+  if(!ex&&A){const ref=B.hand?A.Sc:A.VT;CTL.precio.setRange(Math.max(.5,+(ref*.15).toFixed(1)),+(ref*1.5).toFixed(1))}
+  // fecha
+  if(!ex){const maxd=Math.max(0,Math.ceil(B.T*YR)-1);fr.max=maxd;fr.value=S.tvd;
+    $('#fecha-v').textContent=B.dated?tauLabel(B,TV):(TV>0?tauLabel(B,TV):'emisión (año 0)');
+    $('#fecha-a').textContent=B.dated?fmtDate(B.epoch):'emisión';$('#fecha-b').textContent=B.dated?fmtDate(B.epoch+B.T*YR*DAY):('año '+nf(B.T,1));
+    $('#f-hoy').hidden=!B.dated}
+  sync();
+  if(tab==='bono')renderBono();else if(tab==='explorador')renderExplorador();else if(tab==='precio-tir')renderPrecioTir();else renderTasas();
+}
+let rz,lw=0;try{new ResizeObserver(()=>{const w=HOST.clientWidth;if(!w||Math.abs(w-lw)<2)return;lw=w;clearTimeout(rz);rz=setTimeout(update,120)}).observe(HOST)}catch(e){}
+$('#ccopy').textContent='Copiar los de AL30 para editar';
+selectSrc('30');
+showTab('bono');
+return{show:showTab};
+}
+
     function pintarCuestionario() {
       qstat.innerHTML = statHTML();
       guardarCorrida();
       const intro = document.getElementById("qintro");
       if (intro) intro.textContent = INTRO[quiz.modo] || "";
 
-      if (quiz.modo === "practicos") {
-        qfiltroEl.innerHTML = "";
-        countEl.textContent = "50 ejercicios de bonos y TIR";
-        pararReloj();
-        qzona.innerHTML = practicosHTML();
-        return;
-      }
+      if (quiz.modo === "practicos") marcarModo("practica");   // los prácticos pasaron a la pestaña Práctico
       if (quiz.modo === "historial") {
         qfiltroEl.innerHTML = "";
         countEl.textContent = `${quiz.hist.length} simulacro${quiz.hist.length === 1 ? "" : "s"} registrado${quiz.hist.length === 1 ? "" : "s"}`;
@@ -21284,6 +21854,7 @@
       else if (h === "normas") { msub = "normas"; setVista("mercado"); }
       else if (h === "hoy") { msub = "hoy"; setVista("mercado"); }
       else if (h === "notas") setVista("notas");
+      else if (h === "practico") setVista("practico");
     }
     sesRestaurar();
     window.addEventListener("hashchange", abrirPorHash);
@@ -21613,7 +22184,7 @@
 
 
     /* =================== Sidebar, Inicio e invitaciones =================== */
-    const VNOM = { inicio: "Inicio", leyes: "Las leyes", glosario: "Glosario", cuestionario: "Cuestionario y prácticos", mercado: "El mercado", micro: "Micro-learning", notas: "Mis notas", perfil: "Mi perfil" };
+    const VNOM = { inicio: "Inicio", leyes: "Las leyes", glosario: "Glosario", cuestionario: "Cuestionario", practico: "Práctico", mercado: "El mercado", micro: "Micro-learning", notas: "Mis notas", perfil: "Mi perfil" };
     const LSSB = "mapa-idoneo-sb";
     const esAncho = () => window.matchMedia("(min-width: 1000px)").matches;
     function sbAbrir(si) {
@@ -21664,7 +22235,7 @@
     }
 
     /* intros de cada pestaña y la leyenda: plegadas detrás de un (i) */
-    document.querySelectorAll(".top .lede, .glosintro, #qintro, #mintro, #uintro, #pintro, #nintro").forEach(p => {
+    document.querySelectorAll(".top .lede, .glosintro, #qintro, #xintro, #mintro, #uintro, #pintro, #nintro").forEach(p => {
       const d = document.createElement("details");
       d.className = "iinfo iintro";
       d.innerHTML = `<summary aria-label="Cómo funciona esta sección"><span class="ii">i</span><span>Cómo funciona esta sección</span></summary>`;
@@ -21762,7 +22333,7 @@
           ${card("leyes", "Las leyes", `${nL} leyes · ${nArts} art.`, "Las ocho leyes de la bibliografía abiertas por dentro: estructura, qué regula cada bloque, el texto literal de cada artículo y qué módulo del examen lo toma.", "Leer las leyes")}
           ${card("glosario", "Glosario", `${nG} términos`, "Las definiciones que dan las propias leyes, tal cual las escriben, filtrables por ley y por letra.", "Abrir el glosario")}
           ${card("mercado", "El mapa del mercado", "estructura · matriz", "La estructura de arriba hacia abajo, de la CNV a la Caja de Valores, la matriz de «quién puede qué» y la ficha de cada agente e instrumento.", "Ver el mapa")}
-          ${card("cuestionario", "Cuestionario y prácticos", `${nP} preguntas · 50 prácticos`, "Práctica con corrección inmediata, simulacros con reloj como el examen real (60 preguntas, 45 minutos), repaso, historial con tu dominio por módulo y 50 prácticos de bonos y TIR para resolver con Excel.", "Practicar")}
+          ${card("cuestionario", "Cuestionario", `${nP} preguntas`, "Práctica con corrección inmediata, simulacros con reloj como el examen real (60 preguntas, 45 minutos), repaso, historial con tu dominio por módulo y 50 prácticos de bonos y TIR para resolver con Excel.", "Practicar")}
           ${card("micro", "Micro-learning", `${nF} tarjetas`, "Todos los días, a tu hora, la cantidad de tarjetas que elijas: primero recordás, después ves la respuesta, y lo que fallás vuelve antes. Con aviso en el celular.", "Sesión de hoy")}
           ${card("perfil", "Mi perfil", on ? "sesión iniciada" : "opcional", "Tu cuenta: fecha del examen, cuántos días faltan, tu dominio por módulo y por título, y todo tu progreso sincronizado.", on ? "Ver mi perfil" : "Crear mi cuenta")}
         </div>
@@ -22601,7 +23172,7 @@
     const raiz = document.documentElement;
     const quieto = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const ZONA = { inicio: "lectura", leyes: "lectura", glosario: "lectura", notas: "lectura", perfil: "lectura",
-                   cuestionario: "estudio", micro: "estudio", mercado: "mercado" };
+                   cuestionario: "estudio", practico: "estudio", micro: "estudio", mercado: "mercado" };
     const FONDO = { lectura: ["#F5F3EE", "#17181A"], estudio: ["#F5F3EE", "#17181A"], mercado: ["#F5F3EE", "#17181A"] };
     function oscuro() {
       const t = raiz.getAttribute("data-theme");
@@ -22643,6 +23214,7 @@
       leyes: `<div class="zm"><div class="t">Art. 117 — Abuso de información</div><div class="l" style="width:100%"></div><div class="l" style="width:96%"></div><div class="l c" style="width:88%"></div><div class="l" style="width:94%"></div><div class="r" style="margin-top:8px;gap:4px"><span class="chip">M3</span><span class="chip">Texto completo</span></div></div>`,
       glosario: `<div class="zm"><div class="zm-letras"><span>A</span><span class="on">C</span><span>F</span><span>O</span><span>P</span></div><div class="t">Cuotaparte</div><div class="l" style="width:94%"></div><div class="l" style="width:70%"></div></div>`,
       micro: `<div class="zm-flip"><div><div class="cara">¿Qué tiene prohibido el agente productor?</div><div class="cara dorso">Recibir fondos o valores de clientes</div></div></div>`,
+      practico: `<svg viewBox="0 0 200 110" style="width:100%;height:auto;display:block" aria-hidden="true"><line x1="10" y1="92" x2="190" y2="92" stroke="var(--line-strong)"/><g fill="var(--accent)" opacity=".35"><rect x="18" y="80" width="12" height="12"/><rect x="40" y="80" width="12" height="12"/><rect x="62" y="78" width="12" height="14"/></g><g fill="var(--accent)"><rect x="84" y="56" width="12" height="36"/><rect x="106" y="58" width="12" height="34"/><rect x="128" y="60" width="12" height="32"/><rect x="150" y="62" width="12" height="30"/><rect x="172" y="64" width="12" height="28"/></g><line x1="78" y1="14" x2="78" y2="92" stroke="var(--ink)" stroke-width="1.5"/><path d="M128,93 l-6,10 h12 z" fill="var(--ink)"/><text x="134" y="24" font-size="12" fill="var(--ink-2)" font-family="inherit">D = 1,81</text></svg>`,
       cuestionario: `<div class="zm"><div class="t">¿Qué principio rige toda OPA?</div><div class="op"><i></i>Libre fijación del precio</div><div class="op ok"><i></i>Igualdad de trato</div><div class="op"><i></i>Confidencialidad</div></div>`,
       simulacro: `<div class="zm"><div class="zm-reloj">45:00</div><div class="zm-barra"><i></i></div><div class="r" style="justify-content:space-between;margin-top:8px"><span>60 preguntas</span><span>M1 · M6</span></div></div>`,
       hoy: `<div class="zm"><div class="r" style="justify-content:space-between"><span class="t">ALyC</span><span class="chip">central</span></div><div class="l" style="width:80%"></div><div class="r" style="justify-content:space-between;margin-top:8px"><span class="t">AAGI</span><span class="chip">activo</span></div><div class="l" style="width:64%"></div></div>`,
@@ -22658,8 +23230,8 @@
           ["glosario", "Glosario", `${nG} definiciones tal cual las escriben las leyes y las Normas.`, "Abrir el glosario", "data-ini"]],
         practicar: [
           ["micro", "Micro-learning", `${nF} tarjetas y preguntas que vuelven justo antes de que se te olviden.`, "Sesión de hoy", "data-ini"],
-          ["cuestionario", "Cuestionario y prácticos", `${nP} preguntas con corrección inmediata y 50 prácticos de bonos y TIR con Excel.`, "Practicar", "data-ini"],
-          ["simulacro", "Simulacro", "Como el examen real: 60 preguntas en 45 minutos, con tu nota por módulo.", "Armar un simulacro", "data-zini"]],
+          ["cuestionario", "Cuestionario", `${nP} preguntas con corrección inmediata y simulacros como el examen real: 60 preguntas en 45 minutos.`, "Practicar", "data-ini"],
+          ["practico", "Práctico", "Simulador de bonos con Bonares y Globales reales: precio, TIR, duration y convexidad. Y 50 ejercicios con Excel.", "Abrir el simulador", "data-ini"]],
         mercado: [
           ["dinamica", "Cómo se mueve el mercado", "Órdenes, títulos y plata entre agentes, mercado y bancos, paso a paso.", "Ver el mapa", "data-zini"],
           ["hoy", "Quién es quién hoy", "Cada categoría de agente, si hoy se usa y con nombres reales.", "Ver el mercado real", "data-ini"],
