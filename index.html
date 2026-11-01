@@ -1192,6 +1192,33 @@
       color: var(--ink-2)
     }
 
+    .prx { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); min-width: 0; }
+    .prxit, .prxtop { min-width: 0; }
+    .prxtop { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+    .prxtop h3 { margin: 0 0 6px; }
+    .prxtop p { margin: 0; max-width: 62ch; }
+    .prxbajar { text-decoration: none; white-space: nowrap; }
+    .prxavance { margin: 0; }
+    .prxchips { flex-wrap: wrap; }
+    .prxit { border: 1px solid var(--line); border-radius: 10px; padding: 0 14px; }
+    .prxit > summary { cursor: pointer; padding: 10px 0; display: flex; gap: 10px; align-items: baseline; }
+    .prxit > summary span { flex: 1; }
+    .prxit > summary em { font-style: normal; font-weight: 700; }
+    .prxit em.ok, .prxveredicto.ok { color: #1e8e3e; }
+    .prxit em.mal, .prxveredicto.mal { color: #c5221f; }
+    .prxq { margin: 0 0 10px; }
+    .prxdat { border-collapse: collapse; margin: 0 0 10px; }
+    .prxdat th { text-align: left; font-weight: 400; padding: 2px 14px 2px 0; }
+    .prxdat td { text-align: right; font-variant-numeric: tabular-nums; color: var(--accent); }
+    .prxfl { overflow-x: auto; margin: 0 0 10px; }
+    .prxfl table { border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    .prxfl th, .prxfl td { border: 1px solid var(--line); padding: 3px 8px; text-align: right; white-space: nowrap; }
+    .prxfl th { text-align: left; font-weight: 600; }
+    .prxres { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding-bottom: 12px; }
+    .prxres input { width: 120px; margin-left: 6px; padding: 6px 8px; font: inherit; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: inherit; }
+    .prxsol { border-top: 1px dashed var(--line); padding: 8px 0 12px; }
+    .prxsol p { margin: 4px 0; }
+    .prxsol code { white-space: normal; }
     .qbar {
       display: flex;
       flex-wrap: wrap;
@@ -5598,7 +5625,7 @@
         <button class="vbtn" id="vInicio" role="tab" aria-selected="false">Inicio<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg><span class="vc"></span></button>
         <button class="vbtn" id="vLeyes" role="tab" aria-selected="false">Las leyes<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg><span class="vc">8</span></button>
         <button class="vbtn" id="vGlosario" role="tab" aria-selected="false">Glosario<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg><span class="vc" id="gcount"></span></button>
-        <button class="vbtn" id="vCuest" role="tab" aria-selected="false">Cuestionario<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6"/><path d="M12 17h.01"/></svg><span class="vc" id="qcount"></span></button>
+        <button class="vbtn" id="vCuest" role="tab" aria-selected="false">Cuestionario y prácticos<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6"/><path d="M12 17h.01"/></svg><span class="vc" id="qcount"></span></button>
         <button class="vbtn" id="vMercado" role="tab" aria-selected="false">El mercado<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M6 16V9"/><path d="M11 16V5"/><path d="M16 16v-4"/><path d="M20 16V8"/></svg><span class="vc" id="mcount"></span></button>
         <button class="vbtn" id="vMicro" role="tab" aria-selected="false">Micro-learning<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="vc" id="ucount"></span></button>
         <button class="vbtn" id="vNotas" role="tab" aria-selected="false">Mis notas<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span class="vc" id="ncount"></span></button>
@@ -5669,6 +5696,7 @@
         <button class="mbtn" id="mSimulacro" aria-selected="false">Simulacro</button>
         <button class="mbtn" id="mRepaso" aria-selected="false">Repaso</button>
         <button class="mbtn" id="mHistorial" aria-selected="false">Historial</button>
+        <button class="mbtn" id="mPracticos" aria-selected="false">Prácticos con Excel</button>
         <span class="qstat" id="qstat"></span>
       </div>
       <div class="qfiltro" id="qfiltro"></div>
@@ -17675,8 +17703,8 @@
     const esProp = q => q.id.startsWith("P-");
     const deOrigen = (q, o) => o === "verif" ? !esIcnv(q) && !esProp(q) : o === "icnv" ? esIcnv(q) : o === "prop" ? esProp(q) : true;
     const MODS = [...new Set(PREGUNTAS.map(q => q.mod))].sort((a, b) => a - b);
-    const MODOS = ["practica", "simulacro", "repaso", "historial"];
-    const IDMODO = { practica: "mPractica", simulacro: "mSimulacro", repaso: "mRepaso", historial: "mHistorial" };
+    const MODOS = ["practica", "simulacro", "repaso", "historial", "practicos"];
+    const IDMODO = { practica: "mPractica", simulacro: "mSimulacro", repaso: "mRepaso", historial: "mHistorial", practicos: "mPracticos" };
 
     let quiz = {
       modo: "practica",
@@ -19087,6 +19115,7 @@
       practica: "Una pregunta por vez, con corrección inmediata. Hay dos bancos: las simulaciones corregidas de la carpeta y las de la Guía de Estudio de la CNV que publica idoneocnv.com. Todas están revisadas contra la norma: cada respuesta trae el artículo que la fundamenta, con la cita literal y un botón para leer el texto completo. Las que tenían la clave mal dicen «Clave corregida».",
       simulacro: "Elegís cuántas preguntas, cuánto tiempo y de qué módulos o ley, y el simulacro corre sin corrección hasta el final. Al cerrarlo queda guardado en el historial.",
       repaso: "Todas las preguntas con su respuesta y su fundamento a la vista, para leer de corrido.",
+      practicos: "Ejercicios prácticos de bonos y TIR para resolver con Excel, como en el examen. Bajá el archivo y resolvelo con las funciones (TIR, VA, TASA, VNA, TIR.NO.PER): cada ejercicio se corrige solo. Abajo están los mismos 50 para revisarlos o corregirlos desde acá.",
       historial: "Todo lo que respondiste en este navegador: el registro de cada simulacro, tu dominio por módulo, la curva de progreso y las preguntas que se te siguen escapando. Queda en este dispositivo y, si entrás con tu cuenta desde «Mi perfil», también en la nube para verlo en cualquier otro."
     };
 
@@ -19141,12 +19170,94 @@
       else marcarModo(d.modo === "simulacro" ? "practica" : (d.modo || "practica"));
       if (quiz.qBusca && !qEl.value) qEl.value = quiz.qBusca;
     }
+    /* ---------------- Prácticos con Excel ---------------- */
+    const PRACTICOS = [{"n":1,"tema":"Cupón cero · precio","q":"Un bono cupón cero de VN 100 vence dentro de 5 años. Si la TIR (tasa efectiva anual) de mercado es 10%, ¿cuál es su precio hoy?","datos":[["Valor nominal","100,00"],["Años al vencimiento","5"],["TIR efectiva anual","10,00%"]],"pct":false,"sol":62.0921323059155,"r":"62,09","es":"=VA(10%;5;0;-100)  ó  =100/(1+10%)^5","ex":"Se descuenta el único pago (100) 5 años a la TIR.","g":"Cupón cero y letras"},{"n":2,"tema":"Cupón cero · precio","q":"Bono cupón cero VN 1.000, vence en 3 años. TIR efectiva anual 8%. Calculá el precio.","datos":[["Valor nominal","1.000,00"],["Años","3"],["TIR","8,00%"]],"pct":false,"sol":793.83224102017,"r":"793,83","es":"=VA(8%;3;0;-1000)","ex":"1.000 / 1,08^3.","g":"Cupón cero y letras"},{"n":3,"tema":"Cupón cero · precio","q":"Un cupón cero de VN 100 vence en 180 días. La TIR efectiva anual exigida es 45%. ¿Cuál es el precio? (base 365 días)","datos":[["Valor nominal","100,00"],["Días al vencimiento","180"],["TIR efectiva anual (TEA)","45,00%"]],"pct":false,"sol":83.2570960976208,"r":"83,26","es":"=100/(1+45%)^(180/365)","ex":"Con tasa efectiva anual, el exponente es la fracción de año: días/365.","g":"Cupón cero y letras"},{"n":4,"tema":"Letra · precio con TNA","q":"Una letra VN 1.000 vence en 90 días y se negocia a una TNA de 36% (descuento racional, interés simple, base 365). ¿Precio?","datos":[["Valor nominal","1.000,00"],["Días","90"],["TNA","36,00%"]],"pct":false,"sol":918.470055359839,"r":"918,47","es":"=1000/(1+36%*90/365)","ex":"Con TNA (interés simple), el factor es 1 + TNA × días/365.","g":"Cupón cero y letras"},{"n":5,"tema":"Cupón cero · precio","q":"Cupón cero VN 100 a 2 años. La tasa de mercado es 10% TNA con capitalización semestral (5% por semestre). ¿Precio?","datos":[["Valor nominal","100,00"],["Semestres","4"],["Tasa semestral","5,00%"]],"pct":false,"sol":82.2702474791882,"r":"82,27","es":"=VA(5%;4;0;-100)","ex":"Se trabaja en semestres: 4 períodos al 5%.","g":"Cupón cero y letras"},{"n":6,"tema":"Cupón cero · TIR","q":"Comprás a $80 un cupón cero de VN 100 que vence en 3 años. ¿Qué TIR efectiva anual obtenés?","datos":[["Precio","80,00"],["Valor nominal","100,00"],["Años","3"]],"pct":true,"sol":0.0772173450159418,"r":"7,72%","es":"=TASA(3;0;-80;100)  ó  =(100/80)^(1/3)-1","ex":"TIR = (VN/precio)^(1/n) − 1.","g":"Cupón cero y letras"},{"n":7,"tema":"Letra · TEA","q":"Una letra VN 1.000 que vence en 120 días cotiza a $950. ¿Cuál es su rendimiento como tasa efectiva anual (TEA)?","datos":[["Precio","950,00"],["Valor nominal","1.000,00"],["Días","120"]],"pct":true,"sol":0.168846194586186,"r":"16,88%","es":"=(1000/950)^(365/120)-1","ex":"Se anualiza en forma compuesta: (VN/P)^(365/días) − 1.","g":"Cupón cero y letras"},{"n":8,"tema":"Letra · TNA","q":"La misma letra (VN 1.000, 120 días, precio $950): ¿cuál es su TNA (interés simple, base 365)?","datos":[["Precio","950,00"],["Valor nominal","1.000,00"],["Días","120"]],"pct":true,"sol":0.160087719298245,"r":"16,01%","es":"=(1000/950-1)*365/120","ex":"TNA = rendimiento del período × 365/días (sin capitalizar).","g":"Cupón cero y letras"},{"n":9,"tema":"Cupón cero · TIR","q":"Un cupón cero VN 1.000 a 10 años cotiza a $399,85. ¿Cuál es su TIR efectiva anual?","datos":[["Precio","399,85"],["Valor nominal","1.000,00"],["Años","10"]],"pct":true,"sol":0.0959993332974856,"r":"9,60%","es":"=TASA(10;0;-399,85;1000)","ex":"Es la inversa del ejercicio del banco: da 9,6%.","g":"Cupón cero y letras"},{"n":10,"tema":"Bullet · precio","q":"Bono VN 100, cupón 8% anual, amortiza todo al vencimiento en 5 años. TIR de mercado 10%. ¿Precio?","datos":[["Valor nominal","100,00"],["Cupón anual (tasa)","8,00%"],["Años","5"],["TIR","10,00%"]],"pct":false,"sol":92.4184264611831,"r":"92,42","es":"=VA(10%;5;-8;-100)","ex":"Cupón (8) como pago periódico y VN (100) como valor final. TIR > cupón → bajo la par.","g":"Bonos bullet"},{"n":11,"tema":"Bullet · precio","q":"Bono VN 1.000, cupón anual $100, vence en 4 años, TIR 12%. ¿Precio?","datos":[["Valor nominal","1.000,00"],["Cupón ($)","100,00"],["Años","4"],["TIR","12,00%"]],"pct":false,"sol":939.253013067472,"r":"939,25","es":"=VA(12%;4;-100;-1000)","ex":"Lo vas a necesitar para el current yield del ejercicio 32.","g":"Bonos bullet"},{"n":12,"tema":"Bullet · precio","q":"Bono VN 100, cupón 6% anual, vence en 3 años. Si la TIR es 6%, ¿cuánto vale?","datos":[["Valor nominal","100,00"],["Cupón","6,00%"],["Años","3"],["TIR","6,00%"]],"pct":false,"sol":100,"r":"100,00","es":"=VA(6%;3;-6;-100)","ex":"Si cupón = TIR, el bono vale la par.","g":"Bonos bullet"},{"n":13,"tema":"Bullet · precio","q":"Bono VN 100, cupón 12% anual, vence en 7 años. TIR 9%. ¿Precio?","datos":[["Valor nominal","100,00"],["Cupón","12,00%"],["Años","7"],["TIR","9,00%"]],"pct":false,"sol":115.098858505223,"r":"115,10","es":"=VA(9%;7;-12;-100)","ex":"Cupón > TIR → sobre la par.","g":"Bonos bullet"},{"n":14,"tema":"Bullet semestral · precio","q":"Bono VN 100, cupón 7% anual pagadero semestralmente ($3,50 por semestre), vence en 5 años. TIR semestral 4%. ¿Precio?","datos":[["Valor nominal","100,00"],["Cupón semestral ($)","3,50"],["Semestres","10"],["TIR semestral","4,00%"]],"pct":false,"sol":95.9445521103225,"r":"95,94","es":"=VA(4%;10;-3,5;-100)","ex":"Todo en semestres: 10 períodos, cupón 3,5 y tasa del semestre.","g":"Bonos bullet"},{"n":15,"tema":"Bullet semestral · precio","q":"Bono VN 1.000, cupón 9% TNA pagadero semestral, vence en 3 años. La TIR exigida es 10% efectiva anual. ¿Precio? (pasá la TEA a tasa semestral)","datos":[["Valor nominal","1.000,00"],["Cupón TNA","9,00%"],["Semestres","6"],["TIR efectiva anual","10,00%"]],"pct":false,"sol":980.593597246389,"r":"980,59","es":"=VA((1+10%)^(1/2)-1;6;-45;-1000)","ex":"Tasa semestral equivalente = 1,10^0,5 − 1 ≈ 4,88%. Cupón semestral = 1.000 × 9% / 2 = 45.","g":"Bonos bullet"},{"n":16,"tema":"Bullet · TIR","q":"Un bono VN 100, cupón 7% anual, vence en 4 años y cotiza a $95. ¿Cuál es su TIR?","datos":[["Precio","95,00"],["Valor nominal","100,00"],["Cupón ($)","7,00"],["Años","4"]],"pct":true,"sol":0.0852736277085477,"r":"8,53%","es":"=TASA(4;7;-95;100)  ó  =TIR(flujo -95;7;7;7;107)","ex":"Bajo la par → TIR mayor que el cupón.","g":"Bonos bullet"},{"n":17,"tema":"Bullet · TIR","q":"Bono VN 100, cupón 10% anual, 5 años, precio $105. ¿TIR?","datos":[["Precio","105,00"],["Valor nominal","100,00"],["Cupón ($)","10,00"],["Años","5"]],"pct":true,"sol":0.0872373882412885,"r":"8,72%","es":"=TASA(5;10;-105;100)","ex":"Sobre la par → TIR menor que el cupón.","g":"Bonos bullet"},{"n":18,"tema":"Bullet · TIR","q":"Bono VN 1.000, cupón 8% anual, 6 años, cotiza a la par ($1.000). ¿TIR?","datos":[["Precio","1.000,00"],["Valor nominal","1.000,00"],["Cupón ($)","80,00"],["Años","6"]],"pct":true,"sol":0.08,"r":"8,00%","es":"=TASA(6;80;-1000;1000)","ex":"A la par, TIR = tasa de cupón.","g":"Bonos bullet"},{"n":19,"tema":"Flujo irregular · TIR","q":"Un bono step-up paga cupones crecientes. Con este flujo (el período 0 es lo que pagás), calculá la TIR con =TIR().","datos":[],"pct":true,"sol":0.0915755513592303,"r":"9,16%","es":"=TIR(B?:F?)  (seleccioná la fila de flujos)","ex":"La función TIR toma el flujo completo, con el precio negativo en el período 0.","fl":{"tipo":"t","a":["0","1","2","3","4"],"v":["-950,00","60,00","70,00","80,00","1.100,00"]},"g":"Bonos bullet"},{"n":20,"tema":"Bullet · TIR","q":"Bono VN 100, cupón 5% anual, 6 años, cotiza a $88. ¿TIR?","datos":[["Precio","88,00"],["Valor nominal","100,00"],["Cupón ($)","5,00"],["Años","6"]],"pct":true,"sol":0.0756133958011944,"r":"7,56%","es":"=TASA(6;5;-88;100)","ex":"Precio bajo la par: la TIR queda por encima del 5%.","g":"Bonos bullet"},{"n":21,"tema":"Rendimiento del período","q":"Comprás un bono a $97, al año cobrás un cupón de $6 y lo vendés a $99. ¿Qué rendimiento obtuviste en el año?","datos":[["Precio de compra","97,00"],["Cupón cobrado","6,00"],["Precio de venta","99,00"]],"pct":true,"sol":0.0824742268041236,"r":"8,25%","es":"=(6+99)/97-1","ex":"Rendimiento = (cupón + precio de venta) / precio de compra − 1.","g":"Bonos bullet"},{"n":22,"tema":"Semestral · TIR del período","q":"Bono VN 100, cupón 8% TNA pagadero semestral ($4 por semestre), 3 años, precio $96. ¿Cuál es la TIR semestral?","datos":[["Precio","96,00"],["Valor nominal","100,00"],["Cupón semestral ($)","4,00"],["Semestres","6"]],"pct":true,"sol":0.0478259931082851,"r":"4,78%","es":"=TASA(6;4;-96;100)","ex":"La TASA devuelve la tasa del período de los flujos: acá, semestral.","g":"Tasas equivalentes"},{"n":23,"tema":"Semestral · TEA","q":"Con el mismo bono del ejercicio anterior (precio 96, cupón 4 semestral, 6 semestres): ¿cuál es la TIR efectiva anual?","datos":[["Precio","96,00"],["Valor nominal","100,00"],["Cupón semestral ($)","4,00"],["Semestres","6"]],"pct":true,"sol":0.097939311833364,"r":"9,79%","es":"=(1+TASA(6;4;-96;100))^2-1","ex":"TEA = (1 + i semestral)^2 − 1.","g":"Tasas equivalentes"},{"n":24,"tema":"Semestral · TNA","q":"Mismo bono: ¿cuál es la TIR expresada como TNA (capitalización semestral)?","datos":[["Precio","96,00"],["Valor nominal","100,00"],["Cupón semestral ($)","4,00"],["Semestres","6"]],"pct":true,"sol":0.0956519862165703,"r":"9,57%","es":"=2*TASA(6;4;-96;100)","ex":"TNA = i semestral × 2 (es la que suelen mostrar las pantallas).","g":"Tasas equivalentes"},{"n":25,"tema":"Trimestral · TEA","q":"Bono VN 100, cupón 12% TNA pagadero trimestral ($3 por trimestre), 2 años, precio $98. ¿TIR efectiva anual?","datos":[["Precio","98,00"],["Valor nominal","100,00"],["Cupón trimestral ($)","3,00"],["Trimestres","8"]],"pct":true,"sol":0.138167076959697,"r":"13,82%","es":"=(1+TASA(8;3;-98;100))^4-1","ex":"Tasa trimestral con TASA y después ^4.","g":"Tasas equivalentes"},{"n":26,"tema":"Amortizable · precio","q":"Bono VN 100 que amortiza 25% por año durante 4 años; paga 10% anual de interés sobre el saldo. Con TIR 12%, ¿precio? (el flujo ya está armado)","datos":[["TIR","12,00%"]],"pct":false,"sol":95.9889556109433,"r":"95,99","es":"=VNA(12%;C?:F?)  (flujos de los años 1 a 4)","ex":"Flujos: 35; 32,5; 30; 27,5 (amortización 25 + interés sobre saldo). VNA descuenta desde el período 1.","fl":{"tipo":"t","a":["1","2","3","4"],"v":["35,00","32,50","30,00","27,50"]},"g":"Amortizables"},{"n":27,"tema":"Amortizable · TIR","q":"El mismo bono amortizable cotiza a $97. ¿Cuál es su TIR? (cargá −97 en el período 0)","datos":[],"pct":true,"sol":0.114828220298231,"r":"11,48%","es":"=TIR(B?:F?)","ex":"Con el precio negativo en el período 0, TIR resuelve la tasa que iguala el VNA al precio.","fl":{"tipo":"t","a":["0","1","2","3","4"],"v":["-97,00","35,00","32,50","30,00","27,50"]},"g":"Amortizables"},{"n":28,"tema":"Amortizable semestral · precio","q":"Bono VN 100, amortiza en 10 cuotas semestrales iguales de 10; paga 8% TNA semestral (4% por semestre) sobre saldo. TIR semestral 5%. ¿Precio?","datos":[["TIR semestral","5,00%"]],"pct":false,"sol":95.4434698583696,"r":"95,44","es":"=VNA(5%;C?:L?)","ex":"Flujo del semestre k = 10 + 4% × saldo al inicio: 14; 13,6; 13,2; … ; 10,4.","fl":{"tipo":"t","a":["1","2","3","4","5","6","7","8","9","10"],"v":["14,00","13,60","13,20","12,80","12,40","12,00","11,60","11,20","10,80","10,40"]},"g":"Amortizables"},{"n":29,"tema":"Amortizable semestral · TEA","q":"El bono del ejercicio anterior cotiza a $95. ¿Cuál es su TIR efectiva anual?","datos":[],"pct":true,"sol":0.104627544325759,"r":"10,46%","es":"=(1+TIR(B?:L?))^2-1","ex":"TIR da la tasa semestral; se anualiza con ^2.","fl":{"tipo":"t","a":["0","1","2","3","4","5","6","7","8","9","10"],"v":["-95,00","14,00","13,60","13,20","12,80","12,40","12,00","11,60","11,20","10,80","10,40"]},"g":"Amortizables"},{"n":30,"tema":"Amortizable con gracia · TIR","q":"Bono VN 100: 2 años de gracia pagando solo 9% de interés; luego amortiza 50 en el año 3 y 50 en el año 4, siempre con 9% sobre saldo. Precio $92. ¿TIR?","datos":[],"pct":true,"sol":0.119380968328781,"r":"11,94%","es":"=TIR(B?:F?)","ex":"Flujos: 9; 9; 59; 54,5. Precio bajo la par → TIR > 9%.","fl":{"tipo":"t","a":["0","1","2","3","4"],"v":["-92,00","9,00","9,00","59,00","54,50"]},"g":"Amortizables"},{"n":31,"tema":"Current yield","q":"Un bono paga $8 de cupón anual y cotiza a $92. ¿Cuál es su rendimiento corriente (current yield)?","datos":[["Cupón anual ($)","8,00"],["Precio","92,00"]],"pct":true,"sol":0.0869565217391304,"r":"8,70%","es":"=8/92","ex":"Current yield = cupón anual / precio. No considera la ganancia hasta la par.","g":"Current yield"},{"n":32,"tema":"Current yield","q":"Bono VN 1.000, cupón anual $100, 4 años, TIR 12%. Calculá primero el precio y después el current yield.","datos":[["Valor nominal","1.000,00"],["Cupón ($)","100,00"],["Años","4"],["TIR","12,00%"]],"pct":true,"sol":0.106467584994392,"r":"10,65%","es":"=100/VA(12%;4;-100;-1000)","ex":"Precio 939,25 → 100/939,25 = 10,65% (pregunta del banco).","g":"Current yield"},{"n":33,"tema":"Current yield","q":"Bono con cupón 6% TNA pagadero semestral ($3 por semestre) cotiza a $94. ¿Current yield anual?","datos":[["Cupón semestral ($)","3,00"],["Precio","94,00"]],"pct":true,"sol":0.0638297872340426,"r":"6,38%","es":"=6/94","ex":"Se usa el cupón de todo el año: 2 × 3 = 6.","g":"Current yield"},{"n":34,"tema":"Duration Macaulay","q":"Bono VN 100, cupón 10% anual, 3 años, TIR 10%. Calculá la duration de Macaulay (en años). Tip: columna t × VA(flujo) y dividí por el precio.","datos":[["TIR","10,00%"]],"pct":false,"sol":2.73553719008265,"r":"2,7355","es":"=SUMAPRODUCTO(t;flujo/(1+10%)^t)/SUMAPRODUCTO(flujo/(1+10%)^t)","ex":"D = Σ t × VA(flujo_t) / precio. Da ≈ 2,74 años.","fl":{"tipo":"t","a":["1","2","3"],"v":["10,00","10,00","110,00"]},"g":"Duration"},{"n":35,"tema":"Duration modificada","q":"Mismo bono (cupón 10%, 3 años, TIR 10%): ¿duration modificada?","datos":[["TIR","10,00%"]],"pct":false,"sol":2.48685199098422,"r":"2,4869","es":"=Macaulay/(1+10%)","ex":"DM = D Macaulay / (1 + TIR).","fl":{"tipo":"t","a":["1","2","3"],"v":["10,00","10,00","110,00"]},"g":"Duration"},{"n":36,"tema":"Duration modificada","q":"Un cupón cero a 5 años rinde 8% efectivo anual. ¿Duration modificada?","datos":[["Años","5"],["TIR","8,00%"]],"pct":false,"sol":4.62962962962963,"r":"4,6296","es":"=5/(1+8%)","ex":"En un cupón cero la Macaulay es el plazo (5); la modificada es 5/1,08.","g":"Duration"},{"n":37,"tema":"Duration Macaulay","q":"Bono VN 100, cupón 8% anual, 5 años, TIR 10% (el del ejercicio 10). ¿Duration de Macaulay?","datos":[["TIR","10,00%"]],"pct":false,"sol":4.28141208593343,"r":"4,2814","es":"=SUMAPRODUCTO(t;flujo/(1+10%)^t)/precio","ex":"Menor que 5 porque los cupones adelantan flujos.","fl":{"tipo":"t","a":["1","2","3","4","5"],"v":["8,00","8,00","8,00","8,00","108,00"]},"g":"Duration"},{"n":38,"tema":"Duration amortizable","q":"Bono amortizable del ejercicio 26 (flujos 35; 32,5; 30; 27,5) con TIR 12%. ¿Duration de Macaulay?","datos":[["TIR","12,00%"]],"pct":false,"sol":2.26103942466285,"r":"2,2610","es":"=SUMAPRODUCTO(t;flujo/(1+12%)^t)/precio","ex":"Como devuelve capital antes, la duration es mucho menor que 4.","fl":{"tipo":"t","a":["1","2","3","4"],"v":["35,00","32,50","30,00","27,50"]},"g":"Duration"},{"n":39,"tema":"Sensibilidad · duration","q":"Un bono tiene duration modificada 4,5. Si la TIR sube 0,5 puntos (0,5%), ¿cuánto cambia el precio en %? (aproximación lineal)","datos":[["Duration modificada","4,50"],["Cambio de tasa","0,50%"]],"pct":true,"sol":-0.0225,"r":"-2,25%","es":"=-4,5*0,5%","ex":"ΔP/P ≈ −DM × Δy.","g":"Sensibilidad"},{"n":40,"tema":"Sensibilidad · nuevo precio","q":"Bono a $102 con duration modificada 6. Si la TIR baja 0,75%, ¿cuál es el nuevo precio aproximado?","datos":[["Precio","102,00"],["Duration modificada","6,00"],["Cambio de tasa","-0,75%"]],"pct":false,"sol":106.59,"r":"106,59","es":"=102*(1-6*(-0,75%))","ex":"Baja la tasa → sube el precio: 102 × (1 + 4,5%).","g":"Sensibilidad"},{"n":41,"tema":"Sensibilidad · con convexidad","q":"Bono con duration modificada 3,8 y convexidad 18. La TIR sube 2%. Usando ΔP/P ≈ −DM·Δy + ½·C·Δy², ¿variación del precio?","datos":[["Duration modificada","3,80"],["Convexidad","18,00"],["Cambio de tasa","2,00%"]],"pct":true,"sol":-0.0724,"r":"-7,24%","es":"=-3,8*2%+0,5*18*2%^2","ex":"−7,6% de duration + 0,36% de convexidad.","g":"Sensibilidad"},{"n":42,"tema":"Valor técnico","q":"Bono VN 100 sin amortizaciones, cupón 8% anual. Pasaron 120 días desde el último pago (base 365). ¿Valor técnico por cada 100 VN?","datos":[["Valor residual","100,00"],["Cupón anual","8,00%"],["Días corridos","120"]],"pct":false,"sol":102.630136986301,"r":"102,63","es":"=100+100*8%*120/365","ex":"Valor técnico = valor residual + intereses corridos.","g":"Valor técnico y paridad"},{"n":43,"tema":"Paridad","q":"Ese bono (valor técnico del ejercicio anterior) cotiza a $95. ¿Paridad?","datos":[["Precio","95,00"],["Valor residual","100,00"],["Cupón anual","8,00%"],["Días corridos","120"]],"pct":true,"sol":0.925654030966364,"r":"92,57%","es":"=95/(100+100*8%*120/365)","ex":"Paridad = precio / valor técnico. < 100% → bajo la par.","g":"Valor técnico y paridad"},{"n":44,"tema":"Precio limpio","q":"En pantalla un bono figura a precio sucio $101,50 y los intereses corridos son $2,30. ¿Precio limpio?","datos":[["Precio sucio","101,50"],["Intereses corridos","2,30"]],"pct":false,"sol":99.2,"r":"99,20","es":"=101,5-2,3","ex":"Limpio = sucio − intereses corridos.","g":"Valor técnico y paridad"},{"n":45,"tema":"Paridad con amortización","q":"Un bono ya amortizó 40% (valor residual 60 por cada 100 VN), paga 10% anual y pasaron 90 días del último cupón. Cotiza a $58 por cada 100 VN original. ¿Paridad?","datos":[["Precio","58,00"],["Valor residual","60,00"],["Cupón anual","10,00%"],["Días corridos","90"]],"pct":true,"sol":0.943404634581105,"r":"94,34%","es":"=58/(60+60*10%*90/365)","ex":"Con amortizaciones, el valor técnico se calcula sobre el residual.","g":"Valor técnico y paridad"},{"n":46,"tema":"Monto de la operación","q":"Comprás VN 10.000 de un bono a precio limpio 98,50 (por cada 100 VN) más intereses corridos de 1,20. ¿Cuánto pagás en total? (sin comisiones)","datos":[["VN comprado","10.000,00"],["Precio limpio (c/100)","98,50"],["Intereses corridos (c/100)","1,20"]],"pct":false,"sol":9970,"r":"9.970,00","es":"=10000/100*(98,5+1,2)","ex":"Se paga el precio sucio: (limpio + corridos) × VN / 100.","g":"Valor técnico y paridad"},{"n":47,"tema":"TIR con fechas (TIR.NO.PER)","q":"Comprás un bono el 02/11/2026 a $950. Cobrás $60 el 02/05/2027, $60 el 02/11/2027 y $1.060 el 02/05/2028. ¿TIR efectiva anual con =TIR.NO.PER?","datos":[],"pct":true,"sol":0.165244555353404,"r":"16,52%","es":"=TIR.NO.PER(flujos;fechas)","ex":"TIR.NO.PER usa las fechas reales y devuelve directamente una tasa efectiva anual.","fl":{"tipo":"f","a":["02/11/2026","02/05/2027","02/11/2027","02/05/2028"],"v":["-950,00","60,00","60,00","1.060,00"]},"g":"TIR con fechas"},{"n":48,"tema":"TIR con fechas (TIR.NO.PER)","q":"Comprás el 03/11/2026 una letra VN 100 a $97,10; vence el 02/02/2027. ¿TEA con =TIR.NO.PER?","datos":[],"pct":true,"sol":0.12528758746201,"r":"12,53%","es":"=TIR.NO.PER(flujos;fechas)","ex":"Debe darte casi lo mismo que (100/97,1)^(365/91) − 1.","fl":{"tipo":"f","a":["03/11/2026","02/02/2027"],"v":["-97,10","100,00"]},"g":"TIR con fechas"},{"n":49,"tema":"Duration de cartera","q":"Cartera con un bono de cada uno: X a $1.050 (D=8), Y a $1.000 (D=6), Z a $950 (D=4). ¿Duration de la cartera ponderada por valor?","datos":[["Precio X","1.050,00"],["D X","8,00"],["Precio Y","1.000,00"],["D Y","6,00"],["Precio Z","950,00"],["D Z","4,00"]],"pct":false,"sol":6.06666666666667,"r":"6,0667","es":"=SUMAPRODUCTO(precios;durations)/SUMA(precios)","ex":"Promedio ponderado por valor de mercado (pregunta del banco: 6,07).","g":"Cartera"},{"n":50,"tema":"Duration de cartera","q":"Invertís $60.000 en un bono con duration 2,5 y $40.000 en otro con duration 9. ¿Duration de la cartera?","datos":[["Monto A","60.000,00"],["D A","2,50"],["Monto B","40.000,00"],["D B","9,00"]],"pct":false,"sol":5.1,"r":"5,1000","es":"=(60000*2,5+40000*9)/100000","ex":"60% × 2,5 + 40% × 9.","g":"Cartera"}];
+    const PRX_XLSX = "practicos/Bonos_TIR_50_ejercicios.xlsx";
+    const LSPRX = "mapa-idoneo-practicos-v1";
+    let PRX = {};
+    try { PRX = JSON.parse(localStorage.getItem(LSPRX) || "{}") || {}; } catch (e) { PRX = {}; }
+    const prxGuardar = () => { try { localStorage.setItem(LSPRX, JSON.stringify(PRX)); } catch (e) { } };
+    let prxTema = "";
+    function prxNum(txt, pct) {
+      let t = String(txt || "").trim().replace(/\s/g, ""); if (!t) return NaN;
+      const conPct = t.includes("%"); t = t.replace("%", "");
+      if (t.includes(",")) t = t.replace(/\./g, "").replace(",", ".");
+      let v = parseFloat(t); if (isNaN(v)) return NaN;
+      if (pct && (conPct || Math.abs(v) >= 1)) v = v / 100;
+      return v;
+    }
+    const prxOk = (v, sol) => Math.abs(v - sol) <= Math.max(0.003 * Math.abs(sol), 0.0001);
+    function practicosHTML() {
+      const temas = [...new Set(PRACTICOS.map(x => x.g))];
+      const lista = PRACTICOS.filter(x => !prxTema || x.g === prxTema);
+      const bien = PRACTICOS.filter(x => PRX[x.n] && PRX[x.n].ok).length, hechos = PRACTICOS.filter(x => PRX[x.n]).length;
+      const chips = [["", "Todos"], ...temas.map(t => [t, t])].map(([k, et]) =>
+        `<button class="schip" data-prxtema="${esc(k)}" aria-pressed="${prxTema === k}">${esc(et)}<span class="sn">${k ? PRACTICOS.filter(x => x.g === k).length : PRACTICOS.length}</span></button>`).join("");
+      const tabla = x => {
+        let h = "";
+        if (x.datos.length) h += `<table class="prxdat">${x.datos.map(([a, v]) => `<tr><th>${esc(a)}</th><td>${esc(v)}</td></tr>`).join("")}</table>`;
+        if (x.fl) h += `<div class="prxfl"><table><tr><th>${x.fl.tipo === "t" ? "Período" : "Fecha"}</th>${x.fl.a.map(a => `<td>${esc(a)}</td>`).join("")}</tr><tr><th>Flujo ($)</th>${x.fl.v.map(v => `<td>${esc(v)}</td>`).join("")}</tr></table></div>`;
+        return h;
+      };
+      const items = lista.map(x => {
+        const st = PRX[x.n], ver = st && st.ver;
+        return `<details class="prxit" data-prx="${x.n}"${st && st.abierto ? " open" : ""}><summary><b>Ej. ${x.n}</b><span>${esc(x.tema)}</span>${st ? `<em class="${st.ok ? "ok" : "mal"}">${st.ok ? "✔" : "✘"}</em>` : ""}</summary>
+          <p class="prxq">${esc(x.q)}</p>${tabla(x)}
+          <div class="prxres"><label>Tu respuesta <input type="text" inputmode="decimal" data-prxin="${x.n}" value="${esc(st && st.v != null ? st.v : "")}" placeholder="${x.pct ? "ej. 7,72%" : "ej. 92,42"}" autocomplete="off"></label>
+            <button class="qnext" data-prxcheck="${x.n}">Corregir</button>
+            <button class="lk" data-prxver="${x.n}">${ver ? "Ocultar la respuesta" : "Ver la respuesta"}</button>
+            ${st && st.v != null && st.v !== "" ? `<span class="prxveredicto ${st.ok ? "ok" : "mal"}">${st.ok ? "✔ Correcto" : "✘ Revisá"}</span>` : ""}</div>
+          ${ver ? `<div class="prxsol"><p><b>Respuesta:</b> ${esc(x.r)}</p><p><b>En Excel:</b> <code>${esc(x.es)}</code></p><p>${esc(x.ex)}</p></div>` : ""}
+        </details>`;
+      }).join("");
+      return `<div class="prx">
+        <div class="prxtop">
+          <div><h3>Bonos y TIR · 50 ejercicios para Excel</h3>
+            <p>El archivo trae los enunciados con sus datos, una celda amarilla para tu respuesta que se corrige sola, un índice con tu avance, la hoja de soluciones con cada fórmula y un resumen de funciones. Tasas como porcentaje (7,72%), precios y durations como número (92,42).</p></div>
+          <a class="qnext prxbajar" href="${PRX_XLSX}" download="Bonos_TIR_50_ejercicios.xlsx">Descargar el Excel</a>
+        </div>
+        <p class="prxavance">Corregidos acá: <b>${bien}</b> bien de <b>${hechos}</b> respondidos · 50 ejercicios${hechos ? ` · <button class="lk" data-prxborrar="1">Borrar mis respuestas</button>` : ""}</p>
+        <div class="schips prxchips">${chips}</div>
+        ${items}
+      </div>`;
+    }
+    document.addEventListener("click", e => {
+      if (!e.target.closest || !e.target.closest(".prx")) return;
+      const t = e.target.closest("[data-prxtema]");
+      if (t) { prxTema = t.dataset.prxtema; pintarCuestionario(); return; }
+      const c = e.target.closest("[data-prxcheck]");
+      if (c) {
+        const n = +c.dataset.prxcheck, x = PRACTICOS.find(y => y.n === n), inp = document.querySelector(`[data-prxin="${n}"]`);
+        const v = prxNum(inp && inp.value, x.pct);
+        if (isNaN(v)) { if (inp) inp.focus(); return; }
+        PRX[n] = Object.assign(PRX[n] || {}, { v: inp.value, ok: prxOk(v, x.sol), abierto: true }); prxGuardar(); pintarCuestionario(); return;
+      }
+      const vr = e.target.closest("[data-prxver]");
+      if (vr) { const n = +vr.dataset.prxver; PRX[n] = Object.assign(PRX[n] || {}, { ver: !(PRX[n] && PRX[n].ver), abierto: true }); if (PRX[n].v == null) delete PRX[n].ok; prxGuardar(); pintarCuestionario(); return; }
+      if (e.target.closest("[data-prxborrar]")) { if (confirm("¿Borrás las respuestas de los prácticos guardadas en este dispositivo?")) { PRX = {}; prxGuardar(); pintarCuestionario(); } return; }
+    });
+    document.addEventListener("keydown", e => {
+      const i = e.target.closest && e.target.closest("[data-prxin]");
+      if (i && e.key === "Enter") { e.preventDefault(); const b = document.querySelector(`[data-prxcheck="${i.dataset.prxin}"]`); if (b) b.click(); }
+    });
+    document.addEventListener("toggle", e => {
+      const d = e.target; if (!d.matches || !d.matches("details.prxit")) return;
+      const n = +d.dataset.prx; PRX[n] = Object.assign(PRX[n] || {}, { abierto: d.open }); prxGuardar();
+    }, true);
+
     function pintarCuestionario() {
       qstat.innerHTML = statHTML();
       guardarCorrida();
       const intro = document.getElementById("qintro");
       if (intro) intro.textContent = INTRO[quiz.modo] || "";
 
+      if (quiz.modo === "practicos") {
+        qfiltroEl.innerHTML = "";
+        countEl.textContent = "50 ejercicios de bonos y TIR";
+        pararReloj();
+        qzona.innerHTML = practicosHTML();
+        return;
+      }
       if (quiz.modo === "historial") {
         qfiltroEl.innerHTML = "";
         countEl.textContent = `${quiz.hist.length} simulacro${quiz.hist.length === 1 ? "" : "s"} registrado${quiz.hist.length === 1 ? "" : "s"}`;
@@ -21502,7 +21613,7 @@
 
 
     /* =================== Sidebar, Inicio e invitaciones =================== */
-    const VNOM = { inicio: "Inicio", leyes: "Las leyes", glosario: "Glosario", cuestionario: "Cuestionario", mercado: "El mercado", micro: "Micro-learning", notas: "Mis notas", perfil: "Mi perfil" };
+    const VNOM = { inicio: "Inicio", leyes: "Las leyes", glosario: "Glosario", cuestionario: "Cuestionario y prácticos", mercado: "El mercado", micro: "Micro-learning", notas: "Mis notas", perfil: "Mi perfil" };
     const LSSB = "mapa-idoneo-sb";
     const esAncho = () => window.matchMedia("(min-width: 1000px)").matches;
     function sbAbrir(si) {
@@ -21651,7 +21762,7 @@
           ${card("leyes", "Las leyes", `${nL} leyes · ${nArts} art.`, "Las ocho leyes de la bibliografía abiertas por dentro: estructura, qué regula cada bloque, el texto literal de cada artículo y qué módulo del examen lo toma.", "Leer las leyes")}
           ${card("glosario", "Glosario", `${nG} términos`, "Las definiciones que dan las propias leyes, tal cual las escriben, filtrables por ley y por letra.", "Abrir el glosario")}
           ${card("mercado", "El mapa del mercado", "estructura · matriz", "La estructura de arriba hacia abajo, de la CNV a la Caja de Valores, la matriz de «quién puede qué» y la ficha de cada agente e instrumento.", "Ver el mapa")}
-          ${card("cuestionario", "Cuestionario", `${nP} preguntas`, "Práctica con corrección inmediata, simulacros con reloj como el examen real (60 preguntas, 45 minutos), repaso e historial con tu dominio por módulo.", "Practicar")}
+          ${card("cuestionario", "Cuestionario y prácticos", `${nP} preguntas · 50 prácticos`, "Práctica con corrección inmediata, simulacros con reloj como el examen real (60 preguntas, 45 minutos), repaso, historial con tu dominio por módulo y 50 prácticos de bonos y TIR para resolver con Excel.", "Practicar")}
           ${card("micro", "Micro-learning", `${nF} tarjetas`, "Todos los días, a tu hora, la cantidad de tarjetas que elijas: primero recordás, después ves la respuesta, y lo que fallás vuelve antes. Con aviso en el celular.", "Sesión de hoy")}
           ${card("perfil", "Mi perfil", on ? "sesión iniciada" : "opcional", "Tu cuenta: fecha del examen, cuántos días faltan, tu dominio por módulo y por título, y todo tu progreso sincronizado.", on ? "Ver mi perfil" : "Crear mi cuenta")}
         </div>
@@ -22547,7 +22658,7 @@
           ["glosario", "Glosario", `${nG} definiciones tal cual las escriben las leyes y las Normas.`, "Abrir el glosario", "data-ini"]],
         practicar: [
           ["micro", "Micro-learning", `${nF} tarjetas y preguntas que vuelven justo antes de que se te olviden.`, "Sesión de hoy", "data-ini"],
-          ["cuestionario", "Cuestionario", `${nP} preguntas con corrección inmediata y el artículo que las responde.`, "Practicar", "data-ini"],
+          ["cuestionario", "Cuestionario y prácticos", `${nP} preguntas con corrección inmediata y 50 prácticos de bonos y TIR con Excel.`, "Practicar", "data-ini"],
           ["simulacro", "Simulacro", "Como el examen real: 60 preguntas en 45 minutos, con tu nota por módulo.", "Armar un simulacro", "data-zini"]],
         mercado: [
           ["dinamica", "Cómo se mueve el mercado", "Órdenes, títulos y plata entre agentes, mercado y bancos, paso a paso.", "Ver el mapa", "data-zini"],
