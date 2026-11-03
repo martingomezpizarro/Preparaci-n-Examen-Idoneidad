@@ -15219,8 +15219,10 @@
       const g = e.target.closest("[data-nvgo]");
       if (!g) return;
       e.preventDefault(); e.stopPropagation();
-      const dlg = document.getElementById("srcdlg"); if (dlg && dlg.open) dlg.close();
+      const dlg = document.getElementById("srcdlg");
+      if (dlg && dlg.open) { if (dlg.contains(g)) xrDesdeCita(); dlg.close(); }
       goNorma(g.dataset.nvgo);
+      xrBoton();
     }, true);
     /* ================= FIN Normas vigentes ================= */
 
@@ -15503,6 +15505,13 @@
       b.title = XPILA.length > 1 ? `Hay ${XPILA.length} pasos para volver` : "";
       b.hidden = false;
     }
+    /* desde el diálogo de una cita (pregunta, tarjeta, ficha) a la ley o al título: queda «← Volver a la pregunta» */
+    function xrDesdeCita() {
+      const et = vista === "cuestionario" ? "la pregunta" : vista === "micro" ? "la tarjeta" : vista === "glosario" ? "el glosario" : vista === "mercado" ? "el mercado" : vista === "notas" ? "tus notas" : "la cita";
+      if (vista === "leyes") { const d = XR_DLG; XPILA.push({ vista, current, y: window.scrollY, dlg: d, et: "la cita" }); }
+      else XPILA.push({ vista, current, y: window.scrollY, et, away: true });
+      if (XPILA.length > 30) XPILA.shift();
+    }
     /* al ir a tarjetas o preguntas desde un artículo, la guía o una ficha, queda el botón para volver */
     function xrDesde(el, et) {
       const li = el && el.closest("li.art");
@@ -15736,13 +15745,13 @@
       key = key ? artKey(key).toLowerCase() : "";
       const art = key ? document.getElementById(`a-${leyId}-${key}`) : null;
       if (art) {
-        art.scrollIntoView({ block: "center", behavior: "smooth" });
-        destacar(art);
+        // setVista sube la página en el cuadro siguiente: el scroll va después, si no se cancela
+        setTimeout(() => { art.scrollIntoView({ block: "center", behavior: "smooth" }); destacar(art); }, 80);
         return;
       }
       const n = parseInt(key, 10);
       const blk = n ? bloquePara(n) : null;
-      if (!blk) { document.querySelector(".ficha").scrollIntoView({ block: "start", behavior: "smooth" }); return; }
+      if (!blk) { setTimeout(() => document.querySelector(".ficha").scrollIntoView({ block: "start", behavior: "smooth" }), 80); return; }
       const l = LEYES[i];
       const head = blk.querySelector(":scope > .th, :scope > .ch");
       const aviso = document.createElement("p");
@@ -15750,8 +15759,7 @@
       aviso.innerHTML = `<b>Art. ${esc(key.replace(/(\d)(bis|ter)/, "$1 $2"))}</b> — no está desplegado en el mapa; cae dentro de este bloque. ` +
         `<a href="${l.infoleg}" target="_blank" rel="noopener">Leerlo en InfoLeg ↗</a>`;
       if (head) head.appendChild(aviso); else blk.prepend(aviso);
-      blk.scrollIntoView({ block: "start", behavior: "smooth" });
-      destacar(blk);
+      setTimeout(() => { blk.scrollIntoView({ block: "start", behavior: "smooth" }); destacar(blk); }, 80);
     }
 
     /* ---- ir al artículo: buscador por número o epígrafe dentro de la ley abierta ---- */
@@ -18047,7 +18055,15 @@
       if (b) { e.preventDefault(); e.stopPropagation(); const [o, i] = b.dataset.src.split("|"); abrirFuente(o, +i); return; }
       if (e.target.closest("#sdx") || e.target.id === "srcdlg") { document.getElementById("srcdlg").close(); return; }
       const g = e.target.closest("#srcdlg [data-go]");
-      if (g) { document.getElementById("srcdlg").close(); const [l, k] = g.dataset.go.split(":"); goTo(l, k); }
+      if (g) {
+        xrDesdeCita();
+        document.getElementById("srcdlg").close();
+        const [l, k] = g.dataset.go.split(":");
+        goTo(l, k);
+        const li = k ? document.getElementById(`a-${l}-${artKey(k).toLowerCase()}`) : null;
+        if (li) { xrAbrirTexto(li); setTimeout(() => xrEncuadrar(li), 40); }
+        xrBoton();
+      }
     }, true);
 
     /* ---------------- Subrayados propios en los textos literales ----------------
