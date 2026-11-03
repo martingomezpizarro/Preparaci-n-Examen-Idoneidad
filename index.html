@@ -17733,6 +17733,9 @@
     const LETRAS = "abcdefghij";
     const APROB = 70;                       // % que pide la CNV para aprobar
     const esIcnv = q => q.id.startsWith("ICNV-");
+    /* «no hecha»: nunca la respondiste, ni en práctica, ni en un simulacro, ni en el micro-learning */
+    function vistaEnMicro(id) { try { return !!(U && U.c && U.c["q:" + id]); } catch (e) { return false; } }
+    const noHecha = q => !quiz.respuestas[q.id] && !vistaEnMicro(q.id);
     const esProp = q => q.id.startsWith("P-");
     const deOrigen = (q, o) => o === "verif" ? !esIcnv(q) && !esProp(q) : o === "icnv" ? esIcnv(q) : o === "prop" ? esProp(q) : true;
     const MODS = [...new Set(PREGUNTAS.map(q => q.mod))].sort((a, b) => a - b);
@@ -17744,6 +17747,7 @@
       mod: 0,                // 0 = todos los módulos
       origen: "todas",       // todas | verif | icnv
       filtro: null,          // {ley, art} cuando venís desde un artículo
+      noHechas: false,       // nunca la respondí
       soloFallos: false,     // la última vez la fallé
       dificiles: false,      // la fallé dos veces o más
       cola: [], i: 0,
@@ -17751,7 +17755,7 @@
       respuestas: {},        // id -> {bien, elegidas, v (veces), ok (aciertos), t (fecha)}
       hist: [],              // simulacros cerrados
       abierto: null,         // fila del historial desplegada
-      cfg: { n: 60, min: 45, mods: [], ley: "", origen: "todas", repartir: true },
+      cfg: { n: 60, min: 45, mods: [], ley: "", origen: "todas", estado: "todas", repartir: true },
       simul: { activo: false, fin: false, t0: 0, limite: 0, hechas: {}, cerrado: null }
     };
 
@@ -18590,7 +18594,7 @@
       if (quiz.simul && quiz.simul.activo && !confirm("Tenés un simulacro en curso. ¿Lo dejás para practicar estas preguntas?")) return;
       if (quiz.simul && quiz.simul.activo) { quiz.simul.activo = false; try { pararReloj(); } catch (e) { } }
       quiz.filtro = filtro;
-      quiz.mod = 0; quiz.origen = "todas"; quiz.soloFallos = false; quiz.dificiles = false;
+      quiz.mod = 0; quiz.origen = "todas"; quiz.soloFallos = false; quiz.dificiles = false; quiz.noHechas = false;
       marcarModo("practica");
       qEl.value = ""; quiz.qBusca = "";
       nuevaCola();
@@ -18613,6 +18617,7 @@
         ? xs.filter(q => (q.refs || []).some(r => r.nv === quiz.filtro.nv))
         : xs.filter(q => preguntaCitaLey(q, quiz.filtro.ley, quiz.filtro.art));
       if (quiz.origen !== "todas") xs = xs.filter(q => deOrigen(q, quiz.origen));
+      if (quiz.noHechas) xs = xs.filter(noHecha);
       if (quiz.soloFallos) xs = xs.filter(q => quiz.respuestas[q.id] && !quiz.respuestas[q.id].bien);
       if (quiz.dificiles) xs = xs.filter(q => fallas(q.id) >= 2);
       const q = qEl.value.trim().toLowerCase();
@@ -18697,7 +18702,9 @@
       partes.push(`<span class="vlabel">Tema</span>${temaSelectHTML()}`);
       const fallos = PREGUNTAS.filter(q => quiz.respuestas[q.id] && !quiz.respuestas[q.id].bien).length;
       const duras = PREGUNTAS.filter(q => fallas(q.id) >= 2).length;
+      const sinHacer = PREGUNTAS.filter(noHecha).length;
       partes.push(`<span class="vlabel">Repaso</span>`);
+      partes.push(`<button class="lk${quiz.noHechas ? "" : " ext"}" id="qnohechas" style="cursor:pointer">${quiz.noHechas ? "✓ " : ""}Las que no hice (${sinHacer})</button>`);
       partes.push(`<button class="lk${quiz.soloFallos ? "" : " ext"}" id="qfallos" style="cursor:pointer">${quiz.soloFallos ? "✓ " : ""}Solo las que fallé (${fallos})</button>`);
       partes.push(`<button class="lk${quiz.dificiles ? "" : " ext"}" id="qduras" style="cursor:pointer">${quiz.dificiles ? "✓ " : ""}Las que más me cuestan (${duras})</button>`);
       return partes.join("");
@@ -18752,6 +18759,9 @@
       if (cfg.ley) xs = xs.filter(q => vincDe(q).has("ley:" + cfg.ley));
       if (cfg.ley && cfg.lts && cfg.lts.length) xs = xs.filter(q => cfg.lts.some(i => vincDe(q).has("lt:" + cfg.ley + ":" + i)));
       if (cfg.origen !== "todas") xs = xs.filter(q => deOrigen(q, cfg.origen));
+      if (cfg.estado === "nohechas") xs = xs.filter(noHecha);
+      else if (cfg.estado === "fallos") xs = xs.filter(q => quiz.respuestas[q.id] && !quiz.respuestas[q.id].bien);
+      else if (cfg.estado === "duras") xs = xs.filter(q => fallas(q.id) >= 2);
       return xs;
     }
 
@@ -18794,18 +18804,14 @@
       }).join("");
 
       const mods = MODS.map(m => {
-        const cuenta = PREGUNTAS.filter(q => q.mod === m && q.ok.length &&
-          (!cfg.ley || vincDe(q).has("ley:" + cfg.ley)) &&
-          deOrigen(q, cfg.origen)).length;
+        const cuenta = poolSimul(Object.assign({}, cfg, { mods: [m], lts: [] })).length;
         const on = cfg.mods.includes(m);
         return `<button class="schip" data-smod="${m}" aria-pressed="${on}"${cuenta ? "" : " disabled"}>M${m}<span class="sn">${cuenta}</span></button>`;
       }).join("");
 
       const leyes = idsLey.map(id => {
         const l = leyPorId(id);
-        const cuenta = PREGUNTAS.filter(q => vincDe(q).has("ley:" + id) && q.ok.length &&
-          (!cfg.mods.length || cfg.mods.includes(q.mod)) &&
-          deOrigen(q, cfg.origen)).length;
+        const cuenta = poolSimul(Object.assign({}, cfg, { ley: id, lts: [] })).length;
         const on = cfg.ley === id;
         return `<button class="schip" data-sley="${id}" aria-pressed="${on}"${cuenta ? "" : " disabled"}>${esc(l.num)}<span class="sn">${cuenta}</span></button>`;
       }).join("");
@@ -18821,6 +18827,10 @@
       const nVerif = PREGUNTAS.filter(q => deOrigen(q, "verif") && q.ok.length).length;
       const origen = [["todas", "Todas", nVerif + nIcnv + nProp], ["verif", "Simulaciones corregidas", nVerif], ["icnv", "Guía CNV · idoneocnv", nIcnv], ["prop", "Propias · texto vigente", nProp]]
         .map(([k, et, c]) => `<button class="schip" data-sorigen="${k}" aria-pressed="${cfg.origen === k}">${et}<span class="sn">${c}</span></button>`).join("");
+
+      const nEst = k => poolSimul(Object.assign({}, cfg, { estado: k })).length;
+      const estado = [["todas", "Todas"], ["nohechas", "Las que no hice"], ["fallos", "Las que fallé"], ["duras", "Las que más me cuestan"]]
+        .map(([k, et]) => `<button class="schip" data-sestado="${k}" aria-pressed="${(cfg.estado || "todas") === k}">${et}<span class="sn">${nEst(k)}</span></button>`).join("");
 
       const conLey = Object.values(leyesConPreg).reduce((a, b) => a + b, 0);
 
@@ -18844,7 +18854,7 @@
     <div class="sfila">
       <div class="ihead"><span class="slabel">Ley</span>${iInfo(`${conLey} de las ${PREGUNTAS.length} preguntas citan al menos una ley (en su respuesta o en el fundamento). Las de la Guía CNV que no citan ninguna quedan afuera del filtro por ley; para esas, usá el módulo.`)}</div>
       <div class="schips">
-        <button class="schip" data-sley="" aria-pressed="${!cfg.ley}">Todas<span class="sn">${poolSimul({ mods: cfg.mods, ley: "", origen: cfg.origen, n: 0 }).length}</span></button>
+        <button class="schip" data-sley="" aria-pressed="${!cfg.ley}">Todas<span class="sn">${poolSimul(Object.assign({}, cfg, { ley: "", lts: [] })).length}</span></button>
         ${leyes}</div>
     </div>
     ${ltsSim ? `<div class="sfila">
@@ -18854,6 +18864,10 @@
     <div class="sfila">
       <span class="slabel">Origen</span>
       <div class="schips">${origen}</div>
+    </div>
+    <div class="sfila">
+      <div class="ihead"><span class="slabel">Preguntas</span>${iInfo("«Las que no hice» son las que nunca respondiste: ni en práctica, ni en un simulacro, ni en el micro-learning. Sirve para asegurarte de pasar por todo el banco.")}</div>
+      <div class="schips">${estado}</div>
     </div>
     <div class="sfila">
       <label class="sswitch"><input type="checkbox" id="srep" ${cfg.repartir ? "checked" : ""}>Repartir parejo entre los módulos, como el examen real</label>
@@ -18914,7 +18928,7 @@
       const reg = {
         ts: Date.now(), n: total, resp: dadas.length, ok: bien.length, pct, seg,
         corte: !!porTiempo,
-        cfg: { mods: quiz.cfg.mods.slice(), ley: quiz.cfg.ley, lts: (quiz.cfg.lts || []).slice(), origen: quiz.cfg.origen, min: quiz.cfg.min },
+        cfg: { mods: quiz.cfg.mods.slice(), ley: quiz.cfg.ley, lts: (quiz.cfg.lts || []).slice(), origen: quiz.cfg.origen, estado: quiz.cfg.estado, min: quiz.cfg.min },
         mods,
         ids: quiz.cola.map(q => q.id),
         hechas: Object.assign({}, hechas)
@@ -19044,6 +19058,9 @@
         if (h.cfg.ley) { const l = leyPorId(h.cfg.ley); et.push("Ley " + (l ? l.num : h.cfg.ley) + ((h.cfg.lts || []).length && l ? " (" + h.cfg.lts.map(i => ((l.titulos || [])[i] || {}).t || "").join(", ") + ")" : "")); }
         if (h.cfg.origen === "verif") et.push("simulaciones corregidas");
         else if (h.cfg.origen === "icnv") et.push("Guía CNV");
+        if (h.cfg.estado === "nohechas") et.push("las que no había hecho");
+        else if (h.cfg.estado === "fallos") et.push("las que había fallado");
+        else if (h.cfg.estado === "duras") et.push("las que más me cuestan");
         const fallos = h.ids ? h.ids.filter(id => {
           const q = pregPorId(id);
           return q && (!h.hechas[id] || !acerto(q, h.hechas[id]));
@@ -20013,7 +20030,7 @@ return{show:showTab};
       if (e.target.closest("#qrepasar")) {
         quiz.simul = { activo: false, fin: false, t0: 0, limite: 0, hechas: {}, cerrado: null };
         marcarModo("practica");
-        quiz.soloFallos = true; quiz.dificiles = false; quiz.filtro = null;
+        quiz.soloFallos = true; quiz.dificiles = false; quiz.noHechas = false; quiz.filtro = null;
         nuevaCola(); pintarCuestionario();
         return;
       }
@@ -20035,6 +20052,8 @@ return{show:showTab};
       if (slt) { const v = slt.dataset.slt, a = quiz.cfg.lts || []; quiz.cfg.lts = v === "" ? [] : (a.includes(+v) ? a.filter(x => x !== +v) : [...a, +v]); guardarCfg(); pintarCuestionario(); return; }
       const so = e.target.closest(".schip[data-sorigen]");
       if (so) { quiz.cfg.origen = so.dataset.sorigen; guardarCfg(); pintarCuestionario(); return; }
+      const se = e.target.closest(".schip[data-sestado]");
+      if (se) { quiz.cfg.estado = se.dataset.sestado; guardarCfg(); pintarCuestionario(); return; }
 
       /* ---- historial ---- */
       const fila = e.target.closest("tr.hrow[data-ts]");
@@ -20051,7 +20070,7 @@ return{show:showTab};
       }
       if (e.target.closest("#hrepasar")) {
         marcarModo("practica");
-        quiz.dificiles = true; quiz.soloFallos = false; quiz.filtro = null; quiz.mod = 0;
+        quiz.dificiles = true; quiz.soloFallos = false; quiz.noHechas = false; quiz.filtro = null; quiz.mod = 0;
         qEl.value = ""; nuevaCola(); pintarCuestionario(); return;
       }
       if (e.target.closest("#hexport")) { exportar(); return; }
@@ -20076,8 +20095,9 @@ return{show:showTab};
       const md = e.target.closest("button.lk[data-mod]");
       if (md) { quiz.mod = +md.dataset.mod; quiz.filtro = null; nuevaCola(); pintarCuestionario(); return; }
       if (e.target.closest("#qquitar")) { quiz.filtro = null; nuevaCola(); pintarCuestionario(); return; }
-      if (e.target.closest("#qfallos")) { quiz.soloFallos = !quiz.soloFallos; if (quiz.soloFallos) quiz.dificiles = false; nuevaCola(); pintarCuestionario(); return; }
-      if (e.target.closest("#qduras")) { quiz.dificiles = !quiz.dificiles; if (quiz.dificiles) quiz.soloFallos = false; nuevaCola(); pintarCuestionario(); return; }
+      if (e.target.closest("#qnohechas")) { quiz.noHechas = !quiz.noHechas; if (quiz.noHechas) { quiz.soloFallos = false; quiz.dificiles = false; } nuevaCola(); pintarCuestionario(); return; }
+      if (e.target.closest("#qfallos")) { quiz.soloFallos = !quiz.soloFallos; if (quiz.soloFallos) { quiz.dificiles = false; quiz.noHechas = false; } nuevaCola(); pintarCuestionario(); return; }
+      if (e.target.closest("#qduras")) { quiz.dificiles = !quiz.dificiles; if (quiz.dificiles) { quiz.soloFallos = false; quiz.noHechas = false; } nuevaCola(); pintarCuestionario(); return; }
 
       const lk = e.target.closest("button.lk[data-go]");
       if (lk) { const [l, k] = lk.dataset.go.split(":"); goTo(l, k); }
@@ -21436,7 +21456,8 @@ return{show:showTab};
         <div class="ustat"><b>${Object.values(U.c).filter(s => s.box >= 4).length}</b><span>ya consolidadas</span></div>
       </div>
       <div class="nacc"><button class="nbtn" data-uempezar="1">${hechasHoy ? "Hacer otra ronda" : "Empezar la sesión"}</button>
-        <button class="nbtn sec" data-uextra="1">Solo tarjetas nuevas</button></div>
+        <button class="nbtn sec" data-uextra="1">Solo tarjetas nuevas</button>
+        <button class="nbtn sec" data-unohechas="1"${preguntasNoHechas().length ? "" : " disabled"}>Preguntas que no hice · ${preguntasNoHechas().length}</button></div>
       <div class="udias" aria-label="Últimos 21 días">${dias}</div>
     </section>
     ${enfoqueHTML()}
@@ -21509,10 +21530,20 @@ return{show:showTab};
       pintarMicro();
       window.scrollTo({ top: microView.offsetTop - 10, behavior: "smooth" });
     }
-    function microIr(tits, soloNuevas, soloGlos) {
+    /* las del banco que nunca respondiste en ningún lado, de todos los módulos */
+    function preguntasNoHechas() {
+      return PREGUNTAS.filter(p => p.ok && p.ok.length && p.op && p.op.length > 1 && noHecha(p));
+    }
+
+    function microIr(tits, soloNuevas, soloGlos, soloNoHechas) {
       setVista("micro");
       let items = armarSesion(tits || U.cfg.tits, !tits);
-      if (soloGlos) {
+      if (soloNoHechas) {
+        const cupo = Math.max(1, U.cfg.tarj || 20);
+        items = intercalar(mezclar(preguntasNoHechas()).slice(0, cupo)
+          .map(p => ({ k: "q:" + p.id, tipo: "q", t: "M" + p.mod, p })));
+        if (!items.length) { SES = null; pintarMicro(); uzona.insertAdjacentHTML("afterbegin", `<p class="nvacio">Ya pasaste por todas las preguntas del banco.</p>`); return; }
+      } else if (soloGlos) {
         // primero las que vencen, después nuevas, hasta el cupo del día
         const hoy = hoyISO(), gl = itemsGlosario(), cupo = Math.max(1, U.cfg.tarj || 20);
         const venc = gl.filter(it => U.c[it.k] && U.c[it.k].due <= hoy).sort((a, b) => U.c[a.k].due.localeCompare(U.c[b.k].due));
@@ -21813,6 +21844,7 @@ return{show:showTab};
       if (e.target.closest("[data-uall]")) { U.cfg.tits = NORMAS.filter(n => flashDe(n.id).length).map(n => n.id); guardarU(); pintarMicro(); return; }
       if (e.target.closest("[data-uprio]")) { U.cfg.tits = NORMAS.filter(n => n.prio === 3).map(n => n.id); guardarU(); pintarMicro(); return; }
       if (e.target.closest("[data-uempezar]")) { microIr(); return; }
+      if (e.target.closest("[data-unohechas]")) { microIr(null, false, false, true); return; }
       if (e.target.closest("[data-uextra]")) { microIr(null, true); return; }
       if (e.target.closest("[data-uvolver]")) { SES = null; sesGuardar(); pintarMicro(); return; }
       if (e.target.closest("[data-uics]")) { bajarICS(); return; }
